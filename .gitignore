@@ -32,6 +32,3 @@ jspm_packages
 
 # Vim files
 *.swp
-
-# Output directory
-build/
