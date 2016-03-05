@@ -6,4 +6,9 @@ describe("App", () => {
   it("should exist", () => {
     expect(App).to.be.ok;
   });
+
+  it("can be instantiated", () => {
+    const app = new App();
+    expect(app).to.be.ok;
+  });
 });
