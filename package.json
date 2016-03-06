@@ -4,12 +4,12 @@
   "description": "A simulation of life itself",
   "main": "express.js",
   "scripts": {
-    "build": "./node_modules/.bin/webpack",
+    "build": "webpack",
     "start": "node express.js",
-    "dev": "./node_modules/.bin/webpack-dev-server --inline --hot --content-base build/",
+    "dev": "webpack-dev-server --inline --hot --content-base build/",
     "test": "npm run lint -s && ./node_modules/.bin/babel-node ./node_modules/istanbul/lib/cli cover ./node_modules/mocha/bin/_mocha --report lcovonly -- --recursive --reporter nyan",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
-    "lint": "./node_modules/.bin/eslint ./src/**/*.js"
+    "lint": "eslint ./src/**/*.js"
   },
   "repository": {
     "type": "git",
