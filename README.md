@@ -25,7 +25,7 @@ Now you're ready to install the dependencies, and run the development server:
 
 ```bash
 npm install
-npm run-script dev
+npm run dev
 ```
 
 This will build the project, watch all files for any changes, and spin up a
@@ -36,7 +36,7 @@ Genetic Sandbox should now be running at
 [http://localhost:8080](http://localhost:8080).
 
 If you're only interested in building the project without running the
-development server, just run `npm run-script build`.
+development server, just run `npm run build`.
 
 ### Tests
 
@@ -51,4 +51,5 @@ To run the tests, you can use the following command:
 npm test
 ```
 
-This command will spit out a lovely nyan cat test report and some coverage statistics.
+This command will lint all the source files using [eslint](http://eslint.org/),
+and then spit out a lovely nyan cat test report with coverage statistics.

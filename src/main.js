@@ -7,4 +7,4 @@ import './styles/reset.css';
 
 // Load and bootstrap the main application
 import App from './modules/App.js';
-const app = new App();
+new App();
