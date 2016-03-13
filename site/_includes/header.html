@@ -1,0 +1,10 @@
+<section class="page-header">
+  <h1 class="project-name">{{ site.title }}</h1>
+  <h2 class="project-tagline">{{ site.tagline }}</h2>
+  <a href="https://github.com/cjsauer/genetic-sandbox" class="btn">View on GitHub</a>
+  {% for my_page in site.pages %}
+    {% if my_page.title %}
+    <a class="btn" href="{{ my_page.url | prepend: site.baseurl }}">{{ my_page.title }}</a>
+    {% endif %}
+  {% endfor %}
+</section>
