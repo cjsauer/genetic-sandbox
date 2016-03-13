@@ -53,3 +53,19 @@ npm test
 
 This command will lint all the source files using [eslint](http://eslint.org/),
 and then spit out a lovely nyan cat test report with coverage statistics.
+
+### Docs
+
+The documentation for this project is generated automatically from
+[jsdoc](http://usejsdoc.org/index.html) comments in the source code and inserted
+into a [jekyll](https://jekyllrb.com/) site to be served on Github Pages. To begin
+generating documentation, you will first need to have [ruby](https://www.ruby-lang.org/en/)
+installed ([rvm](https://rvm.io/) is a handy tool for managing ruby installations).
+
+Once you have ruby, change into the `site/` directory and run `bundle install`.
+This will install the ruby gems (dependencies) needed to build the jekyll site.
+At this point you're ready to run `jekyll serve` to run a local server of the
+documentation. To regenerate the docs from the source code run `npm run docs`.
+Finally, to deploy the docs to production, run `npm run docs-deploy`. This will
+merge the `site/` directory from the `master` branch into the `gh-pages` branch
+and push it to Github, among some other little cleanup operations. 
