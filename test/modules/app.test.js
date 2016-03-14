@@ -11,4 +11,9 @@ describe("App", () => {
     const app = new App();
     expect(app).to.be.ok;
   });
+
+  it("sanity should be intact", () => {
+    const app = new App();
+    expect(app.sanity()).to.be.true;
+  });
 });
