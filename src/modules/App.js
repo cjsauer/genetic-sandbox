@@ -5,6 +5,6 @@
  */
 export default class App {
   sanity() {
-    return true
+    return true;
   }
 }
