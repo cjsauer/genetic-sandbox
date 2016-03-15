@@ -7,8 +7,9 @@
     "build": "webpack",
     "start": "node express.js",
     "dev": "webpack-dev-server --inline --hot --content-base build/",
-    "test": "npm run lint -s && ./node_modules/.bin/babel-node ./node_modules/istanbul/lib/cli cover ./node_modules/mocha/bin/_mocha --report lcovonly -- --recursive --reporter nyan",
-    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
+    "test": "npm run lint -s && ./node_modules/.bin/babel-node ./node_modules/mocha/bin/_mocha --recursive",
+    "coverage": "./node_modules/.bin/babel-node ./node_modules/istanbul/lib/cli cover ./node_modules/mocha/bin/_mocha -- --recursive",
+    "coveralls": "npm run coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "lint": "eslint ./src/**/*.js",
     "docs": "jsdoc2md --no-gfm --template ./site/_layouts/docs.html ./src/modules/**/*.js > ./site/docs.md",
     "docs-deploy": "git checkout gh-pages && git rm -rf . && git checkout master -- site && cp -R site/* . && rm -rf site && git add --all && git commit -m \"Updating site\" && git push && git checkout master && rm -rf _site"
