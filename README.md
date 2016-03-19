@@ -54,7 +54,7 @@ npm test
 This command will lint all the source files using [eslint](http://eslint.org/),
 and then spit out a mocha test report.
 
-You can also run `npm run coverage` to get an istanbul test coverage report. 
+You can also run `npm run coverage` to get an istanbul test coverage report.
 
 ### Docs
 
@@ -67,7 +67,8 @@ installed ([rvm](https://rvm.io/) is a handy tool for managing ruby installation
 Once you have ruby, change into the `site/` directory and run `bundle install`.
 This will install the ruby gems (dependencies) needed to build the jekyll site.
 At this point you're ready to run `jekyll serve` to run a local server of the
-documentation. To regenerate the docs from the source code run `npm run docs`.
-Finally, to deploy the docs to production, run `npm run docs-deploy`. This will
-merge the `site/` directory from the `master` branch into the `gh-pages` branch
-and push it to Github, among some other little cleanup operations.
+documentation. To regenerate the docs from the source code run `npm run docs`
+from the project root directory.Finally, to deploy the docs to production, run
+`npm run docs-deploy`. This will merge the `site/` directory from the `master`
+branch into the `gh-pages` branch and push it to Github, among some other
+little cleanup operations.

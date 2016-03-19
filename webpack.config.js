@@ -1,6 +1,10 @@
 var webpack = require('webpack');
 var CleanPlugin = require('clean-webpack-plugin');
 var production = process.env.NODE_ENV === 'production';
+var exec = require('child_process').exec;
+
+// Build the documentation
+exec('npm run docs');
 
 var plugins = [
   // Dev and production plugins
