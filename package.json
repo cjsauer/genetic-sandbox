@@ -12,7 +12,7 @@
     "coveralls": "npm run coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "lint": "eslint ./src/**/*.js",
     "docs": "jsdoc2md --template ./site/_layouts/docs.html ./src/modules/**/*.js > ./site/docs.md",
-    "docs-deploy": "npm run docs && git checkout gh-pages && git rm -rf . && git checkout master -- site && cp -R site/* . && rm -rf site && git add --all && git commit -m \"Updating site\" && git push && git checkout master && rm -rf _site"
+    "docs-deploy": "npm run docs && git subtree push --prefix site origin gh-pages"
   },
   "repository": {
     "type": "git",
