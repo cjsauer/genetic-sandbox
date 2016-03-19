@@ -3,8 +3,12 @@ var CleanPlugin = require('clean-webpack-plugin');
 var production = process.env.NODE_ENV === 'production';
 var exec = require('child_process').exec;
 
-// Build the documentation
-exec('npm run docs');
+// Plugin to build the documentation
+function DocumentationBuildPlugin(options) { }
+DocumentationBuildPlugin.prototype.apply = function(compiler) {
+  console.log('Building documentation...');
+  exec('npm run docs');
+}
 
 var plugins = [
   // Dev and production plugins
@@ -49,6 +53,11 @@ if (production) {
             BABEL_ENV: JSON.stringify(process.env.NODE_ENV),
         },
     }),
+  ]);
+} else {
+  // Development only plugins
+  plugins = plugins.concat([
+    new DocumentationBuildPlugin()
   ]);
 }
 
