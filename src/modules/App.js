@@ -4,4 +4,7 @@
  * @class App
  */
 export default class App {
+  sanity() {
+    return true;
+  }
 }
