@@ -5,7 +5,6 @@
     "src/**/*.js"
   ],
   "plugins": {
-    "node": {},
     "modules": {},
     "es_modules": {},
     "doc_comment": {
