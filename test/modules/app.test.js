@@ -1,5 +1,5 @@
-import App from '../../src/modules/App.js';
-import chai from 'chai';
+import App from "../../src/modules/App.js";
+import chai from "chai";
 const expect = chai.expect;
 
 describe("App", () => {

@@ -1,10 +1,16 @@
 {
     "extends": "standard",
     "plugins": [
-        "standard"
+      "standard"
     ],
+    "env": {
+      "node": true,
+      "es6": true,
+      "mocha": true
+    },
     "rules": {
       "space-before-function-paren": 0,
-      "semi": [2, "always"]
+      "semi": [2, "always"],
+      "quotes": [2, "double", "avoid-escape"]
     }
 }
