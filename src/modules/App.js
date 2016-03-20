@@ -1,9 +1,10 @@
 /**
  * The entry point of the entire application
- * @class App
  */
-export default class App {
+class App {
   sanity() {
     return true;
   }
 }
+
+export default App;
