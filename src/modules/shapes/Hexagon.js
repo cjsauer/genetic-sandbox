@@ -9,6 +9,8 @@ import Point from "./Point";
 class Hexagon extends Shape {
   /**
    * Creates a new Hexagon given the (x, y) position and a radius
+   * @example
+   * let hex = new Hexagon(0, 0, 100);
    * @param {number} x - x position of the hex center
    * @param {number} y - y position of the hex center
    * @param {number} radius - distance from the center to the corners
@@ -40,6 +42,8 @@ class Hexagon extends Shape {
 
   /**
    * The width of the bounding box of the hexagon
+   * @example
+   * let w = hex.width;
    * @returns {number} The width of the bounding box of the hexagon
    */
   get width() {
@@ -48,6 +52,8 @@ class Hexagon extends Shape {
 
   /**
    * The height of the bounding box of the hexagon
+   * @example
+   * let h = hex.height;
    * @returns {number} The height of the bounding box of the hexagon
    */
   get height() {
