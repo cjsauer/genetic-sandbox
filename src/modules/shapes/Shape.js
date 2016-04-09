@@ -1,31 +1,38 @@
+import Point from "./Point";
+
 /**
- * An abstract class representing geometric shapes that have a center, a width,
- * and a height. Dimensions like width and height describe the shape's bounding
- * box.
- * @class Shape
+ * An abstract class representing 2D geometric shapes that have a center, a width,
+ * and a height.
+ * @abstract
  */
 class Shape {
   /**
+   * Creates a new shape at position (x, y).
    * Shapes cannot be instantiated directly. Instead, Shape should be extended
    * and its members overridden by a concrete subclass.
-   *
    * @example
    * class Circle extends Shape {
    *   constructor(x, y, radius) {
-   *     super();
-   *     this.x = x;
-   *     this.y = y;
+   *     super(x, y);
    *     this.r = radius;
    *   }
    *   get width() { return this.radius * 2; }
    *   get height() { return this.width; }
-   *   get center() { return { x: this.x, y: this.y }; }
    * }
+   * @param {number} [x=0] - The x position of the center of this shape
+   * @param {number} [y=0] - The y position of the center of this shape
    */
-  constructor() {
+  constructor(x = 0, y = 0) {
+    /* Prevent instantiation */
     if (this.constructor === Shape) {
       throw new TypeError("Cannot construct Shape instances directly");
     }
+
+    /**
+     * The center position of this shape
+     * @type Point
+     */
+    this.center = new Point(x, y);
   }
 
   /**
@@ -44,17 +51,6 @@ class Shape {
    */
   get height() {
     throw new Error("Shape#height must be implemented by subclass");
-  }
-
-  /**
-   * The position of the center of this shape
-   * @abstract
-   * @returns {Object} center - The position of the center of this shape
-   * @returns {number} center.x - The x value of this shape's center
-   * @returns {number} center.y - The y value of this shape's center
-   */
-  get center() {
-    throw new Error("Shape#center must be implemented by subclass");
   }
 }
 
