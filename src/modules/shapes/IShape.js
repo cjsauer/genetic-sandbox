@@ -8,8 +8,7 @@ import Point from "./Point";
 class IShape {
   /**
    * Creates a new shape at position (x, y).
-   * IShape cannot be instantiated directly. Instead, IShape should be extended
-   * and its members overridden by a concrete subclass.
+   * IShape should be extended and its members overridden by a concrete subclass.
    * @example
    * class Circle extends IShape {
    *   constructor(x, y, radius) {

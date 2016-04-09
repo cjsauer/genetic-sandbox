@@ -1,21 +1,19 @@
 /**
  * An abstract class modeling a generic gGridrid of [Tiles]{@link Tile} that
  * makes up the "playing surface" in Genetic Sandbox.
- * @summary IGrid cannot be instantiated directly, but instead serves as an
- * interface for implementing new types of grids (hexagonal, cartesian, etc).
- * Subclasses of IGrid will have to implement their own method for storing Tiles,
- * which will ultimately define the grid's coordinate system. For example, a 2D,
- * cartesian grid could be implemented using a two dimensional array of Tiles,
- * and then the below methods (e.g. getTile()) would be overridden to
- * take (x,y) as arguments.
+ * @summary Serves as an interface for implementing new types of grids
+ * (hexagonal, cartesian, etc).  Subclasses of IGrid will have to implement
+ * their own method for storing Tiles, which will ultimately define the grid's
+ * coordinate system. For example, a 2D, cartesian grid could be implemented
+ * using a two dimensional array of Tiles, and then the below methods (e.g.
+ * getTile()) would be overridden to take (x,y) as arguments.
  * @abstract
  * @see {@link Tile}
  * @see HexGrid
  */
 class IGrid {
   /**
-   * IGrid can not be instantiated directly, but instead should be extended
-   * by a concrete grid implementation.
+   * IGrid should be extended by a concrete grid implementation.
    * @example
    * class SimpleGrid extends IGrid {
    *   constructor() {
