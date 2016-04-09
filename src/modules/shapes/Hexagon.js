@@ -1,12 +1,12 @@
-import Shape from "./Shape";
+import IShape from "./IShape";
 import Point from "./Point";
 
 /**
  * A flat-topped, regular hexagon. Implementation details can be found
  * [here]{@link http://www.redblobgames.com/grids/hexagons/}.
- * @extends Shape
+ * @extends IShape
  */
-class Hexagon extends Shape {
+class Hexagon extends IShape {
   /**
    * Creates a new Hexagon given the (x, y) position and a radius
    * @example

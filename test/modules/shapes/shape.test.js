@@ -1,15 +1,15 @@
-import Shape from "../../../src/modules/shapes/Shape";
+import IShape from "../../../src/modules/shapes/IShape";
 import chai from "chai";
 const expect = chai.expect;
 
-describe("Shape", () => {
+describe("IShape", () => {
   it("should not be instantiable", () => {
-    expect(() => new Shape()).to.throw(TypeError);
+    expect(() => new IShape()).to.throw(TypeError);
   });
 
-  it("throws an error when trying to call unimplemented Shape instance methods", () => {
-    /* Define a TestShape that doesn't override any Shape instance methods */
-    class TestShape extends Shape {
+  it("throws an error when trying to call unimplemented IShape instance methods", () => {
+    /* Define a TestShape that doesn't override any IShape instance methods */
+    class TestShape extends IShape {
       /* No overrides = ERROR! */
     }
     const testShape = new TestShape();
@@ -18,7 +18,7 @@ describe("Shape", () => {
   });
 
   it("can be properly extended to create new types of shapes", () => {
-    class TestShape extends Shape {
+    class TestShape extends IShape {
       constructor(x, y, w, h) {
         super(x, y);
         this.w = w;
