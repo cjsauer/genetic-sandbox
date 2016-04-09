@@ -11,13 +11,12 @@ permalink: /docs/
 <dd><p>The entry point of the entire application</p>
 </dd>
 <dt><a href="#Grid">Grid</a></dt>
-<dd><p>An abstract class modeling a generic grid of <a href="#Tile">Tiles</a> that 
+<dd><p>An abstract class modeling a generic grid of <a href="#Tile">Tiles</a> that
 makes up the &quot;playing surface&quot; in Genetic Sandbox.</p>
 </dd>
 <dt><a href="#HexGrid">HexGrid</a> ⇐ <code><a href="#Grid">Grid</a></code></dt>
 <dd><p>A 2D, hexagonal grid implementation with axial coordinate system.
-Implementation details can be found <a href="http://goo.gl/nLO6sN">here</a>.
-Hexagons in this implementation are flat-top orientated.</p>
+Implementation details can be found <a href="http://goo.gl/nLO6sN">here</a>.</p>
 </dd>
 <dt><a href="#Tile">Tile</a></dt>
 <dd><p>A Tile is nothing more than a <a href="https://goo.gl/sOhi4X">map</a> of key/value
@@ -45,7 +44,7 @@ The entry point of the entire application
 <a name="Grid"></a>
 
 ## *Grid*
-An abstract class modeling a generic grid of [Tiles](#Tile) that 
+An abstract class modeling a generic grid of [Tiles](#Tile) that
 makes up the "playing surface" in Genetic Sandbox.
 
 **Kind**: global abstract class  
@@ -54,7 +53,7 @@ interface for implementing new types of grids (hexagonal, cartesian, etc).
 Subclasses of Grid will have to implement their own method for storing Tiles,
 which will ultimately define the grid's coordinate system. For example, a 2D,
 cartesian grid could be implemented using a two dimensional array of Tiles,
-and then the below methods (e.g. getTile()) would be overridden to 
+and then the below methods (e.g. getTile()) would be overridden to
 take (x,y) as arguments.  
 **See**
 
@@ -133,7 +132,6 @@ Calculates the distance between two grid coordinates in tiles
 ## HexGrid ⇐ <code>[Grid](#Grid)</code>
 A 2D, hexagonal grid implementation with axial coordinate system.
 Implementation details can be found [here](http://goo.gl/nLO6sN).
-Hexagons in this implementation are flat-top orientated.
 
 **Kind**: global class  
 **Extends:** <code>[Grid](#Grid)</code>  
@@ -147,26 +145,35 @@ Hexagons in this implementation are flat-top orientated.
     * [new HexGrid(radius, [defaultTileProps])](#new_HexGrid_new)
     * [.getTile(q, r)](#HexGrid+getTile) ⇒ <code>[Tile](#Tile)</code>
     * [.getTiles()](#HexGrid+getTiles) ⇒ <code>Array.Tile</code>
-    * *[.neighborsOf()](#Grid+neighborsOf) ⇒ <code>Array.Tile</code>*
-    * *[.distanceBetween()](#Grid+distanceBetween) ⇒ <code>number</code>*
+    * [.neighborsOf(q, r)](#HexGrid+neighborsOf) ⇒ <code>Array.Tile</code>
+    * [.distanceBetween(q1, r1, q2, r2)](#HexGrid+distanceBetween) ⇒ <code>number</code>
 
 <a name="new_HexGrid_new"></a>
 
 ### new HexGrid(radius, [defaultTileProps])
-Constructs a new HexGrid of given radius, meaning the pattern of tiles within the
-grid will then form a hexagon itself with hex (0,0) being the origin.
-A grid of radius 1 is just a single hexagon.
+Constructs a new HexGrid of given radius. The pattern of tiles within the
+grid will then form a hexagon itself with (0,0) being the center.
+A grid of radius 0 is just a single hexagon, radius 1 is a single hexagon
+surrounded by 1 layer of hexagons, and so on...
 
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| radius | <code>number</code> |  | Number of tiles from center of grid to the edge (inclusive) |
+| radius | <code>number</code> |  | Number of tiles from center of grid to the edge, not counting the center tile |
 | [defaultTileProps] | <code>Object</code> | <code>{}</code> | Default properties that all Tiles will be initialized with |
 
+**Example**  
+
+```js
+let myGrid = new HexGrid(10, {
+   biome: "desert"
+});
+```
 <a name="HexGrid+getTile"></a>
 
 ### hexGrid.getTile(q, r) ⇒ <code>[Tile](#Tile)</code>
-Returns the Tile at axial coordinates (q, r)
+Returns the Tile at axial coordinates (q, r). q can be read as "column",
+and r can be read as "row".
 
 **Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
 **Overrides:** <code>[getTile](#Grid+getTile)</code>  
@@ -185,20 +192,36 @@ Returns an array of all tiles in the Grid
 **Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
 **Overrides:** <code>[getTiles](#Grid+getTiles)</code>  
 **Returns**: <code>Array.Tile</code> - Array of all tiles in this Grid  
-<a name="Grid+neighborsOf"></a>
+<a name="HexGrid+neighborsOf"></a>
 
-### *hexGrid.neighborsOf() ⇒ <code>Array.Tile</code>*
-Returns the Tiles that are adjacent to the Tile at the provided coordinates.
+### hexGrid.neighborsOf(q, r) ⇒ <code>Array.Tile</code>
+Returns the Tiles that are adjacent to the Tile at the provided (q, r) coordinates.
 
-**Kind**: instance abstract method of <code>[HexGrid](#HexGrid)</code>  
+**Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
+**Overrides:** <code>[neighborsOf](#Grid+neighborsOf)</code>  
 **Returns**: <code>Array.Tile</code> - The array of neighboring Tiles  
-<a name="Grid+distanceBetween"></a>
 
-### *hexGrid.distanceBetween() ⇒ <code>number</code>*
-Calculates the distance between two grid coordinates in tiles
+| Param | Type | Description |
+| --- | --- | --- |
+| q | <code>number</code> | q coordinate of Tile for which to fetch neighbors |
+| r | <code>number</code> | r coordinate of Tile for which to fetch neighbors |
 
-**Kind**: instance abstract method of <code>[HexGrid](#HexGrid)</code>  
+<a name="HexGrid+distanceBetween"></a>
+
+### hexGrid.distanceBetween(q1, r1, q2, r2) ⇒ <code>number</code>
+Calculates the distance between two (q, r) coordinates in tiles
+
+**Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
+**Overrides:** <code>[distanceBetween](#Grid+distanceBetween)</code>  
 **Returns**: <code>number</code> - The distance between the provided coordinates in tiles  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| q1 | <code>number</code> | q coordinate of first tile |
+| r1 | <code>number</code> | r coordinate of first tile |
+| q2 | <code>number</code> | q coordinate of second tile |
+| r2 | <code>number</code> | r coordinate of second tile |
+
 <a name="Tile"></a>
 
 ## Tile
