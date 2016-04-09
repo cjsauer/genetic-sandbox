@@ -1,5 +1,5 @@
 /**
- * An abstract class modeling a generic gGridrid of [Tiles]{@link Tile} that
+ * An abstract class modeling a generic grid of [Tiles]{@link Tile} that
  * makes up the "playing surface" in Genetic Sandbox.
  * @summary Serves as an interface for implementing new types of grids
  * (hexagonal, cartesian, etc).  Subclasses of IGrid will have to implement
@@ -18,17 +18,17 @@ class IGrid {
    * class SimpleGrid extends IGrid {
    *   constructor() {
    *     super();
-   *     this.tiles = [0, 1, 2, 3, 4, 5];
+   *     this._tiles = [0, 1, 2, 3, 4, 5];
    *   }
    *
    *   getTile(i) {
-   *     return this.tiles[i];
+   *     return this._tiles[i];
    *   }
    *
    *   neighborsOf(i) {
    *     return [
-   *       this.tiles[(i - 1) % this.tiles.length],
-   *       this.tiles[(i + 1) % this.tiles.length]
+   *       this._tiles[(i - 1) % this._tiles.length],
+   *       this._tiles[(i + 1) % this._tiles.length]
    *     ];
    *   }
    *

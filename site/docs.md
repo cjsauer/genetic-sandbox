@@ -15,7 +15,7 @@ permalink: /docs/
 Implementation details can be found <a href="http://goo.gl/nLO6sN">here</a>.</p>
 </dd>
 <dt><a href="#IGrid">IGrid</a></dt>
-<dd><p>An abstract class modeling a generic gGridrid of <a href="#Tile">Tiles</a> that
+<dd><p>An abstract class modeling a generic grid of <a href="#Tile">Tiles</a> that
 makes up the &quot;playing surface&quot; in Genetic Sandbox.</p>
 </dd>
 <dt><a href="#Tile">Tile</a></dt>
@@ -166,17 +166,16 @@ let distanceFromCenterToEdge = myGrid.distanceBetween(0, 0, 2, -2); // 2
 <a name="IGrid"></a>
 
 ## *IGrid*
-An abstract class modeling a generic gGridrid of [Tiles](#Tile) that
+An abstract class modeling a generic grid of [Tiles](#Tile) that
 makes up the "playing surface" in Genetic Sandbox.
 
 **Kind**: global abstract class  
-**Summary**: IGrid cannot be instantiated directly, but instead serves as an
-interface for implementing new types of grids (hexagonal, cartesian, etc).
-Subclasses of IGrid will have to implement their own method for storing Tiles,
-which will ultimately define the grid's coordinate system. For example, a 2D,
-cartesian grid could be implemented using a two dimensional array of Tiles,
-and then the below methods (e.g. getTile()) would be overridden to
-take (x,y) as arguments.  
+**Summary**: Serves as an interface for implementing new types of grids
+(hexagonal, cartesian, etc).  Subclasses of IGrid will have to implement
+their own method for storing Tiles, which will ultimately define the grid's
+coordinate system. For example, a 2D, cartesian grid could be implemented
+using a two dimensional array of Tiles, and then the below methods (e.g.
+getTile()) would be overridden to take (x,y) as arguments.  
 **See**
 
 - [Tile](#Tile)
@@ -193,8 +192,7 @@ take (x,y) as arguments.
 <a name="new_IGrid_new"></a>
 
 ### *new IGrid()*
-IGrid can not be instantiated directly, but instead should be extended
-by a concrete grid implementation.
+IGrid should be extended by a concrete grid implementation.
 
 **Example**  
 
@@ -202,17 +200,17 @@ by a concrete grid implementation.
 class SimpleGrid extends IGrid {
   constructor() {
     super();
-    this.tiles = [0, 1, 2, 3, 4, 5];
+    this._tiles = [0, 1, 2, 3, 4, 5];
   }
 
   getTile(i) {
-    return this.tiles[i];
+    return this._tiles[i];
   }
 
   neighborsOf(i) {
     return [
-      this.tiles[(i - 1) % this.tiles.length],
-      this.tiles[(i + 1) % this.tiles.length]
+      this._tiles[(i - 1) % this._tiles.length],
+      this._tiles[(i + 1) % this._tiles.length]
     ];
   }
 
@@ -440,8 +438,7 @@ and a height.
 
 ### *new IShape([x], [y])*
 Creates a new shape at position (x, y).
-IShape cannot be instantiated directly. Instead, IShape should be extended
-and its members overridden by a concrete subclass.
+IShape should be extended and its members overridden by a concrete subclass.
 
 
 | Param | Type | Default | Description |
