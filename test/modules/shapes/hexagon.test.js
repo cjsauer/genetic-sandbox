@@ -4,6 +4,8 @@ import chai from "chai";
 const expect = chai.expect;
 
 describe("Hexagon", () => {
+  const errorMargin = 0.00001;
+
   it("should extend Shape", () => {
     const hex = new Hexagon(0, 0, 1);
     expect(hex instanceof Shape).to.be.true;
@@ -21,27 +23,27 @@ describe("Hexagon", () => {
     const radius = 3;
     const hex = new Hexagon(x, y, radius);
 
-    expect(hex.cornerAt(0).x).to.equal(x + radius * Math.cos(Math.PI / 180 * 0));
-    expect(hex.cornerAt(0).y).to.equal(y + radius * Math.sin(Math.PI / 180 * 0));
-    expect(hex.cornerAt(1).x).to.equal(x + radius * Math.cos(Math.PI / 180 * -60));
-    expect(hex.cornerAt(1).y).to.equal(y + radius * Math.sin(Math.PI / 180 * -60));
-    expect(hex.cornerAt(2).x).to.equal(x + radius * Math.cos(Math.PI / 180 * -120));
-    expect(hex.cornerAt(2).y).to.equal(y + radius * Math.sin(Math.PI / 180 * -120));
-    expect(hex.cornerAt(3).x).to.equal(x + radius * Math.cos(Math.PI / 180 * -180));
-    expect(hex.cornerAt(3).y).to.equal(y + radius * Math.sin(Math.PI / 180 * -180));
-    expect(hex.cornerAt(4).x).to.equal(x + radius * Math.cos(Math.PI / 180 * -240));
-    expect(hex.cornerAt(4).y).to.equal(y + radius * Math.sin(Math.PI / 180 * -240));
-    expect(hex.cornerAt(5).x).to.equal(x + radius * Math.cos(Math.PI / 180 * -300));
-    expect(hex.cornerAt(5).y).to.equal(y + radius * Math.sin(Math.PI / 180 * -300));
+    expect(hex.cornerAt(0).x).to.be.closeTo(7.99999, errorMargin);
+    expect(hex.cornerAt(0).y).to.be.closeTo(10.00000, errorMargin);
+    expect(hex.cornerAt(1).x).to.be.closeTo(6.50000, errorMargin);
+    expect(hex.cornerAt(1).y).to.be.closeTo(7.40192, errorMargin);
+    expect(hex.cornerAt(2).x).to.be.closeTo(3.50000, errorMargin);
+    expect(hex.cornerAt(2).y).to.be.closeTo(7.40192, errorMargin);
+    expect(hex.cornerAt(3).x).to.be.closeTo(2.00000, errorMargin);
+    expect(hex.cornerAt(3).y).to.be.closeTo(10.00000, errorMargin);
+    expect(hex.cornerAt(4).x).to.be.closeTo(3.50000, errorMargin);
+    expect(hex.cornerAt(4).y).to.be.closeTo(12.59807, errorMargin);
+    expect(hex.cornerAt(5).x).to.be.closeTo(6.50000, errorMargin);
+    expect(hex.cornerAt(5).y).to.be.closeTo(12.59807, errorMargin);
   });
 
   it("can calculate its bounding box's height and width", () => {
-    const x = 2;
-    const y = 8;
-    const radius = 5;
-    const hex = new Hexagon(x, y, radius);
+    let hex = new Hexagon(2, 8, 5);
+    expect(hex.width).to.equal(10);
+    expect(hex.height).to.be.closeTo(8.66025, errorMargin);
 
-    expect(hex.width).to.equal(radius * 2);
-    expect(hex.height).to.equal(Math.sqrt(3) / 2 * hex.width);
+    hex = new Hexagon(0, 0, 10);
+    expect(hex.width).to.equal(20);
+    expect(hex.height).to.be.closeTo(17.32050, errorMargin);
   });
 });
