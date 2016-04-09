@@ -1,14 +1,14 @@
-import Grid from "../../../src/modules/grid/Grid";
+import IGrid from "../../../src/modules/grid/IGrid";
 import chai from "chai";
 const expect = chai.expect;
 
-describe("Abstract Grid", () => {
-  class DummyGrid extends Grid {
-    /* An empty implementation of a concrete Grid subclass */
+describe("Abstract IGrid", () => {
+  class DummyGrid extends IGrid {
+    /* An empty implementation of a concrete IGrid subclass */
   }
 
   it("should not be instantiable directly", () => {
-    expect(() => new Grid()).to.throw(TypeError);
+    expect(() => new IGrid()).to.throw(TypeError);
   });
 
   it("should throw an error when trying to call unimplemented methods", () => {
@@ -21,7 +21,7 @@ describe("Abstract Grid", () => {
 
   it("can be properly extended to define new types of grids", () => {
     /* Very simple implementation of a 1D, finite number grid */
-    class SimpleGrid extends Grid {
+    class SimpleGrid extends IGrid {
       constructor() {
         super();
         this.tiles = [0, 1, 2, 3, 4, 5];

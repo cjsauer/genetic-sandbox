@@ -1,14 +1,14 @@
-import Grid from "./Grid";
+import IGrid from "./IGrid";
 import Tile from "./Tile";
 
 /**
  * A 2D, hexagonal grid implementation with axial coordinate system.
  * Implementation details can be found [here]{@link http://goo.gl/nLO6sN}.
- * @see {@link Grid}
+ * @see {@link IGrid}
  * @see {@link Tile}
- * @extends Grid
+ * @extends IGrid
  */
-class HexGrid extends Grid {
+class HexGrid extends IGrid {
   /**
    * Constructs a new HexGrid of given radius. The pattern of tiles within the
    * grid will then form a hexagon itself with (0,0) being the center.
@@ -73,13 +73,13 @@ class HexGrid extends Grid {
   }
 
   /**
-   * Returns an array of all tiles in the Grid
+   * Returns an array of all tiles in the HexGrid
    * @example
    * let tiles = myGrid.getTiles();
    * tiles.forEach((tile) => {
    *   tile.set("temperature", 75).set("forecast", "sunny");
    * });
-   * @returns {Array.Tile} Array of all tiles in this Grid
+   * @returns {Array.Tile} Array of all tiles in this HexGrid
    */
   getTiles() {
     /* this._tiles is just an array of arrays. Reduce to a single dimensional

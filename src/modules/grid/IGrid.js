@@ -1,9 +1,9 @@
 /**
- * An abstract class modeling a generic grid of [Tiles]{@link Tile} that
+ * An abstract class modeling a generic gGridrid of [Tiles]{@link Tile} that
  * makes up the "playing surface" in Genetic Sandbox.
- * @summary Grid cannot be instantiated directly, but instead serves as an
+ * @summary IGrid cannot be instantiated directly, but instead serves as an
  * interface for implementing new types of grids (hexagonal, cartesian, etc).
- * Subclasses of Grid will have to implement their own method for storing Tiles,
+ * Subclasses of IGrid will have to implement their own method for storing Tiles,
  * which will ultimately define the grid's coordinate system. For example, a 2D,
  * cartesian grid could be implemented using a two dimensional array of Tiles,
  * and then the below methods (e.g. getTile()) would be overridden to
@@ -12,12 +12,12 @@
  * @see {@link Tile}
  * @see HexGrid
  */
-class Grid {
+class IGrid {
   /**
-   * Grid can not be instantiated directly, but instead should be extended
+   * IGrid can not be instantiated directly, but instead should be extended
    * by a concrete grid implementation.
    * @example
-   * class SimpleGrid extends Grid {
+   * class SimpleGrid extends IGrid {
    *   constructor() {
    *     super();
    *     this.tiles = [0, 1, 2, 3, 4, 5];
@@ -40,8 +40,8 @@ class Grid {
    * }
    */
   constructor() {
-    if (this.constructor === Grid) {
-      throw new TypeError("Cannot construct Grid instances directly");
+    if (this.constructor === IGrid) {
+      throw new TypeError("Cannot construct IGrid instances directly");
     }
   }
 
@@ -51,16 +51,16 @@ class Grid {
    * @returns {Tile} The tile at the provided coordinates
    */
   getTile(/* coordinates */) {
-    throw new Error("Grid#getTile must be implemented by subclass");
+    throw new Error("IGrid#getTile must be implemented by subclass");
   }
 
   /**
-   * Returns an array of all tiles in the Grid
+   * Returns an array of all tiles in the grid
    * @abstract
-   * @returns {Array.Tile} Array of all tiles in this Grid
+   * @returns {Array.Tile} Array of all tiles in this grid
    */
   getTiles() {
-    throw new Error("Grid#getTiles must be implemented by subclass");
+    throw new Error("IGrid#getTiles must be implemented by subclass");
   }
 
   /**
@@ -69,7 +69,7 @@ class Grid {
    * @returns {Array.Tile} The array of neighboring Tiles
    */
   neighborsOf(/* coordinates */) {
-    throw new Error("Grid#neighborsOf must be implemented by subclass");
+    throw new Error("IGrid#neighborsOf must be implemented by subclass");
   }
 
   /**
@@ -78,8 +78,8 @@ class Grid {
    * @returns {number} The distance between the provided coordinates in tiles
    */
   distanceBetween(/* coordinate1, coordinate2 */) {
-    throw new Error("Grid#distanceBetween must be implemented by subclass");
+    throw new Error("IGrid#distanceBetween must be implemented by subclass");
   }
 }
 
-export default Grid;
+export default IGrid;

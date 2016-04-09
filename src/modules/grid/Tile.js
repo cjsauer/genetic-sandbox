@@ -1,6 +1,6 @@
 /**
  * A Tile is nothing more than a [map]{@link https://goo.gl/sOhi4X} of key/value
- * pairs representing the state at a discrete location within a {@link Grid}.
+ * pairs representing the state at a discrete location within a {@link IGrid}.
  */
 class Tile {
   /**
