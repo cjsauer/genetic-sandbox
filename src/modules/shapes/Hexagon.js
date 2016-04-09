@@ -9,7 +9,6 @@ import Point from "./Point";
 class Hexagon extends Shape {
   /**
    * Creates a new Hexagon given the (x, y) position and a radius
-   *
    * @param {number} x - x position of the hex center
    * @param {number} y - y position of the hex center
    * @param {number} radius - distance from the center to the corners
@@ -28,7 +27,6 @@ class Hexagon extends Shape {
    * Returns the position as a Point of the *ith* corner.
    * There are six corners on a hexagon (0-5) which are indexed in clockwise
    * order starting from the right-most.
-   *
    * @param {number} i - Index of the corner for which to calculate the position.
    * @returns {Point} Position of ith corner
    */

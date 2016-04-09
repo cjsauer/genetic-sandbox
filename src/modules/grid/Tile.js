@@ -5,13 +5,11 @@
 class Tile {
   /**
    * Creates a new tile with initial properties
-   *
    * @example
    * const hotTile = new Tile({
    *   temperature: 110,
    *   biome: "desert"
    * });
-   *
    * @param {Object} [initialProperties={}] - Initial properties of the Tile
    */
   constructor(initialProperties = {}) {

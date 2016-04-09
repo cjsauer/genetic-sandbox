@@ -10,7 +10,6 @@ class Shape {
    * Creates a new shape at position (x, y).
    * Shapes cannot be instantiated directly. Instead, Shape should be extended
    * and its members overridden by a concrete subclass.
-   *
    * @example
    * class Circle extends Shape {
    *   constructor(x, y, radius) {

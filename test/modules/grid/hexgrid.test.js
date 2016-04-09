@@ -5,7 +5,7 @@ const expect = chai.expect;
 
 describe("HexGrid", () => {
   it("should be instantiable given a radius in tiles", () => {
-    /* Create a HexGrid of 1 tile radius */
+    /* Create a HexGrid of 0 tile radius */
     const hexGrid0 = new HexGrid(0);
     expect(hexGrid0).to.be.ok;
     /* There should be 1 hexagonal tile inside of a HexGrid of radius 0 */
