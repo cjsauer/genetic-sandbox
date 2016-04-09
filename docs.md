@@ -10,28 +10,28 @@ permalink: /docs/
 <dt><a href="#App">App</a></dt>
 <dd><p>The entry point of the entire application</p>
 </dd>
-<dt><a href="#Grid">Grid</a></dt>
-<dd><p>An abstract class modeling a generic grid of <a href="#Tile">Tiles</a> that
-makes up the &quot;playing surface&quot; in Genetic Sandbox.</p>
-</dd>
-<dt><a href="#HexGrid">HexGrid</a> ⇐ <code><a href="#Grid">Grid</a></code></dt>
+<dt><a href="#HexGrid">HexGrid</a> ⇐ <code><a href="#IGrid">IGrid</a></code></dt>
 <dd><p>A 2D, hexagonal grid implementation with axial coordinate system.
 Implementation details can be found <a href="http://goo.gl/nLO6sN">here</a>.</p>
 </dd>
+<dt><a href="#IGrid">IGrid</a></dt>
+<dd><p>An abstract class modeling a generic gGridrid of <a href="#Tile">Tiles</a> that
+makes up the &quot;playing surface&quot; in Genetic Sandbox.</p>
+</dd>
 <dt><a href="#Tile">Tile</a></dt>
 <dd><p>A Tile is nothing more than a <a href="https://goo.gl/sOhi4X">map</a> of key/value
-pairs representing the state at a discrete location within a <a href="#Grid">Grid</a>.</p>
+pairs representing the state at a discrete location within a <a href="#IGrid">IGrid</a>.</p>
 </dd>
-<dt><a href="#Hexagon">Hexagon</a> ⇐ <code><a href="#Shape">Shape</a></code></dt>
+<dt><a href="#Hexagon">Hexagon</a> ⇐ <code><a href="#IShape">IShape</a></code></dt>
 <dd><p>A flat-topped, regular hexagon. Implementation details can be found
 <a href="http://www.redblobgames.com/grids/hexagons/">here</a>.</p>
 </dd>
-<dt><a href="#Point">Point</a></dt>
-<dd><p>A 2D point in space. Contains (x, y) coordinates.</p>
-</dd>
-<dt><a href="#Shape">Shape</a></dt>
+<dt><a href="#IShape">IShape</a></dt>
 <dd><p>An abstract class representing 2D geometric shapes that have a center, a width,
 and a height.</p>
+</dd>
+<dt><a href="#Point">Point</a></dt>
+<dd><p>A 2D point in space. Contains (x, y) coordinates.</p>
 </dd>
 </dl>
 
@@ -41,107 +41,21 @@ and a height.</p>
 The entry point of the entire application
 
 **Kind**: global class  
-<a name="Grid"></a>
-
-## *Grid*
-An abstract class modeling a generic grid of [Tiles](#Tile) that
-makes up the "playing surface" in Genetic Sandbox.
-
-**Kind**: global abstract class  
-**Summary**: Grid cannot be instantiated directly, but instead serves as an
-interface for implementing new types of grids (hexagonal, cartesian, etc).
-Subclasses of Grid will have to implement their own method for storing Tiles,
-which will ultimately define the grid's coordinate system. For example, a 2D,
-cartesian grid could be implemented using a two dimensional array of Tiles,
-and then the below methods (e.g. getTile()) would be overridden to
-take (x,y) as arguments.  
-**See**
-
-- [Tile](#Tile)
-- HexGrid
-
-
-* *[Grid](#Grid)*
-    * *[new Grid()](#new_Grid_new)*
-    * **[.getTile()](#Grid+getTile) ⇒ <code>[Tile](#Tile)</code>**
-    * **[.getTiles()](#Grid+getTiles) ⇒ <code>Array.Tile</code>**
-    * **[.neighborsOf()](#Grid+neighborsOf) ⇒ <code>Array.Tile</code>**
-    * **[.distanceBetween()](#Grid+distanceBetween) ⇒ <code>number</code>**
-
-<a name="new_Grid_new"></a>
-
-### *new Grid()*
-Grid can not be instantiated directly, but instead should be extended
-by a concrete grid implementation.
-
-**Example**  
-
-```js
-class SimpleGrid extends Grid {
-  constructor() {
-    super();
-    this.tiles = [0, 1, 2, 3, 4, 5];
-  }
-
-  getTile(i) {
-    return this.tiles[i];
-  }
-
-  neighborsOf(i) {
-    return [
-      this.tiles[(i - 1) % this.tiles.length],
-      this.tiles[(i + 1) % this.tiles.length]
-    ];
-  }
-
-  distanceBetween(i1, i2) {
-    return Math.abs(i1 - i2);
-  }
-}
-```
-<a name="Grid+getTile"></a>
-
-### **grid.getTile() ⇒ <code>[Tile](#Tile)</code>**
-Returns the Tile at the provided coordinates.
-
-**Kind**: instance abstract method of <code>[Grid](#Grid)</code>  
-**Returns**: <code>[Tile](#Tile)</code> - The tile at the provided coordinates  
-<a name="Grid+getTiles"></a>
-
-### **grid.getTiles() ⇒ <code>Array.Tile</code>**
-Returns an array of all tiles in the Grid
-
-**Kind**: instance abstract method of <code>[Grid](#Grid)</code>  
-**Returns**: <code>Array.Tile</code> - Array of all tiles in this Grid  
-<a name="Grid+neighborsOf"></a>
-
-### **grid.neighborsOf() ⇒ <code>Array.Tile</code>**
-Returns the Tiles that are adjacent to the Tile at the provided coordinates.
-
-**Kind**: instance abstract method of <code>[Grid](#Grid)</code>  
-**Returns**: <code>Array.Tile</code> - The array of neighboring Tiles  
-<a name="Grid+distanceBetween"></a>
-
-### **grid.distanceBetween() ⇒ <code>number</code>**
-Calculates the distance between two grid coordinates in tiles
-
-**Kind**: instance abstract method of <code>[Grid](#Grid)</code>  
-**Returns**: <code>number</code> - The distance between the provided coordinates in tiles  
 <a name="HexGrid"></a>
 
-## HexGrid ⇐ <code>[Grid](#Grid)</code>
+## HexGrid ⇐ <code>[IGrid](#IGrid)</code>
 A 2D, hexagonal grid implementation with axial coordinate system.
 Implementation details can be found [here](http://goo.gl/nLO6sN).
 
 **Kind**: global class  
-**Extends:** <code>[Grid](#Grid)</code>  
+**Extends:** <code>[IGrid](#IGrid)</code>  
 **See**
 
-- [Grid](#Grid)
+- [IGrid](#IGrid)
 - [Tile](#Tile)
 
 
-* [HexGrid](#HexGrid) ⇐ <code>[Grid](#Grid)</code>
+* [HexGrid](#HexGrid) ⇐ <code>[IGrid](#IGrid)</code>
     * [new HexGrid(radius, [defaultTileProps])](#new_HexGrid_new)
     * [.getTile(q, r)](#HexGrid+getTile) ⇒ <code>[Tile](#Tile)</code>
     * [.getTiles()](#HexGrid+getTiles) ⇒ <code>Array.Tile</code>
@@ -176,7 +90,7 @@ Returns the Tile at axial coordinates (q, r). q can be read as "column",
 and r can be read as "row".
 
 **Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
-**Overrides:** <code>[getTile](#Grid+getTile)</code>  
+**Overrides:** <code>[getTile](#IGrid+getTile)</code>  
 **Returns**: <code>[Tile](#Tile)</code> - The tile at the provided coordinates  
 
 | Param | Type | Description |
@@ -192,11 +106,11 @@ let originTile = myGrid.getTile(0, 0);
 <a name="HexGrid+getTiles"></a>
 
 ### hexGrid.getTiles() ⇒ <code>Array.Tile</code>
-Returns an array of all tiles in the Grid
+Returns an array of all tiles in the HexGrid
 
 **Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
-**Overrides:** <code>[getTiles](#Grid+getTiles)</code>  
-**Returns**: <code>Array.Tile</code> - Array of all tiles in this Grid  
+**Overrides:** <code>[getTiles](#IGrid+getTiles)</code>  
+**Returns**: <code>Array.Tile</code> - Array of all tiles in this HexGrid  
 **Example**  
 
 ```js
@@ -211,7 +125,7 @@ tiles.forEach((tile) => {
 Returns the Tiles that are adjacent to the Tile at the provided (q, r) coordinates.
 
 **Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
-**Overrides:** <code>[neighborsOf](#Grid+neighborsOf)</code>  
+**Overrides:** <code>[neighborsOf](#IGrid+neighborsOf)</code>  
 **Returns**: <code>Array.Tile</code> - The array of neighboring Tiles  
 
 | Param | Type | Description |
@@ -233,7 +147,7 @@ neighborsOfOrigin.forEach((tile) => {
 Calculates the distance between two (q, r) coordinates in tiles
 
 **Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
-**Overrides:** <code>[distanceBetween](#Grid+distanceBetween)</code>  
+**Overrides:** <code>[distanceBetween](#IGrid+distanceBetween)</code>  
 **Returns**: <code>number</code> - The distance between the provided coordinates in tiles  
 
 | Param | Type | Description |
@@ -249,11 +163,97 @@ Calculates the distance between two (q, r) coordinates in tiles
 let myGrid = new HexGrid(2);
 let distanceFromCenterToEdge = myGrid.distanceBetween(0, 0, 2, -2); // 2
 ```
+<a name="IGrid"></a>
+
+## *IGrid*
+An abstract class modeling a generic gGridrid of [Tiles](#Tile) that
+makes up the "playing surface" in Genetic Sandbox.
+
+**Kind**: global abstract class  
+**Summary**: IGrid cannot be instantiated directly, but instead serves as an
+interface for implementing new types of grids (hexagonal, cartesian, etc).
+Subclasses of IGrid will have to implement their own method for storing Tiles,
+which will ultimately define the grid's coordinate system. For example, a 2D,
+cartesian grid could be implemented using a two dimensional array of Tiles,
+and then the below methods (e.g. getTile()) would be overridden to
+take (x,y) as arguments.  
+**See**
+
+- [Tile](#Tile)
+- HexGrid
+
+
+* *[IGrid](#IGrid)*
+    * *[new IGrid()](#new_IGrid_new)*
+    * **[.getTile()](#IGrid+getTile) ⇒ <code>[Tile](#Tile)</code>**
+    * **[.getTiles()](#IGrid+getTiles) ⇒ <code>Array.Tile</code>**
+    * **[.neighborsOf()](#IGrid+neighborsOf) ⇒ <code>Array.Tile</code>**
+    * **[.distanceBetween()](#IGrid+distanceBetween) ⇒ <code>number</code>**
+
+<a name="new_IGrid_new"></a>
+
+### *new IGrid()*
+IGrid can not be instantiated directly, but instead should be extended
+by a concrete grid implementation.
+
+**Example**  
+
+```js
+class SimpleGrid extends IGrid {
+  constructor() {
+    super();
+    this.tiles = [0, 1, 2, 3, 4, 5];
+  }
+
+  getTile(i) {
+    return this.tiles[i];
+  }
+
+  neighborsOf(i) {
+    return [
+      this.tiles[(i - 1) % this.tiles.length],
+      this.tiles[(i + 1) % this.tiles.length]
+    ];
+  }
+
+  distanceBetween(i1, i2) {
+    return Math.abs(i1 - i2);
+  }
+}
+```
+<a name="IGrid+getTile"></a>
+
+### **iGrid.getTile() ⇒ <code>[Tile](#Tile)</code>**
+Returns the Tile at the provided coordinates.
+
+**Kind**: instance abstract method of <code>[IGrid](#IGrid)</code>  
+**Returns**: <code>[Tile](#Tile)</code> - The tile at the provided coordinates  
+<a name="IGrid+getTiles"></a>
+
+### **iGrid.getTiles() ⇒ <code>Array.Tile</code>**
+Returns an array of all tiles in the grid
+
+**Kind**: instance abstract method of <code>[IGrid](#IGrid)</code>  
+**Returns**: <code>Array.Tile</code> - Array of all tiles in this grid  
+<a name="IGrid+neighborsOf"></a>
+
+### **iGrid.neighborsOf() ⇒ <code>Array.Tile</code>**
+Returns the Tiles that are adjacent to the Tile at the provided coordinates.
+
+**Kind**: instance abstract method of <code>[IGrid](#IGrid)</code>  
+**Returns**: <code>Array.Tile</code> - The array of neighboring Tiles  
+<a name="IGrid+distanceBetween"></a>
+
+### **iGrid.distanceBetween() ⇒ <code>number</code>**
+Calculates the distance between two grid coordinates in tiles
+
+**Kind**: instance abstract method of <code>[IGrid](#IGrid)</code>  
+**Returns**: <code>number</code> - The distance between the provided coordinates in tiles  
 <a name="Tile"></a>
 
 ## Tile
 A Tile is nothing more than a [map](https://goo.gl/sOhi4X) of key/value
-pairs representing the state at a discrete location within a [Grid](#Grid).
+pairs representing the state at a discrete location within a [IGrid](#IGrid).
 
 **Kind**: global class  
 
@@ -338,19 +338,19 @@ let didDeleteSomething = hotTile.delete("temperature");
 ```
 <a name="Hexagon"></a>
 
-## Hexagon ⇐ <code>[Shape](#Shape)</code>
+## Hexagon ⇐ <code>[IShape](#IShape)</code>
 A flat-topped, regular hexagon. Implementation details can be found
 [here](http://www.redblobgames.com/grids/hexagons/).
 
 **Kind**: global class  
-**Extends:** <code>[Shape](#Shape)</code>  
+**Extends:** <code>[IShape](#IShape)</code>  
 
-* [Hexagon](#Hexagon) ⇐ <code>[Shape](#Shape)</code>
+* [Hexagon](#Hexagon) ⇐ <code>[IShape](#IShape)</code>
     * [new Hexagon(x, y, radius)](#new_Hexagon_new)
     * [.radius](#Hexagon+radius) : <code>number</code>
     * [.width](#Hexagon+width) ⇒ <code>number</code>
     * [.height](#Hexagon+height) ⇒ <code>number</code>
-    * [.center](#Shape+center) : <code>[Point](#Point)</code>
+    * [.center](#IShape+center) : <code>[Point](#Point)</code>
     * [.cornerAt(i)](#Hexagon+cornerAt) ⇒ <code>[Point](#Point)</code>
 
 <a name="new_Hexagon_new"></a>
@@ -382,7 +382,7 @@ Distance from the center to the corners
 The width of the bounding box of the hexagon
 
 **Kind**: instance property of <code>[Hexagon](#Hexagon)</code>  
-**Overrides:** <code>[width](#Shape+width)</code>  
+**Overrides:** <code>[width](#IShape+width)</code>  
 **Returns**: <code>number</code> - The width of the bounding box of the hexagon  
 **Example**  
 
@@ -395,14 +395,14 @@ let w = hex.width;
 The height of the bounding box of the hexagon
 
 **Kind**: instance property of <code>[Hexagon](#Hexagon)</code>  
-**Overrides:** <code>[height](#Shape+height)</code>  
+**Overrides:** <code>[height](#IShape+height)</code>  
 **Returns**: <code>number</code> - The height of the bounding box of the hexagon  
 **Example**  
 
 ```js
 let h = hex.height;
 ```
-<a name="Shape+center"></a>
+<a name="IShape+center"></a>
 
 ### hexagon.center : <code>[Point](#Point)</code>
 The center position of this shape
@@ -422,6 +422,65 @@ order starting from the right-most.
 | --- | --- | --- |
 | i | <code>number</code> | Index of the corner for which to calculate the position. |
 
+<a name="IShape"></a>
+
+## *IShape*
+An abstract class representing 2D geometric shapes that have a center, a width,
+and a height.
+
+**Kind**: global abstract class  
+
+* *[IShape](#IShape)*
+    * *[new IShape([x], [y])](#new_IShape_new)*
+    * *[.center](#IShape+center) : <code>[Point](#Point)</code>*
+    * **[.width](#IShape+width) ⇒ <code>number</code>**
+    * **[.height](#IShape+height) ⇒ <code>number</code>**
+
+<a name="new_IShape_new"></a>
+
+### *new IShape([x], [y])*
+Creates a new shape at position (x, y).
+IShape cannot be instantiated directly. Instead, IShape should be extended
+and its members overridden by a concrete subclass.
+
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [x] | <code>number</code> | <code>0</code> | The x position of the center of this shape |
+| [y] | <code>number</code> | <code>0</code> | The y position of the center of this shape |
+
+**Example**  
+
+```js
+class Circle extends IShape {
+  constructor(x, y, radius) {
+    super(x, y);
+    this.r = radius;
+  }
+  get width() { return this.radius * 2; }
+  get height() { return this.width; }
+}
+```
+<a name="IShape+center"></a>
+
+### *iShape.center : <code>[Point](#Point)</code>*
+The center position of this shape
+
+**Kind**: instance property of <code>[IShape](#IShape)</code>  
+<a name="IShape+width"></a>
+
+### **iShape.width ⇒ <code>number</code>**
+The width of the bounding box containing this shape
+
+**Kind**: instance abstract property of <code>[IShape](#IShape)</code>  
+**Returns**: <code>number</code> - The width of the bounding box containing this shape  
+<a name="IShape+height"></a>
+
+### **iShape.height ⇒ <code>number</code>**
+The height of the bounding box containing this shape
+
+**Kind**: instance abstract property of <code>[IShape](#IShape)</code>  
+**Returns**: <code>number</code> - The height of the bounding box containing this shape  
 <a name="Point"></a>
 
 ## Point
@@ -466,62 +525,3 @@ The y coordinate of this point
 
 **Kind**: instance property of <code>[Point](#Point)</code>  
 **Default**: <code>0</code>  
-<a name="Shape"></a>
-
-## *Shape*
-An abstract class representing 2D geometric shapes that have a center, a width,
-and a height.
-
-**Kind**: global abstract class  
-
-* *[Shape](#Shape)*
-    * *[new Shape([x], [y])](#new_Shape_new)*
-    * *[.center](#Shape+center) : <code>[Point](#Point)</code>*
-    * **[.width](#Shape+width) ⇒ <code>number</code>**
-    * **[.height](#Shape+height) ⇒ <code>number</code>**
-
-<a name="new_Shape_new"></a>
-
-### *new Shape([x], [y])*
-Creates a new shape at position (x, y).
-Shapes cannot be instantiated directly. Instead, Shape should be extended
-and its members overridden by a concrete subclass.
-
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| [x] | <code>number</code> | <code>0</code> | The x position of the center of this shape |
-| [y] | <code>number</code> | <code>0</code> | The y position of the center of this shape |
-
-**Example**  
-
-```js
-class Circle extends Shape {
-  constructor(x, y, radius) {
-    super(x, y);
-    this.r = radius;
-  }
-  get width() { return this.radius * 2; }
-  get height() { return this.width; }
-}
-```
-<a name="Shape+center"></a>
-
-### *shape.center : <code>[Point](#Point)</code>*
-The center position of this shape
-
-**Kind**: instance property of <code>[Shape](#Shape)</code>  
-<a name="Shape+width"></a>
-
-### **shape.width ⇒ <code>number</code>**
-The width of the bounding box containing this shape
-
-**Kind**: instance abstract property of <code>[Shape](#Shape)</code>  
-**Returns**: <code>number</code> - The width of the bounding box containing this shape  
-<a name="Shape+height"></a>
-
-### **shape.height ⇒ <code>number</code>**
-The height of the bounding box containing this shape
-
-**Kind**: instance abstract property of <code>[Shape](#Shape)</code>  
-**Returns**: <code>number</code> - The height of the bounding box containing this shape  
