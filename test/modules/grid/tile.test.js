@@ -38,11 +38,24 @@ describe("Tile", () => {
       expect(freshTile.get("habitable")).to.be.true;
     });
 
+    it("set function is chainable", () => {
+      const numberTile = new Tile();
+      numberTile.set("one", 1).set("two", 2).set("three", 3);
+      expect(numberTile.get("one")).to.equal(1);
+      expect(numberTile.get("two")).to.equal(2);
+      expect(numberTile.get("three")).to.equal(3);
+    });
+
     it("can be deleted", () => {
       const coldTile = new Tile({ temperature: -30 });
+
       expect(coldTile.get("temperature")).to.equal(-30);
-      coldTile.delete("temperature");
+      let didDelete = coldTile.delete("temperature");
+      expect(didDelete).to.be.true;
       expect(coldTile.get("temperature")).to.be.undefined;
+
+      didDelete = coldTile.delete("Non-existant key");
+      expect(didDelete).to.be.false;
     });
   });
 });

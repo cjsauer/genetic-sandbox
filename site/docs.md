@@ -184,6 +184,11 @@ and r can be read as "row".
 | q | <code>number</code> | q coordinate of Tile to fetch |
 | r | <code>number</code> | r coordinate of Tile to fetch |
 
+**Example**  
+
+```js
+let originTile = myGrid.getTile(0, 0);
+```
 <a name="HexGrid+getTiles"></a>
 
 ### hexGrid.getTiles() ⇒ <code>Array.Tile</code>
@@ -192,6 +197,14 @@ Returns an array of all tiles in the Grid
 **Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
 **Overrides:** <code>[getTiles](#Grid+getTiles)</code>  
 **Returns**: <code>Array.Tile</code> - Array of all tiles in this Grid  
+**Example**  
+
+```js
+let tiles = myGrid.getTiles();
+tiles.forEach((tile) => {
+  tile.set("temperature", 75).set("forecast", "sunny");
+});
+```
 <a name="HexGrid+neighborsOf"></a>
 
 ### hexGrid.neighborsOf(q, r) ⇒ <code>Array.Tile</code>
@@ -206,6 +219,14 @@ Returns the Tiles that are adjacent to the Tile at the provided (q, r) coordinat
 | q | <code>number</code> | q coordinate of Tile for which to fetch neighbors |
 | r | <code>number</code> | r coordinate of Tile for which to fetch neighbors |
 
+**Example**  
+
+```js
+let neighborsOfOrigin = myGrid.neighborsOf(0, 0);
+neighborsOfOrigin.forEach((tile) => {
+  tile.set("bordersOrigin", true);
+});
+```
 <a name="HexGrid+distanceBetween"></a>
 
 ### hexGrid.distanceBetween(q1, r1, q2, r2) ⇒ <code>number</code>
@@ -222,6 +243,12 @@ Calculates the distance between two (q, r) coordinates in tiles
 | q2 | <code>number</code> | q coordinate of second tile |
 | r2 | <code>number</code> | r coordinate of second tile |
 
+**Example**  
+
+```js
+let myGrid = new HexGrid(2);
+let distanceFromCenterToEdge = myGrid.distanceBetween(0, 0, 2, -2); // 2
+```
 <a name="Tile"></a>
 
 ## Tile
@@ -233,8 +260,8 @@ pairs representing the state at a discrete location within a [Grid](#Grid).
 * [Tile](#Tile)
     * [new Tile([initialProperties])](#new_Tile_new)
     * [.get(key)](#Tile+get) ⇒ <code>\*</code>
-    * [.set(key, value)](#Tile+set)
-    * [.delete(key)](#Tile+delete)
+    * [.set(key, value)](#Tile+set) ⇒ <code>[Tile](#Tile)</code>
+    * [.delete(key)](#Tile+delete) ⇒ <code>Boolean</code>
 
 <a name="new_Tile_new"></a>
 
@@ -266,30 +293,49 @@ Returns the specified property's value
 | --- | --- | --- |
 | key | <code>key</code> | Name of the property |
 
+**Example**  
+
+```js
+let temperature = hotTile.get("temperature");
+```
 <a name="Tile+set"></a>
 
-### tile.set(key, value)
+### tile.set(key, value) ⇒ <code>[Tile](#Tile)</code>
 Sets the specified property's value, or creates and sets the property if it
 does not yet exist.
 
 **Kind**: instance method of <code>[Tile](#Tile)</code>  
+**Returns**: <code>[Tile](#Tile)</code> - The Tile object  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | key | <code>key</code> | Name of the property to set/create |
 | value | <code>\*</code> | Value of the property |
 
+**Example**  
+
+```js
+hotTile.set("vegetation", ["cactus", "tumbleweed", "wildflowers"]);
+//Chaining
+hotTile.set("one", 1).set("two", 2).set("three", 3);
+```
 <a name="Tile+delete"></a>
 
-### tile.delete(key)
+### tile.delete(key) ⇒ <code>Boolean</code>
 Deletes the specified property, removing it from the Tile completely
 
 **Kind**: instance method of <code>[Tile](#Tile)</code>  
+**Returns**: <code>Boolean</code> - True if an item was actually deleted, false otherwise  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | key | <code>key</code> | Name of the property to delete |
 
+**Example**  
+
+```js
+let didDeleteSomething = hotTile.delete("temperature");
+```
 <a name="Hexagon"></a>
 
 ## Hexagon ⇐ <code>[Shape](#Shape)</code>
@@ -319,6 +365,11 @@ Creates a new Hexagon given the (x, y) position and a radius
 | y | <code>number</code> | y position of the hex center |
 | radius | <code>number</code> | distance from the center to the corners |
 
+**Example**  
+
+```js
+let hex = new Hexagon(0, 0, 100);
+```
 <a name="Hexagon+radius"></a>
 
 ### hexagon.radius : <code>number</code>
@@ -333,6 +384,11 @@ The width of the bounding box of the hexagon
 **Kind**: instance property of <code>[Hexagon](#Hexagon)</code>  
 **Overrides:** <code>[width](#Shape+width)</code>  
 **Returns**: <code>number</code> - The width of the bounding box of the hexagon  
+**Example**  
+
+```js
+let w = hex.width;
+```
 <a name="Hexagon+height"></a>
 
 ### hexagon.height ⇒ <code>number</code>
@@ -341,6 +397,11 @@ The height of the bounding box of the hexagon
 **Kind**: instance property of <code>[Hexagon](#Hexagon)</code>  
 **Overrides:** <code>[height](#Shape+height)</code>  
 **Returns**: <code>number</code> - The height of the bounding box of the hexagon  
+**Example**  
+
+```js
+let h = hex.height;
+```
 <a name="Shape+center"></a>
 
 ### hexagon.center : <code>[Point](#Point)</code>
@@ -384,6 +445,13 @@ Construct a new Point at coordinate (x,y)
 | [x] | <code>number</code> | <code>0</code> | The x coordinate |
 | [y] | <code>number</code> | <code>0</code> | The y coordinate |
 
+**Example**  
+
+```js
+let myPoint = new Point(100, 200);
+myPoint.x = 0;
+myPoint.y = 0;
+```
 <a name="Point+x"></a>
 
 ### point.x : <code>number</code>

@@ -52,6 +52,8 @@ class HexGrid extends Grid {
   /**
    * Returns the Tile at axial coordinates (q, r). q can be read as "column",
    * and r can be read as "row".
+   * @example
+   * let originTile = myGrid.getTile(0, 0);
    * @param {number} q - q coordinate of Tile to fetch
    * @param {number} r - r coordinate of Tile to fetch
    * @returns {Tile} The tile at the provided coordinates
@@ -72,6 +74,11 @@ class HexGrid extends Grid {
 
   /**
    * Returns an array of all tiles in the Grid
+   * @example
+   * let tiles = myGrid.getTiles();
+   * tiles.forEach((tile) => {
+   *   tile.set("temperature", 75).set("forecast", "sunny");
+   * });
    * @returns {Array.Tile} Array of all tiles in this Grid
    */
   getTiles() {
@@ -84,6 +91,11 @@ class HexGrid extends Grid {
 
   /**
    * Returns the Tiles that are adjacent to the Tile at the provided (q, r) coordinates.
+   * @example
+   * let neighborsOfOrigin = myGrid.neighborsOf(0, 0);
+   * neighborsOfOrigin.forEach((tile) => {
+   *   tile.set("bordersOrigin", true);
+   * });
    * @param {number} q - q coordinate of Tile for which to fetch neighbors
    * @param {number} r - r coordinate of Tile for which to fetch neighbors
    * @returns {Array.Tile} The array of neighboring Tiles
@@ -102,6 +114,9 @@ class HexGrid extends Grid {
 
   /**
    * Calculates the distance between two (q, r) coordinates in tiles
+   * @example
+   * let myGrid = new HexGrid(2);
+   * let distanceFromCenterToEdge = myGrid.distanceBetween(0, 0, 2, -2); // 2
    * @param {number} q1 - q coordinate of first tile
    * @param {number} r1 - r coordinate of first tile
    * @param {number} q2 - q coordinate of second tile

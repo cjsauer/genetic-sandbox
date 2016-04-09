@@ -18,6 +18,8 @@ class Tile {
 
   /**
    * Returns the specified property's value
+   * @example
+   * let temperature = hotTile.get("temperature");
    * @param {key} key - Name of the property
    * @returns {*} Value of property at `key`
    */
@@ -28,19 +30,28 @@ class Tile {
   /**
    * Sets the specified property's value, or creates and sets the property if it
    * does not yet exist.
+   * @example
+   * hotTile.set("vegetation", ["cactus", "tumbleweed", "wildflowers"]);
+   * //Chaining
+   * hotTile.set("one", 1).set("two", 2).set("three", 3);
    * @param {key} key - Name of the property to set/create
    * @param {*} value - Value of the property
+   * @returns {Tile} The Tile object
    */
   set(key, value) {
     this._state.set(key, value);
+    return this;
   }
 
   /**
    * Deletes the specified property, removing it from the Tile completely
+   * @example
+   * let didDeleteSomething = hotTile.delete("temperature");
    * @param {key} key - Name of the property to delete
+   * @returns {Boolean} True if an item was actually deleted, false otherwise
    */
   delete(key) {
-    this._state.delete(key);
+    return this._state.delete(key);
   }
 }
 
