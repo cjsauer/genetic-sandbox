@@ -1,6 +1,7 @@
 /**
- * A Tile is nothing more than a [map]{@link https://goo.gl/sOhi4X} of key/value
- * pairs representing the state at a discrete location within a {@link IGrid}.
+ * A Tile is nothing more than a wrapper around a stanard JavaScript object,
+ * and represents the state at a discrete location within a {@link IGrid}.
+ * @see {@link IGrid}
  */
 class Tile {
   /**
@@ -13,18 +14,18 @@ class Tile {
    * @param {Object} [initialProperties={}] - Initial properties of the Tile
    */
   constructor(initialProperties = {}) {
-    this._state = new Map(Object.entries(initialProperties));
+    this._state = initialProperties;
   }
 
   /**
    * Returns the specified property's value
    * @example
    * let temperature = hotTile.get("temperature");
-   * @param {key} key - Name of the property
-   * @returns {*} Value of property at `key`
+   * @param {string} key - Name of the property
+   * @returns {*} Value of property at `key`, or undefined if property not found
    */
   get(key) {
-    return this._state.get(key);
+    return this._state[key];
   }
 
   /**
@@ -34,12 +35,12 @@ class Tile {
    * hotTile.set("vegetation", ["cactus", "tumbleweed", "wildflowers"]);
    * //Chaining
    * hotTile.set("one", 1).set("two", 2).set("three", 3);
-   * @param {key} key - Name of the property to set/create
+   * @param {string} key - Name of the property to set/create
    * @param {*} value - Value of the property
    * @returns {Tile} The Tile object
    */
   set(key, value) {
-    this._state.set(key, value);
+    this._state[key] = value;
     return this;
   }
 
@@ -47,11 +48,15 @@ class Tile {
    * Deletes the specified property, removing it from the Tile completely
    * @example
    * let didDeleteSomething = hotTile.delete("temperature");
-   * @param {key} key - Name of the property to delete
-   * @returns {Boolean} True if an item was actually deleted, false otherwise
+   * @param {string} key - Name of the property to delete
+   * @returns {boolean} True if an item was actually deleted, false otherwise
    */
   delete(key) {
-    return this._state.delete(key);
+    if (this._state.hasOwnProperty(key)) {
+      delete this._state[key];
+      return true;
+    }
+    return false;
   }
 }
 
