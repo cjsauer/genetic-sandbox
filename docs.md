@@ -15,12 +15,13 @@ permalink: /docs/
 Implementation details can be found <a href="http://goo.gl/nLO6sN">here</a>.</p>
 </dd>
 <dt><a href="#IGrid">IGrid</a></dt>
-<dd><p>An abstract class modeling a generic grid of <a href="#Tile">Tiles</a> that
-makes up the &quot;playing surface&quot; in Genetic Sandbox.</p>
+<dd><p>An abstract class modeling a generic 2D grid of <a href="#Tile">Tiles</a>.
+A subclass of IGrid is ultimately responsible for both storing and accessing
+tiles.</p>
 </dd>
 <dt><a href="#Tile">Tile</a></dt>
-<dd><p>A Tile is nothing more than a <a href="https://goo.gl/sOhi4X">map</a> of key/value
-pairs representing the state at a discrete location within a <a href="#IGrid">IGrid</a>.</p>
+<dd><p>A Tile is nothing more than a wrapper around a stanard JavaScript object,
+and represents the state at a discrete location within a <a href="#IGrid">IGrid</a>.</p>
 </dd>
 <dt><a href="#Hexagon">Hexagon</a> ⇐ <code><a href="#IShape">IShape</a></code></dt>
 <dd><p>A flat-topped, regular hexagon. Implementation details can be found
@@ -32,6 +33,12 @@ and a height.</p>
 </dd>
 <dt><a href="#Point">Point</a></dt>
 <dd><p>A 2D point in space. Contains (x, y) coordinates.</p>
+</dd>
+<dt><a href="#MultiStringHashMap">MultiStringHashMap</a></dt>
+<dd><p>A key/value store where the key can be a single string, or an array of
+strings. In either case, keys are stored internally as strings. String
+order in an array key does not matter. In other words, [&quot;one&quot;, &quot;two&quot;] and
+[&quot;two&quot;, &quot;one&quot;] will point to the same value in the map.</p>
 </dd>
 </dl>
 
@@ -166,28 +173,23 @@ let distanceFromCenterToEdge = myGrid.distanceBetween(0, 0, 2, -2); // 2
 <a name="IGrid"></a>
 
 ## *IGrid*
-An abstract class modeling a generic grid of [Tiles](#Tile) that
-makes up the "playing surface" in Genetic Sandbox.
+An abstract class modeling a generic 2D grid of [Tiles](#Tile).
+A subclass of IGrid is ultimately responsible for both storing and accessing
+tiles.
 
 **Kind**: global abstract class  
-**Summary**: Serves as an interface for implementing new types of grids
-(hexagonal, cartesian, etc).  Subclasses of IGrid will have to implement
-their own method for storing Tiles, which will ultimately define the grid's
-coordinate system. For example, a 2D, cartesian grid could be implemented
-using a two dimensional array of Tiles, and then the below methods (e.g.
-getTile()) would be overridden to take (x,y) as arguments.  
 **See**
 
 - [Tile](#Tile)
-- HexGrid
+- [HexGrid](#HexGrid)
 
 
 * *[IGrid](#IGrid)*
     * *[new IGrid()](#new_IGrid_new)*
-    * **[.getTile()](#IGrid+getTile) ⇒ <code>[Tile](#Tile)</code>**
+    * **[.getTile(x, y)](#IGrid+getTile) ⇒ <code>[Tile](#Tile)</code>**
     * **[.getTiles()](#IGrid+getTiles) ⇒ <code>Array.Tile</code>**
-    * **[.neighborsOf()](#IGrid+neighborsOf) ⇒ <code>Array.Tile</code>**
-    * **[.distanceBetween()](#IGrid+distanceBetween) ⇒ <code>number</code>**
+    * **[.neighborsOf(x, y)](#IGrid+neighborsOf) ⇒ <code>Array.Tile</code>**
+    * **[.distanceBetween(x1, y1, x2, y2)](#IGrid+distanceBetween) ⇒ <code>number</code>**
 
 <a name="new_IGrid_new"></a>
 
@@ -221,11 +223,17 @@ class SimpleGrid extends IGrid {
 ```
 <a name="IGrid+getTile"></a>
 
-### **iGrid.getTile() ⇒ <code>[Tile](#Tile)</code>**
+### **iGrid.getTile(x, y) ⇒ <code>[Tile](#Tile)</code>**
 Returns the Tile at the provided coordinates.
 
 **Kind**: instance abstract method of <code>[IGrid](#IGrid)</code>  
 **Returns**: <code>[Tile](#Tile)</code> - The tile at the provided coordinates  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| x | <code>number</code> | First dimension of tile coordinate |
+| y | <code>number</code> | Second dimension of tile coordinate |
+
 <a name="IGrid+getTiles"></a>
 
 ### **iGrid.getTiles() ⇒ <code>Array.Tile</code>**
@@ -235,31 +243,46 @@ Returns an array of all tiles in the grid
 **Returns**: <code>Array.Tile</code> - Array of all tiles in this grid  
 <a name="IGrid+neighborsOf"></a>
 
-### **iGrid.neighborsOf() ⇒ <code>Array.Tile</code>**
+### **iGrid.neighborsOf(x, y) ⇒ <code>Array.Tile</code>**
 Returns the Tiles that are adjacent to the Tile at the provided coordinates.
 
 **Kind**: instance abstract method of <code>[IGrid](#IGrid)</code>  
 **Returns**: <code>Array.Tile</code> - The array of neighboring Tiles  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| x | <code>number</code> | First dimension of tile coordinate |
+| y | <code>number</code> | Second dimension of tile coordinate |
+
 <a name="IGrid+distanceBetween"></a>
 
-### **iGrid.distanceBetween() ⇒ <code>number</code>**
+### **iGrid.distanceBetween(x1, y1, x2, y2) ⇒ <code>number</code>**
 Calculates the distance between two grid coordinates in tiles
 
 **Kind**: instance abstract method of <code>[IGrid](#IGrid)</code>  
 **Returns**: <code>number</code> - The distance between the provided coordinates in tiles  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| x1 | <code>number</code> | First dimension of first tile coordinate |
+| y1 | <code>number</code> | Second dimension of first tile coordinate |
+| x2 | <code>number</code> | First dimension of second tile coordinate |
+| y2 | <code>number</code> | Second dimension of second tile coordinate |
+
 <a name="Tile"></a>
 
 ## Tile
-A Tile is nothing more than a [map](https://goo.gl/sOhi4X) of key/value
-pairs representing the state at a discrete location within a [IGrid](#IGrid).
+A Tile is nothing more than a wrapper around a stanard JavaScript object,
+and represents the state at a discrete location within a [IGrid](#IGrid).
 
 **Kind**: global class  
+**See**: [IGrid](#IGrid)  
 
 * [Tile](#Tile)
     * [new Tile([initialProperties])](#new_Tile_new)
     * [.get(key)](#Tile+get) ⇒ <code>\*</code>
     * [.set(key, value)](#Tile+set) ⇒ <code>[Tile](#Tile)</code>
-    * [.delete(key)](#Tile+delete) ⇒ <code>Boolean</code>
+    * [.delete(key)](#Tile+delete) ⇒ <code>boolean</code>
 
 <a name="new_Tile_new"></a>
 
@@ -285,11 +308,11 @@ const hotTile = new Tile({
 Returns the specified property's value
 
 **Kind**: instance method of <code>[Tile](#Tile)</code>  
-**Returns**: <code>\*</code> - Value of property at `key`  
+**Returns**: <code>\*</code> - Value of property at `key`, or undefined if property not found  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| key | <code>key</code> | Name of the property |
+| key | <code>string</code> | Name of the property |
 
 **Example**  
 
@@ -307,7 +330,7 @@ does not yet exist.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| key | <code>key</code> | Name of the property to set/create |
+| key | <code>string</code> | Name of the property to set/create |
 | value | <code>\*</code> | Value of the property |
 
 **Example**  
@@ -319,15 +342,15 @@ hotTile.set("one", 1).set("two", 2).set("three", 3);
 ```
 <a name="Tile+delete"></a>
 
-### tile.delete(key) ⇒ <code>Boolean</code>
+### tile.delete(key) ⇒ <code>boolean</code>
 Deletes the specified property, removing it from the Tile completely
 
 **Kind**: instance method of <code>[Tile](#Tile)</code>  
-**Returns**: <code>Boolean</code> - True if an item was actually deleted, false otherwise  
+**Returns**: <code>boolean</code> - True if an item was actually deleted, false otherwise  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| key | <code>key</code> | Name of the property to delete |
+| key | <code>string</code> | Name of the property to delete |
 
 **Example**  
 
@@ -522,3 +545,79 @@ The y coordinate of this point
 
 **Kind**: instance property of <code>[Point](#Point)</code>  
 **Default**: <code>0</code>  
+<a name="MultiStringHashMap"></a>
+
+## MultiStringHashMap
+A key/value store where the key can be a single string, or an array of
+strings. In either case, keys are stored internally as strings. String
+order in an array key does not matter. In other words, ["one", "two"] and
+["two", "one"] will point to the same value in the map.
+
+**Kind**: global class  
+
+* [MultiStringHashMap](#MultiStringHashMap)
+    * [new MultiStringHashMap()](#new_MultiStringHashMap_new)
+    * [.get(key)](#MultiStringHashMap+get) ⇒ <code>\*</code>
+    * [.set(key, value)](#MultiStringHashMap+set) ⇒
+    * [.delete(key)](#MultiStringHashMap+delete) ⇒ <code>boolean</code>
+
+<a name="new_MultiStringHashMap_new"></a>
+
+### new MultiStringHashMap()
+Constructs a new, empty MultiStringHashMap
+
+<a name="MultiStringHashMap+get"></a>
+
+### multiStringHashMap.get(key) ⇒ <code>\*</code>
+Returns the value stored at the given key
+
+**Kind**: instance method of <code>[MultiStringHashMap](#MultiStringHashMap)</code>  
+**Returns**: <code>\*</code> - Value at the given key  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>string</code> &#124; <code>Array.string</code> | key to lookup |
+
+**Example**  
+
+```js
+const shinyMetallicWeapons = myHash.get(["shiny", "metallic", "sharp"]);
+```
+<a name="MultiStringHashMap+set"></a>
+
+### multiStringHashMap.set(key, value) ⇒
+Sets a value at the given key, or creates and sets the value at the given
+key if it does not exist
+
+**Kind**: instance method of <code>[MultiStringHashMap](#MultiStringHashMap)</code>  
+**Returns**: The MultiStringHashMap  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>string</code> &#124; <code>Array.string</code> | key to store the value at |
+| value | <code>\*</code> | the value to store |
+
+**Example**  
+
+```js
+const myHash = new MultiStringHashMap();
+myHash.set(["shiny", "metallic", "sharp"], ["sword", "knife", "dagger"]);
+```
+<a name="MultiStringHashMap+delete"></a>
+
+### multiStringHashMap.delete(key) ⇒ <code>boolean</code>
+Deletes the given key
+
+**Kind**: instance method of <code>[MultiStringHashMap](#MultiStringHashMap)</code>  
+**Returns**: <code>boolean</code> - True if a key was actually deleted, false otherwise  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>string</code> &#124; <code>Array.string</code> | key to delete |
+
+**Example**  
+
+```js
+myHash.delete(["no", "longer", "needed"]);
+// myHash.get(["no", "longer", "needed"]) === undefined
+```
