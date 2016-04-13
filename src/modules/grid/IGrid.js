@@ -1,15 +1,10 @@
 /**
- * An abstract class modeling a generic grid of [Tiles]{@link Tile} that
- * makes up the "playing surface" in Genetic Sandbox.
- * @summary Serves as an interface for implementing new types of grids
- * (hexagonal, cartesian, etc).  Subclasses of IGrid will have to implement
- * their own method for storing Tiles, which will ultimately define the grid's
- * coordinate system. For example, a 2D, cartesian grid could be implemented
- * using a two dimensional array of Tiles, and then the below methods (e.g.
- * getTile()) would be overridden to take (x,y) as arguments.
+ * An abstract class modeling a generic 2D grid of [Tiles]{@link Tile}.
+ * A subclass of IGrid is ultimately responsible for both storing and accessing
+ * tiles.
  * @abstract
  * @see {@link Tile}
- * @see HexGrid
+ * @see {@link HexGrid}
  */
 class IGrid {
   /**
@@ -46,9 +41,11 @@ class IGrid {
   /**
    * Returns the Tile at the provided coordinates.
    * @abstract
+   * @param {number} x - First dimension of tile coordinate
+   * @param {number} y - Second dimension of tile coordinate
    * @returns {Tile} The tile at the provided coordinates
    */
-  getTile(/* coordinates */) {
+  getTile(x, y) {
     throw new Error("IGrid#getTile must be implemented by subclass");
   }
 
@@ -64,18 +61,24 @@ class IGrid {
   /**
    * Returns the Tiles that are adjacent to the Tile at the provided coordinates.
    * @abstract
+   * @param {number} x - First dimension of tile coordinate
+   * @param {number} y - Second dimension of tile coordinate
    * @returns {Array.Tile} The array of neighboring Tiles
    */
-  neighborsOf(/* coordinates */) {
+  neighborsOf(x, y) {
     throw new Error("IGrid#neighborsOf must be implemented by subclass");
   }
 
   /**
    * Calculates the distance between two grid coordinates in tiles
    * @abstract
+   * @param {number} x1 - First dimension of first tile coordinate
+   * @param {number} y1 - Second dimension of first tile coordinate
+   * @param {number} x2 - First dimension of second tile coordinate
+   * @param {number} y2 - Second dimension of second tile coordinate
    * @returns {number} The distance between the provided coordinates in tiles
    */
-  distanceBetween(/* coordinate1, coordinate2 */) {
+  distanceBetween(x1, y1, x2, y2) {
     throw new Error("IGrid#distanceBetween must be implemented by subclass");
   }
 }
