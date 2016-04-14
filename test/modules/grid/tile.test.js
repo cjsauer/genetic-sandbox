@@ -21,6 +21,14 @@ describe("Tile", () => {
       expect(result).to.be.undefined;
     });
 
+    it("can be checked for existence", () => {
+      const coldTile = new Tile({
+        temperature: -40
+      });
+      expect(coldTile.hasProperty("temperature")).to.be.true;
+      expect(coldTile.hasProperty("isHot")).to.be.false;
+    });
+
     it("should be mutable", () => {
       /* Create the island! */
       const island = new Tile({ elevation: 200 });

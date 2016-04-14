@@ -29,6 +29,16 @@ class Tile {
   }
 
   /**
+   * Returns true if this Tile has the given key, false otherwise
+   * @param {string} key - the key to check
+   * @returns {boolean} True if the Tile has the given property, false
+   * otherwise
+   */
+  hasProperty(key) {
+    return this._state.hasOwnProperty(key);
+  }
+
+  /**
    * Sets the specified property's value, or creates and sets the property if it
    * does not yet exist.
    * @example
