@@ -1,5 +1,6 @@
 import Tile from "../../../src/modules/grid/Tile";
 import chai from "chai";
+import sinon from "sinon";
 const expect = chai.expect;
 
 describe("Tile", () => {
@@ -64,6 +65,38 @@ describe("Tile", () => {
 
       didDelete = coldTile.delete("Non-existant key");
       expect(didDelete).to.be.false;
+    });
+  });
+
+  describe("events", () => {
+    it("should emit an event when a new property is added", () => {
+      const tile = new Tile();
+      const cb = sinon.spy();
+      tile.addListener("propertyAdded", cb);
+
+      tile.set("newProperty", 0);
+      expect(cb.calledWith({
+        tile: tile,
+        property: "newProperty"
+      })).to.be.true;
+
+      // Property is no longer "new"
+      tile.set("newProperty", 1);
+      expect(cb.calledTwice).to.be.false;
+    });
+
+    it("should emit an event when a property is removed", () => {
+      const tile = new Tile({
+        someProperty: 0
+      });
+      const cb = sinon.spy();
+      tile.addListener("propertyDeleted", cb);
+
+      tile.delete("someProperty");
+      expect(cb.calledWith({
+        tile: tile,
+        property: "someProperty"
+      })).to.be.true;
     });
   });
 });

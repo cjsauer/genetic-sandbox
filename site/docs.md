@@ -23,6 +23,9 @@ tiles.</p>
 <dd><p>A Tile is nothing more than a wrapper around a stanard JavaScript object,
 and represents the state at a discrete location within a <a href="#IGrid">IGrid</a>.</p>
 </dd>
+<dt><a href="#TilePropertyIndex">TilePropertyIndex</a></dt>
+<dd><p>Builds an index of <a href="Tiles">Tiles</a> for fast lookup by property</p>
+</dd>
 <dt><a href="#Hexagon">Hexagon</a> ⇐ <code><a href="#IShape">IShape</a></code></dt>
 <dd><p>A flat-topped, regular hexagon. Implementation details can be found
 <a href="http://www.redblobgames.com/grids/hexagons/">here</a>.</p>
@@ -281,8 +284,11 @@ and represents the state at a discrete location within a [IGrid](#IGrid).
 * [Tile](#Tile)
     * [new Tile([initialProperties])](#new_Tile_new)
     * [.get(key)](#Tile+get) ⇒ <code>\*</code>
+    * [.hasProperty(key)](#Tile+hasProperty) ⇒ <code>boolean</code>
     * [.set(key, value)](#Tile+set) ⇒ <code>[Tile](#Tile)</code>
     * [.delete(key)](#Tile+delete) ⇒ <code>boolean</code>
+    * ["propertyAdded"](#Tile+event_propertyAdded)
+    * ["propertyDeleted"](#Tile+event_propertyDeleted)
 
 <a name="new_Tile_new"></a>
 
@@ -319,6 +325,19 @@ Returns the specified property's value
 ```js
 let temperature = hotTile.get("temperature");
 ```
+<a name="Tile+hasProperty"></a>
+
+### tile.hasProperty(key) ⇒ <code>boolean</code>
+Returns true if this Tile has the given key, false otherwise
+
+**Kind**: instance method of <code>[Tile](#Tile)</code>  
+**Returns**: <code>boolean</code> - True if the Tile has the given property, false
+otherwise  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>string</code> | the key to check |
+
 <a name="Tile+set"></a>
 
 ### tile.set(key, value) ⇒ <code>[Tile](#Tile)</code>
@@ -327,6 +346,7 @@ does not yet exist.
 
 **Kind**: instance method of <code>[Tile](#Tile)</code>  
 **Returns**: <code>[Tile](#Tile)</code> - The Tile object  
+**Emits**: <code>[propertyAdded](#Tile+event_propertyAdded)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -347,6 +367,7 @@ Deletes the specified property, removing it from the Tile completely
 
 **Kind**: instance method of <code>[Tile](#Tile)</code>  
 **Returns**: <code>boolean</code> - True if an item was actually deleted, false otherwise  
+**Emits**: <code>[propertyDeleted](#Tile+event_propertyDeleted)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -357,6 +378,113 @@ Deletes the specified property, removing it from the Tile completely
 ```js
 let didDeleteSomething = hotTile.delete("temperature");
 ```
+<a name="Tile+event_propertyAdded"></a>
+
+### "propertyAdded"
+Property added event
+
+**Kind**: event emitted by <code>[Tile](#Tile)</code>  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| tile | <code>[Tile](#Tile)</code> | the tile that was modified |
+| property | <code>string</code> | the property that was added |
+
+<a name="Tile+event_propertyDeleted"></a>
+
+### "propertyDeleted"
+Property deleted event
+
+**Kind**: event emitted by <code>[Tile](#Tile)</code>  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| tile | <code>[Tile](#Tile)</code> | the tile that was modified |
+| property | <code>string</code> | the property that was deleted |
+
+<a name="TilePropertyIndex"></a>
+
+## TilePropertyIndex
+Builds an index of [Tiles](Tiles) for fast lookup by property
+
+**Kind**: global class  
+
+* [TilePropertyIndex](#TilePropertyIndex)
+    * [new TilePropertyIndex(tiles)](#new_TilePropertyIndex_new)
+    * [.getTilesByProperty(properties)](#TilePropertyIndex+getTilesByProperty) ⇒ <code>Array.Tile</code>
+    * [.onTilePropertyAdded(tile, property)](#TilePropertyIndex+onTilePropertyAdded)
+    * [.onTilePropertyDeleted(tile, property)](#TilePropertyIndex+onTilePropertyDeleted)
+
+<a name="new_TilePropertyIndex_new"></a>
+
+### new TilePropertyIndex(tiles)
+Creates a new TilePropertyIndex with the given array of tiles.
+Note: the index is built on demand. Constructing a new TilePropertyIndex
+does not actually build a complete index (which would be expensive),
+but instead the indices are built as-needed.
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| tiles | <code>Array.Tile</code> | the array of tiles for which to build an index by tile property |
+
+**Example**  
+
+```js
+const tiles = [
+  new Tile(),
+  new Tile(),
+  new Tile()
+];
+const tileIndex = new TilePropertyIndex(tileIndex);
+```
+<a name="TilePropertyIndex+getTilesByProperty"></a>
+
+### tilePropertyIndex.getTilesByProperty(properties) ⇒ <code>Array.Tile</code>
+Returns all tiles that posess the given property or properties
+
+**Kind**: instance method of <code>[TilePropertyIndex](#TilePropertyIndex)</code>  
+**Returns**: <code>Array.Tile</code> - the tiles that include all of the given
+properties  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| properties | <code>string</code> &#124; <code>Array.string</code> | the properties a tile must posess to be included in the result |
+
+**Example**  
+
+```js
+// Returns all tiles that have "biome" and "temperature" properties
+let habitatTiles = tileIndex.getTilesByProperty(["biome", "temperature"]);
+```
+<a name="TilePropertyIndex+onTilePropertyAdded"></a>
+
+### tilePropertyIndex.onTilePropertyAdded(tile, property)
+Event handler called when a property is added to a tile to keep the
+relevant indices up to date
+
+**Kind**: instance method of <code>[TilePropertyIndex](#TilePropertyIndex)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| tile | <code>[Tile](#Tile)</code> | the tile that is being updated |
+| property | <code>string</code> | the property that was added |
+
+<a name="TilePropertyIndex+onTilePropertyDeleted"></a>
+
+### tilePropertyIndex.onTilePropertyDeleted(tile, property)
+Event handler called when a property is deleted from a tile to keep the
+relevant indices up to date
+
+**Kind**: instance method of <code>[TilePropertyIndex](#TilePropertyIndex)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| tile | <code>[Tile](#Tile)</code> | the tile that is being updated |
+| property | <code>string</code> | the property that was deleted |
+
 <a name="Hexagon"></a>
 
 ## Hexagon ⇐ <code>[IShape](#IShape)</code>
@@ -558,6 +686,8 @@ order in an array key does not matter. In other words, ["one", "two"] and
 * [MultiStringHashMap](#MultiStringHashMap)
     * [new MultiStringHashMap()](#new_MultiStringHashMap_new)
     * [.get(key)](#MultiStringHashMap+get) ⇒ <code>\*</code>
+    * [.hasKey(key)](#MultiStringHashMap+hasKey) ⇒ <code>boolean</code>
+    * [.keys()](#MultiStringHashMap+keys) ⇒ <code>Array</code>
     * [.set(key, value)](#MultiStringHashMap+set) ⇒
     * [.delete(key)](#MultiStringHashMap+delete) ⇒ <code>boolean</code>
 
@@ -582,6 +712,39 @@ Returns the value stored at the given key
 
 ```js
 const shinyMetallicWeapons = myHash.get(["shiny", "metallic", "sharp"]);
+```
+<a name="MultiStringHashMap+hasKey"></a>
+
+### multiStringHashMap.hasKey(key) ⇒ <code>boolean</code>
+Returns true if the given key exists in the map, false otherwise
+
+**Kind**: instance method of <code>[MultiStringHashMap](#MultiStringHashMap)</code>  
+**Returns**: <code>boolean</code> - True if key exists, false otherwise  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>string</code> &#124; <code>Array.string</code> | key for which to check existence |
+
+**Example**  
+
+```js
+myHash.set(["tiny", "spherical"], ["marbles", "peas"]);
+myHash.hasKey(["tiny", "spherical"]) // true
+```
+<a name="MultiStringHashMap+keys"></a>
+
+### multiStringHashMap.keys() ⇒ <code>Array</code>
+Returns an array of all keys in the hash map
+
+**Kind**: instance method of <code>[MultiStringHashMap](#MultiStringHashMap)</code>  
+**Returns**: <code>Array</code> - the array of keys  
+**Example**  
+
+```js
+const myHash = new MultiStringHashMap();
+myHash.set(["one", "two", "three"], [1, 2, 3]);
+myHash.set("four", 4);
+let keys = myHash.keys(); // [ ["one", "two", "three"], "four" ]
 ```
 <a name="MultiStringHashMap+set"></a>
 
