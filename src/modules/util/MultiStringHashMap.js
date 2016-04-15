@@ -43,6 +43,38 @@ class MultiStringHashMap {
   }
 
   /**
+   * Returns true if the given key exists in the map, false otherwise
+   * @example
+   * myHash.set(["tiny", "spherical"], ["marbles", "peas"]);
+   * myHash.hasKey(["tiny", "spherical"]) // true
+   * @param {(string | Array.string)} key - key for which to check
+   * existence
+   * @returns {boolean} True if key exists, false otherwise
+   */
+  hasKey(key) {
+    return this._map.hasOwnProperty(this._hash(key));
+  }
+
+  /**
+   * Returns an array of all keys in the hash map
+   * @example
+   * const myHash = new MultiStringHashMap();
+   * myHash.set(["one", "two", "three"], [1, 2, 3]);
+   * myHash.set("four", 4);
+   * let keys = myHash.keys(); // [ ["one", "two", "three"], "four" ]
+   * @returns {Array} the array of keys
+   */
+  keys() {
+    return Object.keys(this._map).map((key) => {
+      if (key.indexOf(",") < 0) {
+        return key.slice(1);
+      } else {
+        return key.slice(1).split(",");
+      }
+    });
+  }
+
+  /**
    * Sets a value at the given key, or creates and sets the value at the given
    * key if it does not exist
    * @example

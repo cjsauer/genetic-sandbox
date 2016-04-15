@@ -51,6 +51,16 @@ describe("MultiStringHashMap", () => {
     });
   });
 
+  it("can provide an array of all current keys", () => {
+    const myHash = new MultiStringHashMap();
+    myHash.set(["one", "two", "three"], [1, 2, 3]);
+    myHash.set("four", 4);
+    expect(myHash.keys()).to.deep.equal([
+      ["one", "two", "three"].sort(),
+      "four"
+    ]);
+  });
+
   describe("get and set", () => {
     it("can retrieve a value keyed by single string", () => {
       const key = "vegetables";
@@ -103,6 +113,19 @@ describe("MultiStringHashMap", () => {
       myHash.set(firstKey, firstValue).set(secondKey, secondValue);
       expect(myHash.get(firstKey)).to.deep.equal(firstValue);
       expect(myHash.get(secondKey)).to.deep.equal(secondValue);
+    });
+  });
+
+  describe("key existence", () => {
+    it("can be verified", () => {
+      const myHash = new MultiStringHashMap();
+      myHash.set(["tiny", "spherical"], ["marble", "pea"]);
+      myHash.set("tiny", ["nanite", "atom"]);
+
+      expect(myHash.hasKey(["tiny", "spherical"])).to.be.true;
+      expect(myHash.hasKey("tiny")).to.be.true;
+      expect(myHash.hasKey("whoops!")).to.be.false;
+      expect(myHash.hasKey(["oh", "no", "jimmy!"])).to.be.false;
     });
   });
 
