@@ -2,8 +2,7 @@ import EventEmitter from "wolfy87-eventemitter";
 
 /**
  * A Tile is nothing more than a wrapper around a stanard JavaScript object,
- * and represents the state at a discrete location within a {@link IGrid}.
- * @see {@link IGrid}
+ * and represents the state at a discrete location within a grid
  */
 class Tile extends EventEmitter {
   /**

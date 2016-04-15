@@ -1,14 +1,11 @@
-import IGrid from "./IGrid";
 import Tile from "./Tile";
 
 /**
  * A 2D, hexagonal grid implementation with axial coordinate system.
  * Implementation details can be found [here]{@link http://goo.gl/nLO6sN}.
- * @see {@link IGrid}
  * @see {@link Tile}
- * @extends IGrid
  */
-class HexGrid extends IGrid {
+class HexGrid {
   /**
    * Constructs a new HexGrid of given radius. The pattern of tiles within the
    * grid will then form a hexagon itself with (0,0) being the center.
@@ -24,7 +21,6 @@ class HexGrid extends IGrid {
    * will be initialized with
    */
   constructor(radius, defaultTileProps = {}) {
-    super();
     this._radius = radius;
     this._tiles = [];
 

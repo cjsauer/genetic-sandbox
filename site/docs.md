@@ -10,18 +10,13 @@ permalink: /docs/
 <dt><a href="#App">App</a></dt>
 <dd><p>The entry point of the entire application</p>
 </dd>
-<dt><a href="#HexGrid">HexGrid</a> ⇐ <code><a href="#IGrid">IGrid</a></code></dt>
+<dt><a href="#HexGrid">HexGrid</a></dt>
 <dd><p>A 2D, hexagonal grid implementation with axial coordinate system.
 Implementation details can be found <a href="http://goo.gl/nLO6sN">here</a>.</p>
 </dd>
-<dt><a href="#IGrid">IGrid</a></dt>
-<dd><p>An abstract class modeling a generic 2D grid of <a href="#Tile">Tiles</a>.
-A subclass of IGrid is ultimately responsible for both storing and accessing
-tiles.</p>
-</dd>
 <dt><a href="#Tile">Tile</a></dt>
 <dd><p>A Tile is nothing more than a wrapper around a stanard JavaScript object,
-and represents the state at a discrete location within a <a href="#IGrid">IGrid</a>.</p>
+and represents the state at a discrete location within a grid</p>
 </dd>
 <dt><a href="#TilePropertyIndex">TilePropertyIndex</a></dt>
 <dd><p>Builds an index of <a href="Tiles">Tiles</a> for fast lookup by property</p>
@@ -53,19 +48,14 @@ The entry point of the entire application
 **Kind**: global class  
 <a name="HexGrid"></a>
 
-## HexGrid ⇐ <code>[IGrid](#IGrid)</code>
+## HexGrid
 A 2D, hexagonal grid implementation with axial coordinate system.
 Implementation details can be found [here](http://goo.gl/nLO6sN).
 
 **Kind**: global class  
-**Extends:** <code>[IGrid](#IGrid)</code>  
-**See**
+**See**: [Tile](#Tile)  
 
-- [IGrid](#IGrid)
-- [Tile](#Tile)
-
-
-* [HexGrid](#HexGrid) ⇐ <code>[IGrid](#IGrid)</code>
+* [HexGrid](#HexGrid)
     * [new HexGrid(radius, [defaultTileProps])](#new_HexGrid_new)
     * [.getTile(q, r)](#HexGrid+getTile) ⇒ <code>[Tile](#Tile)</code>
     * [.getTiles()](#HexGrid+getTiles) ⇒ <code>Array.Tile</code>
@@ -100,7 +90,6 @@ Returns the Tile at axial coordinates (q, r). q can be read as "column",
 and r can be read as "row".
 
 **Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
-**Overrides:** <code>[getTile](#IGrid+getTile)</code>  
 **Returns**: <code>[Tile](#Tile)</code> - The tile at the provided coordinates  
 
 | Param | Type | Description |
@@ -119,7 +108,6 @@ let originTile = myGrid.getTile(0, 0);
 Returns an array of all tiles in the HexGrid
 
 **Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
-**Overrides:** <code>[getTiles](#IGrid+getTiles)</code>  
 **Returns**: <code>Array.Tile</code> - Array of all tiles in this HexGrid  
 **Example**  
 
@@ -135,7 +123,6 @@ tiles.forEach((tile) => {
 Returns the Tiles that are adjacent to the Tile at the provided (q, r) coordinates.
 
 **Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
-**Overrides:** <code>[neighborsOf](#IGrid+neighborsOf)</code>  
 **Returns**: <code>Array.Tile</code> - The array of neighboring Tiles  
 
 | Param | Type | Description |
@@ -157,7 +144,6 @@ neighborsOfOrigin.forEach((tile) => {
 Calculates the distance between two (q, r) coordinates in tiles
 
 **Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
-**Overrides:** <code>[distanceBetween](#IGrid+distanceBetween)</code>  
 **Returns**: <code>number</code> - The distance between the provided coordinates in tiles  
 
 | Param | Type | Description |
@@ -173,113 +159,13 @@ Calculates the distance between two (q, r) coordinates in tiles
 let myGrid = new HexGrid(2);
 let distanceFromCenterToEdge = myGrid.distanceBetween(0, 0, 2, -2); // 2
 ```
-<a name="IGrid"></a>
-
-## *IGrid*
-An abstract class modeling a generic 2D grid of [Tiles](#Tile).
-A subclass of IGrid is ultimately responsible for both storing and accessing
-tiles.
-
-**Kind**: global abstract class  
-**See**
-
-- [Tile](#Tile)
-- [HexGrid](#HexGrid)
-
-
-* *[IGrid](#IGrid)*
-    * *[new IGrid()](#new_IGrid_new)*
-    * **[.getTile(x, y)](#IGrid+getTile) ⇒ <code>[Tile](#Tile)</code>**
-    * **[.getTiles()](#IGrid+getTiles) ⇒ <code>Array.Tile</code>**
-    * **[.neighborsOf(x, y)](#IGrid+neighborsOf) ⇒ <code>Array.Tile</code>**
-    * **[.distanceBetween(x1, y1, x2, y2)](#IGrid+distanceBetween) ⇒ <code>number</code>**
-
-<a name="new_IGrid_new"></a>
-
-### *new IGrid()*
-IGrid should be extended by a concrete grid implementation.
-
-**Example**  
-
-```js
-class SimpleGrid extends IGrid {
-  constructor() {
-    super();
-    this._tiles = [0, 1, 2, 3, 4, 5];
-  }
-
-  getTile(i) {
-    return this._tiles[i];
-  }
-
-  neighborsOf(i) {
-    return [
-      this._tiles[(i - 1) % this._tiles.length],
-      this._tiles[(i + 1) % this._tiles.length]
-    ];
-  }
-
-  distanceBetween(i1, i2) {
-    return Math.abs(i1 - i2);
-  }
-}
-```
-<a name="IGrid+getTile"></a>
-
-### **iGrid.getTile(x, y) ⇒ <code>[Tile](#Tile)</code>**
-Returns the Tile at the provided coordinates.
-
-**Kind**: instance abstract method of <code>[IGrid](#IGrid)</code>  
-**Returns**: <code>[Tile](#Tile)</code> - The tile at the provided coordinates  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| x | <code>number</code> | First dimension of tile coordinate |
-| y | <code>number</code> | Second dimension of tile coordinate |
-
-<a name="IGrid+getTiles"></a>
-
-### **iGrid.getTiles() ⇒ <code>Array.Tile</code>**
-Returns an array of all tiles in the grid
-
-**Kind**: instance abstract method of <code>[IGrid](#IGrid)</code>  
-**Returns**: <code>Array.Tile</code> - Array of all tiles in this grid  
-<a name="IGrid+neighborsOf"></a>
-
-### **iGrid.neighborsOf(x, y) ⇒ <code>Array.Tile</code>**
-Returns the Tiles that are adjacent to the Tile at the provided coordinates.
-
-**Kind**: instance abstract method of <code>[IGrid](#IGrid)</code>  
-**Returns**: <code>Array.Tile</code> - The array of neighboring Tiles  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| x | <code>number</code> | First dimension of tile coordinate |
-| y | <code>number</code> | Second dimension of tile coordinate |
-
-<a name="IGrid+distanceBetween"></a>
-
-### **iGrid.distanceBetween(x1, y1, x2, y2) ⇒ <code>number</code>**
-Calculates the distance between two grid coordinates in tiles
-
-**Kind**: instance abstract method of <code>[IGrid](#IGrid)</code>  
-**Returns**: <code>number</code> - The distance between the provided coordinates in tiles  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| x1 | <code>number</code> | First dimension of first tile coordinate |
-| y1 | <code>number</code> | Second dimension of first tile coordinate |
-| x2 | <code>number</code> | First dimension of second tile coordinate |
-| y2 | <code>number</code> | Second dimension of second tile coordinate |
-
 <a name="Tile"></a>
 
 ## Tile
 A Tile is nothing more than a wrapper around a stanard JavaScript object,
-and represents the state at a discrete location within a [IGrid](#IGrid).
+and represents the state at a discrete location within a grid
 
 **Kind**: global class  
-**See**: [IGrid](#IGrid)  
 
 * [Tile](#Tile)
     * [new Tile([initialProperties])](#new_Tile_new)
