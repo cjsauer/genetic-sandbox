@@ -381,7 +381,8 @@ let didDeleteSomething = hotTile.delete("temperature");
 <a name="Tile+event_propertyAdded"></a>
 
 ### "propertyAdded"
-Property added event
+Fired when a new property is added to a tile. It is NOT fired when
+a property is solely modified.
 
 **Kind**: event emitted by <code>[Tile](#Tile)</code>  
 **Properties**
@@ -394,7 +395,7 @@ Property added event
 <a name="Tile+event_propertyDeleted"></a>
 
 ### "propertyDeleted"
-Property deleted event
+Fired when a property is deleted from a tile
 
 **Kind**: event emitted by <code>[Tile](#Tile)</code>  
 **Properties**
@@ -414,8 +415,8 @@ Builds an index of [Tiles](Tiles) for fast lookup by property
 * [TilePropertyIndex](#TilePropertyIndex)
     * [new TilePropertyIndex(tiles)](#new_TilePropertyIndex_new)
     * [.getTilesByProperty(properties)](#TilePropertyIndex+getTilesByProperty) ⇒ <code>Array.Tile</code>
-    * [.onTilePropertyAdded(tile, property)](#TilePropertyIndex+onTilePropertyAdded)
-    * [.onTilePropertyDeleted(tile, property)](#TilePropertyIndex+onTilePropertyDeleted)
+    * [.onTilePropertyAdded(e)](#TilePropertyIndex+onTilePropertyAdded)
+    * [.onTilePropertyDeleted(e)](#TilePropertyIndex+onTilePropertyDeleted)
 
 <a name="new_TilePropertyIndex_new"></a>
 
@@ -423,7 +424,7 @@ Builds an index of [Tiles](Tiles) for fast lookup by property
 Creates a new TilePropertyIndex with the given array of tiles.
 Note: the index is built on demand. Constructing a new TilePropertyIndex
 does not actually build a complete index (which would be expensive),
-but instead the indices are built as-needed.
+but instead the indices are built as needed.
 
 
 | Param | Type | Description |
@@ -461,7 +462,7 @@ let habitatTiles = tileIndex.getTilesByProperty(["biome", "temperature"]);
 ```
 <a name="TilePropertyIndex+onTilePropertyAdded"></a>
 
-### tilePropertyIndex.onTilePropertyAdded(tile, property)
+### tilePropertyIndex.onTilePropertyAdded(e)
 Event handler called when a property is added to a tile to keep the
 relevant indices up to date
 
@@ -469,12 +470,13 @@ relevant indices up to date
 
 | Param | Type | Description |
 | --- | --- | --- |
-| tile | <code>[Tile](#Tile)</code> | the tile that is being updated |
-| property | <code>string</code> | the property that was added |
+| e | <code>object</code> | the event object |
+| e.tile | <code>[Tile](#Tile)</code> | the tile that is being updated |
+| e.property | <code>string</code> | the property that was added |
 
 <a name="TilePropertyIndex+onTilePropertyDeleted"></a>
 
-### tilePropertyIndex.onTilePropertyDeleted(tile, property)
+### tilePropertyIndex.onTilePropertyDeleted(e)
 Event handler called when a property is deleted from a tile to keep the
 relevant indices up to date
 
@@ -482,8 +484,9 @@ relevant indices up to date
 
 | Param | Type | Description |
 | --- | --- | --- |
-| tile | <code>[Tile](#Tile)</code> | the tile that is being updated |
-| property | <code>string</code> | the property that was deleted |
+| e | <code>object</code> | the event object |
+| e.tile | <code>[Tile](#Tile)</code> | the tile that is being updated |
+| e.property | <code>string</code> | the property that was deleted |
 
 <a name="Hexagon"></a>
 
