@@ -46,6 +46,30 @@ order in an array key does not matter. In other words, [&quot;one&quot;, &quot;t
 The entry point of the entire application
 
 **Kind**: global class  
+
+* [App](#App)
+    * [new App()](#new_App_new)
+    * [.initialize()](#App+initialize)
+    * [.update()](#App+update)
+
+<a name="new_App_new"></a>
+
+### new App()
+Bootstraps the Genetic Sandbox application, instantiating a HexGrid
+and defining all Systems.
+
+<a name="App+initialize"></a>
+
+### app.initialize()
+Initializes every System in the systems array
+
+**Kind**: instance method of <code>[App](#App)</code>  
+<a name="App+update"></a>
+
+### app.update()
+Updates every System in the systems array
+
+**Kind**: instance method of <code>[App](#App)</code>  
 <a name="HexGrid"></a>
 
 ## HexGrid
