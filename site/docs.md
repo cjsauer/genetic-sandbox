@@ -59,6 +59,7 @@ Implementation details can be found [here](http://goo.gl/nLO6sN).
     * [new HexGrid(radius, [defaultTileProps])](#new_HexGrid_new)
     * [.getTile(q, r)](#HexGrid+getTile) ⇒ <code>[Tile](#Tile)</code>
     * [.getTiles()](#HexGrid+getTiles) ⇒ <code>Array.Tile</code>
+    * [.getTilesByProperty(properties)](#HexGrid+getTilesByProperty) ⇒ <code>Array.Tile</code>
     * [.neighborsOf(q, r)](#HexGrid+neighborsOf) ⇒ <code>Array.Tile</code>
     * [.distanceBetween(q1, r1, q2, r2)](#HexGrid+distanceBetween) ⇒ <code>number</code>
 
@@ -116,6 +117,25 @@ let tiles = myGrid.getTiles();
 tiles.forEach((tile) => {
   tile.set("temperature", 75).set("forecast", "sunny");
 });
+```
+<a name="HexGrid+getTilesByProperty"></a>
+
+### hexGrid.getTilesByProperty(properties) ⇒ <code>Array.Tile</code>
+Returns all tiles that posess the given property or properties
+
+**Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
+**Returns**: <code>Array.Tile</code> - the tiles that include all of the given
+properties  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| properties | <code>string</code> &#124; <code>Array.string</code> | the properties a tile must posess to be included in the result |
+
+**Example**  
+
+```js
+// Returns all tiles that have "biome" and "temperature" properties
+let habitatTiles = grid.getTilesByProperty(["biome", "temperature"]);
 ```
 <a name="HexGrid+neighborsOf"></a>
 
@@ -179,7 +199,9 @@ and represents the state at a discrete location within a grid
 <a name="new_Tile_new"></a>
 
 ### new Tile([initialProperties])
-Creates a new tile with initial properties
+Creates a new tile with initial properties. Note that the given initial
+properties will be copied *by value* into each tile. What this means is
+that inner objects of the initial properties object are *not* deep copied.
 
 
 | Param | Type | Default | Description |

@@ -43,6 +43,49 @@ describe("HexGrid", () => {
     });
   });
 
+  it("passes each tile's coordinates in addition to default properties", () => {
+    const hexGrid = new HexGrid(1, {
+      someOtherProperty: true
+    });
+    const coords = [
+      [0, 0],
+      [1, 0],
+      [0, 1],
+      [-1, 1],
+      [-1, 0],
+      [0, -1],
+      [1, -1]
+    ];
+
+    coords.forEach(([x, y]) => {
+      let tile = hexGrid.getTile(x, y);
+      expect(tile.get("x")).to.equal(x);
+      expect(tile.get("y")).to.equal(y);
+      expect(tile.get("someOtherProperty")).to.be.true;
+    });
+  });
+
+  it("passes a reference to itself in addition to default properties", () => {
+    const hexGrid = new HexGrid(1, {
+      someOtherProperty: true
+    });
+    const coords = [
+      [0, 0],
+      [1, 0],
+      [0, 1],
+      [-1, 1],
+      [-1, 0],
+      [0, -1],
+      [1, -1]
+    ];
+
+    coords.forEach(([x, y]) => {
+      let tile = hexGrid.getTile(x, y);
+      expect(tile.get("grid")).to.equal(hexGrid);
+      expect(tile.get("someOtherProperty")).to.be.true;
+    });
+  });
+
   it("can calculate the distance between tiles", () => {
     const hexGrid = new HexGrid(5);
     expect(hexGrid.distanceBetween(0, 0, 0, 0)).to.equal(0);
@@ -76,6 +119,20 @@ describe("HexGrid", () => {
         const tile = hexGrid.getTile(...coords);
         expect(tile).to.be.instanceof(Tile);
       });
+    });
+
+    it("should be retrievable by property", () => {
+      const hexGrid = new HexGrid(2, {
+        biome: "desert",
+        temperature: 120
+      });
+      hexGrid.getTile(0, 0).set("unique", true);
+
+      const habitatTiles = hexGrid.getTilesByProperty(["biome", "temperature"]);
+      expect(habitatTiles).to.have.length(hexGrid.getTiles().length);
+
+      const uniqueTiles = hexGrid.getTilesByProperty("unique");
+      expect(uniqueTiles).to.have.length(1);
     });
 
     it("should throw an error when indexed out of bounds", () => {
@@ -131,8 +188,8 @@ describe("HexGrid", () => {
       });
 
       const neighbors = hexGrid.neighborsOf(1, -1);
-
-      expect(neighbors).to.deep.equal(expectedNeighbors);
+      expect(neighbors.length).to.equal(expectedNeighbors.length);
+      expect(neighbors).to.deep.include.members(expectedNeighbors);
     });
   });
 
