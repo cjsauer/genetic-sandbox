@@ -10,6 +10,20 @@ describe("Tile", () => {
     expect(hotTile.get("temperature")).to.equal(110);
   });
 
+  it("should each have a unique state object", () => {
+    const initialProperties = { temperature: 75 };
+    const tile1 = new Tile(initialProperties);
+    const tile2 = new Tile(initialProperties);
+    const tile3 = new Tile(initialProperties);
+    tile1.set("unique", true);
+
+    // Changes in one tile should not affect the other tiles that were
+    // instantiated with the same default properties object
+    expect(tile1.get("unique")).to.be.true;
+    expect(tile2.get("unique")).to.be.undefined;
+    expect(tile3.get("unique")).to.be.undefined;
+  });
+
   describe("properties", () => {
     it("should be retrievable", () => {
       const dogeTile = new Tile({ dogeLevel: 9001 });

@@ -6,7 +6,9 @@ import EventEmitter from "wolfy87-eventemitter";
  */
 class Tile extends EventEmitter {
   /**
-   * Creates a new tile with initial properties
+   * Creates a new tile with initial properties. Note that the given initial
+   * properties will be copied *by value* into each tile. What this means is
+   * that inner objects of the initial properties object are *not* deep copied.
    * @example
    * const hotTile = new Tile({
    *   temperature: 110,
@@ -16,7 +18,7 @@ class Tile extends EventEmitter {
    */
   constructor(initialProperties = {}) {
     super();
-    this._state = initialProperties;
+    this._state = Object.assign({}, initialProperties);
   }
 
   /**
