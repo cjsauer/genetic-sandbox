@@ -1,19 +1,56 @@
-import App from "../../src/modules/App.js";
+import App from "../../src/modules/App";
+import HexGrid from "../../src/modules/grid/HexGrid";
 import chai from "chai";
 const expect = chai.expect;
+import sinon from "sinon";
 
 describe("App", () => {
-  it("should exist", () => {
-    expect(App).to.be.ok;
+  let app;
+
+  before(() => {
+    app = new App();
   });
 
   it("can be instantiated", () => {
-    const app = new App();
     expect(app).to.be.ok;
   });
 
-  it("sanity should be intact", () => {
-    const app = new App();
-    expect(app.sanity()).to.be.true;
+  it("should instantiate a HexGrid", () => {
+    expect(app.grid).to.be.ok;
+    expect(app.grid instanceof HexGrid).to.be.true;
+  });
+
+  it("should contain an array of Systems", () => {
+    expect(app.systems).to.be.ok;
+    expect(app.systems.constructor === Array).to.be.true;
+  });
+
+  describe("initialize", () => {
+    it("should call initialize() on every System in the systems array", () => {
+      app.systems.forEach((system) => {
+        sinon.spy(system, "initialize");
+      });
+
+      app.initialize();
+
+      app.systems.forEach((system) => {
+        expect(system.initialize.calledOnce).to.be.true;
+      });
+    });
+  });
+
+  describe("update", () => {
+    it("should call update() on every System in the systems array", () => {
+      app.initialize();
+      app.systems.forEach((system) => {
+        sinon.spy(system, "update");
+      });
+
+      app.update();
+
+      app.systems.forEach((system) => {
+        expect(system.update.calledOnce).to.be.true;
+      });
+    });
   });
 });
