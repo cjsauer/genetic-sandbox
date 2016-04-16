@@ -6,14 +6,20 @@ import HexGrid from "./grid/HexGrid";
 class App {
   /**
    * Bootstraps the Genetic Sandbox application, instantiating a HexGrid
-   * and defining all Systems.
+   * and defining all systems
+   * @param {Array.ISystem} systems - the systems to be included in the main
+   * processing loop
    */
-  constructor() {
+  constructor(systems) {
+    /**
+     * @type HexGrid
+     */
     this.grid = new HexGrid(App.GRID_RADIUS);
 
-    // Add systems to this list to be included in the processing loop
-    this.systems = [
-    ];
+    /**
+     * @type {Array.ISystem}
+     */
+    this.systems = systems;
   }
 
   /**
@@ -21,7 +27,7 @@ class App {
    */
   initialize() {
     this.systems.forEach((system) => {
-      system.initialize();
+      system.initialize(this.grid);
     });
   }
 
@@ -30,7 +36,7 @@ class App {
    */
   update() {
     this.systems.forEach((system) => {
-      system.update();
+      system.update(this.grid);
     });
   }
 }

@@ -1,14 +1,25 @@
 import App from "../../src/modules/App";
 import HexGrid from "../../src/modules/grid/HexGrid";
+import ISystem from "../../src/modules/systems/ISystem";
 import chai from "chai";
 const expect = chai.expect;
 import sinon from "sinon";
 
 describe("App", () => {
+  class FakeSystem extends ISystem {
+    initialize() {}
+    update() {}
+  }
+
   let app;
+  let systems = [
+    new FakeSystem(),
+    new FakeSystem(),
+    new FakeSystem()
+  ];
 
   before(() => {
-    app = new App();
+    app = new App(systems);
   });
 
   it("can be instantiated", () => {

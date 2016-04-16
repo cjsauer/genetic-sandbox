@@ -32,6 +32,11 @@ and a height.</p>
 <dt><a href="#Point">Point</a></dt>
 <dd><p>A 2D point in space. Contains (x, y) coordinates.</p>
 </dd>
+<dt><a href="#ISystem">ISystem</a></dt>
+<dd><p>Interface for defining new systems. A system in Genetic Sandbox is a class
+containing initialize() and update() functions that operate in some way on
+<a href="#Tile">Tiles</a> within the <a href="#HexGrid">HexGrid</a>.</p>
+</dd>
 <dt><a href="#MultiStringHashMap">MultiStringHashMap</a></dt>
 <dd><p>A key/value store where the key can be a single string, or an array of
 strings. In either case, keys are stored internally as strings. String
@@ -48,16 +53,31 @@ The entry point of the entire application
 **Kind**: global class  
 
 * [App](#App)
-    * [new App()](#new_App_new)
+    * [new App(systems)](#new_App_new)
+    * [.grid](#App+grid) : <code>[HexGrid](#HexGrid)</code>
+    * [.systems](#App+systems) : <code>Array.ISystem</code>
     * [.initialize()](#App+initialize)
     * [.update()](#App+update)
 
 <a name="new_App_new"></a>
 
-### new App()
+### new App(systems)
 Bootstraps the Genetic Sandbox application, instantiating a HexGrid
-and defining all Systems.
+and defining all systems
 
+
+| Param | Type | Description |
+| --- | --- | --- |
+| systems | <code>Array.ISystem</code> | the systems to be included in the main processing loop |
+
+<a name="App+grid"></a>
+
+### app.grid : <code>[HexGrid](#HexGrid)</code>
+**Kind**: instance property of <code>[App](#App)</code>  
+<a name="App+systems"></a>
+
+### app.systems : <code>Array.ISystem</code>
+**Kind**: instance property of <code>[App](#App)</code>  
 <a name="App+initialize"></a>
 
 ### app.initialize()
@@ -608,6 +628,48 @@ The y coordinate of this point
 
 **Kind**: instance property of <code>[Point](#Point)</code>  
 **Default**: <code>0</code>  
+<a name="ISystem"></a>
+
+## *ISystem*
+Interface for defining new systems. A system in Genetic Sandbox is a class
+containing initialize() and update() functions that operate in some way on
+[Tiles](#Tile) within the [HexGrid](#HexGrid).
+
+**Kind**: global abstract class  
+
+* *[ISystem](#ISystem)*
+    * *[new ISystem()](#new_ISystem_new)*
+    * *[.initialize(grid)](#ISystem+initialize)*
+    * *[.update(grid)](#ISystem+update)*
+
+<a name="new_ISystem_new"></a>
+
+### *new ISystem()*
+ISystem can not be instantiated directly, but instead should be extended
+and its instance methods overridden.
+
+<a name="ISystem+initialize"></a>
+
+### *iSystem.initialize(grid)*
+Initializes this system allowing it to perform one-time preparation logic
+
+**Kind**: instance method of <code>[ISystem](#ISystem)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| grid | <code>[HexGrid](#HexGrid)</code> | the grid on which to perform some type of initialization logic |
+
+<a name="ISystem+update"></a>
+
+### *iSystem.update(grid)*
+Called once per tick to update the grid
+
+**Kind**: instance method of <code>[ISystem](#ISystem)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| grid | <code>[HexGrid](#HexGrid)</code> | the grid to update |
+
 <a name="MultiStringHashMap"></a>
 
 ## MultiStringHashMap
