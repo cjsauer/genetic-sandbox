@@ -1,21 +1,24 @@
 /**
- * A key/value store where the key can be a single string, or an array of
- * strings. In either case, keys are stored internally as strings. String
- * order in an array key does not matter. In other words, ["one", "two"] and
- * ["two", "one"] will point to the same value in the map.
+ * A key/value store where keys can be a single string, or an array of strings.
  */
 class MultiStringHashMap {
   /**
    * Constructs a new, empty MultiStringHashMap
    */
   constructor() {
+    /**
+     * Internal representation of the key/value store.
+     * @type {object}
+     * @private
+     */
     this._map = {};
   }
 
   /**
    * Returns a hash value for the given string or array of strings. Hash value
    * will be the same for an array containing the same strings regardless of
-   * order.
+   * order. In other words, `["one", "two"]` will hash to the same value as
+   * `["two", "one"]`.
    * @private
    * @param {string | Array.string} potentialKey - string or array of strings
    * to hash
@@ -46,7 +49,7 @@ class MultiStringHashMap {
    * Returns true if the given key exists in the map, false otherwise
    * @example
    * myHash.set(["tiny", "spherical"], ["marbles", "peas"]);
-   * myHash.hasKey(["tiny", "spherical"]) // true
+   * myHash.hasKey(["tiny", "spherical"]); // true
    * @param {(string | Array.string)} key - key for which to check
    * existence
    * @returns {boolean} True if key exists, false otherwise
@@ -92,7 +95,7 @@ class MultiStringHashMap {
   /**
    * Deletes the given key
    * @example
-   * myHash.delete(["no", "longer", "needed"]);
+   * let wasDeleted = myHash.delete(["no", "longer", "needed"]);
    * // myHash.get(["no", "longer", "needed"]) === undefined
    * @param {string | Array.string} key - key to delete
    * @returns {boolean} True if a key was actually deleted, false otherwise

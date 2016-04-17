@@ -3,9 +3,14 @@ import chai from "chai";
 const expect = chai.expect;
 
 describe("MultiStringHashMap", () => {
+  let myHashMap;
+
+  beforeEach(() => {
+    myHashMap = new MultiStringHashMap();
+  });
+
   it("should be instantiable", () => {
-    const myHash = new MultiStringHashMap();
-    expect(myHash).to.be.ok;
+    expect(myHashMap).to.be.ok;
   });
 
   describe("hashing function", () => {
@@ -13,8 +18,7 @@ describe("MultiStringHashMap", () => {
       const string = "apple";
       const expectedHash = "$apple";
 
-      const myHash = new MultiStringHashMap();
-      const actualHash = myHash._hash(string);
+      const actualHash = myHashMap._hash(string);
 
       expect(actualHash).to.equal(expectedHash);
     });
@@ -23,8 +27,7 @@ describe("MultiStringHashMap", () => {
       const strings = ["apple", "orange", "banana"];
       const expectedHash = "$apple,banana,orange";
 
-      const myHash = new MultiStringHashMap();
-      const actualHash = myHash._hash(strings);
+      const actualHash = myHashMap._hash(strings);
 
       expect(actualHash).to.equal(expectedHash);
     });
@@ -35,27 +38,24 @@ describe("MultiStringHashMap", () => {
       const key3 = ["three", "two", "one"];
       const expectedHash = "$one,three,two";
 
-      const myHash = new MultiStringHashMap();
-      expect(myHash._hash(key1)).to.equal(expectedHash);
-      expect(myHash._hash(key2)).to.equal(expectedHash);
-      expect(myHash._hash(key3)).to.equal(expectedHash);
+      expect(myHashMap._hash(key1)).to.equal(expectedHash);
+      expect(myHashMap._hash(key2)).to.equal(expectedHash);
+      expect(myHashMap._hash(key3)).to.equal(expectedHash);
     });
 
     it("throws an error if given non-string values", () => {
       const badKey = 42;
       const anotherBadKey = {};
-      const myHash = new MultiStringHashMap();
 
-      expect(() => myHash._hash(badKey)).to.throw(TypeError);
-      expect(() => myHash._hash(anotherBadKey)).to.throw(TypeError);
+      expect(() => myHashMap._hash(badKey)).to.throw(TypeError);
+      expect(() => myHashMap._hash(anotherBadKey)).to.throw(TypeError);
     });
   });
 
   it("can provide an array of all current keys", () => {
-    const myHash = new MultiStringHashMap();
-    myHash.set(["one", "two", "three"], [1, 2, 3]);
-    myHash.set("four", 4);
-    expect(myHash.keys()).to.deep.equal([
+    myHashMap.set(["one", "two", "three"], [1, 2, 3]);
+    myHashMap.set("four", 4);
+    expect(myHashMap.keys()).to.deep.equal([
       ["one", "two", "three"].sort(),
       "four"
     ]);
@@ -65,42 +65,38 @@ describe("MultiStringHashMap", () => {
     it("can retrieve a value keyed by single string", () => {
       const key = "vegetables";
       const value = ["carrot", "lettuce", "broccoli"];
-      const myHash = new MultiStringHashMap();
-      myHash.set(key, value);
+      myHashMap.set(key, value);
 
-      expect(myHash.get(key)).to.deep.equal(value);
+      expect(myHashMap.get(key)).to.deep.equal(value);
     });
 
     it("can retrieve a value keyed by an array of strings", () => {
       const key = ["cylindrical", "metallic", "shiny"];
       const value = ["can", "pipe", "dumbbell"];
-      const myHash = new MultiStringHashMap();
-      myHash.set(key, value);
+      myHashMap.set(key, value);
 
-      expect(myHash.get(key)).to.deep.equal(value);
+      expect(myHashMap.get(key)).to.deep.equal(value);
     });
 
     it("returns undefined if key does not exist", () => {
       /* Completely empty hash map */
-      const myHash = new MultiStringHashMap();
-      expect(myHash.get("whoops")).to.be.undefined;
-      expect(myHash.get(["oh", "no", "jimmy!"])).to.be.undefined;
+      expect(myHashMap.get("whoops")).to.be.undefined;
+      expect(myHashMap.get(["oh", "no", "jimmy!"])).to.be.undefined;
     });
 
     it("overwrites the value of an already existing key", () => {
       let key = ["cylindrical", "metallic", "shiny"];
       let initialValue = ["can", "pipe", "dumbbell"];
       let newValue = ["pole", "lightsaber"];
-      const myHash = new MultiStringHashMap();
 
-      myHash.set(key, initialValue);
-      myHash.set(key, newValue);
-      expect(myHash.get(key)).to.deep.equal(newValue);
+      myHashMap.set(key, initialValue);
+      myHashMap.set(key, newValue);
+      expect(myHashMap.get(key)).to.deep.equal(newValue);
 
       key = "weapon";
-      myHash.set(key, initialValue);
-      myHash.set(key, newValue);
-      expect(myHash.get(key)).to.deep.equal(newValue);
+      myHashMap.set(key, initialValue);
+      myHashMap.set(key, newValue);
+      expect(myHashMap.get(key)).to.deep.equal(newValue);
     });
 
     it("can be chained", () => {
@@ -108,24 +104,22 @@ describe("MultiStringHashMap", () => {
       const firstValue = [1];
       const secondKey = ["two", "three"];
       const secondValue = [2, 3];
-      const myHash = new MultiStringHashMap();
 
-      myHash.set(firstKey, firstValue).set(secondKey, secondValue);
-      expect(myHash.get(firstKey)).to.deep.equal(firstValue);
-      expect(myHash.get(secondKey)).to.deep.equal(secondValue);
+      myHashMap.set(firstKey, firstValue).set(secondKey, secondValue);
+      expect(myHashMap.get(firstKey)).to.deep.equal(firstValue);
+      expect(myHashMap.get(secondKey)).to.deep.equal(secondValue);
     });
   });
 
   describe("key existence", () => {
     it("can be verified", () => {
-      const myHash = new MultiStringHashMap();
-      myHash.set(["tiny", "spherical"], ["marble", "pea"]);
-      myHash.set("tiny", ["nanite", "atom"]);
+      myHashMap.set(["tiny", "spherical"], ["marble", "pea"]);
+      myHashMap.set("tiny", ["nanite", "atom"]);
 
-      expect(myHash.hasKey(["tiny", "spherical"])).to.be.true;
-      expect(myHash.hasKey("tiny")).to.be.true;
-      expect(myHash.hasKey("whoops!")).to.be.false;
-      expect(myHash.hasKey(["oh", "no", "jimmy!"])).to.be.false;
+      expect(myHashMap.hasKey(["tiny", "spherical"])).to.be.true;
+      expect(myHashMap.hasKey("tiny")).to.be.true;
+      expect(myHashMap.hasKey("whoops!")).to.be.false;
+      expect(myHashMap.hasKey(["oh", "no", "jimmy!"])).to.be.false;
     });
   });
 
@@ -133,22 +127,20 @@ describe("MultiStringHashMap", () => {
     it("clears a key from the hash map", () => {
       let key = ["cylindrical", "metallic", "shiny"];
       let value = ["can", "pipe", "dumbbell"];
-      const myHash = new MultiStringHashMap();
 
-      myHash.set(key, value);
-      expect(myHash.delete(key)).to.be.true;
-      expect(myHash.get(key)).to.be.undefined;
+      myHashMap.set(key, value);
+      expect(myHashMap.delete(key)).to.be.true;
+      expect(myHashMap.get(key)).to.be.undefined;
 
       key = "weapon";
-      myHash.set(key, value);
-      expect(myHash.delete(key)).to.be.true;
-      expect(myHash.get(key)).to.be.undefined;
+      myHashMap.set(key, value);
+      expect(myHashMap.delete(key)).to.be.true;
+      expect(myHashMap.get(key)).to.be.undefined;
     });
 
     it("returns false if the given key does not exist", () => {
-      const myHash = new MultiStringHashMap();
-      expect(myHash.delete("whoops")).to.be.false;
-      expect(myHash.delete(["all", "men", "are", "angels"])).to.be.false;
+      expect(myHashMap.delete("whoops")).to.be.false;
+      expect(myHashMap.delete(["all", "men", "are", "angels"])).to.be.false;
     });
   });
 });
