@@ -1,5 +1,6 @@
 import Tile from "../../../src/modules/grid/Tile";
 import chai from "chai";
+import sinon from "sinon";
 const expect = chai.expect;
 
 describe("Tile", () => {
@@ -7,6 +8,20 @@ describe("Tile", () => {
     const hotTile = new Tile({ temperature: 110 });
     expect(hotTile).to.be.ok;
     expect(hotTile.get("temperature")).to.equal(110);
+  });
+
+  it("should each have a unique state object", () => {
+    const initialProperties = { temperature: 75 };
+    const tile1 = new Tile(initialProperties);
+    const tile2 = new Tile(initialProperties);
+    const tile3 = new Tile(initialProperties);
+    tile1.set("unique", true);
+
+    // Changes in one tile should not affect the other tiles that were
+    // instantiated with the same default properties object
+    expect(tile1.get("unique")).to.be.true;
+    expect(tile2.get("unique")).to.be.undefined;
+    expect(tile3.get("unique")).to.be.undefined;
   });
 
   describe("properties", () => {
@@ -19,6 +34,14 @@ describe("Tile", () => {
       const emptyTile = new Tile(/* No properties */);
       const result = emptyTile.get("oops");
       expect(result).to.be.undefined;
+    });
+
+    it("can be checked for existence", () => {
+      const coldTile = new Tile({
+        temperature: -40
+      });
+      expect(coldTile.hasProperty("temperature")).to.be.true;
+      expect(coldTile.hasProperty("isHot")).to.be.false;
     });
 
     it("should be mutable", () => {
@@ -56,6 +79,38 @@ describe("Tile", () => {
 
       didDelete = coldTile.delete("Non-existant key");
       expect(didDelete).to.be.false;
+    });
+  });
+
+  describe("events", () => {
+    it("should emit an event when a new property is added", () => {
+      const tile = new Tile();
+      const cb = sinon.spy();
+      tile.addListener("propertyAdded", cb);
+
+      tile.set("newProperty", 0);
+      expect(cb.calledWith({
+        tile: tile,
+        property: "newProperty"
+      })).to.be.true;
+
+      // Property is no longer "new"
+      tile.set("newProperty", 1);
+      expect(cb.calledTwice).to.be.false;
+    });
+
+    it("should emit an event when a property is removed", () => {
+      const tile = new Tile({
+        someProperty: 0
+      });
+      const cb = sinon.spy();
+      tile.addListener("propertyDeleted", cb);
+
+      tile.delete("someProperty");
+      expect(cb.calledWith({
+        tile: tile,
+        property: "someProperty"
+      })).to.be.true;
     });
   });
 });

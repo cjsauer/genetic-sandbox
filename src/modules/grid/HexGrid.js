@@ -1,14 +1,12 @@
-import IGrid from "./IGrid";
 import Tile from "./Tile";
+import TilePropertyIndex from "./TilePropertyIndex";
 
 /**
  * A 2D, hexagonal grid implementation with axial coordinate system.
  * Implementation details can be found [here]{@link http://goo.gl/nLO6sN}.
- * @see {@link IGrid}
  * @see {@link Tile}
- * @extends IGrid
  */
-class HexGrid extends IGrid {
+class HexGrid {
   /**
    * Constructs a new HexGrid of given radius. The pattern of tiles within the
    * grid will then form a hexagon itself with (0,0) being the center.
@@ -24,14 +22,15 @@ class HexGrid extends IGrid {
    * will be initialized with
    */
   constructor(radius, defaultTileProps = {}) {
-    super();
-    this._radius = radius;
-    this._tiles = [];
-
     /* Generate a hex grid. We'll use the constraint in cubic coordinates
      * that x + y + z = 0 to decide where hexes are to be placed before
-     * converting to axial coordinates for storage
+     * converting to axial coordinates for storage.
+     * Note that within this file (x, y, z) refer to cubic coordinates, while
+     * (q, r) refer to axial coordinates. The distinction is only present
+     * within this file for clarity; everywhere else in the source will use
+     * (x, y) notation in favor of familiarity.
      */
+    let tiles = [];
     let x, y, z, q, r;
     for (x = -radius; x <= radius; x++) {
       for (y = -radius; y <= radius; y++) {
@@ -39,14 +38,24 @@ class HexGrid extends IGrid {
           if ((x + y + z) === 0) {
             // This is a valid hex. Instantiate and store in the tiles array.
             ({q, r} = HexGrid._cubicToAxial(x, y, z));
-            if (this._tiles[r + radius] === undefined) {
-              this._tiles[r + radius] = [];
+            if (tiles[r + radius] === undefined) {
+              tiles[r + radius] = [];
             }
-            this._tiles[r + radius][q + radius + Math.min(0, r)] = new Tile(defaultTileProps);
+            // Merge the passed default properties with some grid meta data
+            let tileProps = Object.assign({}, defaultTileProps, {
+              x: q,
+              y: r,
+              grid: this
+            });
+            tiles[r + radius][q + radius + Math.min(0, r)] = new Tile(tileProps);
           }
         }
       }
     }
+    this._tiles = tiles;
+    this._radius = radius;
+    // Build out the index so we can super quickly look up tiles by property
+    this._propertyIndex = new TilePropertyIndex(this.getTiles());
   }
 
   /**
@@ -87,6 +96,20 @@ class HexGrid extends IGrid {
     return this._tiles.reduce((prevArray, currArray) => {
       return prevArray.concat(currArray);
     }, []);
+  }
+
+  /**
+   * Returns all tiles that posess the given property or properties
+   * @example
+   * // Returns all tiles that have "biome" and "temperature" properties
+   * let habitatTiles = grid.getTilesByProperty(["biome", "temperature"]);
+   * @param {(string | Array.string)} properties - the properties a tile
+   * must posess to be included in the result
+   * @returns {Array.Tile} the tiles that include all of the given
+   * properties
+   */
+  getTilesByProperty(properties) {
+    return this._propertyIndex.getTilesByProperty(properties);
   }
 
   /**

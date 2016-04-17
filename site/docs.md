@@ -10,17 +10,16 @@ permalink: /docs/
 <dt><a href="#App">App</a></dt>
 <dd><p>The entry point of the entire application</p>
 </dd>
-<dt><a href="#HexGrid">HexGrid</a> ⇐ <code><a href="#IGrid">IGrid</a></code></dt>
+<dt><a href="#HexGrid">HexGrid</a></dt>
 <dd><p>A 2D, hexagonal grid implementation with axial coordinate system.
 Implementation details can be found <a href="http://goo.gl/nLO6sN">here</a>.</p>
 </dd>
-<dt><a href="#IGrid">IGrid</a></dt>
-<dd><p>An abstract class modeling a generic gGridrid of <a href="#Tile">Tiles</a> that
-makes up the &quot;playing surface&quot; in Genetic Sandbox.</p>
-</dd>
 <dt><a href="#Tile">Tile</a></dt>
-<dd><p>A Tile is nothing more than a <a href="https://goo.gl/sOhi4X">map</a> of key/value
-pairs representing the state at a discrete location within a <a href="#IGrid">IGrid</a>.</p>
+<dd><p>A Tile is nothing more than a wrapper around a stanard JavaScript object,
+and represents the state at a discrete location within a grid</p>
+</dd>
+<dt><a href="#TilePropertyIndex">TilePropertyIndex</a></dt>
+<dd><p>Builds an index of <a href="Tiles">Tiles</a> for fast lookup by property</p>
 </dd>
 <dt><a href="#Hexagon">Hexagon</a> ⇐ <code><a href="#IShape">IShape</a></code></dt>
 <dd><p>A flat-topped, regular hexagon. Implementation details can be found
@@ -33,6 +32,17 @@ and a height.</p>
 <dt><a href="#Point">Point</a></dt>
 <dd><p>A 2D point in space. Contains (x, y) coordinates.</p>
 </dd>
+<dt><a href="#ISystem">ISystem</a></dt>
+<dd><p>Interface for defining new systems. A system in Genetic Sandbox is a class
+containing initialize() and update() functions that operate in some way on
+<a href="#Tile">Tiles</a> within the <a href="#HexGrid">HexGrid</a>.</p>
+</dd>
+<dt><a href="#MultiStringHashMap">MultiStringHashMap</a></dt>
+<dd><p>A key/value store where the key can be a single string, or an array of
+strings. In either case, keys are stored internally as strings. String
+order in an array key does not matter. In other words, [&quot;one&quot;, &quot;two&quot;] and
+[&quot;two&quot;, &quot;one&quot;] will point to the same value in the map.</p>
+</dd>
 </dl>
 
 <a name="App"></a>
@@ -41,24 +51,59 @@ and a height.</p>
 The entry point of the entire application
 
 **Kind**: global class  
+
+* [App](#App)
+    * [new App(systems)](#new_App_new)
+    * [.grid](#App+grid) : <code>[HexGrid](#HexGrid)</code>
+    * [.systems](#App+systems) : <code>Array.ISystem</code>
+    * [.initialize()](#App+initialize)
+    * [.update()](#App+update)
+
+<a name="new_App_new"></a>
+
+### new App(systems)
+Bootstraps the Genetic Sandbox application, instantiating a HexGrid
+and defining all systems
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| systems | <code>Array.ISystem</code> | the systems to be included in the main processing loop |
+
+<a name="App+grid"></a>
+
+### app.grid : <code>[HexGrid](#HexGrid)</code>
+**Kind**: instance property of <code>[App](#App)</code>  
+<a name="App+systems"></a>
+
+### app.systems : <code>Array.ISystem</code>
+**Kind**: instance property of <code>[App](#App)</code>  
+<a name="App+initialize"></a>
+
+### app.initialize()
+Initializes every System in the systems array
+
+**Kind**: instance method of <code>[App](#App)</code>  
+<a name="App+update"></a>
+
+### app.update()
+Updates every System in the systems array
+
+**Kind**: instance method of <code>[App](#App)</code>  
 <a name="HexGrid"></a>
 
-## HexGrid ⇐ <code>[IGrid](#IGrid)</code>
+## HexGrid
 A 2D, hexagonal grid implementation with axial coordinate system.
 Implementation details can be found [here](http://goo.gl/nLO6sN).
 
 **Kind**: global class  
-**Extends:** <code>[IGrid](#IGrid)</code>  
-**See**
+**See**: [Tile](#Tile)  
 
-- [IGrid](#IGrid)
-- [Tile](#Tile)
-
-
-* [HexGrid](#HexGrid) ⇐ <code>[IGrid](#IGrid)</code>
+* [HexGrid](#HexGrid)
     * [new HexGrid(radius, [defaultTileProps])](#new_HexGrid_new)
     * [.getTile(q, r)](#HexGrid+getTile) ⇒ <code>[Tile](#Tile)</code>
     * [.getTiles()](#HexGrid+getTiles) ⇒ <code>Array.Tile</code>
+    * [.getTilesByProperty(properties)](#HexGrid+getTilesByProperty) ⇒ <code>Array.Tile</code>
     * [.neighborsOf(q, r)](#HexGrid+neighborsOf) ⇒ <code>Array.Tile</code>
     * [.distanceBetween(q1, r1, q2, r2)](#HexGrid+distanceBetween) ⇒ <code>number</code>
 
@@ -90,7 +135,6 @@ Returns the Tile at axial coordinates (q, r). q can be read as "column",
 and r can be read as "row".
 
 **Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
-**Overrides:** <code>[getTile](#IGrid+getTile)</code>  
 **Returns**: <code>[Tile](#Tile)</code> - The tile at the provided coordinates  
 
 | Param | Type | Description |
@@ -109,7 +153,6 @@ let originTile = myGrid.getTile(0, 0);
 Returns an array of all tiles in the HexGrid
 
 **Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
-**Overrides:** <code>[getTiles](#IGrid+getTiles)</code>  
 **Returns**: <code>Array.Tile</code> - Array of all tiles in this HexGrid  
 **Example**  
 
@@ -119,13 +162,31 @@ tiles.forEach((tile) => {
   tile.set("temperature", 75).set("forecast", "sunny");
 });
 ```
+<a name="HexGrid+getTilesByProperty"></a>
+
+### hexGrid.getTilesByProperty(properties) ⇒ <code>Array.Tile</code>
+Returns all tiles that posess the given property or properties
+
+**Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
+**Returns**: <code>Array.Tile</code> - the tiles that include all of the given
+properties  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| properties | <code>string</code> &#124; <code>Array.string</code> | the properties a tile must posess to be included in the result |
+
+**Example**  
+
+```js
+// Returns all tiles that have "biome" and "temperature" properties
+let habitatTiles = grid.getTilesByProperty(["biome", "temperature"]);
+```
 <a name="HexGrid+neighborsOf"></a>
 
 ### hexGrid.neighborsOf(q, r) ⇒ <code>Array.Tile</code>
 Returns the Tiles that are adjacent to the Tile at the provided (q, r) coordinates.
 
 **Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
-**Overrides:** <code>[neighborsOf](#IGrid+neighborsOf)</code>  
 **Returns**: <code>Array.Tile</code> - The array of neighboring Tiles  
 
 | Param | Type | Description |
@@ -147,7 +208,6 @@ neighborsOfOrigin.forEach((tile) => {
 Calculates the distance between two (q, r) coordinates in tiles
 
 **Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
-**Overrides:** <code>[distanceBetween](#IGrid+distanceBetween)</code>  
 **Returns**: <code>number</code> - The distance between the provided coordinates in tiles  
 
 | Param | Type | Description |
@@ -163,110 +223,29 @@ Calculates the distance between two (q, r) coordinates in tiles
 let myGrid = new HexGrid(2);
 let distanceFromCenterToEdge = myGrid.distanceBetween(0, 0, 2, -2); // 2
 ```
-<a name="IGrid"></a>
-
-## *IGrid*
-An abstract class modeling a generic gGridrid of [Tiles](#Tile) that
-makes up the "playing surface" in Genetic Sandbox.
-
-**Kind**: global abstract class  
-**Summary**: IGrid cannot be instantiated directly, but instead serves as an
-interface for implementing new types of grids (hexagonal, cartesian, etc).
-Subclasses of IGrid will have to implement their own method for storing Tiles,
-which will ultimately define the grid's coordinate system. For example, a 2D,
-cartesian grid could be implemented using a two dimensional array of Tiles,
-and then the below methods (e.g. getTile()) would be overridden to
-take (x,y) as arguments.  
-**See**
-
-- [Tile](#Tile)
-- HexGrid
-
-
-* *[IGrid](#IGrid)*
-    * *[new IGrid()](#new_IGrid_new)*
-    * **[.getTile()](#IGrid+getTile) ⇒ <code>[Tile](#Tile)</code>**
-    * **[.getTiles()](#IGrid+getTiles) ⇒ <code>Array.Tile</code>**
-    * **[.neighborsOf()](#IGrid+neighborsOf) ⇒ <code>Array.Tile</code>**
-    * **[.distanceBetween()](#IGrid+distanceBetween) ⇒ <code>number</code>**
-
-<a name="new_IGrid_new"></a>
-
-### *new IGrid()*
-IGrid can not be instantiated directly, but instead should be extended
-by a concrete grid implementation.
-
-**Example**  
-
-```js
-class SimpleGrid extends IGrid {
-  constructor() {
-    super();
-    this.tiles = [0, 1, 2, 3, 4, 5];
-  }
-
-  getTile(i) {
-    return this.tiles[i];
-  }
-
-  neighborsOf(i) {
-    return [
-      this.tiles[(i - 1) % this.tiles.length],
-      this.tiles[(i + 1) % this.tiles.length]
-    ];
-  }
-
-  distanceBetween(i1, i2) {
-    return Math.abs(i1 - i2);
-  }
-}
-```
-<a name="IGrid+getTile"></a>
-
-### **iGrid.getTile() ⇒ <code>[Tile](#Tile)</code>**
-Returns the Tile at the provided coordinates.
-
-**Kind**: instance abstract method of <code>[IGrid](#IGrid)</code>  
-**Returns**: <code>[Tile](#Tile)</code> - The tile at the provided coordinates  
-<a name="IGrid+getTiles"></a>
-
-### **iGrid.getTiles() ⇒ <code>Array.Tile</code>**
-Returns an array of all tiles in the grid
-
-**Kind**: instance abstract method of <code>[IGrid](#IGrid)</code>  
-**Returns**: <code>Array.Tile</code> - Array of all tiles in this grid  
-<a name="IGrid+neighborsOf"></a>
-
-### **iGrid.neighborsOf() ⇒ <code>Array.Tile</code>**
-Returns the Tiles that are adjacent to the Tile at the provided coordinates.
-
-**Kind**: instance abstract method of <code>[IGrid](#IGrid)</code>  
-**Returns**: <code>Array.Tile</code> - The array of neighboring Tiles  
-<a name="IGrid+distanceBetween"></a>
-
-### **iGrid.distanceBetween() ⇒ <code>number</code>**
-Calculates the distance between two grid coordinates in tiles
-
-**Kind**: instance abstract method of <code>[IGrid](#IGrid)</code>  
-**Returns**: <code>number</code> - The distance between the provided coordinates in tiles  
 <a name="Tile"></a>
 
 ## Tile
-A Tile is nothing more than a [map](https://goo.gl/sOhi4X) of key/value
-pairs representing the state at a discrete location within a [IGrid](#IGrid).
+A Tile is nothing more than a wrapper around a stanard JavaScript object,
+and represents the state at a discrete location within a grid
 
 **Kind**: global class  
 
 * [Tile](#Tile)
     * [new Tile([initialProperties])](#new_Tile_new)
     * [.get(key)](#Tile+get) ⇒ <code>\*</code>
+    * [.hasProperty(key)](#Tile+hasProperty) ⇒ <code>boolean</code>
     * [.set(key, value)](#Tile+set) ⇒ <code>[Tile](#Tile)</code>
-    * [.delete(key)](#Tile+delete) ⇒ <code>Boolean</code>
+    * [.delete(key)](#Tile+delete) ⇒ <code>boolean</code>
+    * ["propertyAdded"](#Tile+event_propertyAdded)
+    * ["propertyDeleted"](#Tile+event_propertyDeleted)
 
 <a name="new_Tile_new"></a>
 
 ### new Tile([initialProperties])
-Creates a new tile with initial properties
+Creates a new tile with initial properties. Note that the given initial
+properties will be copied *by value* into each tile. What this means is
+that inner objects of the initial properties object are *not* deep copied.
 
 
 | Param | Type | Default | Description |
@@ -287,17 +266,30 @@ const hotTile = new Tile({
 Returns the specified property's value
 
 **Kind**: instance method of <code>[Tile](#Tile)</code>  
-**Returns**: <code>\*</code> - Value of property at `key`  
+**Returns**: <code>\*</code> - Value of property at `key`, or undefined if property not found  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| key | <code>key</code> | Name of the property |
+| key | <code>string</code> | Name of the property |
 
 **Example**  
 
 ```js
 let temperature = hotTile.get("temperature");
 ```
+<a name="Tile+hasProperty"></a>
+
+### tile.hasProperty(key) ⇒ <code>boolean</code>
+Returns true if this Tile has the given key, false otherwise
+
+**Kind**: instance method of <code>[Tile](#Tile)</code>  
+**Returns**: <code>boolean</code> - True if the Tile has the given property, false
+otherwise  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>string</code> | the key to check |
+
 <a name="Tile+set"></a>
 
 ### tile.set(key, value) ⇒ <code>[Tile](#Tile)</code>
@@ -306,10 +298,11 @@ does not yet exist.
 
 **Kind**: instance method of <code>[Tile](#Tile)</code>  
 **Returns**: <code>[Tile](#Tile)</code> - The Tile object  
+**Emits**: <code>[propertyAdded](#Tile+event_propertyAdded)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| key | <code>key</code> | Name of the property to set/create |
+| key | <code>string</code> | Name of the property to set/create |
 | value | <code>\*</code> | Value of the property |
 
 **Example**  
@@ -321,21 +314,132 @@ hotTile.set("one", 1).set("two", 2).set("three", 3);
 ```
 <a name="Tile+delete"></a>
 
-### tile.delete(key) ⇒ <code>Boolean</code>
+### tile.delete(key) ⇒ <code>boolean</code>
 Deletes the specified property, removing it from the Tile completely
 
 **Kind**: instance method of <code>[Tile](#Tile)</code>  
-**Returns**: <code>Boolean</code> - True if an item was actually deleted, false otherwise  
+**Returns**: <code>boolean</code> - True if an item was actually deleted, false otherwise  
+**Emits**: <code>[propertyDeleted](#Tile+event_propertyDeleted)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| key | <code>key</code> | Name of the property to delete |
+| key | <code>string</code> | Name of the property to delete |
 
 **Example**  
 
 ```js
 let didDeleteSomething = hotTile.delete("temperature");
 ```
+<a name="Tile+event_propertyAdded"></a>
+
+### "propertyAdded"
+Fired when a new property is added to a tile. It is NOT fired when
+a property is solely modified.
+
+**Kind**: event emitted by <code>[Tile](#Tile)</code>  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| tile | <code>[Tile](#Tile)</code> | the tile that was modified |
+| property | <code>string</code> | the property that was added |
+
+<a name="Tile+event_propertyDeleted"></a>
+
+### "propertyDeleted"
+Fired when a property is deleted from a tile
+
+**Kind**: event emitted by <code>[Tile](#Tile)</code>  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| tile | <code>[Tile](#Tile)</code> | the tile that was modified |
+| property | <code>string</code> | the property that was deleted |
+
+<a name="TilePropertyIndex"></a>
+
+## TilePropertyIndex
+Builds an index of [Tiles](Tiles) for fast lookup by property
+
+**Kind**: global class  
+
+* [TilePropertyIndex](#TilePropertyIndex)
+    * [new TilePropertyIndex(tiles)](#new_TilePropertyIndex_new)
+    * [.getTilesByProperty(properties)](#TilePropertyIndex+getTilesByProperty) ⇒ <code>Array.Tile</code>
+    * [.onTilePropertyAdded(e)](#TilePropertyIndex+onTilePropertyAdded)
+    * [.onTilePropertyDeleted(e)](#TilePropertyIndex+onTilePropertyDeleted)
+
+<a name="new_TilePropertyIndex_new"></a>
+
+### new TilePropertyIndex(tiles)
+Creates a new TilePropertyIndex with the given array of tiles.
+Note: the index is built on demand. Constructing a new TilePropertyIndex
+does not actually build a complete index (which would be expensive),
+but instead the indices are built as needed.
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| tiles | <code>Array.Tile</code> | the array of tiles for which to build an index by tile property |
+
+**Example**  
+
+```js
+const tiles = [
+  new Tile(),
+  new Tile(),
+  new Tile()
+];
+const tileIndex = new TilePropertyIndex(tileIndex);
+```
+<a name="TilePropertyIndex+getTilesByProperty"></a>
+
+### tilePropertyIndex.getTilesByProperty(properties) ⇒ <code>Array.Tile</code>
+Returns all tiles that posess the given property or properties
+
+**Kind**: instance method of <code>[TilePropertyIndex](#TilePropertyIndex)</code>  
+**Returns**: <code>Array.Tile</code> - the tiles that include all of the given
+properties  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| properties | <code>string</code> &#124; <code>Array.string</code> | the properties a tile must posess to be included in the result |
+
+**Example**  
+
+```js
+// Returns all tiles that have "biome" and "temperature" properties
+let habitatTiles = tileIndex.getTilesByProperty(["biome", "temperature"]);
+```
+<a name="TilePropertyIndex+onTilePropertyAdded"></a>
+
+### tilePropertyIndex.onTilePropertyAdded(e)
+Event handler called when a property is added to a tile to keep the
+relevant indices up to date
+
+**Kind**: instance method of <code>[TilePropertyIndex](#TilePropertyIndex)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| e | <code>object</code> | the event object |
+| e.tile | <code>[Tile](#Tile)</code> | the tile that is being updated |
+| e.property | <code>string</code> | the property that was added |
+
+<a name="TilePropertyIndex+onTilePropertyDeleted"></a>
+
+### tilePropertyIndex.onTilePropertyDeleted(e)
+Event handler called when a property is deleted from a tile to keep the
+relevant indices up to date
+
+**Kind**: instance method of <code>[TilePropertyIndex](#TilePropertyIndex)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| e | <code>object</code> | the event object |
+| e.tile | <code>[Tile](#Tile)</code> | the tile that is being updated |
+| e.property | <code>string</code> | the property that was deleted |
+
 <a name="Hexagon"></a>
 
 ## Hexagon ⇐ <code>[IShape](#IShape)</code>
@@ -440,8 +544,7 @@ and a height.
 
 ### *new IShape([x], [y])*
 Creates a new shape at position (x, y).
-IShape cannot be instantiated directly. Instead, IShape should be extended
-and its members overridden by a concrete subclass.
+IShape should be extended and its members overridden by a concrete subclass.
 
 
 | Param | Type | Default | Description |
@@ -525,3 +628,156 @@ The y coordinate of this point
 
 **Kind**: instance property of <code>[Point](#Point)</code>  
 **Default**: <code>0</code>  
+<a name="ISystem"></a>
+
+## *ISystem*
+Interface for defining new systems. A system in Genetic Sandbox is a class
+containing initialize() and update() functions that operate in some way on
+[Tiles](#Tile) within the [HexGrid](#HexGrid).
+
+**Kind**: global abstract class  
+
+* *[ISystem](#ISystem)*
+    * *[new ISystem()](#new_ISystem_new)*
+    * *[.initialize(grid)](#ISystem+initialize)*
+    * *[.update(grid)](#ISystem+update)*
+
+<a name="new_ISystem_new"></a>
+
+### *new ISystem()*
+ISystem can not be instantiated directly, but instead should be extended
+and its instance methods overridden.
+
+<a name="ISystem+initialize"></a>
+
+### *iSystem.initialize(grid)*
+Initializes this system allowing it to perform one-time preparation logic
+
+**Kind**: instance method of <code>[ISystem](#ISystem)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| grid | <code>[HexGrid](#HexGrid)</code> | the grid on which to perform some type of initialization logic |
+
+<a name="ISystem+update"></a>
+
+### *iSystem.update(grid)*
+Called once per tick to update the grid
+
+**Kind**: instance method of <code>[ISystem](#ISystem)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| grid | <code>[HexGrid](#HexGrid)</code> | the grid to update |
+
+<a name="MultiStringHashMap"></a>
+
+## MultiStringHashMap
+A key/value store where the key can be a single string, or an array of
+strings. In either case, keys are stored internally as strings. String
+order in an array key does not matter. In other words, ["one", "two"] and
+["two", "one"] will point to the same value in the map.
+
+**Kind**: global class  
+
+* [MultiStringHashMap](#MultiStringHashMap)
+    * [new MultiStringHashMap()](#new_MultiStringHashMap_new)
+    * [.get(key)](#MultiStringHashMap+get) ⇒ <code>\*</code>
+    * [.hasKey(key)](#MultiStringHashMap+hasKey) ⇒ <code>boolean</code>
+    * [.keys()](#MultiStringHashMap+keys) ⇒ <code>Array</code>
+    * [.set(key, value)](#MultiStringHashMap+set) ⇒
+    * [.delete(key)](#MultiStringHashMap+delete) ⇒ <code>boolean</code>
+
+<a name="new_MultiStringHashMap_new"></a>
+
+### new MultiStringHashMap()
+Constructs a new, empty MultiStringHashMap
+
+<a name="MultiStringHashMap+get"></a>
+
+### multiStringHashMap.get(key) ⇒ <code>\*</code>
+Returns the value stored at the given key
+
+**Kind**: instance method of <code>[MultiStringHashMap](#MultiStringHashMap)</code>  
+**Returns**: <code>\*</code> - Value at the given key  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>string</code> &#124; <code>Array.string</code> | key to lookup |
+
+**Example**  
+
+```js
+const shinyMetallicWeapons = myHash.get(["shiny", "metallic", "sharp"]);
+```
+<a name="MultiStringHashMap+hasKey"></a>
+
+### multiStringHashMap.hasKey(key) ⇒ <code>boolean</code>
+Returns true if the given key exists in the map, false otherwise
+
+**Kind**: instance method of <code>[MultiStringHashMap](#MultiStringHashMap)</code>  
+**Returns**: <code>boolean</code> - True if key exists, false otherwise  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>string</code> &#124; <code>Array.string</code> | key for which to check existence |
+
+**Example**  
+
+```js
+myHash.set(["tiny", "spherical"], ["marbles", "peas"]);
+myHash.hasKey(["tiny", "spherical"]) // true
+```
+<a name="MultiStringHashMap+keys"></a>
+
+### multiStringHashMap.keys() ⇒ <code>Array</code>
+Returns an array of all keys in the hash map
+
+**Kind**: instance method of <code>[MultiStringHashMap](#MultiStringHashMap)</code>  
+**Returns**: <code>Array</code> - the array of keys  
+**Example**  
+
+```js
+const myHash = new MultiStringHashMap();
+myHash.set(["one", "two", "three"], [1, 2, 3]);
+myHash.set("four", 4);
+let keys = myHash.keys(); // [ ["one", "two", "three"], "four" ]
+```
+<a name="MultiStringHashMap+set"></a>
+
+### multiStringHashMap.set(key, value) ⇒
+Sets a value at the given key, or creates and sets the value at the given
+key if it does not exist
+
+**Kind**: instance method of <code>[MultiStringHashMap](#MultiStringHashMap)</code>  
+**Returns**: The MultiStringHashMap  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>string</code> &#124; <code>Array.string</code> | key to store the value at |
+| value | <code>\*</code> | the value to store |
+
+**Example**  
+
+```js
+const myHash = new MultiStringHashMap();
+myHash.set(["shiny", "metallic", "sharp"], ["sword", "knife", "dagger"]);
+```
+<a name="MultiStringHashMap+delete"></a>
+
+### multiStringHashMap.delete(key) ⇒ <code>boolean</code>
+Deletes the given key
+
+**Kind**: instance method of <code>[MultiStringHashMap](#MultiStringHashMap)</code>  
+**Returns**: <code>boolean</code> - True if a key was actually deleted, false otherwise  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>string</code> &#124; <code>Array.string</code> | key to delete |
+
+**Example**  
+
+```js
+myHash.delete(["no", "longer", "needed"]);
+// myHash.get(["no", "longer", "needed"]) === undefined
+```
