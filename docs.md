@@ -8,7 +8,8 @@ permalink: /docs/
 
 <dl>
 <dt><a href="#App">App</a></dt>
-<dd><p>The entry point of the entire application</p>
+<dd><p>The entry point of the entire application. App contains references to the
+grid and an array of systems.</p>
 </dd>
 <dt><a href="#HexGrid">HexGrid</a></dt>
 <dd><p>A 2D, hexagonal grid implementation with axial coordinate system.
@@ -38,19 +39,22 @@ containing initialize() and update() functions that operate in some way on
 <a href="#Tile">Tiles</a> within the <a href="#HexGrid">HexGrid</a>.</p>
 </dd>
 <dt><a href="#MultiStringHashMap">MultiStringHashMap</a></dt>
-<dd><p>A key/value store where the key can be a single string, or an array of
-strings. In either case, keys are stored internally as strings. String
-order in an array key does not matter. In other words, [&quot;one&quot;, &quot;two&quot;] and
-[&quot;two&quot;, &quot;one&quot;] will point to the same value in the map.</p>
+<dd><p>A key/value store where keys can be a single string, or an array of strings.</p>
 </dd>
 </dl>
 
 <a name="App"></a>
 
 ## App
-The entry point of the entire application
+The entry point of the entire application. App contains references to the
+grid and an array of systems.
 
 **Kind**: global class  
+**See**
+
+- {HexGrid}
+- {ISystem}
+
 
 * [App](#App)
     * [new App(systems)](#new_App_new)
@@ -62,8 +66,7 @@ The entry point of the entire application
 <a name="new_App_new"></a>
 
 ### new App(systems)
-Bootstraps the Genetic Sandbox application, instantiating a HexGrid
-and defining all systems
+Prepares the Genetic Sandbox application for bootstrapping.
 
 
 | Param | Type | Description |
@@ -73,10 +76,14 @@ and defining all systems
 <a name="App+grid"></a>
 
 ### app.grid : <code>[HexGrid](#HexGrid)</code>
+A grid of tiles serving as the main stage of the simulation
+
 **Kind**: instance property of <code>[App](#App)</code>  
 <a name="App+systems"></a>
 
 ### app.systems : <code>Array.ISystem</code>
+Array of systems included in the main processing loop
+
 **Kind**: instance property of <code>[App](#App)</code>  
 <a name="App+initialize"></a>
 
@@ -673,10 +680,7 @@ Called once per tick to update the grid
 <a name="MultiStringHashMap"></a>
 
 ## MultiStringHashMap
-A key/value store where the key can be a single string, or an array of
-strings. In either case, keys are stored internally as strings. String
-order in an array key does not matter. In other words, ["one", "two"] and
-["two", "one"] will point to the same value in the map.
+A key/value store where keys can be a single string, or an array of strings.
 
 **Kind**: global class  
 
@@ -726,7 +730,7 @@ Returns true if the given key exists in the map, false otherwise
 
 ```js
 myHash.set(["tiny", "spherical"], ["marbles", "peas"]);
-myHash.hasKey(["tiny", "spherical"]) // true
+myHash.hasKey(["tiny", "spherical"]); // true
 ```
 <a name="MultiStringHashMap+keys"></a>
 
@@ -778,6 +782,6 @@ Deletes the given key
 **Example**  
 
 ```js
-myHash.delete(["no", "longer", "needed"]);
+let wasDeleted = myHash.delete(["no", "longer", "needed"]);
 // myHash.get(["no", "longer", "needed"]) === undefined
 ```
