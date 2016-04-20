@@ -59,6 +59,7 @@ class App {
   run() {
     // TODO: implement a more formal game loop
     this.update();
+    this.paper.view.draw();
   }
 }
 

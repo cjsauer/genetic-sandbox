@@ -17,9 +17,14 @@ describe("App", () => {
     new FakeSystem(),
     new FakeSystem()
   ];
+  let fakePaper = {
+    view: {
+      draw: sinon.stub()
+    }
+  };
 
   before(() => {
-    app = new App(systems);
+    app = new App(systems, fakePaper);
   });
 
   it("can be instantiated", () => {
@@ -70,6 +75,11 @@ describe("App", () => {
       sinon.spy(app, "update");
       app.run();
       expect(app.update.called).to.be.true;
+    });
+
+    it("should draw the view", () => {
+      app.run();
+      expect(app.paper.view.draw.called).to.be.true;
     });
   });
 });
