@@ -664,8 +664,8 @@ containing initialize() and update() functions that operate in some way on
 
 * *[ISystem](#ISystem)*
     * *[new ISystem()](#new_ISystem_new)*
-    * *[.initialize(grid)](#ISystem+initialize)*
-    * *[.update(grid)](#ISystem+update)*
+    * *[.initialize(app)](#ISystem+initialize)*
+    * *[.update(app)](#ISystem+update)*
 
 <a name="new_ISystem_new"></a>
 
@@ -675,25 +675,25 @@ and its instance methods overridden.
 
 <a name="ISystem+initialize"></a>
 
-### *iSystem.initialize(grid)*
+### *iSystem.initialize(app)*
 Initializes this system allowing it to perform one-time preparation logic
 
 **Kind**: instance method of <code>[ISystem](#ISystem)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| grid | <code>[HexGrid](#HexGrid)</code> | the grid on which to perform some type of initialization logic |
+| app | <code>[App](#App)</code> | the currently running GS app |
 
 <a name="ISystem+update"></a>
 
-### *iSystem.update(grid)*
-Called once per tick to update the grid
+### *iSystem.update(app)*
+Called once per tick to update the simulation
 
 **Kind**: instance method of <code>[ISystem](#ISystem)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| grid | <code>[HexGrid](#HexGrid)</code> | the grid to update |
+| app | <code>[App](#App)</code> | the currently running GS app |
 
 <a name="MultiStringHashMap"></a>
 
