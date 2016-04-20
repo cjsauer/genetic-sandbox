@@ -64,4 +64,12 @@ describe("App", () => {
       });
     });
   });
+
+  describe("run", () => {
+    it("should call update", () => {
+      sinon.spy(app, "update");
+      app.run();
+      expect(app.update.called).to.be.true;
+    });
+  });
 });

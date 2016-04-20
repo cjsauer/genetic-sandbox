@@ -5,17 +5,24 @@ import "file?name=index.html!./main.html";
 // Load the main stylesheet
 import "./styles/reset.css";
 
-// Import and bootstrap the application!
+// Import the Paper.js vector grahics library
+import paper from "paper";
+
+// Import the main Genetic Sandbox application
 import App from "./modules/App";
 
-// Add systems to this list to include them in the processing loop
-let systems = [
-];
+// Export the GS bootstrapping function
+window.GeneticSandbox = function(canvas) {
+  // Add systems to this list to include them in the processing loop
+  let systems = [
+  ];
 
-const app = new App(systems);
-app.initialize();
+  // Create an empty paper project and view attached to the given canvas
+  let paperScope = new paper.PaperScope();
+  paperScope.setup(canvas);
 
-// TODO: Implement a more formal game loop
-app.update();
+  const app = new App(systems, paperScope);
+  app.initialize();
 
-console.log("Genetic Sandbox is up and running!");
+  return app;
+};
