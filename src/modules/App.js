@@ -2,7 +2,7 @@ import HexGrid from "./grid/HexGrid";
 
 /**
  * The entry point of the entire application. App contains references to the
- * grid and an array of systems, as well as a reference to a
+ * grid, an array of systems, and a reference to a
  * [Paper]{@link http://paperjs.org} context.
  * @see {HexGrid}
  * @see {ISystem}
@@ -40,7 +40,7 @@ class App {
    */
   initialize() {
     this.systems.forEach((system) => {
-      system.initialize(this.grid);
+      system.initialize(this);
     });
   }
 
@@ -49,7 +49,7 @@ class App {
    */
   update() {
     this.systems.forEach((system) => {
-      system.update(this.grid);
+      system.update(this);
     });
   }
 
