@@ -9,7 +9,8 @@ permalink: /docs/
 <dl>
 <dt><a href="#App">App</a></dt>
 <dd><p>The entry point of the entire application. App contains references to the
-grid and an array of systems.</p>
+grid and an array of systems, as well as a reference to a
+<a href="http://paperjs.org">Paper</a> context.</p>
 </dd>
 <dt><a href="#HexGrid">HexGrid</a></dt>
 <dd><p>A 2D, hexagonal grid implementation with axial coordinate system.
@@ -47,7 +48,8 @@ containing initialize() and update() functions that operate in some way on
 
 ## App
 The entry point of the entire application. App contains references to the
-grid and an array of systems.
+grid and an array of systems, as well as a reference to a
+[Paper](http://paperjs.org) context.
 
 **Kind**: global class  
 **See**
@@ -57,21 +59,24 @@ grid and an array of systems.
 
 
 * [App](#App)
-    * [new App(systems)](#new_App_new)
+    * [new App(systems, paperScope)](#new_App_new)
     * [.grid](#App+grid) : <code>[HexGrid](#HexGrid)</code>
     * [.systems](#App+systems) : <code>Array.ISystem</code>
+    * [.paper](#App+paper) : <code>PaperScope</code>
     * [.initialize()](#App+initialize)
     * [.update()](#App+update)
+    * [.run()](#App+run)
 
 <a name="new_App_new"></a>
 
-### new App(systems)
+### new App(systems, paperScope)
 Prepares the Genetic Sandbox application for bootstrapping.
 
 
 | Param | Type | Description |
 | --- | --- | --- |
 | systems | <code>Array.ISystem</code> | the systems to be included in the main processing loop |
+| paperScope | <code>PaperScope</code> | Paper.js graphics context |
 
 <a name="App+grid"></a>
 
@@ -85,6 +90,13 @@ A grid of tiles serving as the main stage of the simulation
 Array of systems included in the main processing loop
 
 **Kind**: instance property of <code>[App](#App)</code>  
+<a name="App+paper"></a>
+
+### app.paper : <code>PaperScope</code>
+Paper.js graphics context used for rendering vector graphics to a
+canvas element
+
+**Kind**: instance property of <code>[App](#App)</code>  
 <a name="App+initialize"></a>
 
 ### app.initialize()
@@ -95,6 +107,12 @@ Initializes every System in the systems array
 
 ### app.update()
 Updates every System in the systems array
+
+**Kind**: instance method of <code>[App](#App)</code>  
+<a name="App+run"></a>
+
+### app.run()
+Kicks off the processing loop to continously update all systems
 
 **Kind**: instance method of <code>[App](#App)</code>  
 <a name="HexGrid"></a>
