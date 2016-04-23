@@ -2,12 +2,11 @@ import ISystem from "./ISystem";
 import Theme from "../themes/Theme";
 
 /**
- * The default renderer of all tiles in the grid. This renderer is called first,
- * and draws the basic outline of a tile.
+ * The default renderer of all tiles in the grid.
  */
 class DefaultGridRenderSystem extends ISystem {
   /**
-   * Initializes this system allowing it to perform one-time preparation logic
+   * Prepares the system for rendering
    * @param {App} app - the currently running GS app
    */
   initialize(app) {
