@@ -35,8 +35,7 @@ and a height.</p>
 <dd><p>A 2D point in space. Contains (x, y) coordinates.</p>
 </dd>
 <dt><a href="#DefaultGridRenderSystem">DefaultGridRenderSystem</a></dt>
-<dd><p>The default renderer of all tiles in the grid. This renderer is called first,
-and draws the basic outline of a tile.</p>
+<dd><p>The default renderer of all tiles in the grid.</p>
 </dd>
 <dt><a href="#ISystem">ISystem</a></dt>
 <dd><p>Interface for defining new systems. A system in Genetic Sandbox is a class
@@ -679,8 +678,7 @@ The y coordinate of this point
 <a name="DefaultGridRenderSystem"></a>
 
 ## DefaultGridRenderSystem
-The default renderer of all tiles in the grid. This renderer is called first,
-and draws the basic outline of a tile.
+The default renderer of all tiles in the grid.
 
 **Kind**: global class  
 
@@ -691,7 +689,7 @@ and draws the basic outline of a tile.
 <a name="DefaultGridRenderSystem+initialize"></a>
 
 ### defaultGridRenderSystem.initialize(app)
-Initializes this system allowing it to perform one-time preparation logic
+Prepares the system for rendering
 
 **Kind**: instance method of <code>[DefaultGridRenderSystem](#DefaultGridRenderSystem)</code>  
 
