@@ -2,17 +2,19 @@ import HexGrid from "./grid/HexGrid";
 
 /**
  * The entry point of the entire application. App contains references to the
- * grid and an array of systems.
+ * grid, an array of systems, and a reference to a
+ * [Paper]{@link http://paperjs.org} context.
  * @see {HexGrid}
  * @see {ISystem}
  */
 class App {
   /**
-   * Prepares the Genetic Sandbox application for bootstrapping.
+   * Prepares a Genetic Sandbox application for bootstrapping.
    * @param {Array.ISystem} systems - the systems to be included in the main
    * processing loop
+   * @param {PaperScope} paperScope - Paper.js graphics context
    */
-  constructor(systems) {
+  constructor(systems, paperScope) {
     /**
      * A grid of tiles serving as the main stage of the simulation
      * @type HexGrid
@@ -24,6 +26,13 @@ class App {
      * @type {Array.ISystem}
      */
     this.systems = systems;
+
+    /**
+     * Paper.js graphics context used for rendering vector graphics to a
+     * canvas element
+     * @type {PaperScope}
+     */
+    this.paper = paperScope;
   }
 
   /**
@@ -31,7 +40,7 @@ class App {
    */
   initialize() {
     this.systems.forEach((system) => {
-      system.initialize(this.grid);
+      system.initialize(this);
     });
   }
 
@@ -40,8 +49,35 @@ class App {
    */
   update() {
     this.systems.forEach((system) => {
-      system.update(this.grid);
+      system.update(this);
     });
+  }
+
+  /**
+   * Kicks off the processing loop to continously update all systems
+   */
+  run() {
+    this._timer = setInterval(this._tick.bind(this), 1000);
+    this._tick();
+  }
+
+  /**
+   * Stops the processing loop, essentially pausing the entire simulation
+   */
+  stop() {
+    if (this._timer) {
+      clearInterval(this._timer);
+    }
+  }
+
+  /**
+   * Moves the simulation forward by one full tick
+   * @private
+   */
+  _tick() {
+    this.paper.project.clear();
+    this.update();
+    this.paper.view.draw();
   }
 }
 

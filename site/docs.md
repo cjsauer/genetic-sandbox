@@ -9,7 +9,8 @@ permalink: /docs/
 <dl>
 <dt><a href="#App">App</a></dt>
 <dd><p>The entry point of the entire application. App contains references to the
-grid and an array of systems.</p>
+grid, an array of systems, and a reference to a
+<a href="http://paperjs.org">Paper</a> context.</p>
 </dd>
 <dt><a href="#HexGrid">HexGrid</a></dt>
 <dd><p>A 2D, hexagonal grid implementation with axial coordinate system.
@@ -33,6 +34,9 @@ and a height.</p>
 <dt><a href="#Point">Point</a></dt>
 <dd><p>A 2D point in space. Contains (x, y) coordinates.</p>
 </dd>
+<dt><a href="#DefaultGridRenderSystem">DefaultGridRenderSystem</a></dt>
+<dd><p>The default renderer of all tiles in the grid.</p>
+</dd>
 <dt><a href="#ISystem">ISystem</a></dt>
 <dd><p>Interface for defining new systems. A system in Genetic Sandbox is a class
 containing initialize() and update() functions that operate in some way on
@@ -43,11 +47,24 @@ containing initialize() and update() functions that operate in some way on
 </dd>
 </dl>
 
+## Constants
+
+<dl>
+<dt><a href="#ElementalTheme">ElementalTheme</a></dt>
+<dd><p>An elemental inspired theme</p>
+</dd>
+<dt><a href="#Theme">Theme</a></dt>
+<dd><p>The hub of all styling. Used to set the current theme, and retrieve styling
+values like color, stroke thickness, etc.</p>
+</dd>
+</dl>
+
 <a name="App"></a>
 
 ## App
 The entry point of the entire application. App contains references to the
-grid and an array of systems.
+grid, an array of systems, and a reference to a
+[Paper](http://paperjs.org) context.
 
 **Kind**: global class  
 **See**
@@ -57,21 +74,25 @@ grid and an array of systems.
 
 
 * [App](#App)
-    * [new App(systems)](#new_App_new)
+    * [new App(systems, paperScope)](#new_App_new)
     * [.grid](#App+grid) : <code>[HexGrid](#HexGrid)</code>
     * [.systems](#App+systems) : <code>Array.ISystem</code>
+    * [.paper](#App+paper) : <code>PaperScope</code>
     * [.initialize()](#App+initialize)
     * [.update()](#App+update)
+    * [.run()](#App+run)
+    * [.stop()](#App+stop)
 
 <a name="new_App_new"></a>
 
-### new App(systems)
-Prepares the Genetic Sandbox application for bootstrapping.
+### new App(systems, paperScope)
+Prepares a Genetic Sandbox application for bootstrapping.
 
 
 | Param | Type | Description |
 | --- | --- | --- |
 | systems | <code>Array.ISystem</code> | the systems to be included in the main processing loop |
+| paperScope | <code>PaperScope</code> | Paper.js graphics context |
 
 <a name="App+grid"></a>
 
@@ -85,6 +106,13 @@ A grid of tiles serving as the main stage of the simulation
 Array of systems included in the main processing loop
 
 **Kind**: instance property of <code>[App](#App)</code>  
+<a name="App+paper"></a>
+
+### app.paper : <code>PaperScope</code>
+Paper.js graphics context used for rendering vector graphics to a
+canvas element
+
+**Kind**: instance property of <code>[App](#App)</code>  
 <a name="App+initialize"></a>
 
 ### app.initialize()
@@ -95,6 +123,18 @@ Initializes every System in the systems array
 
 ### app.update()
 Updates every System in the systems array
+
+**Kind**: instance method of <code>[App](#App)</code>  
+<a name="App+run"></a>
+
+### app.run()
+Kicks off the processing loop to continously update all systems
+
+**Kind**: instance method of <code>[App](#App)</code>  
+<a name="App+stop"></a>
+
+### app.stop()
+Stops the processing loop, essentially pausing the entire simulation
 
 **Kind**: instance method of <code>[App](#App)</code>  
 <a name="HexGrid"></a>
@@ -635,6 +675,39 @@ The y coordinate of this point
 
 **Kind**: instance property of <code>[Point](#Point)</code>  
 **Default**: <code>0</code>  
+<a name="DefaultGridRenderSystem"></a>
+
+## DefaultGridRenderSystem
+The default renderer of all tiles in the grid.
+
+**Kind**: global class  
+
+* [DefaultGridRenderSystem](#DefaultGridRenderSystem)
+    * [.initialize(app)](#DefaultGridRenderSystem+initialize)
+    * [.update(app)](#DefaultGridRenderSystem+update)
+
+<a name="DefaultGridRenderSystem+initialize"></a>
+
+### defaultGridRenderSystem.initialize(app)
+Prepares the system for rendering
+
+**Kind**: instance method of <code>[DefaultGridRenderSystem](#DefaultGridRenderSystem)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="DefaultGridRenderSystem+update"></a>
+
+### defaultGridRenderSystem.update(app)
+Draws all tiles in the app's grid
+
+**Kind**: instance method of <code>[DefaultGridRenderSystem](#DefaultGridRenderSystem)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
 <a name="ISystem"></a>
 
 ## *ISystem*
@@ -646,8 +719,8 @@ containing initialize() and update() functions that operate in some way on
 
 * *[ISystem](#ISystem)*
     * *[new ISystem()](#new_ISystem_new)*
-    * *[.initialize(grid)](#ISystem+initialize)*
-    * *[.update(grid)](#ISystem+update)*
+    * *[.initialize(app)](#ISystem+initialize)*
+    * *[.update(app)](#ISystem+update)*
 
 <a name="new_ISystem_new"></a>
 
@@ -657,25 +730,25 @@ and its instance methods overridden.
 
 <a name="ISystem+initialize"></a>
 
-### *iSystem.initialize(grid)*
+### *iSystem.initialize(app)*
 Initializes this system allowing it to perform one-time preparation logic
 
 **Kind**: instance method of <code>[ISystem](#ISystem)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| grid | <code>[HexGrid](#HexGrid)</code> | the grid on which to perform some type of initialization logic |
+| app | <code>[App](#App)</code> | the currently running GS app |
 
 <a name="ISystem+update"></a>
 
-### *iSystem.update(grid)*
-Called once per tick to update the grid
+### *iSystem.update(app)*
+Called once per tick to update the simulation
 
 **Kind**: instance method of <code>[ISystem](#ISystem)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| grid | <code>[HexGrid](#HexGrid)</code> | the grid to update |
+| app | <code>[App](#App)</code> | the currently running GS app |
 
 <a name="MultiStringHashMap"></a>
 
@@ -784,4 +857,50 @@ Deletes the given key
 ```js
 let wasDeleted = myHash.delete(["no", "longer", "needed"]);
 // myHash.get(["no", "longer", "needed"]) === undefined
+```
+<a name="ElementalTheme"></a>
+
+## ElementalTheme
+An elemental inspired theme
+
+**Kind**: global constant  
+<a name="Theme"></a>
+
+## Theme
+The hub of all styling. Used to set the current theme, and retrieve styling
+values like color, stroke thickness, etc.
+
+**Kind**: global constant  
+
+* [Theme](#Theme)
+    * [.current](#Theme.current) : <code>object</code>
+    * [.setTheme(name)](#Theme.setTheme)
+
+<a name="Theme.current"></a>
+
+### Theme.current : <code>object</code>
+The currently selected theme from which you can get styling values
+
+**Kind**: static property of <code>[Theme](#Theme)</code>  
+**Example**  
+
+```js
+let pepperoni = new Path.Circle(new Point(0, 0), 30);
+pepperoni.style = Theme.current.pepperoniStyle;
+```
+<a name="Theme.setTheme"></a>
+
+### Theme.setTheme(name)
+Sets the current theme
+
+**Kind**: static method of <code>[Theme](#Theme)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | the name of the theme to use |
+
+**Example**  
+
+```js
+Theme.setTheme("elemental");
 ```
