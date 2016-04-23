@@ -9,7 +9,7 @@ import HexGrid from "./grid/HexGrid";
  */
 class App {
   /**
-   * Prepares the Genetic Sandbox application for bootstrapping.
+   * Prepares a Genetic Sandbox application for bootstrapping.
    * @param {Array.ISystem} systems - the systems to be included in the main
    * processing loop
    * @param {PaperScope} paperScope - Paper.js graphics context
@@ -57,7 +57,25 @@ class App {
    * Kicks off the processing loop to continously update all systems
    */
   run() {
-    // TODO: implement a more formal game loop
+    this._timer = setInterval(this._tick.bind(this), 1000);
+    this._tick();
+  }
+
+  /**
+   * Stops the processing loop, essentially pausing the entire simulation
+   */
+  stop() {
+    if (this._timer) {
+      clearInterval(this._timer);
+    }
+  }
+
+  /**
+   * Moves the simulation forward by one full tick
+   * @private
+   */
+  _tick() {
+    this.paper.project.clear();
     this.update();
     this.paper.view.draw();
   }

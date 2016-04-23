@@ -6,25 +6,34 @@ const expect = chai.expect;
 import sinon from "sinon";
 
 describe("App", () => {
+  let app, systems, paper;
+
   class FakeSystem extends ISystem {
     initialize() {}
     update() {}
   }
 
-  let app;
-  let systems = [
-    new FakeSystem(),
-    new FakeSystem(),
-    new FakeSystem()
-  ];
-  let fakePaper = {
-    view: {
-      draw: sinon.stub()
-    }
-  };
+  beforeEach(() => {
+    systems = [
+      new FakeSystem(),
+      new FakeSystem(),
+      new FakeSystem()
+    ];
+    systems.forEach((system) => {
+      sinon.spy(system, "initialize");
+      sinon.spy(system, "update");
+    });
 
-  before(() => {
-    app = new App(systems, fakePaper);
+    paper = {
+      project: {
+        clear: sinon.stub()
+      },
+      view: {
+        draw: sinon.stub()
+      }
+    };
+
+    app = new App(systems, paper);
   });
 
   it("can be instantiated", () => {
@@ -43,12 +52,7 @@ describe("App", () => {
 
   describe("initialize", () => {
     it("should call initialize() on every System in the systems array", () => {
-      app.systems.forEach((system) => {
-        sinon.spy(system, "initialize");
-      });
-
       app.initialize();
-
       app.systems.forEach((system) => {
         expect(system.initialize.calledOnce).to.be.true;
       });
@@ -56,30 +60,60 @@ describe("App", () => {
   });
 
   describe("update", () => {
-    it("should call update() on every System in the systems array", () => {
+    beforeEach(() => {
       app.initialize();
-      app.systems.forEach((system) => {
-        sinon.spy(system, "update");
-      });
+    });
 
+    it("should call update() on every System in the systems array", () => {
       app.update();
-
       app.systems.forEach((system) => {
         expect(system.update.calledOnce).to.be.true;
       });
     });
   });
 
-  describe("run", () => {
-    it("should call update", () => {
-      sinon.spy(app, "update");
+  describe("run and stop", () => {
+    let stubSet, stubClear;
+
+    beforeEach(() => {
+      stubSet = sinon.stub(global, "setInterval").returns({});
+      stubClear = sinon.stub(global, "clearInterval");
+    });
+
+    afterEach(() => {
+      stubSet.restore();
+      stubClear.restore();
+    });
+
+    it("should start an interval timer to tick the simulation", () => {
       app.run();
-      expect(app.update.called).to.be.true;
+      expect(app._timer).to.be.ok;
+      expect(stubSet.calledOnce).to.be.true;
+    });
+
+    it("should clear the previously set interval", () => {
+      app.run();
+      app.stop();
+      expect(stubClear.calledWith(app._timer)).to.be.true;
+    });
+  });
+
+  describe("_tick", () => {
+    it("should clear the scene", () => {
+      app._tick();
+      expect(app.paper.project.clear.calledOnce).to.be.true;
+    });
+
+    it("should call update", () => {
+      let spy = sinon.spy(app, "update");
+      app._tick();
+      expect(app.update.calledOnce).to.be.true;
+      spy.restore();
     });
 
     it("should draw the view", () => {
-      app.run();
-      expect(app.paper.view.draw.called).to.be.true;
+      app._tick();
+      expect(app.paper.view.draw.calledOnce).to.be.true;
     });
   });
 });
