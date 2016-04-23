@@ -48,6 +48,18 @@ containing initialize() and update() functions that operate in some way on
 </dd>
 </dl>
 
+## Constants
+
+<dl>
+<dt><a href="#ElementalTheme">ElementalTheme</a></dt>
+<dd><p>An elemental inspired theme</p>
+</dd>
+<dt><a href="#Theme">Theme</a></dt>
+<dd><p>The hub of all styling. Used to set the current theme, and retrieve styling
+values like color, stroke thickness, etc.</p>
+</dd>
+</dl>
+
 <a name="App"></a>
 
 ## App
@@ -847,4 +859,50 @@ Deletes the given key
 ```js
 let wasDeleted = myHash.delete(["no", "longer", "needed"]);
 // myHash.get(["no", "longer", "needed"]) === undefined
+```
+<a name="ElementalTheme"></a>
+
+## ElementalTheme
+An elemental inspired theme
+
+**Kind**: global constant  
+<a name="Theme"></a>
+
+## Theme
+The hub of all styling. Used to set the current theme, and retrieve styling
+values like color, stroke thickness, etc.
+
+**Kind**: global constant  
+
+* [Theme](#Theme)
+    * [.current](#Theme.current) : <code>object</code>
+    * [.setTheme(name)](#Theme.setTheme)
+
+<a name="Theme.current"></a>
+
+### Theme.current : <code>object</code>
+The currently selected theme from which you can get styling values
+
+**Kind**: static property of <code>[Theme](#Theme)</code>  
+**Example**  
+
+```js
+let pepperoni = new Path.Circle(new Point(0, 0), 30);
+pepperoni.style = Theme.current.pepperoniStyle;
+```
+<a name="Theme.setTheme"></a>
+
+### Theme.setTheme(name)
+Sets the current theme
+
+**Kind**: static method of <code>[Theme](#Theme)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | the name of the theme to use |
+
+**Example**  
+
+```js
+Theme.setTheme("elemental");
 ```
