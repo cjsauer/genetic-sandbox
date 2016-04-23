@@ -1,4 +1,5 @@
 import ISystem from "./ISystem";
+import Theme from "../themes/Theme";
 
 /**
  * The default renderer of all tiles in the grid. This renderer is called first,
@@ -11,17 +12,15 @@ class DefaultGridRenderSystem extends ISystem {
    */
   initialize(app) {
     const paper = app.paper;
-    let Path, Symbol, Color;
-    ({ Path, Symbol, Color } = paper);
+    let Path, Symbol;
+    ({ Path, Symbol } = paper);
 
     // Cache reference to all tiles
     this._tiles = app.grid.getTiles();
 
     // Create a Symbol for the hex path to place for every tile
     let path = new Path.RegularPolygon(paper.view.center, 6, DefaultGridRenderSystem.HEX_SIZE);
-    path.style = {
-      strokeColor: new Color(1.0, 0.1)
-    };
+    path.style = Theme.current.defaultHexStyle;
     this._hex = new Symbol(path);
     path.remove();
   }
