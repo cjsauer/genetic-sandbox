@@ -9,7 +9,7 @@ permalink: /docs/
 <dl>
 <dt><a href="#App">App</a></dt>
 <dd><p>The entry point of the entire application. App contains references to the
-grid and an array of systems, as well as a reference to a
+grid, an array of systems, and a reference to a
 <a href="http://paperjs.org">Paper</a> context.</p>
 </dd>
 <dt><a href="#HexGrid">HexGrid</a></dt>
@@ -34,6 +34,10 @@ and a height.</p>
 <dt><a href="#Point">Point</a></dt>
 <dd><p>A 2D point in space. Contains (x, y) coordinates.</p>
 </dd>
+<dt><a href="#DefaultGridRenderSystem">DefaultGridRenderSystem</a></dt>
+<dd><p>The default renderer of all tiles in the grid. This renderer is called first,
+and draws the basic outline of a tile.</p>
+</dd>
 <dt><a href="#ISystem">ISystem</a></dt>
 <dd><p>Interface for defining new systems. A system in Genetic Sandbox is a class
 containing initialize() and update() functions that operate in some way on
@@ -48,7 +52,7 @@ containing initialize() and update() functions that operate in some way on
 
 ## App
 The entry point of the entire application. App contains references to the
-grid and an array of systems, as well as a reference to a
+grid, an array of systems, and a reference to a
 [Paper](http://paperjs.org) context.
 
 **Kind**: global class  
@@ -66,11 +70,12 @@ grid and an array of systems, as well as a reference to a
     * [.initialize()](#App+initialize)
     * [.update()](#App+update)
     * [.run()](#App+run)
+    * [.stop()](#App+stop)
 
 <a name="new_App_new"></a>
 
 ### new App(systems, paperScope)
-Prepares the Genetic Sandbox application for bootstrapping.
+Prepares a Genetic Sandbox application for bootstrapping.
 
 
 | Param | Type | Description |
@@ -113,6 +118,12 @@ Updates every System in the systems array
 
 ### app.run()
 Kicks off the processing loop to continously update all systems
+
+**Kind**: instance method of <code>[App](#App)</code>  
+<a name="App+stop"></a>
+
+### app.stop()
+Stops the processing loop, essentially pausing the entire simulation
 
 **Kind**: instance method of <code>[App](#App)</code>  
 <a name="HexGrid"></a>
@@ -653,6 +664,40 @@ The y coordinate of this point
 
 **Kind**: instance property of <code>[Point](#Point)</code>  
 **Default**: <code>0</code>  
+<a name="DefaultGridRenderSystem"></a>
+
+## DefaultGridRenderSystem
+The default renderer of all tiles in the grid. This renderer is called first,
+and draws the basic outline of a tile.
+
+**Kind**: global class  
+
+* [DefaultGridRenderSystem](#DefaultGridRenderSystem)
+    * [.initialize(app)](#DefaultGridRenderSystem+initialize)
+    * [.update(app)](#DefaultGridRenderSystem+update)
+
+<a name="DefaultGridRenderSystem+initialize"></a>
+
+### defaultGridRenderSystem.initialize(app)
+Initializes this system allowing it to perform one-time preparation logic
+
+**Kind**: instance method of <code>[DefaultGridRenderSystem](#DefaultGridRenderSystem)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="DefaultGridRenderSystem+update"></a>
+
+### defaultGridRenderSystem.update(app)
+Draws all tiles in the app's grid
+
+**Kind**: instance method of <code>[DefaultGridRenderSystem](#DefaultGridRenderSystem)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
 <a name="ISystem"></a>
 
 ## *ISystem*
