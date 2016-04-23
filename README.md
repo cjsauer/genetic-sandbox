@@ -24,6 +24,8 @@ As an alternative, you could also download and extract
 Now you're ready to install the dependencies, and run the development server:
 
 ```bash
+# These are necessary for using the Paper.js vector graphics library
+sudo apt-get install libcairo2-dev libpango1.0-dev libssl-dev libjpeg62-dev libgif-dev
 npm install
 npm run dev
 ```
