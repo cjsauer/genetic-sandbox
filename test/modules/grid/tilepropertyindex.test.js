@@ -1,7 +1,7 @@
 import TilePropertyIndex from "../../../src/modules/grid/TilePropertyIndex";
 import Tile from "../../../src/modules/grid/Tile";
 import chai from "chai";
-import sinon from "sinon";
+import { spy } from "sinon";
 const expect = chai.expect;
 
 describe("TilePropertyIndex", () => {
@@ -43,7 +43,7 @@ describe("TilePropertyIndex", () => {
     ];
 
     tiles.forEach((tile) => {
-      sinon.spy(tile, "addListener");
+      spy(tile, "addListener");
     });
 
     const newTileIndex = new TilePropertyIndex(tiles);
@@ -84,11 +84,12 @@ describe("TilePropertyIndex", () => {
   });
 
   it("should build the index on demand", () => {
-    tileIndex._buildIndex = sinon.spy();
+    spy(tileIndex, "_buildIndex");
     // The index should be empty initially
     expect(tileIndex._index.keys()).to.have.length(0);
     tileIndex.getTilesByProperty(["temperature", "biome"]);
     expect(tileIndex._buildIndex.called).to.be.true;
+    tileIndex._buildIndex.restore();
   });
 
   it("can return a list of tiles that possess a set of properties", () => {

@@ -3,7 +3,7 @@ import HexGrid from "../../src/modules/grid/HexGrid";
 import ISystem from "../../src/modules/systems/ISystem";
 import chai from "chai";
 const expect = chai.expect;
-import sinon from "sinon";
+import { spy, stub } from "sinon";
 
 describe("App", () => {
   let app, systems, paper;
@@ -20,16 +20,16 @@ describe("App", () => {
       new FakeSystem()
     ];
     systems.forEach((system) => {
-      sinon.spy(system, "initialize");
-      sinon.spy(system, "update");
+      spy(system, "initialize");
+      spy(system, "update");
     });
 
     paper = {
       project: {
-        clear: sinon.stub()
+        clear: stub()
       },
       view: {
-        draw: sinon.stub()
+        draw: stub()
       }
     };
 
@@ -76,8 +76,8 @@ describe("App", () => {
     let stubSet, stubClear;
 
     beforeEach(() => {
-      stubSet = sinon.stub(global, "setInterval").returns({});
-      stubClear = sinon.stub(global, "clearInterval");
+      stubSet = stub(global, "setInterval").returns({});
+      stubClear = stub(global, "clearInterval");
     });
 
     afterEach(() => {
@@ -105,7 +105,7 @@ describe("App", () => {
     });
 
     it("should call update", () => {
-      let spy = sinon.spy(app, "update");
+      let spy = spy(app, "update");
       app._tick();
       expect(app.update.calledOnce).to.be.true;
       spy.restore();

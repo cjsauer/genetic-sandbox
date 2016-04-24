@@ -1,6 +1,6 @@
 import Tile from "../../../src/modules/grid/Tile";
 import chai from "chai";
-import sinon from "sinon";
+import { spy } from "sinon";
 const expect = chai.expect;
 
 describe("Tile", () => {
@@ -85,7 +85,7 @@ describe("Tile", () => {
   describe("events", () => {
     it("should emit an event when a new property is added", () => {
       const tile = new Tile();
-      const cb = sinon.spy();
+      const cb = spy();
       tile.addListener("propertyAdded", cb);
 
       tile.set("newProperty", 0);
@@ -103,7 +103,7 @@ describe("Tile", () => {
       const tile = new Tile({
         someProperty: 0
       });
-      const cb = sinon.spy();
+      const cb = spy();
       tile.addListener("propertyDeleted", cb);
 
       tile.delete("someProperty");
