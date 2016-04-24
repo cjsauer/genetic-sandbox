@@ -1,12 +1,11 @@
 import App from "../../src/modules/App";
-import HexGrid from "../../src/modules/grid/HexGrid";
 import ISystem from "../../src/modules/systems/ISystem";
 import chai from "chai";
 const expect = chai.expect;
 import { spy, stub } from "sinon";
 
 describe("App", () => {
-  let app, systems, paper;
+  let app, grid, systems, paper;
 
   class FakeSystem extends ISystem {
     initialize() {}
@@ -14,11 +13,14 @@ describe("App", () => {
   }
 
   beforeEach(() => {
+    grid = {};
+
     systems = [
       new FakeSystem(),
       new FakeSystem(),
       new FakeSystem()
     ];
+
     systems.forEach((system) => {
       spy(system, "initialize");
       spy(system, "update");
@@ -33,16 +35,11 @@ describe("App", () => {
       }
     };
 
-    app = new App(systems, paper);
+    app = new App(grid, systems, paper);
   });
 
   it("can be instantiated", () => {
     expect(app).to.be.ok;
-  });
-
-  it("should instantiate a HexGrid", () => {
-    expect(app.grid).to.be.ok;
-    expect(app.grid instanceof HexGrid).to.be.true;
   });
 
   it("should contain an array of Systems", () => {
@@ -105,10 +102,10 @@ describe("App", () => {
     });
 
     it("should call update", () => {
-      let spy = spy(app, "update");
+      let updateSpy = spy(app, "update");
       app._tick();
       expect(app.update.calledOnce).to.be.true;
-      spy.restore();
+      updateSpy.restore();
     });
 
     it("should draw the view", () => {

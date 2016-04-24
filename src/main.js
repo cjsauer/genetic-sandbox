@@ -2,17 +2,13 @@
 // it becomes the "homepage"
 import "file?name=index.html!./main.html";
 
-// Load the reset stylesheet to get consistent styling across browsers
+// Stylesheets
 import "./styles/reset.css";
-
-// Load the GS theme
 import "./styles/theme.css";
 
-// Import the Paper.js vector grahics library
 import paper from "paper";
-
-// Import the main Genetic Sandbox application
 import App from "./modules/App";
+import HexGrid from "./modules/grid/HexGrid";
 
 // Import all systems
 import DefaultGridRenderSystem from "./modules/systems/DefaultGridRenderSystem";
@@ -29,7 +25,7 @@ window.GeneticSandbox = function (canvas) {
   fitToContainer();
 
   // Create an empty paper project and view attached to the given canvas
-  let paperScope = new paper.PaperScope();
+  const paperScope = new paper.PaperScope();
   paperScope.setup(canvas);
 
   // If the window is resized, refit the canvas again, and then subsequently
@@ -40,12 +36,15 @@ window.GeneticSandbox = function (canvas) {
   };
 
   // Add systems to this list to include them in the processing loop
-  let systems = [
+  const systems = [
     new DefaultGridRenderSystem()
   ];
 
+  // Create the universe!
+  const grid = new HexGrid(25);
+
   // Finally, create an instance of App and initialize it
-  const app = new App(systems, paperScope);
+  const app = new App(grid, systems, paperScope);
   app.initialize();
 
   return app;
