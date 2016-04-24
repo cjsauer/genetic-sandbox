@@ -1,5 +1,5 @@
 import Tile from "./Tile";
-import TilePropertyIndex from "./TilePropertyIndex";
+import TileComponentIndex from "./TileComponentIndex";
 
 /**
  * A 2D, hexagonal grid implementation with axial coordinate system.
@@ -18,10 +18,10 @@ class HexGrid {
    * });
    * @param {number} radius - Number of tiles from center of grid to the edge,
    * not counting the center tile
-   * @param {Object} [defaultTileProps={}] - Default properties that all Tiles
-   * will be initialized with
+   * @param {Object} [defaultTileComponents={}] - Default components that all
+   * Tiles will be initialized with
    */
-  constructor(radius, defaultTileProps = {}) {
+  constructor(radius, defaultTileComponents = {}) {
     /* Generate a hex grid. We'll use the constraint in cubic coordinates
      * that x + y + z = 0 to decide where hexes are to be placed before
      * converting to axial coordinates for storage.
@@ -41,21 +41,21 @@ class HexGrid {
             if (tiles[r + radius] === undefined) {
               tiles[r + radius] = [];
             }
-            // Merge the passed default properties with some grid meta data
-            let tileProps = Object.assign({}, defaultTileProps, {
+            // Merge the passed default components with some grid meta data
+            let tileComponents = Object.assign({}, defaultTileComponents, {
               x: q,
               y: r,
               grid: this
             });
-            tiles[r + radius][q + radius + Math.min(0, r)] = new Tile(tileProps);
+            tiles[r + radius][q + radius + Math.min(0, r)] = new Tile(tileComponents);
           }
         }
       }
     }
     this._tiles = tiles;
     this._radius = radius;
-    // Build out the index so we can super quickly look up tiles by property
-    this._propertyIndex = new TilePropertyIndex(this.getTiles());
+    // Build out the index so we can super quickly look up tiles by component
+    this._componentIndex = new TileComponentIndex(this.getTiles());
   }
 
   /**
@@ -99,17 +99,17 @@ class HexGrid {
   }
 
   /**
-   * Returns all tiles that posess the given property or properties
+   * Returns all tiles that posess the given component or components
    * @example
-   * // Returns all tiles that have "biome" and "temperature" properties
-   * let habitatTiles = grid.getTilesByProperty(["biome", "temperature"]);
-   * @param {(string | Array.string)} properties - the properties a tile
-   * must posess to be included in the result
+   * // Returns all tiles that have "biome" and "temperature" components
+   * let habitatTiles = grid.getTilesByComponent(["biome", "temperature"]);
+   * @param {(string | Array.string)} names - the names of the components
+   * this tile must posess to be included in the result
    * @returns {Array.Tile} the tiles that include all of the given
-   * properties
+   * components
    */
-  getTilesByProperty(properties) {
-    return this._propertyIndex.getTilesByProperty(properties);
+  getTilesByComponent(names) {
+    return this._componentIndex.getTilesByComponent(names);
   }
 
   /**

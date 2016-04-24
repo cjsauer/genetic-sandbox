@@ -30,7 +30,7 @@ describe("HexGrid", () => {
     expect(hexGrid3.getTiles()).to.have.length(37);
   });
 
-  it("should be instantiable with default tile properties", () => {
+  it("should be instantiable with default components", () => {
     const desertGrid = new HexGrid(3, {
       temperature: 130,
       biome: "desert"
@@ -43,9 +43,9 @@ describe("HexGrid", () => {
     });
   });
 
-  it("passes each tile's coordinates in addition to default properties", () => {
+  it("passes each tile's coordinates in addition to default components", () => {
     const hexGrid = new HexGrid(1, {
-      someOtherProperty: true
+      someOtherComponent: true
     });
     const coords = [
       [0, 0],
@@ -61,13 +61,13 @@ describe("HexGrid", () => {
       let tile = hexGrid.getTile(x, y);
       expect(tile.get("x")).to.equal(x);
       expect(tile.get("y")).to.equal(y);
-      expect(tile.get("someOtherProperty")).to.be.true;
+      expect(tile.get("someOtherComponent")).to.be.true;
     });
   });
 
-  it("passes a reference to itself in addition to default properties", () => {
+  it("passes a reference to itself in addition to default components", () => {
     const hexGrid = new HexGrid(1, {
-      someOtherProperty: true
+      someOtherComponent: true
     });
     const coords = [
       [0, 0],
@@ -82,7 +82,7 @@ describe("HexGrid", () => {
     coords.forEach(([x, y]) => {
       let tile = hexGrid.getTile(x, y);
       expect(tile.get("grid")).to.equal(hexGrid);
-      expect(tile.get("someOtherProperty")).to.be.true;
+      expect(tile.get("someOtherComponent")).to.be.true;
     });
   });
 
@@ -121,17 +121,17 @@ describe("HexGrid", () => {
       });
     });
 
-    it("should be retrievable by property", () => {
+    it("should be retrievable by component", () => {
       const hexGrid = new HexGrid(2, {
         biome: "desert",
         temperature: 120
       });
       hexGrid.getTile(0, 0).set("unique", true);
 
-      const habitatTiles = hexGrid.getTilesByProperty(["biome", "temperature"]);
+      const habitatTiles = hexGrid.getTilesByComponent(["biome", "temperature"]);
       expect(habitatTiles).to.have.length(hexGrid.getTiles().length);
 
-      const uniqueTiles = hexGrid.getTilesByProperty("unique");
+      const uniqueTiles = hexGrid.getTilesByComponent("unique");
       expect(uniqueTiles).to.have.length(1);
     });
 

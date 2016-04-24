@@ -1,12 +1,12 @@
 import MultiStringHashMap from "../util/MultiStringHashMap";
 
 /**
- * Builds an index of {@link Tiles} for fast lookup by property
+ * Builds an index of {@link Tiles} for fast lookup by component
  */
-class TilePropertyIndex {
+class TileComponentIndex {
   /**
-  * Creates a new TilePropertyIndex with the given array of tiles.
-  * Note: the index is built on demand. Constructing a new TilePropertyIndex
+  * Creates a new TileComponentIndex with the given array of tiles.
+  * Note: the index is built on demand. Constructing a new TileComponentIndex
   * does not actually build a complete index (which would be expensive),
   * but instead the indices are built as needed.
   * @example
@@ -15,9 +15,9 @@ class TilePropertyIndex {
   *   new Tile(),
   *   new Tile()
   * ];
-  * const tileIndex = new TilePropertyIndex(tileIndex);
+  * const tileIndex = new TileComponentIndex(tileIndex);
   * @param {Array.Tile} tiles - the array of tiles for which to build
-  * an index by tile property
+  * an index by tile component
   */
   constructor(tiles) {
     /**
@@ -31,8 +31,8 @@ class TilePropertyIndex {
     // Note that we need to bind `this`, because within the event handler
     // `this` would normally refer to the Tile itself.
     this._tiles.forEach((tile) => {
-      tile.addListener("propertyAdded", this.onTilePropertyAdded.bind(this));
-      tile.addListener("propertyDeleted", this.onTilePropertyDeleted.bind(this));
+      tile.addListener("componentAdded", this.onTileComponentAdded.bind(this));
+      tile.addListener("componentDeleted", this.onTileComponentDeleted.bind(this));
     });
 
     /**
@@ -43,32 +43,32 @@ class TilePropertyIndex {
   }
 
   /**
-   * Returns all tiles that posess the given property or properties
+   * Returns all tiles that posess the given component
    * @example
-   * // Returns all tiles that have "biome" and "temperature" properties
-   * let habitatTiles = tileIndex.getTilesByProperty(["biome", "temperature"]);
-   * @param {(string | Array.string)} properties - the properties a tile
-   * must posess to be included in the result
+   * // Returns all tiles that have "biome" and "temperature" components
+   * let habitatTiles = tileIndex.getTilesByComponent(["biome", "temperature"]);
+   * @param {(string | Array.string)} names - the names of the components a
+   * Tile must posess to be included in the result
    * @returns {Array.Tile} the tiles that include all of the given
-   * properties
+   * components
    */
-  getTilesByProperty(properties) {
+  getTilesByComponent(names) {
     // If the index does exist, we don't need to build it. We can assume
     // that the index has been kept up to date.
-    if (!this._index.hasKey(properties)) {
-      this._buildIndex(properties);
+    if (!this._index.hasKey(names)) {
+      this._buildIndex(names);
     }
-    return this._index.get(properties);
+    return this._index.get(names);
   }
 
   /**
-   * Event handler called when a property is added to a tile to keep the
+   * Event handler called when a component is added to a tile to keep the
    * relevant indices up to date
    * @param {object} e - the event object
    * @param {Tile} e.tile - the tile that is being updated
-   * @param {string} e.property - the property that was added
+   * @param {string} e.name - the name of the component that was added
    */
-  onTilePropertyAdded({tile, property}) {
+  onTileComponentAdded({tile, name}) {
     // Check for indices that the tile should now be included in
     let index;
     this._index.keys().forEach((key) => {
@@ -84,13 +84,13 @@ class TilePropertyIndex {
   }
 
   /**
-   * Event handler called when a property is deleted from a tile to keep the
+   * Event handler called when a name is deleted from a tile to keep the
    * relevant indices up to date
    * @param {object} e - the event object
    * @param {Tile} e.tile - the tile that is being updated
-   * @param {string} e.property - the property that was deleted
+   * @param {string} e.name - the name of the component that was deleted
    */
-  onTilePropertyDeleted({tile, property}) {
+  onTileComponentDeleted({tile, name}) {
     // Check for indices that the tile should now be removed from
     let index;
     this._index.keys().forEach((key) => {
@@ -107,43 +107,43 @@ class TilePropertyIndex {
 
   /**
    * Private function that builds the index for the given group of
-   * properties. Loops over the _tiles array, and if a Tile contains
-   * all of the given properties, it is added to this index.
+   * components. Loops over the _tiles array, and if a Tile contains
+   * all of the given components, it is added to this index.
    * @private
-   * @param {(string | Array.string)} properties - the property
+   * @param {(string | Array.string)} names - the component
    * index to build
    */
-  _buildIndex(properties) {
+  _buildIndex(names) {
     // Initialize the index to an empty array
     let index = [];
 
     // Try and add every tile to the index
     this._tiles.forEach((tile) => {
-      if (this._tileMatchesIndex(tile, properties)) {
+      if (this._tileMatchesIndex(tile, names)) {
         index.push(tile);
       }
     });
 
-    this._index.set(properties, index);
+    this._index.set(names, index);
   }
 
   /**
-   * Returns true if the given tile contains all of the given properties
+   * Returns true if the given tile contains all of the given components
    * @private
    * @param {Tile} tile - the tile to check
-   * @param {(string | Array.string)} properties - the props to check
+   * @param {(string | Array.string)} names - the names to check
    * against
    */
-  _tileMatchesIndex(tile, properties) {
-    if (typeof properties === "string") {
-      return tile.hasProperty(properties);
-    } else if (properties.constructor === Array) {
-      return properties.every((prop) => {
-        return tile.hasProperty(prop);
+  _tileMatchesIndex(tile, names) {
+    if (typeof names === "string") {
+      return tile.hasComponent(names);
+    } else if (names.constructor === Array) {
+      return names.every((name) => {
+        return tile.hasComponent(name);
       });
     }
     return false;
   }
 }
 
-export default TilePropertyIndex;
+export default TileComponentIndex;
