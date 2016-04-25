@@ -68,6 +68,10 @@ describe("DefaultGridRenderSystem", () => {
       sys.update(app);
       expect(paper.Symbol().place.callCount).to.equal(4);
     });
+
+    it("should not call getTiles", () => {
+      expect(app.grid.getTiles.callCount).to.equal(1);
+    });
   });
 
   describe("private methods", () => {
