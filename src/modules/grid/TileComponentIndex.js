@@ -31,15 +31,15 @@ class TileComponentIndex {
     // Note that we need to bind `this`, because within the event handler
     // `this` would normally refer to the Tile itself.
     this._tiles.forEach((tile) => {
-      tile.addListener("componentAdded", this.onTileComponentAdded.bind(this));
-      tile.addListener("componentDeleted", this.onTileComponentDeleted.bind(this));
+      tile.addListener("componentAdded", this._onTileComponentAdded.bind(this));
+      tile.addListener("componentDeleted", this._onTileComponentDeleted.bind(this));
     });
 
     /**
      * @type {MultiStringHashMap}
      * @private
      */
-    this._index = new MultiStringHashMap();
+    this._map = new MultiStringHashMap();
   }
 
   /**
@@ -53,12 +53,12 @@ class TileComponentIndex {
    * components
    */
   getTilesByComponent(names) {
-    // If the index does exist, we don't need to build it. We can assume
+    // If the index entry does exist, we don't need to build it. We can assume
     // that the index has been kept up to date.
-    if (!this._index.hasKey(names)) {
+    if (!this._map.hasKey(names)) {
       this._buildIndex(names);
     }
-    return this._index.get(names);
+    return this._map.get(names);
   }
 
   /**
@@ -68,16 +68,16 @@ class TileComponentIndex {
    * @param {Tile} e.tile - the tile that is being updated
    * @param {string} e.name - the name of the component that was added
    */
-  onTileComponentAdded({tile, name}) {
+  _onTileComponentAdded({tile, name}) {
     // Check for indices that the tile should now be included in
-    let index;
-    this._index.keys().forEach((key) => {
-      // If this tile matches this index, but is NOT included in it,
-      // add it to this index
+    let indexEntry;
+    this._map.keys().forEach((key) => {
+      // If this tile matches this index entry, but is NOT included in it,
+      // add it to this index entry
       if (this._tileMatchesIndex(tile, key)) {
-        index = this._index.get(key);
-        if (!index.includes(tile)) {
-          index.push(tile);
+        indexEntry = this._map.get(key);
+        if (!indexEntry.includes(tile)) {
+          indexEntry.push(tile);
         }
       }
     });
@@ -90,14 +90,14 @@ class TileComponentIndex {
    * @param {Tile} e.tile - the tile that is being updated
    * @param {string} e.name - the name of the component that was deleted
    */
-  onTileComponentDeleted({tile, name}) {
+  _onTileComponentDeleted({tile, name}) {
     // Check for indices that the tile should now be removed from
     let index;
-    this._index.keys().forEach((key) => {
+    this._map.keys().forEach((key) => {
       // If this tile does NOT match this index, but it is included in it,
       // remove it from that index
       if (!this._tileMatchesIndex(tile, key)) {
-        index = this._index.get(key);
+        index = this._map.get(key);
         if (index.includes(tile)) {
           index.splice(index.indexOf(tile), 1);
         }
@@ -124,7 +124,7 @@ class TileComponentIndex {
       }
     });
 
-    this._index.set(names, index);
+    this._map.set(names, index);
   }
 
   /**

@@ -54,39 +54,39 @@ describe("TileComponentIndex", () => {
   });
 
   it("can build an index of tiles by component", () => {
-    let index;
+    let tiles;
 
     tileIndex._buildIndex(["temperature", "biome"]);
-    index = tileIndex._index.get(["temperature", "biome"]);
-    expect(index).to.have.length(2);
-    index.forEach((tile) => {
+    tiles = tileIndex._map.get(["temperature", "biome"]);
+    expect(tiles).to.have.length(2);
+    tiles.forEach((tile) => {
       expect(tile.hasComponent("temperature")).to.be.true;
       expect(tile.hasComponent("biome")).to.be.true;
     });
 
     tileIndex._buildIndex(["temperature", "vegetation"]);
-    index = tileIndex._index.get(["temperature", "vegetation"]);
-    expect(index).to.have.length(1);
-    index.forEach((tile) => {
+    tiles = tileIndex._map.get(["temperature", "vegetation"]);
+    expect(tiles).to.have.length(1);
+    tiles.forEach((tile) => {
       expect(tile.hasComponent("temperature")).to.be.true;
       expect(tile.hasComponent("vegetation")).to.be.true;
     });
 
     tileIndex._buildIndex("enabled");
-    index = tileIndex._index.get("enabled");
-    expect(index).to.have.length(1);
-    index.forEach((tile) => {
+    tiles = tileIndex._map.get("enabled");
+    expect(tiles).to.have.length(1);
+    tiles.forEach((tile) => {
       expect(tile.hasComponent("enabled")).to.be.true;
     });
 
     tileIndex._buildIndex("whoops!");
-    expect(tileIndex._index.get("whoops!")).to.have.length(0);
+    expect(tileIndex._map.get("whoops!")).to.have.length(0);
   });
 
-  it("should build the index on demand", () => {
+  it("should build the index entries on demand", () => {
     spy(tileIndex, "_buildIndex");
     // The index should be empty initially
-    expect(tileIndex._index.keys()).to.have.length(0);
+    expect(tileIndex._map.keys()).to.have.length(0);
     tileIndex.getTilesByComponent(["temperature", "biome"]);
     expect(tileIndex._buildIndex.called).to.be.true;
     tileIndex._buildIndex.restore();
@@ -106,23 +106,18 @@ describe("TileComponentIndex", () => {
     });
   });
 
-  it("can decide whether or not a Tile belongs in a given index", () => {
-    const component = "temperature";
+  it("can decide whether or not a Tile belongs in a given index entry", () => {
     const components = ["temperature", "biome"];
     const badComponent = 42;
     const tileThatBelongsInIndex = tileIndex._tiles[0];
     const tileThatDoesNotBelongInIndex = tileIndex._tiles[3];
-    const trueResult = tileIndex._tileMatchesIndex(tileThatBelongsInIndex, component);
-    const trueResult2 = tileIndex._tileMatchesIndex(tileThatBelongsInIndex, components);
-    const falseResult = tileIndex._tileMatchesIndex(tileThatDoesNotBelongInIndex, components);
-    const falseResult2 = tileIndex._tileMatchesIndex(tileThatDoesNotBelongInIndex, badComponent);
-    expect(trueResult).to.be.true;
-    expect(trueResult2).to.be.true;
-    expect(falseResult).to.be.false;
-    expect(falseResult2).to.be.false;
+    expect(tileIndex._tileMatchesIndex(tileThatBelongsInIndex, "temperature")).to.be.true;
+    expect(tileIndex._tileMatchesIndex(tileThatBelongsInIndex, components)).to.be.true;
+    expect(tileIndex._tileMatchesIndex(tileThatDoesNotBelongInIndex, components)).to.be.false;
+    expect(tileIndex._tileMatchesIndex(tileThatDoesNotBelongInIndex, badComponent)).to.be.false;
   });
 
-  describe("onTileComponentAdded", () => {
+  describe("_onTileComponentAdded", () => {
     it("adds the updated tile to the relevant indices", () => {
       // Assert initial conditions
       let tiles = tileIndex.getTilesByComponent(["temperature", "biome"]);
@@ -143,7 +138,7 @@ describe("TileComponentIndex", () => {
     });
   });
 
-  describe("onTileComponentDeleted", () => {
+  describe("_onTileComponentDeleted", () => {
     it("removes the tile from the relevant indices", () => {
       // Assert initial conditions
       let tiles = tileIndex.getTilesByComponent(["temperature", "biome"]);
