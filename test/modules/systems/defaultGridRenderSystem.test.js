@@ -1,8 +1,9 @@
 import DefaultGridRenderSystem from "../../../src/modules/systems/DefaultGridRenderSystem";
 import Tile from "../../../src/modules/grid/Tile";
+import Coord from "../../../src/modules/grid/Coord";
 import chai from "chai";
 const expect = chai.expect;
-import { stub } from "sinon";
+import { stub, spy } from "sinon";
 
 describe("DefaultGridRenderSystem", () => {
   let sys, grid, paper, app;
@@ -13,10 +14,11 @@ describe("DefaultGridRenderSystem", () => {
     // Stub out the dependencies required by DefaultGridRenderSystem
     grid = {
       getTiles: stub().returns([
-        new Tile({ x: 0, y: 0 }),
-        new Tile({ x: 1, y: 0 }),
-        new Tile({ x: -1, y: 0 }),
-        new Tile({ x: 0, y: 1 })
+        new Tile({ coord: new Coord(0, 0) }),
+        new Tile({ coord: new Coord(1, 0) }),
+        new Tile({ coord: new Coord(-1, 0) }),
+        new Tile({ coord: new Coord(0, 1) }),
+        new Tile({ coord: new Coord(0, -1) })
       ])
     };
     paper = {
@@ -65,8 +67,14 @@ describe("DefaultGridRenderSystem", () => {
     });
 
     it("should place the symbol for each hex", () => {
+      let coordSpy = spy(sys, "_coordToPixel");
       sys.update(app);
-      expect(paper.Symbol().place.callCount).to.equal(4);
+      app.grid.getTiles().forEach((tile) => {
+        let coord = tile.get("coord");
+        expect(sys._coordToPixel.calledWith(coord.x, coord.y)).to.be.true;
+      });
+      expect(paper.Symbol().place.callCount).to.equal(5);
+      coordSpy.restore();
     });
 
     it("should not call getTiles", () => {
