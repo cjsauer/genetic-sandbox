@@ -12,6 +12,9 @@ permalink: /docs/
 grid, an array of systems, and a reference to a
 <a href="http://paperjs.org">Paper</a> context.</p>
 </dd>
+<dt><a href="#Coord">Coord</a></dt>
+<dd><p>A two dimensional coordinate of x and y</p>
+</dd>
 <dt><a href="#HexGrid">HexGrid</a></dt>
 <dd><p>A 2D, hexagonal grid implementation with axial coordinate system.
 Implementation details can be found <a href="http://goo.gl/nLO6sN">here</a>.</p>
@@ -138,6 +141,50 @@ Kicks off the processing loop to continously update all systems
 Stops the processing loop, essentially pausing the entire simulation
 
 **Kind**: instance method of <code>[App](#App)</code>  
+<a name="Coord"></a>
+
+## Coord
+A two dimensional coordinate of x and y
+
+**Kind**: global class  
+
+* [Coord](#Coord)
+    * [new Coord([x], [y])](#new_Coord_new)
+    * [.x](#Coord+x) : <code>number</code>
+    * [.y](#Coord+y) : <code>number</code>
+
+<a name="new_Coord_new"></a>
+
+### new Coord([x], [y])
+Constructs a new Coord with coordinates (x,y)
+
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [x] | <code>number</code> | <code>0</code> | x value |
+| [y] | <code>number</code> | <code>0</code> | y value |
+
+**Example**  
+
+```js
+let myCoord = new Coord(-5, 10);
+myCoord.x = 0;
+myCoord.y = 0;
+```
+<a name="Coord+x"></a>
+
+### coord.x : <code>number</code>
+x value
+
+**Kind**: instance property of <code>[Coord](#Coord)</code>  
+**Default**: <code>0</code>  
+<a name="Coord+y"></a>
+
+### coord.y : <code>number</code>
+y value
+
+**Kind**: instance property of <code>[Coord](#Coord)</code>  
+**Default**: <code>0</code>  
 <a name="HexGrid"></a>
 
 ## HexGrid
@@ -145,15 +192,19 @@ A 2D, hexagonal grid implementation with axial coordinate system.
 Implementation details can be found [here](http://goo.gl/nLO6sN).
 
 **Kind**: global class  
-**See**: [Tile](#Tile)  
+**See**
+
+- [Tile](#Tile)
+- [Coord](#Coord)
+
 
 * [HexGrid](#HexGrid)
     * [new HexGrid(radius, [defaultTileComponents])](#new_HexGrid_new)
-    * [.getTile(q, r)](#HexGrid+getTile) ⇒ <code>[Tile](#Tile)</code>
+    * [.getTile(coord)](#HexGrid+getTile) ⇒ <code>[Tile](#Tile)</code>
     * [.getTiles()](#HexGrid+getTiles) ⇒ <code>Array.Tile</code>
     * [.getTilesByComponent(names)](#HexGrid+getTilesByComponent) ⇒ <code>Array.Tile</code>
-    * [.neighborsOf(q, r)](#HexGrid+neighborsOf) ⇒ <code>Array.Tile</code>
-    * [.distanceBetween(q1, r1, q2, r2)](#HexGrid+distanceBetween) ⇒ <code>number</code>
+    * [.neighborsOf(coord)](#HexGrid+neighborsOf) ⇒ <code>Array.Tile</code>
+    * [.distanceBetween(coord1, coord2)](#HexGrid+distanceBetween) ⇒ <code>number</code>
 
 <a name="new_HexGrid_new"></a>
 
@@ -178,22 +229,20 @@ let myGrid = new HexGrid(10, {
 ```
 <a name="HexGrid+getTile"></a>
 
-### hexGrid.getTile(q, r) ⇒ <code>[Tile](#Tile)</code>
-Returns the Tile at axial coordinates (q, r). q can be read as "column",
-and r can be read as "row".
+### hexGrid.getTile(coord) ⇒ <code>[Tile](#Tile)</code>
+Returns the Tile at coordinates (x, y)
 
 **Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
 **Returns**: <code>[Tile](#Tile)</code> - The tile at the provided coordinates  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| q | <code>number</code> | q coordinate of Tile to fetch |
-| r | <code>number</code> | r coordinate of Tile to fetch |
+| coord | <code>[Coord](#Coord)</code> | coordinate of tile to fetch |
 
 **Example**  
 
 ```js
-let originTile = myGrid.getTile(0, 0);
+let originTile = myGrid.getTile(new Coord(0, 0));
 ```
 <a name="HexGrid+getTiles"></a>
 
@@ -231,45 +280,42 @@ let habitatTiles = grid.getTilesByComponent(["biome", "temperature"]);
 ```
 <a name="HexGrid+neighborsOf"></a>
 
-### hexGrid.neighborsOf(q, r) ⇒ <code>Array.Tile</code>
-Returns the Tiles that are adjacent to the Tile at the provided (q, r) coordinates.
+### hexGrid.neighborsOf(coord) ⇒ <code>Array.Tile</code>
+Returns the Tiles that are adjacent to the Tile at the provided (x, y) coordinates.
 
 **Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
 **Returns**: <code>Array.Tile</code> - The array of neighboring Tiles  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| q | <code>number</code> | q coordinate of Tile for which to fetch neighbors |
-| r | <code>number</code> | r coordinate of Tile for which to fetch neighbors |
+| coord | <code>[Coord](#Coord)</code> | coordinates of tile for which to calculate neighbors |
 
 **Example**  
 
 ```js
-let neighborsOfOrigin = myGrid.neighborsOf(0, 0);
+let neighborsOfOrigin = myGrid.neighborsOf(new Coord(0, 0));
 neighborsOfOrigin.forEach((tile) => {
   tile.set("bordersOrigin", true);
 });
 ```
 <a name="HexGrid+distanceBetween"></a>
 
-### hexGrid.distanceBetween(q1, r1, q2, r2) ⇒ <code>number</code>
-Calculates the distance between two (q, r) coordinates in tiles
+### hexGrid.distanceBetween(coord1, coord2) ⇒ <code>number</code>
+Calculates the distance between two (x, y) coordinates in tiles
 
 **Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
 **Returns**: <code>number</code> - The distance between the provided coordinates in tiles  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| q1 | <code>number</code> | q coordinate of first tile |
-| r1 | <code>number</code> | r coordinate of first tile |
-| q2 | <code>number</code> | q coordinate of second tile |
-| r2 | <code>number</code> | r coordinate of second tile |
+| coord1 | <code>[Coord](#Coord)</code> | coordinates of first tile |
+| coord2 | <code>[Coord](#Coord)</code> | coordinates of second tile |
 
 **Example**  
 
 ```js
 let myGrid = new HexGrid(2);
-let distanceFromCenterToEdge = myGrid.distanceBetween(0, 0, 2, -2); // 2
+let distanceFromCenterToEdge = myGrid.distanceBetween(new Coord(0, 0), new Coord(2, -2)); // 2
 ```
 <a name="Tile"></a>
 
@@ -420,8 +466,8 @@ Builds an index of [Tiles](Tiles) for fast lookup by component
 * [TileComponentIndex](#TileComponentIndex)
     * [new TileComponentIndex(tiles)](#new_TileComponentIndex_new)
     * [.getTilesByComponent(names)](#TileComponentIndex+getTilesByComponent) ⇒ <code>Array.Tile</code>
-    * [.onTileComponentAdded(e)](#TileComponentIndex+onTileComponentAdded)
-    * [.onTileComponentDeleted(e)](#TileComponentIndex+onTileComponentDeleted)
+    * [._onTileComponentAdded(e)](#TileComponentIndex+_onTileComponentAdded)
+    * [._onTileComponentDeleted(e)](#TileComponentIndex+_onTileComponentDeleted)
 
 <a name="new_TileComponentIndex_new"></a>
 
@@ -465,9 +511,9 @@ components
 // Returns all tiles that have "biome" and "temperature" components
 let habitatTiles = tileIndex.getTilesByComponent(["biome", "temperature"]);
 ```
-<a name="TileComponentIndex+onTileComponentAdded"></a>
+<a name="TileComponentIndex+_onTileComponentAdded"></a>
 
-### tileComponentIndex.onTileComponentAdded(e)
+### tileComponentIndex._onTileComponentAdded(e)
 Event handler called when a component is added to a tile to keep the
 relevant indices up to date
 
@@ -479,9 +525,9 @@ relevant indices up to date
 | e.tile | <code>[Tile](#Tile)</code> | the tile that is being updated |
 | e.name | <code>string</code> | the name of the component that was added |
 
-<a name="TileComponentIndex+onTileComponentDeleted"></a>
+<a name="TileComponentIndex+_onTileComponentDeleted"></a>
 
-### tileComponentIndex.onTileComponentDeleted(e)
+### tileComponentIndex._onTileComponentDeleted(e)
 Event handler called when a name is deleted from a tile to keep the
 relevant indices up to date
 
@@ -503,7 +549,7 @@ A flat-topped, regular hexagon. Implementation details can be found
 **Extends:** <code>[IShape](#IShape)</code>  
 
 * [Hexagon](#Hexagon) ⇐ <code>[IShape](#IShape)</code>
-    * [new Hexagon(x, y, radius)](#new_Hexagon_new)
+    * [new Hexagon(point, radius)](#new_Hexagon_new)
     * [.radius](#Hexagon+radius) : <code>number</code>
     * [.width](#Hexagon+width) ⇒ <code>number</code>
     * [.height](#Hexagon+height) ⇒ <code>number</code>
@@ -512,20 +558,19 @@ A flat-topped, regular hexagon. Implementation details can be found
 
 <a name="new_Hexagon_new"></a>
 
-### new Hexagon(x, y, radius)
-Creates a new Hexagon given the (x, y) position and a radius
+### new Hexagon(point, radius)
+Creates a new Hexagon with center at point and a given radius
 
 
 | Param | Type | Description |
 | --- | --- | --- |
-| x | <code>number</code> | x position of the hex center |
-| y | <code>number</code> | y position of the hex center |
+| point | <code>[Point](#Point)</code> | center point of hexagon |
 | radius | <code>number</code> | distance from the center to the corners |
 
 **Example**  
 
 ```js
-let hex = new Hexagon(0, 0, 100);
+let hex = new Hexagon(new Point(0, 0), 100);
 ```
 <a name="Hexagon+radius"></a>
 
@@ -588,29 +633,28 @@ and a height.
 **Kind**: global abstract class  
 
 * *[IShape](#IShape)*
-    * *[new IShape([x], [y])](#new_IShape_new)*
+    * *[new IShape([point])](#new_IShape_new)*
     * *[.center](#IShape+center) : <code>[Point](#Point)</code>*
     * **[.width](#IShape+width) ⇒ <code>number</code>**
     * **[.height](#IShape+height) ⇒ <code>number</code>**
 
 <a name="new_IShape_new"></a>
 
-### *new IShape([x], [y])*
-Creates a new shape at position (x, y).
+### *new IShape([point])*
+Creates a new shape at given point
 IShape should be extended and its members overridden by a concrete subclass.
 
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| [x] | <code>number</code> | <code>0</code> | The x position of the center of this shape |
-| [y] | <code>number</code> | <code>0</code> | The y position of the center of this shape |
+| [point] | <code>[Point](#Point)</code> | <code>new Point(0, 0)</code> | center point of shape |
 
 **Example**  
 
 ```js
 class Circle extends IShape {
-  constructor(x, y, radius) {
-    super(x, y);
+  constructor(point, radius) {
+    super(point);
     this.r = radius;
   }
   get width() { return this.radius * 2; }
@@ -657,8 +701,8 @@ Construct a new Point at coordinate (x,y)
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| [x] | <code>number</code> | <code>0</code> | The x coordinate |
-| [y] | <code>number</code> | <code>0</code> | The y coordinate |
+| [x] | <code>number</code> | <code>0</code> | x coordinate |
+| [y] | <code>number</code> | <code>0</code> | y coordinate |
 
 **Example**  
 
