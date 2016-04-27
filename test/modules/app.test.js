@@ -1,7 +1,6 @@
 import App from "../../src/modules/App";
 import ISystem from "../../src/modules/systems/ISystem";
-import chai from "chai";
-const expect = chai.expect;
+import { expect } from "chai";
 import { spy, stub } from "sinon";
 
 describe("App", () => {

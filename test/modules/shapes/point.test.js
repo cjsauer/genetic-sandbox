@@ -1,6 +1,5 @@
 import Point from "../../../src/modules/shapes/Point";
-import chai from "chai";
-const expect = chai.expect;
+import { expect } from "chai";
 
 describe("Point", () => {
   it("should default to (0, 0) when instantiated with no arguments", () => {

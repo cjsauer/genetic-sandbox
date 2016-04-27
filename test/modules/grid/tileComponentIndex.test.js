@@ -1,8 +1,7 @@
 import TileComponentIndex from "../../../src/modules/grid/TileComponentIndex";
 import Tile from "../../../src/modules/grid/Tile";
-import chai from "chai";
+import { expect } from "chai";
 import { spy } from "sinon";
-const expect = chai.expect;
 
 describe("TileComponentIndex", () => {
   let tileIndex;

@@ -1,8 +1,7 @@
 import DefaultGridRenderer from "../../../../src/modules/systems/renderers/DefaultGridRenderer";
 import Tile from "../../../../src/modules/grid/Tile";
 import Coord from "../../../../src/modules/grid/Coord";
-import chai from "chai";
-const expect = chai.expect;
+import { expect } from "chai";
 import { stub, spy } from "sinon";
 
 describe("DefaultGridRenderer", () => {

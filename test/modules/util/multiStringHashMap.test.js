@@ -1,6 +1,5 @@
 import MultiStringHashMap from "../../../src/modules/util/MultiStringHashMap";
-import chai from "chai";
-const expect = chai.expect;
+import { expect } from "chai";
 
 describe("MultiStringHashMap", () => {
   let myHashMap;

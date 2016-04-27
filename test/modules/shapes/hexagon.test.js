@@ -1,8 +1,7 @@
 import Hexagon from "../../../src/modules/shapes/Hexagon";
 import IShape from "../../../src/modules/shapes/IShape";
 import Point from "../../../src/modules/shapes/Point";
-import chai from "chai";
-const expect = chai.expect;
+import { expect } from "chai";
 
 describe("Hexagon", () => {
   const errorMargin = 0.00001;

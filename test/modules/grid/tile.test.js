@@ -1,7 +1,6 @@
 import Tile from "../../../src/modules/grid/Tile";
-import chai from "chai";
+import { expect } from "chai";
 import { spy } from "sinon";
-const expect = chai.expect;
 
 describe("Tile", () => {
   it("should be instantiable with an initial state object", () => {

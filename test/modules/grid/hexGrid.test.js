@@ -1,8 +1,7 @@
 import HexGrid from "../../../src/modules/grid/HexGrid";
 import Tile from "../../../src/modules/grid/Tile";
 import Coord from "../../../src/modules/grid/Coord";
-import chai from "chai";
-const expect = chai.expect;
+import { expect } from "chai";
 
 describe("HexGrid", () => {
   it("should be instantiable given a radius in tiles", () => {
