@@ -81,6 +81,7 @@ The entry point and hub of the entire application
     * [.update()](#App+update)
     * [.run()](#App+run)
     * [.stop()](#App+stop)
+    * [._drawBackground()](#App+_drawBackground) ⇒ <code>Paper.Path</code>
 
 <a name="new_App_new"></a>
 
@@ -137,6 +138,13 @@ Kicks off the processing loop to continously update all systems
 Stops the processing loop, essentially pausing the entire simulation
 
 **Kind**: instance method of <code>[App](#App)</code>  
+<a name="App+_drawBackground"></a>
+
+### app._drawBackground() ⇒ <code>Paper.Path</code>
+Draws the background
+
+**Kind**: instance method of <code>[App](#App)</code>  
+**Returns**: <code>Paper.Path</code> - background rectangle path  
 <a name="Coord"></a>
 
 ## Coord
@@ -901,8 +909,8 @@ The currently selected theme from which you can get styling values
 **Example**  
 
 ```js
-let pepperoni = new Path.Circle(new Point(0, 0), 30);
-pepperoni.style = Theme.current.pepperoniStyle;
+let circle = new Path.Circle(new Point(0, 0), 30);
+circle.style = Theme.current.backgroundStyle;
 ```
 <a name="Theme.setTheme"></a>
 
