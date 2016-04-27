@@ -145,6 +145,8 @@ describe("TileComponentIndex", () => {
       expect(tiles).to.have.length(2);
       tiles = tileIndex.getTilesByComponent("temperature");
       expect(tiles).to.have.length(2);
+      tiles = tileIndex.getTilesByComponent("vegetation");
+      expect(tiles).to.have.length(1);
 
       // Tile 0 refers to the "desert" tile in the fixutre
       const tileToUpdate = tileIndex._tiles[0];

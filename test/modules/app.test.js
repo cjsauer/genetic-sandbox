@@ -100,6 +100,11 @@ describe("App", () => {
       app.stop();
       expect(stubClear.calledWith(app._timer)).to.be.true;
     });
+
+    it("should do nothing if no timer is set", () => {
+      app.stop();
+      expect(stubClear.called).to.be.false;
+    });
   });
 
   describe("_drawBackground", () => {
