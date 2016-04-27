@@ -27,11 +27,18 @@ describe("App", () => {
     });
 
     paper = {
+      Path: {
+        Rectangle: stub()
+      },
       project: {
         clear: stub()
       },
       view: {
-        draw: stub()
+        draw: stub(),
+        size: {
+          width: 800,
+          height: 600
+        }
       }
     };
 
@@ -95,6 +102,13 @@ describe("App", () => {
     });
   });
 
+  describe("_drawBackground", () => {
+    it("should draw the background", () => {
+      app._drawBackground();
+      expect(app.paper.Path.Rectangle.calledOnce).to.be.true;
+    });
+  });
+
   describe("_tick", () => {
     it("should clear the scene", () => {
       app._tick();
@@ -106,6 +120,13 @@ describe("App", () => {
       app._tick();
       expect(app.update.calledOnce).to.be.true;
       updateSpy.restore();
+    });
+
+    it("should call _drawBackground", () => {
+      let drawSpy = spy(app, "_drawBackground");
+      app._tick();
+      expect(app._drawBackground.calledOnce).to.be.true;
+      drawSpy.restore();
     });
 
     it("should draw the view", () => {

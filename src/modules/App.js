@@ -1,3 +1,5 @@
+import Theme from "./themes/Theme";
+
 /**
  * The entry point and hub of the entire application
  * @see {@link HexGrid}
@@ -68,11 +70,25 @@ class App {
   }
 
   /**
+   * Draws the background
+   * @returns {Paper.Path} background rectangle path
+   */
+  _drawBackground() {
+    let viewSize = this.paper.view.size;
+    return new this.paper.Path.Rectangle({
+      from: [0, 0],
+      to: [viewSize.width, viewSize.height],
+      style: Theme.current.backgroundStyle
+    });
+  }
+
+  /**
    * Moves the simulation forward by one full tick
    * @private
    */
   _tick() {
     this.paper.project.clear();
+    this._drawBackground();
     this.update();
     this.paper.view.draw();
   }

@@ -16,8 +16,8 @@ const Theme = {
   /**
    * The currently selected theme from which you can get styling values
    * @example
-   * let pepperoni = new Path.Circle(new Point(0, 0), 30);
-   * pepperoni.style = Theme.current.pepperoniStyle;
+   * let circle = new Path.Circle(new Point(0, 0), 30);
+   * circle.style = Theme.current.backgroundStyle;
    * @type {object}
    */
   current: undefined,
