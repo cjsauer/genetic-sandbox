@@ -1,5 +1,6 @@
 import HexGrid from "../../../src/modules/grid/HexGrid";
 import Tile from "../../../src/modules/grid/Tile";
+import Coord from "../../../src/modules/grid/Coord";
 import chai from "chai";
 const expect = chai.expect;
 
@@ -30,7 +31,7 @@ describe("HexGrid", () => {
     expect(hexGrid3.getTiles()).to.have.length(37);
   });
 
-  it("should be instantiable with default tile properties", () => {
+  it("should be instantiable with default components", () => {
     const desertGrid = new HexGrid(3, {
       temperature: 130,
       biome: "desert"
@@ -43,9 +44,9 @@ describe("HexGrid", () => {
     });
   });
 
-  it("passes each tile's coordinates in addition to default properties", () => {
+  it("passes each tile's coordinates in addition to default components", () => {
     const hexGrid = new HexGrid(1, {
-      someOtherProperty: true
+      someOtherComponent: true
     });
     const coords = [
       [0, 0],
@@ -58,16 +59,17 @@ describe("HexGrid", () => {
     ];
 
     coords.forEach(([x, y]) => {
-      let tile = hexGrid.getTile(x, y);
-      expect(tile.get("x")).to.equal(x);
-      expect(tile.get("y")).to.equal(y);
-      expect(tile.get("someOtherProperty")).to.be.true;
+      let tile = hexGrid.getTile(new Coord(x, y));
+      let coord = tile.get("coord");
+      expect(coord.x).to.equal(x);
+      expect(coord.y).to.equal(y);
+      expect(tile.get("someOtherComponent")).to.be.true;
     });
   });
 
-  it("passes a reference to itself in addition to default properties", () => {
+  it("passes a reference to itself in addition to default components", () => {
     const hexGrid = new HexGrid(1, {
-      someOtherProperty: true
+      someOtherComponent: true
     });
     const coords = [
       [0, 0],
@@ -80,20 +82,20 @@ describe("HexGrid", () => {
     ];
 
     coords.forEach(([x, y]) => {
-      let tile = hexGrid.getTile(x, y);
+      let tile = hexGrid.getTile(new Coord(x, y));
       expect(tile.get("grid")).to.equal(hexGrid);
-      expect(tile.get("someOtherProperty")).to.be.true;
+      expect(tile.get("someOtherComponent")).to.be.true;
     });
   });
 
   it("can calculate the distance between tiles", () => {
     const hexGrid = new HexGrid(5);
-    expect(hexGrid.distanceBetween(0, 0, 0, 0)).to.equal(0);
-    expect(hexGrid.distanceBetween(0, 0, 3, 0)).to.equal(3);
-    expect(hexGrid.distanceBetween(0, 0, 2, 1)).to.equal(3);
-    expect(hexGrid.distanceBetween(0, 0, -3, 1)).to.equal(3);
-    expect(hexGrid.distanceBetween(-1, 3, 3, -5)).to.equal(8);
-    expect(hexGrid.distanceBetween(-5, 5, 5, -4)).to.equal(10);
+    expect(hexGrid.distanceBetween(new Coord(0, 0), new Coord(0, 0))).to.equal(0);
+    expect(hexGrid.distanceBetween(new Coord(0, 0), new Coord(3, 0))).to.equal(3);
+    expect(hexGrid.distanceBetween(new Coord(0, 0), new Coord(2, 1))).to.equal(3);
+    expect(hexGrid.distanceBetween(new Coord(0, 0), new Coord(-3, 1))).to.equal(3);
+    expect(hexGrid.distanceBetween(new Coord(-1, 3), new Coord(3, -5))).to.equal(8);
+    expect(hexGrid.distanceBetween(new Coord(-5, 5), new Coord(5, -4))).to.equal(10);
   });
 
   describe("tiles", () => {
@@ -115,23 +117,23 @@ describe("HexGrid", () => {
         [1, -1]
       ];
 
-      validCoords.forEach((coords) => {
-        const tile = hexGrid.getTile(...coords);
+      validCoords.forEach(([x, y]) => {
+        const tile = hexGrid.getTile(new Coord(x, y));
         expect(tile).to.be.instanceof(Tile);
       });
     });
 
-    it("should be retrievable by property", () => {
+    it("should be retrievable by component", () => {
       const hexGrid = new HexGrid(2, {
         biome: "desert",
         temperature: 120
       });
-      hexGrid.getTile(0, 0).set("unique", true);
+      hexGrid.getTile(new Coord(0, 0)).set("unique", true);
 
-      const habitatTiles = hexGrid.getTilesByProperty(["biome", "temperature"]);
+      const habitatTiles = hexGrid.getTilesByComponent(["biome", "temperature"]);
       expect(habitatTiles).to.have.length(hexGrid.getTiles().length);
 
-      const uniqueTiles = hexGrid.getTilesByProperty("unique");
+      const uniqueTiles = hexGrid.getTilesByComponent("unique");
       expect(uniqueTiles).to.have.length(1);
     });
 
@@ -147,12 +149,12 @@ describe("HexGrid", () => {
       ];
 
       expect(() => {
-        hexGrid.getTile(0, 0);
+        hexGrid.getTile(new Coord(0, 0));
       }).to.not.throw(Error, /out of bounds/);
 
-      invalidCoords.forEach((coords) => {
+      invalidCoords.forEach(([x, y]) => {
         expect(() => {
-          hexGrid.getTile(...coords);
+          hexGrid.getTile(new Coord(x, y));
         }).to.throw(Error, /out of bounds/);
       });
     });
@@ -167,11 +169,11 @@ describe("HexGrid", () => {
         [0, -1],
         [1, -1]
       ];
-      const expectedNeighbors = expectedCoords.map(([q, r]) => {
-        return hexGrid.getTile(q, r);
+      const expectedNeighbors = expectedCoords.map(([x, y]) => {
+        return hexGrid.getTile({x, y});
       });
 
-      const neighbors = hexGrid.neighborsOf(0, 0);
+      const neighbors = hexGrid.neighborsOf(new Coord(0, 0));
 
       expect(neighbors).to.deep.equal(expectedNeighbors);
     });
@@ -183,11 +185,11 @@ describe("HexGrid", () => {
         [0, -1],
         [1, 0]
       ];
-      const expectedNeighbors = expectedCoords.map(([q, r]) => {
-        return hexGrid.getTile(q, r);
+      const expectedNeighbors = expectedCoords.map(([x, y]) => {
+        return hexGrid.getTile(new Coord(x, y));
       });
 
-      const neighbors = hexGrid.neighborsOf(1, -1);
+      const neighbors = hexGrid.neighborsOf(new Coord(1, -1));
       expect(neighbors.length).to.equal(expectedNeighbors.length);
       expect(neighbors).to.deep.include.members(expectedNeighbors);
     });

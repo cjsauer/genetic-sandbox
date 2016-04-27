@@ -1,25 +1,24 @@
-import HexGrid from "./grid/HexGrid";
+import Theme from "./themes/Theme";
 
 /**
- * The entry point of the entire application. App contains references to the
- * grid, an array of systems, and a reference to a
- * [Paper]{@link http://paperjs.org} context.
- * @see {HexGrid}
- * @see {ISystem}
+ * The entry point and hub of the entire application
+ * @see {@link HexGrid}
+ * @see {@link ISystem}
  */
 class App {
   /**
    * Prepares a Genetic Sandbox application for bootstrapping.
-   * @param {Array.ISystem} systems - the systems to be included in the main
+   * @param {HexGrid} grid - hex grid to use as the stage
+   * @param {Array.<ISystem>} systems - the systems to be included in the main
    * processing loop
    * @param {PaperScope} paperScope - Paper.js graphics context
    */
-  constructor(systems, paperScope) {
+  constructor(grid, systems, paperScope) {
     /**
      * A grid of tiles serving as the main stage of the simulation
-     * @type HexGrid
+     * @type {HexGrid}
      */
-    this.grid = new HexGrid(App.GRID_RADIUS);
+    this.grid = grid;
 
     /**
      * Array of systems included in the main processing loop
@@ -71,16 +70,28 @@ class App {
   }
 
   /**
+   * Draws the background
+   * @returns {Paper.Path} background rectangle path
+   */
+  _drawBackground() {
+    let viewSize = this.paper.view.size;
+    return new this.paper.Path.Rectangle({
+      from: [0, 0],
+      to: [viewSize.width, viewSize.height],
+      style: Theme.current.backgroundStyle
+    });
+  }
+
+  /**
    * Moves the simulation forward by one full tick
    * @private
    */
   _tick() {
     this.paper.project.clear();
+    this._drawBackground();
     this.update();
     this.paper.view.draw();
   }
 }
-
-App.GRID_RADIUS = 25;
 
 export default App;

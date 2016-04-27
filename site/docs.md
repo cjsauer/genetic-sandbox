@@ -8,20 +8,21 @@ permalink: /docs/
 
 <dl>
 <dt><a href="#App">App</a></dt>
-<dd><p>The entry point of the entire application. App contains references to the
-grid, an array of systems, and a reference to a
-<a href="http://paperjs.org">Paper</a> context.</p>
+<dd><p>The entry point and hub of the entire application</p>
+</dd>
+<dt><a href="#Coord">Coord</a></dt>
+<dd><p>A two dimensional coordinate of x and y</p>
 </dd>
 <dt><a href="#HexGrid">HexGrid</a></dt>
 <dd><p>A 2D, hexagonal grid implementation with axial coordinate system.
 Implementation details can be found <a href="http://goo.gl/nLO6sN">here</a>.</p>
 </dd>
 <dt><a href="#Tile">Tile</a></dt>
-<dd><p>A Tile is nothing more than a wrapper around a stanard JavaScript object,
-and represents the state at a discrete location within a grid</p>
+<dd><p>A Tile is a collection of components (data) representing the state at a
+specific place in a grid</p>
 </dd>
-<dt><a href="#TilePropertyIndex">TilePropertyIndex</a></dt>
-<dd><p>Builds an index of <a href="Tiles">Tiles</a> for fast lookup by property</p>
+<dt><a href="#TileComponentIndex">TileComponentIndex</a></dt>
+<dd><p>Builds an index of <a href="Tiles">Tiles</a> for fast lookup by component</p>
 </dd>
 <dt><a href="#Hexagon">Hexagon</a> ⇐ <code><a href="#IShape">IShape</a></code></dt>
 <dd><p>A flat-topped, regular hexagon. Implementation details can be found
@@ -62,19 +63,17 @@ values like color, stroke thickness, etc.</p>
 <a name="App"></a>
 
 ## App
-The entry point of the entire application. App contains references to the
-grid, an array of systems, and a reference to a
-[Paper](http://paperjs.org) context.
+The entry point and hub of the entire application
 
 **Kind**: global class  
 **See**
 
-- {HexGrid}
-- {ISystem}
+- [HexGrid](#HexGrid)
+- [ISystem](#ISystem)
 
 
 * [App](#App)
-    * [new App(systems, paperScope)](#new_App_new)
+    * [new App(grid, systems, paperScope)](#new_App_new)
     * [.grid](#App+grid) : <code>[HexGrid](#HexGrid)</code>
     * [.systems](#App+systems) : <code>Array.ISystem</code>
     * [.paper](#App+paper) : <code>PaperScope</code>
@@ -82,16 +81,18 @@ grid, an array of systems, and a reference to a
     * [.update()](#App+update)
     * [.run()](#App+run)
     * [.stop()](#App+stop)
+    * [._drawBackground()](#App+_drawBackground) ⇒ <code>Paper.Path</code>
 
 <a name="new_App_new"></a>
 
-### new App(systems, paperScope)
+### new App(grid, systems, paperScope)
 Prepares a Genetic Sandbox application for bootstrapping.
 
 
 | Param | Type | Description |
 | --- | --- | --- |
-| systems | <code>Array.ISystem</code> | the systems to be included in the main processing loop |
+| grid | <code>[HexGrid](#HexGrid)</code> | hex grid to use as the stage |
+| systems | <code>[Array.&lt;ISystem&gt;](#ISystem)</code> | the systems to be included in the main processing loop |
 | paperScope | <code>PaperScope</code> | Paper.js graphics context |
 
 <a name="App+grid"></a>
@@ -137,6 +138,57 @@ Kicks off the processing loop to continously update all systems
 Stops the processing loop, essentially pausing the entire simulation
 
 **Kind**: instance method of <code>[App](#App)</code>  
+<a name="App+_drawBackground"></a>
+
+### app._drawBackground() ⇒ <code>Paper.Path</code>
+Draws the background
+
+**Kind**: instance method of <code>[App](#App)</code>  
+**Returns**: <code>Paper.Path</code> - background rectangle path  
+<a name="Coord"></a>
+
+## Coord
+A two dimensional coordinate of x and y
+
+**Kind**: global class  
+
+* [Coord](#Coord)
+    * [new Coord([x], [y])](#new_Coord_new)
+    * [.x](#Coord+x) : <code>number</code>
+    * [.y](#Coord+y) : <code>number</code>
+
+<a name="new_Coord_new"></a>
+
+### new Coord([x], [y])
+Constructs a new Coord with coordinates (x,y)
+
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [x] | <code>number</code> | <code>0</code> | x value |
+| [y] | <code>number</code> | <code>0</code> | y value |
+
+**Example**  
+
+```js
+let myCoord = new Coord(-5, 10);
+myCoord.x = 0;
+myCoord.y = 0;
+```
+<a name="Coord+x"></a>
+
+### coord.x : <code>number</code>
+x value
+
+**Kind**: instance property of <code>[Coord](#Coord)</code>  
+**Default**: <code>0</code>  
+<a name="Coord+y"></a>
+
+### coord.y : <code>number</code>
+y value
+
+**Kind**: instance property of <code>[Coord](#Coord)</code>  
+**Default**: <code>0</code>  
 <a name="HexGrid"></a>
 
 ## HexGrid
@@ -144,19 +196,23 @@ A 2D, hexagonal grid implementation with axial coordinate system.
 Implementation details can be found [here](http://goo.gl/nLO6sN).
 
 **Kind**: global class  
-**See**: [Tile](#Tile)  
+**See**
+
+- [Tile](#Tile)
+- [Coord](#Coord)
+
 
 * [HexGrid](#HexGrid)
-    * [new HexGrid(radius, [defaultTileProps])](#new_HexGrid_new)
-    * [.getTile(q, r)](#HexGrid+getTile) ⇒ <code>[Tile](#Tile)</code>
+    * [new HexGrid(radius, [defaultTileComponents])](#new_HexGrid_new)
+    * [.getTile(coord)](#HexGrid+getTile) ⇒ <code>[Tile](#Tile)</code>
     * [.getTiles()](#HexGrid+getTiles) ⇒ <code>Array.Tile</code>
-    * [.getTilesByProperty(properties)](#HexGrid+getTilesByProperty) ⇒ <code>Array.Tile</code>
-    * [.neighborsOf(q, r)](#HexGrid+neighborsOf) ⇒ <code>Array.Tile</code>
-    * [.distanceBetween(q1, r1, q2, r2)](#HexGrid+distanceBetween) ⇒ <code>number</code>
+    * [.getTilesByComponent(names)](#HexGrid+getTilesByComponent) ⇒ <code>Array.Tile</code>
+    * [.neighborsOf(coord)](#HexGrid+neighborsOf) ⇒ <code>Array.Tile</code>
+    * [.distanceBetween(coord1, coord2)](#HexGrid+distanceBetween) ⇒ <code>number</code>
 
 <a name="new_HexGrid_new"></a>
 
-### new HexGrid(radius, [defaultTileProps])
+### new HexGrid(radius, [defaultTileComponents])
 Constructs a new HexGrid of given radius. The pattern of tiles within the
 grid will then form a hexagon itself with (0,0) being the center.
 A grid of radius 0 is just a single hexagon, radius 1 is a single hexagon
@@ -166,7 +222,7 @@ surrounded by 1 layer of hexagons, and so on...
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | radius | <code>number</code> |  | Number of tiles from center of grid to the edge, not counting the center tile |
-| [defaultTileProps] | <code>Object</code> | <code>{}</code> | Default properties that all Tiles will be initialized with |
+| [defaultTileComponents] | <code>Object</code> | <code>{}</code> | Default components that all Tiles will be initialized with |
 
 **Example**  
 
@@ -177,22 +233,20 @@ let myGrid = new HexGrid(10, {
 ```
 <a name="HexGrid+getTile"></a>
 
-### hexGrid.getTile(q, r) ⇒ <code>[Tile](#Tile)</code>
-Returns the Tile at axial coordinates (q, r). q can be read as "column",
-and r can be read as "row".
+### hexGrid.getTile(coord) ⇒ <code>[Tile](#Tile)</code>
+Returns the Tile at coordinates (x, y)
 
 **Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
 **Returns**: <code>[Tile](#Tile)</code> - The tile at the provided coordinates  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| q | <code>number</code> | q coordinate of Tile to fetch |
-| r | <code>number</code> | r coordinate of Tile to fetch |
+| coord | <code>[Coord](#Coord)</code> | coordinate of tile to fetch |
 
 **Example**  
 
 ```js
-let originTile = myGrid.getTile(0, 0);
+let originTile = myGrid.getTile(new Coord(0, 0));
 ```
 <a name="HexGrid+getTiles"></a>
 
@@ -209,95 +263,92 @@ tiles.forEach((tile) => {
   tile.set("temperature", 75).set("forecast", "sunny");
 });
 ```
-<a name="HexGrid+getTilesByProperty"></a>
+<a name="HexGrid+getTilesByComponent"></a>
 
-### hexGrid.getTilesByProperty(properties) ⇒ <code>Array.Tile</code>
-Returns all tiles that posess the given property or properties
+### hexGrid.getTilesByComponent(names) ⇒ <code>Array.Tile</code>
+Returns all tiles that posess the given component or components
 
 **Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
 **Returns**: <code>Array.Tile</code> - the tiles that include all of the given
-properties  
+components  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| properties | <code>string</code> &#124; <code>Array.string</code> | the properties a tile must posess to be included in the result |
+| names | <code>string</code> &#124; <code>Array.string</code> | the names of the components this tile must posess to be included in the result |
 
 **Example**  
 
 ```js
-// Returns all tiles that have "biome" and "temperature" properties
-let habitatTiles = grid.getTilesByProperty(["biome", "temperature"]);
+// Returns all tiles that have "biome" and "temperature" components
+let habitatTiles = grid.getTilesByComponent(["biome", "temperature"]);
 ```
 <a name="HexGrid+neighborsOf"></a>
 
-### hexGrid.neighborsOf(q, r) ⇒ <code>Array.Tile</code>
-Returns the Tiles that are adjacent to the Tile at the provided (q, r) coordinates.
+### hexGrid.neighborsOf(coord) ⇒ <code>Array.Tile</code>
+Returns the Tiles that are adjacent to the Tile at the provided (x, y) coordinates.
 
 **Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
 **Returns**: <code>Array.Tile</code> - The array of neighboring Tiles  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| q | <code>number</code> | q coordinate of Tile for which to fetch neighbors |
-| r | <code>number</code> | r coordinate of Tile for which to fetch neighbors |
+| coord | <code>[Coord](#Coord)</code> | coordinates of tile for which to calculate neighbors |
 
 **Example**  
 
 ```js
-let neighborsOfOrigin = myGrid.neighborsOf(0, 0);
+let neighborsOfOrigin = myGrid.neighborsOf(new Coord(0, 0));
 neighborsOfOrigin.forEach((tile) => {
   tile.set("bordersOrigin", true);
 });
 ```
 <a name="HexGrid+distanceBetween"></a>
 
-### hexGrid.distanceBetween(q1, r1, q2, r2) ⇒ <code>number</code>
-Calculates the distance between two (q, r) coordinates in tiles
+### hexGrid.distanceBetween(coord1, coord2) ⇒ <code>number</code>
+Calculates the distance between two (x, y) coordinates in tiles
 
 **Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
 **Returns**: <code>number</code> - The distance between the provided coordinates in tiles  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| q1 | <code>number</code> | q coordinate of first tile |
-| r1 | <code>number</code> | r coordinate of first tile |
-| q2 | <code>number</code> | q coordinate of second tile |
-| r2 | <code>number</code> | r coordinate of second tile |
+| coord1 | <code>[Coord](#Coord)</code> | coordinates of first tile |
+| coord2 | <code>[Coord](#Coord)</code> | coordinates of second tile |
 
 **Example**  
 
 ```js
 let myGrid = new HexGrid(2);
-let distanceFromCenterToEdge = myGrid.distanceBetween(0, 0, 2, -2); // 2
+let distanceFromCenterToEdge = myGrid.distanceBetween(new Coord(0, 0), new Coord(2, -2)); // 2
 ```
 <a name="Tile"></a>
 
 ## Tile
-A Tile is nothing more than a wrapper around a stanard JavaScript object,
-and represents the state at a discrete location within a grid
+A Tile is a collection of components (data) representing the state at a
+specific place in a grid
 
 **Kind**: global class  
 
 * [Tile](#Tile)
-    * [new Tile([initialProperties])](#new_Tile_new)
-    * [.get(key)](#Tile+get) ⇒ <code>\*</code>
-    * [.hasProperty(key)](#Tile+hasProperty) ⇒ <code>boolean</code>
-    * [.set(key, value)](#Tile+set) ⇒ <code>[Tile](#Tile)</code>
-    * [.delete(key)](#Tile+delete) ⇒ <code>boolean</code>
-    * ["propertyAdded"](#Tile+event_propertyAdded)
-    * ["propertyDeleted"](#Tile+event_propertyDeleted)
+    * [new Tile([initialComponents])](#new_Tile_new)
+    * [.get(name)](#Tile+get) ⇒ <code>\*</code>
+    * [.hasComponent(name)](#Tile+hasComponent) ⇒ <code>boolean</code>
+    * [.set(name, component)](#Tile+set) ⇒ <code>[Tile](#Tile)</code>
+    * [.delete(name)](#Tile+delete) ⇒ <code>boolean</code>
+    * ["componentAdded"](#Tile+event_componentAdded)
+    * ["componentDeleted"](#Tile+event_componentDeleted)
 
 <a name="new_Tile_new"></a>
 
-### new Tile([initialProperties])
-Creates a new tile with initial properties. Note that the given initial
-properties will be copied *by value* into each tile. What this means is
-that inner objects of the initial properties object are *not* deep copied.
+### new Tile([initialComponents])
+Creates a new tile with initial components. Note that the given initial
+components object will be copied *by value* into each tile. What this means
+is that inner objects of the component are *not* deep copied.
 
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| [initialProperties] | <code>Object</code> | <code>{}</code> | Initial properties of the Tile |
+| [initialComponents] | <code>Object</code> | <code>{}</code> | Initial components of the Tile |
 
 **Example**  
 
@@ -305,96 +356,88 @@ that inner objects of the initial properties object are *not* deep copied.
 const hotTile = new Tile({
   temperature: 110,
   biome: "desert"
+  vegetation: [
+    { type: "tree", edible: false },
+    { type: "berries", edible: true}
+  ]
 });
 ```
 <a name="Tile+get"></a>
 
-### tile.get(key) ⇒ <code>\*</code>
-Returns the specified property's value
+### tile.get(name) ⇒ <code>\*</code>
+Returns the specified component
 
 **Kind**: instance method of <code>[Tile](#Tile)</code>  
-**Returns**: <code>\*</code> - Value of property at `key`, or undefined if property not found  
+**Returns**: <code>\*</code> - component data, or undefined if component not found  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| key | <code>string</code> | Name of the property |
+| name | <code>string</code> | Name of the component |
 
 **Example**  
 
 ```js
 let temperature = hotTile.get("temperature");
 ```
-<a name="Tile+hasProperty"></a>
+<a name="Tile+hasComponent"></a>
 
-### tile.hasProperty(key) ⇒ <code>boolean</code>
-Returns true if this Tile has the given key, false otherwise
+### tile.hasComponent(name) ⇒ <code>boolean</code>
+Returns true if this Tile has the given component, false otherwise
 
 **Kind**: instance method of <code>[Tile](#Tile)</code>  
-**Returns**: <code>boolean</code> - True if the Tile has the given property, false
+**Returns**: <code>boolean</code> - True if the Tile has the given component, false
 otherwise  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| key | <code>string</code> | the key to check |
+| name | <code>string</code> | the name of the component to check for |
 
 <a name="Tile+set"></a>
 
-### tile.set(key, value) ⇒ <code>[Tile](#Tile)</code>
-Sets the specified property's value, or creates and sets the property if it
-does not yet exist.
+### tile.set(name, component) ⇒ <code>[Tile](#Tile)</code>
+Sets the specified component
 
 **Kind**: instance method of <code>[Tile](#Tile)</code>  
 **Returns**: <code>[Tile](#Tile)</code> - The Tile object  
-**Emits**: <code>[propertyAdded](#Tile+event_propertyAdded)</code>  
+**Emits**: <code>[componentAdded](#Tile+event_componentAdded)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| key | <code>string</code> | Name of the property to set/create |
-| value | <code>\*</code> | Value of the property |
+| name | <code>string</code> | name of the component to set |
+| component | <code>\*</code> | the component data |
 
 **Example**  
 
 ```js
-hotTile.set("vegetation", ["cactus", "tumbleweed", "wildflowers"]);
+hotTile.set("vegetation", [
+  { type: "tree", edible: false }
+]);
 //Chaining
 hotTile.set("one", 1).set("two", 2).set("three", 3);
 ```
 <a name="Tile+delete"></a>
 
-### tile.delete(key) ⇒ <code>boolean</code>
-Deletes the specified property, removing it from the Tile completely
+### tile.delete(name) ⇒ <code>boolean</code>
+Deletes the specified component, removing it from the Tile completely
 
 **Kind**: instance method of <code>[Tile](#Tile)</code>  
 **Returns**: <code>boolean</code> - True if an item was actually deleted, false otherwise  
-**Emits**: <code>[propertyDeleted](#Tile+event_propertyDeleted)</code>  
+**Emits**: <code>[componentDeleted](#Tile+event_componentDeleted)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| key | <code>string</code> | Name of the property to delete |
+| name | <code>string</code> | name of the component to delete |
 
 **Example**  
 
 ```js
 let didDeleteSomething = hotTile.delete("temperature");
 ```
-<a name="Tile+event_propertyAdded"></a>
+<a name="Tile+event_componentAdded"></a>
 
-### "propertyAdded"
-Fired when a new property is added to a tile. It is NOT fired when
-a property is solely modified.
-
-**Kind**: event emitted by <code>[Tile](#Tile)</code>  
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| tile | <code>[Tile](#Tile)</code> | the tile that was modified |
-| property | <code>string</code> | the property that was added |
-
-<a name="Tile+event_propertyDeleted"></a>
-
-### "propertyDeleted"
-Fired when a property is deleted from a tile
+### "componentAdded"
+Fired when a new component is added to a tile. It is NOT fired when
+a component is solely modified.
 
 **Kind**: event emitted by <code>[Tile](#Tile)</code>  
 **Properties**
@@ -402,33 +445,44 @@ Fired when a property is deleted from a tile
 | Name | Type | Description |
 | --- | --- | --- |
 | tile | <code>[Tile](#Tile)</code> | the tile that was modified |
-| property | <code>string</code> | the property that was deleted |
+| name | <code>string</code> | the name of the component that was added |
 
-<a name="TilePropertyIndex"></a>
+<a name="Tile+event_componentDeleted"></a>
 
-## TilePropertyIndex
-Builds an index of [Tiles](Tiles) for fast lookup by property
+### "componentDeleted"
+Fired when a component is deleted from a tile
+
+**Kind**: event emitted by <code>[Tile](#Tile)</code>  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| tile | <code>[Tile](#Tile)</code> | the tile that was modified |
+| name | <code>string</code> | name of the component that was deleted |
+
+<a name="TileComponentIndex"></a>
+
+## TileComponentIndex
+Builds an index of [Tiles](Tiles) for fast lookup by component
 
 **Kind**: global class  
 
-* [TilePropertyIndex](#TilePropertyIndex)
-    * [new TilePropertyIndex(tiles)](#new_TilePropertyIndex_new)
-    * [.getTilesByProperty(properties)](#TilePropertyIndex+getTilesByProperty) ⇒ <code>Array.Tile</code>
-    * [.onTilePropertyAdded(e)](#TilePropertyIndex+onTilePropertyAdded)
-    * [.onTilePropertyDeleted(e)](#TilePropertyIndex+onTilePropertyDeleted)
+* [TileComponentIndex](#TileComponentIndex)
+    * [new TileComponentIndex(tiles)](#new_TileComponentIndex_new)
+    * [.getTilesByComponent(names)](#TileComponentIndex+getTilesByComponent) ⇒ <code>Array.Tile</code>
 
-<a name="new_TilePropertyIndex_new"></a>
+<a name="new_TileComponentIndex_new"></a>
 
-### new TilePropertyIndex(tiles)
-Creates a new TilePropertyIndex with the given array of tiles.
-Note: the index is built on demand. Constructing a new TilePropertyIndex
+### new TileComponentIndex(tiles)
+Creates a new TileComponentIndex with the given array of tiles.
+Note: the index is built on demand. Constructing a new TileComponentIndex
 does not actually build a complete index (which would be expensive),
 but instead the indices are built as needed.
 
 
 | Param | Type | Description |
 | --- | --- | --- |
-| tiles | <code>Array.Tile</code> | the array of tiles for which to build an index by tile property |
+| tiles | <code>Array.Tile</code> | the array of tiles for which to build an index by tile component |
 
 **Example**  
 
@@ -438,55 +492,27 @@ const tiles = [
   new Tile(),
   new Tile()
 ];
-const tileIndex = new TilePropertyIndex(tileIndex);
+const tileIndex = new TileComponentIndex(tileIndex);
 ```
-<a name="TilePropertyIndex+getTilesByProperty"></a>
+<a name="TileComponentIndex+getTilesByComponent"></a>
 
-### tilePropertyIndex.getTilesByProperty(properties) ⇒ <code>Array.Tile</code>
-Returns all tiles that posess the given property or properties
+### tileComponentIndex.getTilesByComponent(names) ⇒ <code>Array.Tile</code>
+Returns all tiles that posess the given component
 
-**Kind**: instance method of <code>[TilePropertyIndex](#TilePropertyIndex)</code>  
+**Kind**: instance method of <code>[TileComponentIndex](#TileComponentIndex)</code>  
 **Returns**: <code>Array.Tile</code> - the tiles that include all of the given
-properties  
+components  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| properties | <code>string</code> &#124; <code>Array.string</code> | the properties a tile must posess to be included in the result |
+| names | <code>string</code> &#124; <code>Array.string</code> | the names of the components a Tile must posess to be included in the result |
 
 **Example**  
 
 ```js
-// Returns all tiles that have "biome" and "temperature" properties
-let habitatTiles = tileIndex.getTilesByProperty(["biome", "temperature"]);
+// Returns all tiles that have "biome" and "temperature" components
+let habitatTiles = tileIndex.getTilesByComponent(["biome", "temperature"]);
 ```
-<a name="TilePropertyIndex+onTilePropertyAdded"></a>
-
-### tilePropertyIndex.onTilePropertyAdded(e)
-Event handler called when a property is added to a tile to keep the
-relevant indices up to date
-
-**Kind**: instance method of <code>[TilePropertyIndex](#TilePropertyIndex)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| e | <code>object</code> | the event object |
-| e.tile | <code>[Tile](#Tile)</code> | the tile that is being updated |
-| e.property | <code>string</code> | the property that was added |
-
-<a name="TilePropertyIndex+onTilePropertyDeleted"></a>
-
-### tilePropertyIndex.onTilePropertyDeleted(e)
-Event handler called when a property is deleted from a tile to keep the
-relevant indices up to date
-
-**Kind**: instance method of <code>[TilePropertyIndex](#TilePropertyIndex)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| e | <code>object</code> | the event object |
-| e.tile | <code>[Tile](#Tile)</code> | the tile that is being updated |
-| e.property | <code>string</code> | the property that was deleted |
-
 <a name="Hexagon"></a>
 
 ## Hexagon ⇐ <code>[IShape](#IShape)</code>
@@ -497,7 +523,7 @@ A flat-topped, regular hexagon. Implementation details can be found
 **Extends:** <code>[IShape](#IShape)</code>  
 
 * [Hexagon](#Hexagon) ⇐ <code>[IShape](#IShape)</code>
-    * [new Hexagon(x, y, radius)](#new_Hexagon_new)
+    * [new Hexagon(center, radius)](#new_Hexagon_new)
     * [.radius](#Hexagon+radius) : <code>number</code>
     * [.width](#Hexagon+width) ⇒ <code>number</code>
     * [.height](#Hexagon+height) ⇒ <code>number</code>
@@ -506,20 +532,19 @@ A flat-topped, regular hexagon. Implementation details can be found
 
 <a name="new_Hexagon_new"></a>
 
-### new Hexagon(x, y, radius)
-Creates a new Hexagon given the (x, y) position and a radius
+### new Hexagon(center, radius)
+Creates a new Hexagon with center at point and a given radius
 
 
 | Param | Type | Description |
 | --- | --- | --- |
-| x | <code>number</code> | x position of the hex center |
-| y | <code>number</code> | y position of the hex center |
+| center | <code>[Point](#Point)</code> | center position of Hexagon |
 | radius | <code>number</code> | distance from the center to the corners |
 
 **Example**  
 
 ```js
-let hex = new Hexagon(0, 0, 100);
+let hex = new Hexagon(new Point(0, 0), 100);
 ```
 <a name="Hexagon+radius"></a>
 
@@ -582,29 +607,28 @@ and a height.
 **Kind**: global abstract class  
 
 * *[IShape](#IShape)*
-    * *[new IShape([x], [y])](#new_IShape_new)*
+    * *[new IShape([center])](#new_IShape_new)*
     * *[.center](#IShape+center) : <code>[Point](#Point)</code>*
     * **[.width](#IShape+width) ⇒ <code>number</code>**
     * **[.height](#IShape+height) ⇒ <code>number</code>**
 
 <a name="new_IShape_new"></a>
 
-### *new IShape([x], [y])*
-Creates a new shape at position (x, y).
+### *new IShape([center])*
+Creates a new shape at given point
 IShape should be extended and its members overridden by a concrete subclass.
 
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| [x] | <code>number</code> | <code>0</code> | The x position of the center of this shape |
-| [y] | <code>number</code> | <code>0</code> | The y position of the center of this shape |
+| [center] | <code>[Point](#Point)</code> | <code>new Point(0, 0)</code> | center point of shape |
 
 **Example**  
 
 ```js
 class Circle extends IShape {
-  constructor(x, y, radius) {
-    super(x, y);
+  constructor(point, radius) {
+    super(point);
     this.r = radius;
   }
   get width() { return this.radius * 2; }
@@ -651,8 +675,8 @@ Construct a new Point at coordinate (x,y)
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| [x] | <code>number</code> | <code>0</code> | The x coordinate |
-| [y] | <code>number</code> | <code>0</code> | The y coordinate |
+| [x] | <code>number</code> | <code>0</code> | x coordinate |
+| [y] | <code>number</code> | <code>0</code> | y coordinate |
 
 **Example**  
 
@@ -885,8 +909,8 @@ The currently selected theme from which you can get styling values
 **Example**  
 
 ```js
-let pepperoni = new Path.Circle(new Point(0, 0), 30);
-pepperoni.style = Theme.current.pepperoniStyle;
+let circle = new Path.Circle(new Point(0, 0), 30);
+circle.style = Theme.current.backgroundStyle;
 ```
 <a name="Theme.setTheme"></a>
 

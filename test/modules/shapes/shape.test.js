@@ -1,4 +1,5 @@
 import IShape from "../../../src/modules/shapes/IShape";
+import Point from "../../../src/modules/shapes/Point";
 import chai from "chai";
 const expect = chai.expect;
 
@@ -19,15 +20,15 @@ describe("IShape", () => {
 
   it("can be properly extended to create new types of shapes", () => {
     class TestShape extends IShape {
-      constructor(x, y, w, h) {
-        super(x, y);
+      constructor(point, w, h) {
+        super(point);
         this.w = w;
         this.h = h;
       }
       get width() { return this.w; }
       get height() { return this.h; }
     }
-    const testShape = new TestShape(0, 0, 5, 6);
+    const testShape = new TestShape(new Point(0, 0), 5, 6);
     expect(testShape).to.be.ok;
     expect(testShape.width).to.equal(5);
     expect(testShape.height).to.equal(6);

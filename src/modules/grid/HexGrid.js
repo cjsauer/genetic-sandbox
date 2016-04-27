@@ -1,10 +1,12 @@
 import Tile from "./Tile";
-import TilePropertyIndex from "./TilePropertyIndex";
+import TileComponentIndex from "./TileComponentIndex";
+import Coord from "./Coord";
 
 /**
  * A 2D, hexagonal grid implementation with axial coordinate system.
  * Implementation details can be found [here]{@link http://goo.gl/nLO6sN}.
  * @see {@link Tile}
+ * @see {@link Coord}
  */
 class HexGrid {
   /**
@@ -18,10 +20,10 @@ class HexGrid {
    * });
    * @param {number} radius - Number of tiles from center of grid to the edge,
    * not counting the center tile
-   * @param {Object} [defaultTileProps={}] - Default properties that all Tiles
-   * will be initialized with
+   * @param {Object} [defaultTileComponents={}] - Default components that all
+   * Tiles will be initialized with
    */
-  constructor(radius, defaultTileProps = {}) {
+  constructor(radius, defaultTileComponents = {}) {
     /* Generate a hex grid. We'll use the constraint in cubic coordinates
      * that x + y + z = 0 to decide where hexes are to be placed before
      * converting to axial coordinates for storage.
@@ -41,33 +43,30 @@ class HexGrid {
             if (tiles[r + radius] === undefined) {
               tiles[r + radius] = [];
             }
-            // Merge the passed default properties with some grid meta data
-            let tileProps = Object.assign({}, defaultTileProps, {
-              x: q,
-              y: r,
+            // Merge the passed default components with some grid meta data
+            let tileComponents = Object.assign({}, defaultTileComponents, {
+              coord: new Coord(q, r),
               grid: this
             });
-            tiles[r + radius][q + radius + Math.min(0, r)] = new Tile(tileProps);
+            tiles[r + radius][q + radius + Math.min(0, r)] = new Tile(tileComponents);
           }
         }
       }
     }
     this._tiles = tiles;
     this._radius = radius;
-    // Build out the index so we can super quickly look up tiles by property
-    this._propertyIndex = new TilePropertyIndex(this.getTiles());
+    // Build out the index so we can super quickly look up tiles by component
+    this._componentIndex = new TileComponentIndex(this.getTiles());
   }
 
   /**
-   * Returns the Tile at axial coordinates (q, r). q can be read as "column",
-   * and r can be read as "row".
+   * Returns the Tile at coordinates (x, y)
    * @example
-   * let originTile = myGrid.getTile(0, 0);
-   * @param {number} q - q coordinate of Tile to fetch
-   * @param {number} r - r coordinate of Tile to fetch
+   * let originTile = myGrid.getTile(new Coord(0, 0));
+   * @param {Coord} coord - coordinate of tile to fetch
    * @returns {Tile} The tile at the provided coordinates
    */
-  getTile(q, r) {
+  getTile({ x: q, y: r }) {
     let xOffset = r + this._radius;
     let yOffset = q + this._radius + Math.min(0, r);
 
@@ -99,34 +98,33 @@ class HexGrid {
   }
 
   /**
-   * Returns all tiles that posess the given property or properties
+   * Returns all tiles that posess the given component or components
    * @example
-   * // Returns all tiles that have "biome" and "temperature" properties
-   * let habitatTiles = grid.getTilesByProperty(["biome", "temperature"]);
-   * @param {(string | Array.string)} properties - the properties a tile
-   * must posess to be included in the result
+   * // Returns all tiles that have "biome" and "temperature" components
+   * let habitatTiles = grid.getTilesByComponent(["biome", "temperature"]);
+   * @param {(string | Array.string)} names - the names of the components
+   * this tile must posess to be included in the result
    * @returns {Array.Tile} the tiles that include all of the given
-   * properties
+   * components
    */
-  getTilesByProperty(properties) {
-    return this._propertyIndex.getTilesByProperty(properties);
+  getTilesByComponent(names) {
+    return this._componentIndex.getTilesByComponent(names);
   }
 
   /**
-   * Returns the Tiles that are adjacent to the Tile at the provided (q, r) coordinates.
+   * Returns the Tiles that are adjacent to the Tile at the provided (x, y) coordinates.
    * @example
-   * let neighborsOfOrigin = myGrid.neighborsOf(0, 0);
+   * let neighborsOfOrigin = myGrid.neighborsOf(new Coord(0, 0));
    * neighborsOfOrigin.forEach((tile) => {
    *   tile.set("bordersOrigin", true);
    * });
-   * @param {number} q - q coordinate of Tile for which to fetch neighbors
-   * @param {number} r - r coordinate of Tile for which to fetch neighbors
+   * @param {Coord} coord - coordinates of tile for which to calculate neighbors
    * @returns {Array.Tile} The array of neighboring Tiles
    */
-  neighborsOf(q, r) {
+  neighborsOf({ x: q, y: r }) {
     return HexGrid._axialUnitDirections.map(([qd, rd]) => {
       try {
-        return this.getTile(q + qd, r + rd);
+        return this.getTile(new Coord(q + qd, r + rd));
       } catch (e) {
         return null;
       }
@@ -136,17 +134,15 @@ class HexGrid {
   }
 
   /**
-   * Calculates the distance between two (q, r) coordinates in tiles
+   * Calculates the distance between two (x, y) coordinates in tiles
    * @example
    * let myGrid = new HexGrid(2);
-   * let distanceFromCenterToEdge = myGrid.distanceBetween(0, 0, 2, -2); // 2
-   * @param {number} q1 - q coordinate of first tile
-   * @param {number} r1 - r coordinate of first tile
-   * @param {number} q2 - q coordinate of second tile
-   * @param {number} r2 - r coordinate of second tile
+   * let distanceFromCenterToEdge = myGrid.distanceBetween(new Coord(0, 0), new Coord(2, -2)); // 2
+   * @param {Coord} coord1 - coordinates of first tile
+   * @param {Coord} coord2 - coordinates of second tile
    * @returns {number} The distance between the provided coordinates in tiles
    */
-  distanceBetween(q1, r1, q2, r2) {
+  distanceBetween({ x: q1, y: r1 }, { x: q2, y: r2 }) {
     let x1, y1, z1, x2, y2, z2;
     ({x: x1, y: y1, z: z1} = HexGrid._axialToCubic(q1, r1));
     ({x: x2, y: y2, z: z2} = HexGrid._axialToCubic(q2, r2));

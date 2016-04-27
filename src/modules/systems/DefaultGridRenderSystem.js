@@ -34,7 +34,8 @@ class DefaultGridRenderSystem extends ISystem {
     // Draw each tile
     this._tiles.forEach((tile) => {
       let x, y;
-      ({x, y} = this._coordToPixel(tile.get("x"), tile.get("y"), DefaultGridRenderSystem.HEX_SIZE));
+      ({ x, y } = tile.get("coord"));
+      ({x, y} = this._coordToPixel(x, y, DefaultGridRenderSystem.HEX_SIZE));
 
       let instance = this._hex.place();
       instance.position = new Point(x, y).add(app.paper.view.center);
