@@ -1,6 +1,6 @@
 import Tile from "../../../src/modules/grid/Tile";
 import chai from "chai";
-import sinon from "sinon";
+import { spy } from "sinon";
 const expect = chai.expect;
 
 describe("Tile", () => {
@@ -11,27 +11,27 @@ describe("Tile", () => {
   });
 
   it("should each have a unique state object", () => {
-    const initialProperties = { temperature: 75 };
-    const tile1 = new Tile(initialProperties);
-    const tile2 = new Tile(initialProperties);
-    const tile3 = new Tile(initialProperties);
+    const initialComponents = { temperature: 75 };
+    const tile1 = new Tile(initialComponents);
+    const tile2 = new Tile(initialComponents);
+    const tile3 = new Tile(initialComponents);
     tile1.set("unique", true);
 
     // Changes in one tile should not affect the other tiles that were
-    // instantiated with the same default properties object
+    // instantiated with the same default components object
     expect(tile1.get("unique")).to.be.true;
     expect(tile2.get("unique")).to.be.undefined;
     expect(tile3.get("unique")).to.be.undefined;
   });
 
-  describe("properties", () => {
+  describe("components", () => {
     it("should be retrievable", () => {
       const dogeTile = new Tile({ dogeLevel: 9001 });
       expect(dogeTile.get("dogeLevel")).to.be.above(9000);
     });
 
     it("should return undefined for nonexistent keys", () => {
-      const emptyTile = new Tile(/* No properties */);
+      const emptyTile = new Tile(/* No components */);
       const result = emptyTile.get("oops");
       expect(result).to.be.undefined;
     });
@@ -40,8 +40,8 @@ describe("Tile", () => {
       const coldTile = new Tile({
         temperature: -40
       });
-      expect(coldTile.hasProperty("temperature")).to.be.true;
-      expect(coldTile.hasProperty("isHot")).to.be.false;
+      expect(coldTile.hasComponent("temperature")).to.be.true;
+      expect(coldTile.hasComponent("isHot")).to.be.false;
     });
 
     it("should be mutable", () => {
@@ -55,7 +55,7 @@ describe("Tile", () => {
     });
 
     it("should be created if they don't yet exist", () => {
-      const freshTile = new Tile(/* No initial properties */);
+      const freshTile = new Tile(/* No initial components */);
       expect(freshTile.get("habitable")).to.not.be.defined;
       freshTile.set("habitable", true);
       expect(freshTile.get("habitable")).to.be.true;
@@ -83,33 +83,33 @@ describe("Tile", () => {
   });
 
   describe("events", () => {
-    it("should emit an event when a new property is added", () => {
+    it("should emit an event when a new component is added", () => {
       const tile = new Tile();
-      const cb = sinon.spy();
-      tile.addListener("propertyAdded", cb);
+      const cb = spy();
+      tile.addListener("componentAdded", cb);
 
-      tile.set("newProperty", 0);
+      tile.set("newComponent", 0);
       expect(cb.calledWith({
         tile: tile,
-        property: "newProperty"
+        name: "newComponent"
       })).to.be.true;
 
-      // Property is no longer "new"
-      tile.set("newProperty", 1);
+      // Component is no longer "new"
+      tile.set("newComponent", 1);
       expect(cb.calledTwice).to.be.false;
     });
 
-    it("should emit an event when a property is removed", () => {
+    it("should emit an event when a component is deleted", () => {
       const tile = new Tile({
-        someProperty: 0
+        someComponent: 0
       });
-      const cb = sinon.spy();
-      tile.addListener("propertyDeleted", cb);
+      const cb = spy();
+      tile.addListener("componentDeleted", cb);
 
-      tile.delete("someProperty");
+      tile.delete("someComponent");
       expect(cb.calledWith({
         tile: tile,
-        property: "someProperty"
+        name: "someComponent"
       })).to.be.true;
     });
   });

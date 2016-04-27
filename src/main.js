@@ -2,20 +2,50 @@
 // it becomes the "homepage"
 import "file?name=index.html!./main.html";
 
-// Load the main stylesheet
+// Stylesheets
 import "./styles/reset.css";
+import "./styles/style.css";
 
-// Import and bootstrap the application!
+import paper from "paper";
 import App from "./modules/App";
+import HexGrid from "./modules/grid/HexGrid";
 
-// Add systems to this list to include them in the processing loop
-let systems = [
-];
+// Import all systems
+import DefaultGridRenderSystem from "./modules/systems/DefaultGridRenderSystem";
 
-const app = new App(systems);
-app.initialize();
+// Export the GS bootstrapping function
+window.GeneticSandbox = function (canvas) {
+  // Fits the canvas to its containing DOM element
+  function fitToContainer() {
+    canvas.style.width = "100%";
+    canvas.style.height = "100%";
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+  }
+  fitToContainer();
 
-// TODO: Implement a more formal game loop
-app.update();
+  // Create an empty paper project and view attached to the given canvas
+  const paperScope = new paper.PaperScope();
+  paperScope.setup(canvas);
 
-console.log("Genetic Sandbox is up and running!");
+  // If the window is resized, refit the canvas again, and then subsequently
+  // refit the paper view to match.
+  window.onresize = function() {
+    fitToContainer();
+    paperScope.view.viewSize = new paperScope.Size(canvas.width, canvas.height);
+  };
+
+  // Add systems to this list to include them in the processing loop
+  const systems = [
+    new DefaultGridRenderSystem()
+  ];
+
+  // Create the universe!
+  const grid = new HexGrid(25);
+
+  // Finally, create an instance of App and initialize it
+  const app = new App(grid, systems, paperScope);
+  app.initialize();
+
+  return app;
+};

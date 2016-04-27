@@ -1,6 +1,6 @@
 {
   "name": "genetic-sandbox",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A simulation of life itself",
   "main": "express.js",
   "scripts": {
@@ -9,11 +9,14 @@
     "postinstall": "npm run build",
     "dev": "webpack-dev-server --inline --hot --content-base build/",
     "test": "npm run lint -s && ./node_modules/.bin/babel-node ./node_modules/mocha/bin/_mocha --recursive",
+    "test-watch": "./node_modules/.bin/babel-node ./node_modules/mocha/bin/_mocha --recursive --watch",
     "coverage": "./node_modules/.bin/babel-node ./node_modules/istanbul/lib/cli cover ./node_modules/mocha/bin/_mocha -- --recursive",
     "coveralls": "npm run coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
-    "lint": "eslint --ignore-pattern *.html --quiet ./src/** ./test/**",
-    "docs": "jsdoc2md --example-lang js --template ./site/_layouts/docs.html ./src/modules/*.js ./src/modules/**/*.js --plugin dmd-kramdown-plugin > ./site/docs.md",
-    "docs-deploy": "npm run docs && git subtree push --prefix site origin gh-pages"
+    "lint": "eslint \"**/*.js\"",
+    "lint-fix": "eslint \"**/*.js\" --fix",
+    "docs": "jsdoc2md --example-lang js --template ./site/_layouts/docs.html \"./src/modules/**/*.js\" --plugin dmd-kramdown-plugin > ./site/docs.md",
+    "docs-deploy": "npm run docs && git subtree push --prefix site origin gh-pages",
+    "stats": "jsdoc2md --stats \"./src/**/*.js\""
   },
   "repository": {
     "type": "git",
@@ -36,6 +39,7 @@
     "express": "^4.13.4",
     "file-loader": "^0.8.5",
     "html-loader": "^0.4.3",
+    "paper": "^0.9.25",
     "style-loader": "^0.13.0",
     "webpack": "^1.12.14",
     "wolfy87-eventemitter": "^4.3.0"

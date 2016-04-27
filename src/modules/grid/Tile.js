@@ -1,95 +1,100 @@
 import EventEmitter from "wolfy87-eventemitter";
 
 /**
- * A Tile is nothing more than a wrapper around a stanard JavaScript object,
- * and represents the state at a discrete location within a grid
+ * A Tile is a collection of components (data) representing the state at a
+ * specific place in a grid
  */
 class Tile extends EventEmitter {
   /**
-   * Creates a new tile with initial properties. Note that the given initial
-   * properties will be copied *by value* into each tile. What this means is
-   * that inner objects of the initial properties object are *not* deep copied.
+   * Creates a new tile with initial components. Note that the given initial
+   * components object will be copied *by value* into each tile. What this means
+   * is that inner objects of the component are *not* deep copied.
    * @example
    * const hotTile = new Tile({
    *   temperature: 110,
    *   biome: "desert"
+   *   vegetation: [
+   *     { type: "tree", edible: false },
+   *     { type: "berries", edible: true}
+   *   ]
    * });
-   * @param {Object} [initialProperties={}] - Initial properties of the Tile
+   * @param {Object} [initialComponents={}] - Initial components of the Tile
    */
-  constructor(initialProperties = {}) {
+  constructor(initialComponents = {}) {
     super();
-    this._state = Object.assign({}, initialProperties);
+    this._state = Object.assign({}, initialComponents);
   }
 
   /**
-   * Returns the specified property's value
+   * Returns the specified component
    * @example
    * let temperature = hotTile.get("temperature");
-   * @param {string} key - Name of the property
-   * @returns {*} Value of property at `key`, or undefined if property not found
+   * @param {string} name - Name of the component
+   * @returns {*} component data, or undefined if component not found
    */
-  get(key) {
-    return this._state[key];
+  get(name) {
+    return this._state[name];
   }
 
   /**
-   * Returns true if this Tile has the given key, false otherwise
-   * @param {string} key - the key to check
-   * @returns {boolean} True if the Tile has the given property, false
+   * Returns true if this Tile has the given component, false otherwise
+   * @param {string} name - the name of the component to check for
+   * @returns {boolean} True if the Tile has the given component, false
    * otherwise
    */
-  hasProperty(key) {
-    return this._state.hasOwnProperty(key);
+  hasComponent(name) {
+    return this._state.hasOwnProperty(name);
   }
 
   /**
-   * Sets the specified property's value, or creates and sets the property if it
-   * does not yet exist.
+   * Sets the specified component
    * @example
-   * hotTile.set("vegetation", ["cactus", "tumbleweed", "wildflowers"]);
+   * hotTile.set("vegetation", [
+   *   { type: "tree", edible: false }
+   * ]);
    * //Chaining
    * hotTile.set("one", 1).set("two", 2).set("three", 3);
-   * @fires Tile#propertyAdded
-   * @param {string} key - Name of the property to set/create
-   * @param {*} value - Value of the property
+   * @fires Tile#componentAdded
+   * @param {string} name - name of the component to set
+   * @param {*} component - the component data
    * @returns {Tile} The Tile object
    */
-  set(key, value) {
-    let alreadyHadProperty = this.hasProperty(key);
-    this._state[key] = value;
-    if (!alreadyHadProperty) {
+  set(name, component) {
+    let alreadyHadComponent = this.hasComponent(name);
+    this._state[name] = component;
+    if (!alreadyHadComponent) {
       /**
-       * Fired when a new property is added to a tile. It is NOT fired when
-       * a property is solely modified.
-       * @event Tile#propertyAdded
+       * Fired when a new component is added to a tile. It is NOT fired when
+       * a component is solely modified.
+       * @event Tile#componentAdded
        * @type {object}
        * @property {Tile} tile - the tile that was modified
-       * @property {string} property - the property that was added
+       * @property {string} name - the name of the component that was added
        */
-      this.emitEvent("propertyAdded", [{tile: this, property: key}]);
+      this.emitEvent("componentAdded", [{ tile: this, name }]);
     }
     return this;
   }
 
   /**
-   * Deletes the specified property, removing it from the Tile completely
+   * Deletes the specified component, removing it from the Tile completely
    * @example
    * let didDeleteSomething = hotTile.delete("temperature");
-   * @fires Tile#propertyDeleted
-   * @param {string} key - Name of the property to delete
+   * @fires Tile#componentDeleted
+   * @param {string} name - name of the component to delete
    * @returns {boolean} True if an item was actually deleted, false otherwise
    */
-  delete(key) {
-    if (this._state.hasOwnProperty(key)) {
-      delete this._state[key];
+  delete(name) {
+    if (this._state.hasOwnProperty(name)) {
+      delete this._state[name];
       /**
-       * Fired when a property is deleted from a tile
-       * @event Tile#propertyDeleted
+       * Fired when a component is deleted from a tile
+       * @event Tile#componentDeleted
        * @type {object}
        * @property {Tile} tile - the tile that was modified
-       * @property {string} property - the property that was deleted
+       * @property {string} name - name of the component that was deleted
        */
-      this.emitEvent("propertyDeleted", [{tile: this, property: key}]);
+      this.emitEvent("componentDeleted", [{ tile: this, name }]);
       return true;
     }
     return false;

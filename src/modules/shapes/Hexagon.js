@@ -8,15 +8,14 @@ import Point from "./Point";
  */
 class Hexagon extends IShape {
   /**
-   * Creates a new Hexagon given the (x, y) position and a radius
+   * Creates a new Hexagon with center at point and a given radius
    * @example
-   * let hex = new Hexagon(0, 0, 100);
-   * @param {number} x - x position of the hex center
-   * @param {number} y - y position of the hex center
+   * let hex = new Hexagon(new Point(0, 0), 100);
+   * @param {Point} center - center position of Hexagon
    * @param {number} radius - distance from the center to the corners
    */
-  constructor(x, y, radius) {
-    super(x, y);
+  constructor(center, radius) {
+    super(center);
 
     /**
      * Distance from the center to the corners

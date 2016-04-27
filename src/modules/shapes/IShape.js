@@ -7,21 +7,20 @@ import Point from "./Point";
  */
 class IShape {
   /**
-   * Creates a new shape at position (x, y).
+   * Creates a new shape at given point
    * IShape should be extended and its members overridden by a concrete subclass.
    * @example
    * class Circle extends IShape {
-   *   constructor(x, y, radius) {
-   *     super(x, y);
+   *   constructor(point, radius) {
+   *     super(point);
    *     this.r = radius;
    *   }
    *   get width() { return this.radius * 2; }
    *   get height() { return this.width; }
    * }
-   * @param {number} [x=0] - The x position of the center of this shape
-   * @param {number} [y=0] - The y position of the center of this shape
+   * @param {Point} [center=new Point(0, 0)] - center point of shape
    */
-  constructor(x = 0, y = 0) {
+  constructor(center) {
     /* Prevent instantiation */
     if (this.constructor === IShape) {
       throw new TypeError("Cannot construct IShape instances directly");
@@ -31,7 +30,7 @@ class IShape {
      * The center position of this shape
      * @type Point
      */
-    this.center = new Point(x, y);
+    this.center = center || new Point(0, 0);
   }
 
   /**

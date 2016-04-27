@@ -6,7 +6,7 @@ A simulation of life itself.
 
 ##Contributing
 
-Genetic Sandbox is a [node](http://nodejs.org/) application, so you'll need
+Genetic Sandbox is built with [node](http://nodejs.org/), so you'll need
 to install that first.
 
 ### Getting up and running
@@ -24,6 +24,8 @@ As an alternative, you could also download and extract
 Now you're ready to install the dependencies, and run the development server:
 
 ```bash
+# These are necessary for using the Paper.js vector graphics library
+sudo apt-get install libcairo2-dev libpango1.0-dev libssl-dev libjpeg62-dev libgif-dev
 npm install
 npm run dev
 ```
@@ -48,11 +50,16 @@ for continous integration support.
 To run the tests, you can use the following command:
 
 ```bash
+# Run tests once
 npm test
+
+# Continuously trigger tests upon source file change
+npm run test-watch
 ```
 
-This command will lint all the source files using [eslint](http://eslint.org/),
-and then spit out a mocha test report.
+The former will lint all the source files using [eslint](http://eslint.org/),
+and then spit out a mocha test report. You can run the linter alone using
+`npm run lint`.
 
 You can also run `npm run coverage` to get an istanbul test coverage report.
 
@@ -67,8 +74,5 @@ installed ([rvm](https://rvm.io/) is a handy tool for managing ruby installation
 Once you have ruby, change into the `site/` directory and run `bundle install`.
 This will install the ruby gems (dependencies) needed to build the jekyll site.
 At this point you're ready to run `jekyll serve` to run a local server of the
-documentation. To regenerate the docs from the source code run `npm run docs`
-from the project root directory.Finally, to deploy the docs to production, run
-`npm run docs-deploy`. This will merge the `site/` directory from the `master`
-branch into the `gh-pages` branch and push it to Github, among some other
-little cleanup operations.
+documentation. To regenerate the docs from the source code use `npm run docs`
+from the project root directory.
