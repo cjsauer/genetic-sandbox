@@ -64,6 +64,7 @@ class TileComponentIndex {
   /**
    * Event handler called when a component is added to a tile to keep the
    * relevant indices up to date
+   * @private
    * @param {object} e - the event object
    * @param {Tile} e.tile - the tile that is being updated
    * @param {string} e.name - the name of the component that was added
@@ -86,6 +87,7 @@ class TileComponentIndex {
   /**
    * Event handler called when a name is deleted from a tile to keep the
    * relevant indices up to date
+   * @private
    * @param {object} e - the event object
    * @param {Tile} e.tile - the tile that is being updated
    * @param {string} e.name - the name of the component that was deleted

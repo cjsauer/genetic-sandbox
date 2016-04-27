@@ -1,22 +1,20 @@
 /**
- * The entry point of the entire application. App contains references to the
- * grid, an array of systems, and a reference to a
- * [Paper]{@link http://paperjs.org} context.
- * @see {HexGrid}
- * @see {ISystem}
+ * The entry point and hub of the entire application
+ * @see {@link HexGrid}
+ * @see {@link ISystem}
  */
 class App {
   /**
    * Prepares a Genetic Sandbox application for bootstrapping.
    * @param {HexGrid} grid - hex grid to use as the stage
-   * @param {Array.ISystem} systems - the systems to be included in the main
+   * @param {Array.<ISystem>} systems - the systems to be included in the main
    * processing loop
    * @param {PaperScope} paperScope - Paper.js graphics context
    */
   constructor(grid, systems, paperScope) {
     /**
      * A grid of tiles serving as the main stage of the simulation
-     * @type HexGrid
+     * @type {HexGrid}
      */
     this.grid = grid;
 

@@ -8,9 +8,7 @@ permalink: /docs/
 
 <dl>
 <dt><a href="#App">App</a></dt>
-<dd><p>The entry point of the entire application. App contains references to the
-grid, an array of systems, and a reference to a
-<a href="http://paperjs.org">Paper</a> context.</p>
+<dd><p>The entry point and hub of the entire application</p>
 </dd>
 <dt><a href="#Coord">Coord</a></dt>
 <dd><p>A two dimensional coordinate of x and y</p>
@@ -65,15 +63,13 @@ values like color, stroke thickness, etc.</p>
 <a name="App"></a>
 
 ## App
-The entry point of the entire application. App contains references to the
-grid, an array of systems, and a reference to a
-[Paper](http://paperjs.org) context.
+The entry point and hub of the entire application
 
 **Kind**: global class  
 **See**
 
-- {HexGrid}
-- {ISystem}
+- [HexGrid](#HexGrid)
+- [ISystem](#ISystem)
 
 
 * [App](#App)
@@ -95,7 +91,7 @@ Prepares a Genetic Sandbox application for bootstrapping.
 | Param | Type | Description |
 | --- | --- | --- |
 | grid | <code>[HexGrid](#HexGrid)</code> | hex grid to use as the stage |
-| systems | <code>Array.ISystem</code> | the systems to be included in the main processing loop |
+| systems | <code>[Array.&lt;ISystem&gt;](#ISystem)</code> | the systems to be included in the main processing loop |
 | paperScope | <code>PaperScope</code> | Paper.js graphics context |
 
 <a name="App+grid"></a>
@@ -466,8 +462,6 @@ Builds an index of [Tiles](Tiles) for fast lookup by component
 * [TileComponentIndex](#TileComponentIndex)
     * [new TileComponentIndex(tiles)](#new_TileComponentIndex_new)
     * [.getTilesByComponent(names)](#TileComponentIndex+getTilesByComponent) ⇒ <code>Array.Tile</code>
-    * [._onTileComponentAdded(e)](#TileComponentIndex+_onTileComponentAdded)
-    * [._onTileComponentDeleted(e)](#TileComponentIndex+_onTileComponentDeleted)
 
 <a name="new_TileComponentIndex_new"></a>
 
@@ -511,34 +505,6 @@ components
 // Returns all tiles that have "biome" and "temperature" components
 let habitatTiles = tileIndex.getTilesByComponent(["biome", "temperature"]);
 ```
-<a name="TileComponentIndex+_onTileComponentAdded"></a>
-
-### tileComponentIndex._onTileComponentAdded(e)
-Event handler called when a component is added to a tile to keep the
-relevant indices up to date
-
-**Kind**: instance method of <code>[TileComponentIndex](#TileComponentIndex)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| e | <code>object</code> | the event object |
-| e.tile | <code>[Tile](#Tile)</code> | the tile that is being updated |
-| e.name | <code>string</code> | the name of the component that was added |
-
-<a name="TileComponentIndex+_onTileComponentDeleted"></a>
-
-### tileComponentIndex._onTileComponentDeleted(e)
-Event handler called when a name is deleted from a tile to keep the
-relevant indices up to date
-
-**Kind**: instance method of <code>[TileComponentIndex](#TileComponentIndex)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| e | <code>object</code> | the event object |
-| e.tile | <code>[Tile](#Tile)</code> | the tile that is being updated |
-| e.name | <code>string</code> | the name of the component that was deleted |
-
 <a name="Hexagon"></a>
 
 ## Hexagon ⇐ <code>[IShape](#IShape)</code>
@@ -549,7 +515,7 @@ A flat-topped, regular hexagon. Implementation details can be found
 **Extends:** <code>[IShape](#IShape)</code>  
 
 * [Hexagon](#Hexagon) ⇐ <code>[IShape](#IShape)</code>
-    * [new Hexagon(point, radius)](#new_Hexagon_new)
+    * [new Hexagon(center, radius)](#new_Hexagon_new)
     * [.radius](#Hexagon+radius) : <code>number</code>
     * [.width](#Hexagon+width) ⇒ <code>number</code>
     * [.height](#Hexagon+height) ⇒ <code>number</code>
@@ -558,13 +524,13 @@ A flat-topped, regular hexagon. Implementation details can be found
 
 <a name="new_Hexagon_new"></a>
 
-### new Hexagon(point, radius)
+### new Hexagon(center, radius)
 Creates a new Hexagon with center at point and a given radius
 
 
 | Param | Type | Description |
 | --- | --- | --- |
-| point | <code>[Point](#Point)</code> | center point of hexagon |
+| center | <code>[Point](#Point)</code> | center position of Hexagon |
 | radius | <code>number</code> | distance from the center to the corners |
 
 **Example**  
@@ -633,21 +599,21 @@ and a height.
 **Kind**: global abstract class  
 
 * *[IShape](#IShape)*
-    * *[new IShape([point])](#new_IShape_new)*
+    * *[new IShape([center])](#new_IShape_new)*
     * *[.center](#IShape+center) : <code>[Point](#Point)</code>*
     * **[.width](#IShape+width) ⇒ <code>number</code>**
     * **[.height](#IShape+height) ⇒ <code>number</code>**
 
 <a name="new_IShape_new"></a>
 
-### *new IShape([point])*
+### *new IShape([center])*
 Creates a new shape at given point
 IShape should be extended and its members overridden by a concrete subclass.
 
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| [point] | <code>[Point](#Point)</code> | <code>new Point(0, 0)</code> | center point of shape |
+| [center] | <code>[Point](#Point)</code> | <code>new Point(0, 0)</code> | center point of shape |
 
 **Example**  
 
