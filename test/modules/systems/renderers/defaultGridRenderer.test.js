@@ -70,14 +70,14 @@ describe("DefaultGridRenderer", () => {
     });
 
     it("should place the symbol for each hex", () => {
-      let coordSpy = spy(sys, "_coordToPixel");
+      const coordSpy = spy(sys, "_coordToPixel");
       sys.update(app);
+      coordSpy.restore();
       app.grid.getTiles().forEach((tile) => {
         let coord = tile.get("coord");
-        expect(sys._coordToPixel.calledWith(coord.x, coord.y)).to.be.true;
+        expect(coordSpy.calledWith(coord.x, coord.y)).to.be.true;
       });
       expect(paper.Symbol().place.callCount).to.equal(5);
-      coordSpy.restore();
     });
 
     it("should not call getTiles", () => {
