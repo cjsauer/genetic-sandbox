@@ -4,7 +4,7 @@ import "file?name=index.html!./main.html";
 
 // Stylesheets
 import "./styles/reset.css";
-import "./styles/theme.css";
+import "./styles/style.css";
 
 import paper from "paper";
 import App from "./modules/App";
