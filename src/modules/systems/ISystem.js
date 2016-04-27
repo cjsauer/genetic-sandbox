@@ -8,11 +8,19 @@ class ISystem {
   /**
    * ISystem can not be instantiated directly, but instead should be extended
    * and its instance methods overridden.
+   * @param {string} tag - one of "renderer", "generator", or "processor"
    */
-  constructor() {
+  constructor(tag) {
     if (this.constructor === ISystem) {
       throw new TypeError("Cannot construct ISystem instances directly");
     }
+
+    /**
+     * Defines the role of this system. One of "renderer", "generator", or
+     * "processor".
+     * @type {string}
+     */
+    this.tag = tag;
   }
 
   /**

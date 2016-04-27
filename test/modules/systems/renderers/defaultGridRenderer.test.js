@@ -1,17 +1,17 @@
-import DefaultGridRenderSystem from "../../../src/modules/systems/DefaultGridRenderSystem";
-import Tile from "../../../src/modules/grid/Tile";
-import Coord from "../../../src/modules/grid/Coord";
+import DefaultGridRenderer from "../../../../src/modules/systems/renderers/DefaultGridRenderer";
+import Tile from "../../../../src/modules/grid/Tile";
+import Coord from "../../../../src/modules/grid/Coord";
 import chai from "chai";
 const expect = chai.expect;
 import { stub, spy } from "sinon";
 
-describe("DefaultGridRenderSystem", () => {
+describe("DefaultGridRenderer", () => {
   let sys, grid, paper, app;
 
   beforeEach(() => {
-    sys = new DefaultGridRenderSystem();
+    sys = new DefaultGridRenderer();
 
-    // Stub out the dependencies required by DefaultGridRenderSystem
+    // Stub out the dependencies required by DefaultGridRenderer
     grid = {
       getTiles: stub().returns([
         new Tile({ coord: new Coord(0, 0) }),
@@ -45,6 +45,10 @@ describe("DefaultGridRenderSystem", () => {
       grid,
       paper
     };
+  });
+
+  it("should be tagged as 'renderer'", () => {
+    expect(sys.tag).to.equal("renderer");
   });
 
   describe("initialize", () => {

@@ -11,7 +11,7 @@ import App from "./modules/App";
 import HexGrid from "./modules/grid/HexGrid";
 
 // Import all systems
-import DefaultGridRenderSystem from "./modules/systems/DefaultGridRenderSystem";
+import DefaultGridRenderer from "./modules/systems/renderers/DefaultGridRenderer";
 
 // Export the GS bootstrapping function
 window.GeneticSandbox = function (canvas) {
@@ -37,7 +37,7 @@ window.GeneticSandbox = function (canvas) {
 
   // Add systems to this list to include them in the processing loop
   const systems = [
-    new DefaultGridRenderSystem()
+    new DefaultGridRenderer()
   ];
 
   // Create the universe!

@@ -1,10 +1,17 @@
-import ISystem from "./ISystem";
-import Theme from "../themes/Theme";
+import ISystem from "../ISystem";
+import Theme from "../../themes/Theme";
 
 /**
  * The default renderer of all tiles in the grid.
  */
-class DefaultGridRenderSystem extends ISystem {
+class DefaultGridRenderer extends ISystem {
+  /**
+   * Constructs a new DefaultGridRenderer
+   */
+  constructor() {
+    super("renderer");
+  }
+
   /**
    * Prepares the system for rendering
    * @param {App} app - the currently running GS app
@@ -18,7 +25,7 @@ class DefaultGridRenderSystem extends ISystem {
     this._tiles = app.grid.getTiles();
 
     // Create a Symbol for the hex path to place for every tile
-    let path = new Path.RegularPolygon(paper.view.center, 6, DefaultGridRenderSystem.HEX_SIZE);
+    let path = new Path.RegularPolygon(paper.view.center, 6, DefaultGridRenderer.HEX_SIZE);
     path.style = Theme.current.defaultHexStyle;
     this._hex = new Symbol(path);
     path.remove();
@@ -35,7 +42,7 @@ class DefaultGridRenderSystem extends ISystem {
     this._tiles.forEach((tile) => {
       let x, y;
       ({ x, y } = tile.get("coord"));
-      ({x, y} = this._coordToPixel(x, y, DefaultGridRenderSystem.HEX_SIZE));
+      ({x, y} = this._coordToPixel(x, y, DefaultGridRenderer.HEX_SIZE));
 
       let instance = this._hex.place();
       instance.position = new Point(x, y).add(app.paper.view.center);
@@ -57,6 +64,6 @@ class DefaultGridRenderSystem extends ISystem {
   }
 }
 
-DefaultGridRenderSystem.HEX_SIZE = 12;
+DefaultGridRenderer.HEX_SIZE = 12;
 
-export default DefaultGridRenderSystem;
+export default DefaultGridRenderer;
