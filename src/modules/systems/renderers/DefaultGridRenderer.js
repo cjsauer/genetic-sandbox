@@ -17,18 +17,32 @@ class DefaultGridRenderer extends ISystem {
    * @param {App} app - the currently running GS app
    */
   initialize(app) {
+    const tiles = app.grid.getTiles();
     const paper = app.paper;
-    let Path, Symbol;
-    ({ Path, Symbol } = paper);
+    let Path, Symbol, Point, Group;
+    ({ Path, Symbol, Point, Group } = paper);
 
-    // Cache reference to all tiles
-    this._tiles = app.grid.getTiles();
+    /**
+     * Prebuild as much of the grid graphics as we can up front. Create a hex
+     * path, symbolize it, and then group them together to allow "one-shot"
+     * rendering from the update() function.
+     */
 
     // Create a Symbol for the hex path to place for every tile
     let path = new Path.RegularPolygon(paper.view.center, 6, DefaultGridRenderer.HEX_SIZE);
     path.style = Theme.current.defaultHexStyle;
-    this._hex = new Symbol(path);
-    path.remove();
+    let hexSymbol = new Symbol(path);
+
+    // Draw each tile, adding each to a group
+    this._hexGroup = new Group();
+    tiles.forEach((tile) => {
+      let x, y;
+      ({ x, y } = tile.get("coord"));
+      ({x, y} = this._coordToPixel(x, y, DefaultGridRenderer.HEX_SIZE));
+
+      let instance = hexSymbol.place(new Point(x, y));
+      this._hexGroup.addChild(instance);
+    });
   }
 
   /**
@@ -36,17 +50,11 @@ class DefaultGridRenderer extends ISystem {
    * @param {App} app - the currently running GS app
    */
   update(app) {
-    const Point = app.paper.Point;
-
-    // Draw each tile
-    this._tiles.forEach((tile) => {
-      let x, y;
-      ({ x, y } = tile.get("coord"));
-      ({x, y} = this._coordToPixel(x, y, DefaultGridRenderer.HEX_SIZE));
-
-      let instance = this._hex.place();
-      instance.position = new Point(x, y).add(app.paper.view.center);
-    });
+    const paper = app.paper;
+    // Draw the grid on its own layer in the middle of the view
+    let layer = new paper.Layer();
+    layer.addChild(this._hexGroup);
+    this._hexGroup.position = paper.view.center;
   }
 
   /**

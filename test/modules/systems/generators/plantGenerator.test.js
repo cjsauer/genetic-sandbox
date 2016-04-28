@@ -7,7 +7,7 @@ describe("PlantGenerator", () => {
   let sys, app, grid;
 
   beforeEach(() => {
-    // Stub out the dependencies required by DefaultGridRenderer
+    // Stub out the dependencies required by PlantGenerator
     grid = {
       getTiles: stub().returns([
         new Tile(),

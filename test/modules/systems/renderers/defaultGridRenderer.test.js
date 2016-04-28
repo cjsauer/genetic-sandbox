@@ -22,19 +22,21 @@ describe("DefaultGridRenderer", () => {
     };
     paper = {
       Path: {
-        RegularPolygon: stub().returns({
-          remove: stub()
-        })
+        RegularPolygon: stub().returns({})
       },
       Symbol: stub().returns({
-        place: stub().returns({
-          position: {}
-        })
+        place: stub().returns({})
       }),
       Point: stub().returns({
         add: stub()
       }),
       Color: stub(),
+      Group: stub().returns({
+        addChild: stub()
+      }),
+      Layer: stub().returns({
+        addChild: stub()
+      }),
       view: {
         // Pretend the view is 800x600
         center: { x: 400, y: 300 }
@@ -56,11 +58,23 @@ describe("DefaultGridRenderer", () => {
       expect(grid.getTiles.calledOnce).to.be.true;
     });
 
-    it("should use a symbol to create a single Hexagon path instance", () => {
+    it("should use a symbol to create a single hex path instance", () => {
       sys.initialize(app);
       expect(paper.Path.RegularPolygon.calledOnce).to.be.true;
-      expect(paper.Path.RegularPolygon().remove.calledOnce).to.be.true;
       expect(paper.Symbol.calledOnce).to.be.true;
+    });
+
+    it("should place the symbol for each hex and add them to a group", () => {
+      const coordSpy = spy(sys, "_coordToPixel");
+      sys.initialize(app);
+      coordSpy.restore();
+      expect(paper.Group.calledWithNew()).to.be.true;
+      app.grid.getTiles().forEach((tile) => {
+        let coord = tile.get("coord");
+        expect(coordSpy.calledWith(coord.x, coord.y)).to.be.true;
+      });
+      expect(paper.Symbol().place.callCount).to.equal(grid.getTiles().length);
+      expect(sys._hexGroup.addChild.callCount).to.equal(grid.getTiles().length);
     });
   });
 
@@ -69,19 +83,17 @@ describe("DefaultGridRenderer", () => {
       sys.initialize(app);
     });
 
-    it("should place the symbol for each hex", () => {
-      const coordSpy = spy(sys, "_coordToPixel");
+    it("should not call getTiles", () => {
       sys.update(app);
-      coordSpy.restore();
-      app.grid.getTiles().forEach((tile) => {
-        let coord = tile.get("coord");
-        expect(coordSpy.calledWith(coord.x, coord.y)).to.be.true;
-      });
-      expect(paper.Symbol().place.callCount).to.equal(5);
+      sys.update(app);
+      sys.update(app);
+      expect(app.grid.getTiles.callCount).to.equal(1); // 1 call by initialize
     });
 
-    it("should not call getTiles", () => {
-      expect(app.grid.getTiles.callCount).to.equal(1);
+    it("should render the grid on a new layer", () => {
+      sys.update(app);
+      expect(paper.Layer.calledWithNew()).to.be.true;
+      expect(paper.Layer().addChild.calledWith(sys._hexGroup)).to.be.true;
     });
   });
 
