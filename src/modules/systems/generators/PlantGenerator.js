@@ -24,6 +24,13 @@ class PlantGenerator extends ISystem {
       }
     });
   }
+
+  /**
+   * A no-op for generators
+   * @param {App} app - the currently running GS app
+   */
+  update(app) {
+  }
 }
 
 PlantGenerator.VEGETATION_RATE = 0.1;

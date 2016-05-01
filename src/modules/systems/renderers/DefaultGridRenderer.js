@@ -1,8 +1,9 @@
 import ISystem from "../ISystem";
 import Theme from "../../themes/Theme";
+import HexGrid from "../../grid/HexGrid";
 
 /**
- * The default renderer of all tiles in the grid.
+ * The default renderer of all tiles in the grid
  */
 class DefaultGridRenderer extends ISystem {
   /**
@@ -36,9 +37,9 @@ class DefaultGridRenderer extends ISystem {
     // Draw each tile, adding each to a group
     this._hexGroup = new Group();
     tiles.forEach((tile) => {
-      let x, y;
-      ({ x, y } = tile.get("coord"));
-      ({x, y} = this._coordToPixel(x, y, DefaultGridRenderer.HEX_SIZE));
+      let coord = tile.get("coord");
+      let { x, y } = coord;
+      ({x, y} = HexGrid.coordToPixel(coord, DefaultGridRenderer.HEX_SIZE));
 
       let instance = hexSymbol.place(new Point(x, y));
       this._hexGroup.addChild(instance);
@@ -55,20 +56,6 @@ class DefaultGridRenderer extends ISystem {
     let layer = new paper.Layer();
     layer.addChild(this._hexGroup);
     this._hexGroup.position = paper.view.center;
-  }
-
-  /**
-   * Converts a tile's coordinates to its pixel coordinates
-   * @private
-   * @param {number} q - q coordinate of tile (x)
-   * @param {number} r - r coordinate of tile (y)
-   * @param {number} radius - radius of hexagons (for correct spacing)
-   */
-  _coordToPixel(q, r, radius) {
-    return {
-      x: radius * Math.sqrt(3) * (r + (q / 2)),
-      y: radius * (3 / 2) * q
-    };
   }
 }
 

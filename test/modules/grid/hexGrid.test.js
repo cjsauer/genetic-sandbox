@@ -194,6 +194,28 @@ describe("HexGrid", () => {
     });
   });
 
+  it("can calculate the position of a hex from its coordinates", () => {
+    let errorMargin = 0.001;
+    let pixelPos = HexGrid.coordToPixel(new Coord(0, 0), 10);
+    expect(pixelPos).to.deep.equal({ x: 0, y: 0 });
+
+    pixelPos = HexGrid.coordToPixel(new Coord(1, 0), 10);
+    expect(pixelPos.x).to.be.closeTo(8.6603, errorMargin);
+    expect(pixelPos.y).to.equal(15);
+
+    pixelPos = HexGrid.coordToPixel(new Coord(0, 1), 10);
+    expect(pixelPos.x).to.be.closeTo(17.3205, errorMargin);
+    expect(pixelPos.y).to.equal(0);
+
+    pixelPos = HexGrid.coordToPixel(new Coord(-1, 1), 10);
+    expect(pixelPos.x).to.be.closeTo(8.66025, errorMargin);
+    expect(pixelPos.y).to.equal(-15);
+
+    pixelPos = HexGrid.coordToPixel(new Coord(1, -1), 10);
+    expect(pixelPos.x).to.be.closeTo(-8.66025, errorMargin);
+    expect(pixelPos.y).to.equal(15);
+  });
+
   describe("internal conversion functions", () => {
     it("can covert from cubic coordinates to axial", () => {
       expect(HexGrid._cubicToAxial(1, 2, 3)).to.deep.equal({q: 1, r: 3});

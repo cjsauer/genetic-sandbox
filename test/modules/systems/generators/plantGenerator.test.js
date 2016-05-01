@@ -25,10 +25,6 @@ describe("PlantGenerator", () => {
     expect(sys.tag).to.equal("generator");
   });
 
-  it("update function should throw an error", () => {
-    expect(sys.update).to.throw(Error);
-  });
-
   describe("initialize", () => {
     it("should distribute vegetation to tiles", () => {
       // Stub out random number generation

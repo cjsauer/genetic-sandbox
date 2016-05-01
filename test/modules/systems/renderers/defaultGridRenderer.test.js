@@ -1,6 +1,5 @@
 import DefaultGridRenderer from "../../../../src/modules/systems/renderers/DefaultGridRenderer";
-import Tile from "../../../../src/modules/grid/Tile";
-import Coord from "../../../../src/modules/grid/Coord";
+import HexGrid from "../../../../src/modules/grid/HexGrid";
 import { expect } from "chai";
 import { stub, spy } from "sinon";
 
@@ -9,17 +8,10 @@ describe("DefaultGridRenderer", () => {
 
   beforeEach(() => {
     sys = new DefaultGridRenderer();
+    grid = new HexGrid(1);
+    spy(grid, "getTiles");
 
-    // Stub out the dependencies required by DefaultGridRenderer
-    grid = {
-      getTiles: stub().returns([
-        new Tile({ coord: new Coord(0, 0) }),
-        new Tile({ coord: new Coord(1, 0) }),
-        new Tile({ coord: new Coord(-1, 0) }),
-        new Tile({ coord: new Coord(0, 1) }),
-        new Tile({ coord: new Coord(0, -1) })
-      ])
-    };
+    // Stub out the dependencies
     paper = {
       Path: {
         RegularPolygon: stub().returns({})
@@ -65,13 +57,13 @@ describe("DefaultGridRenderer", () => {
     });
 
     it("should place the symbol for each hex and add them to a group", () => {
-      const coordSpy = spy(sys, "_coordToPixel");
+      const coordSpy = spy(HexGrid, "coordToPixel");
       sys.initialize(app);
       coordSpy.restore();
       expect(paper.Group.calledWithNew()).to.be.true;
       app.grid.getTiles().forEach((tile) => {
         let coord = tile.get("coord");
-        expect(coordSpy.calledWith(coord.x, coord.y)).to.be.true;
+        expect(coordSpy.calledWith(coord)).to.be.true;
       });
       expect(paper.Symbol().place.callCount).to.equal(grid.getTiles().length);
       expect(sys._hexGroup.addChild.callCount).to.equal(grid.getTiles().length);
@@ -94,31 +86,6 @@ describe("DefaultGridRenderer", () => {
       sys.update(app);
       expect(paper.Layer.calledWithNew()).to.be.true;
       expect(paper.Layer().addChild.calledWith(sys._hexGroup)).to.be.true;
-    });
-  });
-
-  describe("private methods", () => {
-    let errorMargin = 0.001;
-
-    it("can calculate the position of a hex from its coordinates", () => {
-      let pixelPos = sys._coordToPixel(0, 0, 10);
-      expect(pixelPos).to.deep.equal({ x: 0, y: 0 });
-
-      pixelPos = sys._coordToPixel(1, 0, 10);
-      expect(pixelPos.x).to.be.closeTo(8.6603, errorMargin);
-      expect(pixelPos.y).to.equal(15);
-
-      pixelPos = sys._coordToPixel(0, 1, 10);
-      expect(pixelPos.x).to.be.closeTo(17.3205, errorMargin);
-      expect(pixelPos.y).to.equal(0);
-
-      pixelPos = sys._coordToPixel(-1, 1, 10);
-      expect(pixelPos.x).to.be.closeTo(8.66025, errorMargin);
-      expect(pixelPos.y).to.equal(-15);
-
-      pixelPos = sys._coordToPixel(1, -1, 10);
-      expect(pixelPos.x).to.be.closeTo(-8.66025, errorMargin);
-      expect(pixelPos.y).to.equal(15);
     });
   });
 });
