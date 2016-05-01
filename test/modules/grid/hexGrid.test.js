@@ -169,7 +169,7 @@ describe("HexGrid", () => {
         [1, -1]
       ];
       const expectedNeighbors = expectedCoords.map(([x, y]) => {
-        return hexGrid.getTile({x, y});
+        return hexGrid.getTile(new Coord(x, y));
       });
 
       const neighbors = hexGrid.neighborsOf(new Coord(0, 0));

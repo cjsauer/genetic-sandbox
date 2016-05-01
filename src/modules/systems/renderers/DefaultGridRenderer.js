@@ -20,8 +20,7 @@ class DefaultGridRenderer extends ISystem {
   initialize(app) {
     const tiles = app.grid.getTiles();
     const paper = app.paper;
-    let Path, Symbol, Point, Group;
-    ({ Path, Symbol, Point, Group } = paper);
+    const { Path, Symbol, Point, Group } = paper;
 
     /**
      * Prebuild as much of the grid graphics as we can up front. Create a hex
