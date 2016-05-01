@@ -6,7 +6,6 @@
   "scripts": {
     "build": "webpack",
     "start": "node express.js",
-    "postinstall": "npm run build",
     "dev": "webpack-dev-server --inline --hot --content-base build/",
     "test": "npm run lint -s && ./node_modules/.bin/babel-node ./node_modules/mocha/bin/_mocha --recursive",
     "test-watch": "./node_modules/.bin/babel-node ./node_modules/mocha/bin/_mocha --recursive --watch",
@@ -29,6 +28,12 @@
   },
   "homepage": "https://github.com/cjsauer/genetic-sandbox#readme",
   "dependencies": {
+    "express": "^4.13.4",
+    "paper": "^0.9.25",
+    "wolfy87-eventemitter": "^4.3.0"
+  },
+  "devDependencies": {
+    "webpack": "^1.12.14",
     "babel-cli": "^6.6.5",
     "babel-core": "^6.6.5",
     "babel-loader": "^6.2.4",
@@ -36,15 +41,9 @@
     "babel-register": "^6.6.5",
     "clean-webpack-plugin": "^0.1.8",
     "css-loader": "^0.23.1",
-    "express": "^4.13.4",
     "file-loader": "^0.8.5",
     "html-loader": "^0.4.3",
-    "paper": "^0.9.25",
     "style-loader": "^0.13.0",
-    "webpack": "^1.12.14",
-    "wolfy87-eventemitter": "^4.3.0"
-  },
-  "devDependencies": {
     "chai": "^3.5.0",
     "coveralls": "^2.11.8",
     "dmd-kramdown-plugin": "^0.1.0",
