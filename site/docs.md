@@ -30,21 +30,27 @@ specific place in a grid</p>
 </dd>
 <dt><a href="#IShape">IShape</a></dt>
 <dd><p>An abstract class representing 2D geometric shapes that have a center, a width,
-and a height.</p>
+and a height</p>
 </dd>
 <dt><a href="#Point">Point</a></dt>
 <dd><p>A 2D point in space. Contains (x, y) coordinates.</p>
-</dd>
-<dt><a href="#DefaultGridRenderSystem">DefaultGridRenderSystem</a></dt>
-<dd><p>The default renderer of all tiles in the grid.</p>
 </dd>
 <dt><a href="#ISystem">ISystem</a></dt>
 <dd><p>Interface for defining new systems. A system in Genetic Sandbox is a class
 containing initialize() and update() functions that operate in some way on
 <a href="#Tile">Tiles</a> within the <a href="#HexGrid">HexGrid</a>.</p>
 </dd>
+<dt><a href="#PlantGenerator">PlantGenerator</a></dt>
+<dd><p>Generates initial vegetation</p>
+</dd>
+<dt><a href="#DefaultGridRenderer">DefaultGridRenderer</a></dt>
+<dd><p>The default renderer of all tiles in the grid</p>
+</dd>
+<dt><a href="#DefaultPlantRenderer">DefaultPlantRenderer</a></dt>
+<dd><p>Renders plants for tiles that contain a vegetation component</p>
+</dd>
 <dt><a href="#MultiStringHashMap">MultiStringHashMap</a></dt>
-<dd><p>A key/value store where keys can be a single string, or an array of strings.</p>
+<dd><p>A key/value store where keys can be a single string, or an array of strings</p>
 </dd>
 </dl>
 
@@ -204,11 +210,14 @@ Implementation details can be found [here](http://goo.gl/nLO6sN).
 
 * [HexGrid](#HexGrid)
     * [new HexGrid(radius, [defaultTileComponents])](#new_HexGrid_new)
-    * [.getTile(coord)](#HexGrid+getTile) ⇒ <code>[Tile](#Tile)</code>
-    * [.getTiles()](#HexGrid+getTiles) ⇒ <code>Array.Tile</code>
-    * [.getTilesByComponent(names)](#HexGrid+getTilesByComponent) ⇒ <code>Array.Tile</code>
-    * [.neighborsOf(coord)](#HexGrid+neighborsOf) ⇒ <code>Array.Tile</code>
-    * [.distanceBetween(coord1, coord2)](#HexGrid+distanceBetween) ⇒ <code>number</code>
+    * _instance_
+        * [.getTile(coord)](#HexGrid+getTile) ⇒ <code>[Tile](#Tile)</code>
+        * [.getTiles()](#HexGrid+getTiles) ⇒ <code>Array.Tile</code>
+        * [.getTilesByComponent(names)](#HexGrid+getTilesByComponent) ⇒ <code>Array.Tile</code>
+        * [.neighborsOf(coord)](#HexGrid+neighborsOf) ⇒ <code>Array.Tile</code>
+        * [.distanceBetween(coord1, coord2)](#HexGrid+distanceBetween) ⇒ <code>number</code>
+    * _static_
+        * [.coordToPixel(coord, radius)](#HexGrid.coordToPixel) ⇒ <code>[Point](#Point)</code>
 
 <a name="new_HexGrid_new"></a>
 
@@ -321,6 +330,19 @@ Calculates the distance between two (x, y) coordinates in tiles
 let myGrid = new HexGrid(2);
 let distanceFromCenterToEdge = myGrid.distanceBetween(new Coord(0, 0), new Coord(2, -2)); // 2
 ```
+<a name="HexGrid.coordToPixel"></a>
+
+### HexGrid.coordToPixel(coord, radius) ⇒ <code>[Point](#Point)</code>
+Converts a tile's coordinates to its pixel coordinates
+
+**Kind**: static method of <code>[HexGrid](#HexGrid)</code>  
+**Returns**: <code>[Point](#Point)</code> - pixel coordinates of center of tile  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| coord | <code>[Coord](#Coord)</code> | tile coordinates |
+| radius | <code>number</code> | radius of hexagons (for correct spacing) |
+
 <a name="Tile"></a>
 
 ## Tile
@@ -602,7 +624,7 @@ order starting from the right-most.
 
 ## *IShape*
 An abstract class representing 2D geometric shapes that have a center, a width,
-and a height.
+and a height
 
 **Kind**: global abstract class  
 
@@ -699,39 +721,6 @@ The y coordinate of this point
 
 **Kind**: instance property of <code>[Point](#Point)</code>  
 **Default**: <code>0</code>  
-<a name="DefaultGridRenderSystem"></a>
-
-## DefaultGridRenderSystem
-The default renderer of all tiles in the grid.
-
-**Kind**: global class  
-
-* [DefaultGridRenderSystem](#DefaultGridRenderSystem)
-    * [.initialize(app)](#DefaultGridRenderSystem+initialize)
-    * [.update(app)](#DefaultGridRenderSystem+update)
-
-<a name="DefaultGridRenderSystem+initialize"></a>
-
-### defaultGridRenderSystem.initialize(app)
-Prepares the system for rendering
-
-**Kind**: instance method of <code>[DefaultGridRenderSystem](#DefaultGridRenderSystem)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="DefaultGridRenderSystem+update"></a>
-
-### defaultGridRenderSystem.update(app)
-Draws all tiles in the app's grid
-
-**Kind**: instance method of <code>[DefaultGridRenderSystem](#DefaultGridRenderSystem)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
 <a name="ISystem"></a>
 
 ## *ISystem*
@@ -742,16 +731,29 @@ containing initialize() and update() functions that operate in some way on
 **Kind**: global abstract class  
 
 * *[ISystem](#ISystem)*
-    * *[new ISystem()](#new_ISystem_new)*
+    * *[new ISystem(tag)](#new_ISystem_new)*
+    * *[.tag](#ISystem+tag) : <code>string</code>*
     * *[.initialize(app)](#ISystem+initialize)*
     * *[.update(app)](#ISystem+update)*
 
 <a name="new_ISystem_new"></a>
 
-### *new ISystem()*
+### *new ISystem(tag)*
 ISystem can not be instantiated directly, but instead should be extended
 and its instance methods overridden.
 
+
+| Param | Type | Description |
+| --- | --- | --- |
+| tag | <code>string</code> | one of "renderer", "generator", or "processor" |
+
+<a name="ISystem+tag"></a>
+
+### *iSystem.tag : <code>string</code>*
+Defines the role of this system. One of "renderer", "generator", or
+"processor".
+
+**Kind**: instance property of <code>[ISystem](#ISystem)</code>  
 <a name="ISystem+initialize"></a>
 
 ### *iSystem.initialize(app)*
@@ -774,10 +776,127 @@ Called once per tick to update the simulation
 | --- | --- | --- |
 | app | <code>[App](#App)</code> | the currently running GS app |
 
+<a name="PlantGenerator"></a>
+
+## PlantGenerator
+Generates initial vegetation
+
+**Kind**: global class  
+
+* [PlantGenerator](#PlantGenerator)
+    * [new PlantGenerator()](#new_PlantGenerator_new)
+    * [.initialize(app)](#PlantGenerator+initialize)
+    * [.update(app)](#PlantGenerator+update)
+
+<a name="new_PlantGenerator_new"></a>
+
+### new PlantGenerator()
+Constructs a new PlantGenerator
+
+<a name="PlantGenerator+initialize"></a>
+
+### plantGenerator.initialize(app)
+Seeds the world with vegetation
+
+**Kind**: instance method of <code>[PlantGenerator](#PlantGenerator)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="PlantGenerator+update"></a>
+
+### plantGenerator.update(app)
+A no-op for generators
+
+**Kind**: instance method of <code>[PlantGenerator](#PlantGenerator)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="DefaultGridRenderer"></a>
+
+## DefaultGridRenderer
+The default renderer of all tiles in the grid
+
+**Kind**: global class  
+
+* [DefaultGridRenderer](#DefaultGridRenderer)
+    * [new DefaultGridRenderer()](#new_DefaultGridRenderer_new)
+    * [.initialize(app)](#DefaultGridRenderer+initialize)
+    * [.update(app)](#DefaultGridRenderer+update)
+
+<a name="new_DefaultGridRenderer_new"></a>
+
+### new DefaultGridRenderer()
+Constructs a new DefaultGridRenderer
+
+<a name="DefaultGridRenderer+initialize"></a>
+
+### defaultGridRenderer.initialize(app)
+Prepares the system for rendering
+
+**Kind**: instance method of <code>[DefaultGridRenderer](#DefaultGridRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="DefaultGridRenderer+update"></a>
+
+### defaultGridRenderer.update(app)
+Draws all tiles in the app's grid
+
+**Kind**: instance method of <code>[DefaultGridRenderer](#DefaultGridRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="DefaultPlantRenderer"></a>
+
+## DefaultPlantRenderer
+Renders plants for tiles that contain a vegetation component
+
+**Kind**: global class  
+
+* [DefaultPlantRenderer](#DefaultPlantRenderer)
+    * [new DefaultPlantRenderer()](#new_DefaultPlantRenderer_new)
+    * [.initialize(app)](#DefaultPlantRenderer+initialize)
+    * [.update(app)](#DefaultPlantRenderer+update)
+
+<a name="new_DefaultPlantRenderer_new"></a>
+
+### new DefaultPlantRenderer()
+Constructs a  new DefaultPlantRenderer
+
+<a name="DefaultPlantRenderer+initialize"></a>
+
+### defaultPlantRenderer.initialize(app)
+Prepares the system for rendering plant graphics
+
+**Kind**: instance method of <code>[DefaultPlantRenderer](#DefaultPlantRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="DefaultPlantRenderer+update"></a>
+
+### defaultPlantRenderer.update(app)
+Renders a plant graphic for every tile that contains a vegetation component
+
+**Kind**: instance method of <code>[DefaultPlantRenderer](#DefaultPlantRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
 <a name="MultiStringHashMap"></a>
 
 ## MultiStringHashMap
-A key/value store where keys can be a single string, or an array of strings.
+A key/value store where keys can be a single string, or an array of strings
 
 **Kind**: global class  
 

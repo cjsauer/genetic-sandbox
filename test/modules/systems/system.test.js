@@ -1,6 +1,5 @@
 import ISystem from "../../../src/modules/systems/ISystem";
-import chai from "chai";
-const expect = chai.expect;
+import { expect } from "chai";
 
 describe("ISystem", () => {
   it("should not be instantiable", () => {

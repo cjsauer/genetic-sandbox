@@ -2,7 +2,7 @@ import Point from "./Point";
 
 /**
  * An abstract class representing 2D geometric shapes that have a center, a width,
- * and a height.
+ * and a height
  * @abstract
  */
 class IShape {

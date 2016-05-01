@@ -9,7 +9,8 @@ const ElementalTheme = {
   },
   defaultHexStyle: {
     strokeColor: new Color(1.0, 0.1)
-  }
+  },
+  defaultPlantColor: new Color("#347C47")
 };
 
 export default ElementalTheme;

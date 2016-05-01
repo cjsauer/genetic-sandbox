@@ -1,6 +1,5 @@
 import Coord from "../../../src/modules/grid/Coord";
-import chai from "chai";
-const expect = chai.expect;
+import { expect } from "chai";
 
 describe("Coord", () => {
   it("should default to (0, 0) when instantiated with no arguments", () => {

@@ -1,5 +1,5 @@
 /**
- * A key/value store where keys can be a single string, or an array of strings.
+ * A key/value store where keys can be a single string, or an array of strings
  */
 class MultiStringHashMap {
   /**

@@ -1,6 +1,7 @@
 import Tile from "./Tile";
 import TileComponentIndex from "./TileComponentIndex";
 import Coord from "./Coord";
+import Point from "../shapes/Point";
 
 /**
  * A 2D, hexagonal grid implementation with axial coordinate system.
@@ -149,6 +150,20 @@ class HexGrid {
     return Math.max(Math.abs(x1 - x2), Math.abs(y1 - y2), Math.abs(z1 - z2));
   }
 }
+
+/**
+ * Converts a tile's coordinates to its pixel coordinates
+ * @param {Coord} coord - tile coordinates
+ * @param {number} radius - radius of hexagons (for correct spacing)
+ * @returns {Point} pixel coordinates of center of tile
+ */
+HexGrid.coordToPixel = (coord, radius) => {
+  let { x: q, y: r } = coord;
+  return new Point(
+    radius * Math.sqrt(3) * (r + (q / 2)),
+    radius * (3 / 2) * q
+  );
+};
 
 // The six unit directions in the axial coordinate system
 HexGrid._axialUnitDirections = [
