@@ -869,7 +869,7 @@ Renders plants for tiles that contain a vegetation component
 <a name="new_DefaultPlantRenderer_new"></a>
 
 ### new DefaultPlantRenderer()
-Constructs a  new DefaultPlantRenderer
+Constructs a new DefaultPlantRenderer
 
 <a name="DefaultPlantRenderer+initialize"></a>
 
