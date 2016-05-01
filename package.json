@@ -1,6 +1,6 @@
 {
   "name": "genetic-sandbox",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A simulation of life itself",
   "main": "express.js",
   "scripts": {
