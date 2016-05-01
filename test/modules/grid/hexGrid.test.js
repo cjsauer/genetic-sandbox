@@ -1,8 +1,7 @@
 import HexGrid from "../../../src/modules/grid/HexGrid";
 import Tile from "../../../src/modules/grid/Tile";
 import Coord from "../../../src/modules/grid/Coord";
-import chai from "chai";
-const expect = chai.expect;
+import { expect } from "chai";
 
 describe("HexGrid", () => {
   it("should be instantiable given a radius in tiles", () => {
@@ -170,7 +169,7 @@ describe("HexGrid", () => {
         [1, -1]
       ];
       const expectedNeighbors = expectedCoords.map(([x, y]) => {
-        return hexGrid.getTile({x, y});
+        return hexGrid.getTile(new Coord(x, y));
       });
 
       const neighbors = hexGrid.neighborsOf(new Coord(0, 0));
@@ -193,6 +192,28 @@ describe("HexGrid", () => {
       expect(neighbors.length).to.equal(expectedNeighbors.length);
       expect(neighbors).to.deep.include.members(expectedNeighbors);
     });
+  });
+
+  it("can calculate the position of a hex from its coordinates", () => {
+    let errorMargin = 0.001;
+    let pixelPos = HexGrid.coordToPixel(new Coord(0, 0), 10);
+    expect(pixelPos).to.deep.equal({ x: 0, y: 0 });
+
+    pixelPos = HexGrid.coordToPixel(new Coord(1, 0), 10);
+    expect(pixelPos.x).to.be.closeTo(8.6603, errorMargin);
+    expect(pixelPos.y).to.equal(15);
+
+    pixelPos = HexGrid.coordToPixel(new Coord(0, 1), 10);
+    expect(pixelPos.x).to.be.closeTo(17.3205, errorMargin);
+    expect(pixelPos.y).to.equal(0);
+
+    pixelPos = HexGrid.coordToPixel(new Coord(-1, 1), 10);
+    expect(pixelPos.x).to.be.closeTo(8.66025, errorMargin);
+    expect(pixelPos.y).to.equal(-15);
+
+    pixelPos = HexGrid.coordToPixel(new Coord(1, -1), 10);
+    expect(pixelPos.x).to.be.closeTo(-8.66025, errorMargin);
+    expect(pixelPos.y).to.equal(15);
   });
 
   describe("internal conversion functions", () => {

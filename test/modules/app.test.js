@@ -1,7 +1,6 @@
 import App from "../../src/modules/App";
 import ISystem from "../../src/modules/systems/ISystem";
-import chai from "chai";
-const expect = chai.expect;
+import { expect } from "chai";
 import { spy, stub } from "sinon";
 
 describe("App", () => {
@@ -123,15 +122,15 @@ describe("App", () => {
     it("should call update", () => {
       let updateSpy = spy(app, "update");
       app._tick();
-      expect(app.update.calledOnce).to.be.true;
       updateSpy.restore();
+      expect(updateSpy.calledOnce).to.be.true;
     });
 
     it("should call _drawBackground", () => {
       let drawSpy = spy(app, "_drawBackground");
       app._tick();
-      expect(app._drawBackground.calledOnce).to.be.true;
       drawSpy.restore();
+      expect(drawSpy.calledOnce).to.be.true;
     });
 
     it("should draw the view", () => {

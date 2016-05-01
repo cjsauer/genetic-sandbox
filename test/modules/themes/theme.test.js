@@ -1,6 +1,5 @@
 import Theme from "../../../src/modules/themes/Theme";
-import chai from "chai";
-const expect = chai.expect;
+import { expect } from "chai";
 
 describe("Theme", () => {
   let fakeTheme = {

@@ -1,8 +1,7 @@
 import TileComponentIndex from "../../../src/modules/grid/TileComponentIndex";
 import Tile from "../../../src/modules/grid/Tile";
-import chai from "chai";
+import { expect } from "chai";
 import { spy } from "sinon";
-const expect = chai.expect;
 
 describe("TileComponentIndex", () => {
   let tileIndex;
@@ -84,12 +83,12 @@ describe("TileComponentIndex", () => {
   });
 
   it("should build the index entries on demand", () => {
-    spy(tileIndex, "_buildIndex");
+    const buildIndexSpy = spy(tileIndex, "_buildIndex");
     // The index should be empty initially
     expect(tileIndex._map.keys()).to.have.length(0);
     tileIndex.getTilesByComponent(["temperature", "biome"]);
-    expect(tileIndex._buildIndex.called).to.be.true;
-    tileIndex._buildIndex.restore();
+    buildIndexSpy.restore();
+    expect(buildIndexSpy.calledOnce).to.be.true;
   });
 
   it("can return a list of tiles that possess a set of components", () => {
