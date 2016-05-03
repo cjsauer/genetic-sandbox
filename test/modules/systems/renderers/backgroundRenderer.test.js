@@ -40,16 +40,4 @@ describe("BackgroundRenderer", () => {
       expect(paper.Path.Rectangle.calledWithNew()).to.be.true;
     });
   });
-
-  describe("update", () => {
-    it("should update the bounds of the background to match the view", () => {
-      sys.initialize(app);
-      sys.update(app);
-      expect(paper.Path.Rectangle().bounds).to.deep.equal(paper.view.bounds);
-      paper.view.bounds = { x: 400, y: 200 };
-      expect(paper.Path.Rectangle().bounds).to.not.deep.equal(paper.view.bounds);
-      sys.update(app);
-      expect(paper.Path.Rectangle().bounds).to.deep.equal(paper.view.bounds);
-    });
-  });
 });

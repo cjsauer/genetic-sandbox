@@ -31,7 +31,6 @@ class BackgroundRenderer extends ISystem {
    * @param {App} app - the currently running GS app
    */
   update(app) {
-    this._backgroundPath.bounds = app.paper.view.bounds;
   }
 }
 
