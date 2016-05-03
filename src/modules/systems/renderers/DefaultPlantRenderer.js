@@ -44,7 +44,8 @@ class DefaultPlantRenderer extends ISystem {
   }
 
   /**
-   * Renders a plant graphic for every tile that contains a vegetation component
+   * Renders a plant graphic for every tile that contains a vegetation component,
+   * and removing plant graphics for tiles that no longer contain vegetation
    * @param {App} app - the currently running GS app
    */
   update(app) {

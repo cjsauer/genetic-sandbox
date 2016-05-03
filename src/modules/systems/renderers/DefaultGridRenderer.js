@@ -3,7 +3,7 @@ import Theme from "../../themes/Theme";
 import HexGrid from "../../grid/HexGrid";
 
 /**
- * The default renderer of all tiles in the grid
+ * Used to draw a hexagonal border around all tiles in the grid
  */
 class DefaultGridRenderer extends ISystem {
   /**
@@ -14,7 +14,7 @@ class DefaultGridRenderer extends ISystem {
   }
 
   /**
-   * Builds the vector graphics necessary for rendering the grid
+   * Renders the grid
    * @param {App} app - the currently running GS app
    */
   initialize(app) {
@@ -42,7 +42,7 @@ class DefaultGridRenderer extends ISystem {
   }
 
   /**
-   * Called once per tick to center the grid in the view
+   * Called once per tick. No-op for DefaultGridRenderer.
    * @param {App} app - the currently running GS app
    */
   update(app) {

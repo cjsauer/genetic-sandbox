@@ -13,7 +13,7 @@ class BackgroundRenderer extends ISystem {
   }
 
   /**
-   * Initializes this system preparing it for rendering
+   * Renders the background
    * @param {App} app - the currently running GS app
    */
   initialize(app) {
@@ -27,7 +27,7 @@ class BackgroundRenderer extends ISystem {
   }
 
   /**
-   * Called once per tick to recenter the background layer
+   * Called once per tick. No-op for BackgroundRenderer.
    * @param {App} app - the currently running GS app
    */
   update(app) {
