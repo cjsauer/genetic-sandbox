@@ -44,8 +44,8 @@ window.GeneticSandbox = function (canvas) {
     new PlantGenerator(),
 
     // Renderers
-    new BackgroundRenderer()
-    // new DefaultGridRenderer()
+    new BackgroundRenderer(),
+    new DefaultGridRenderer()
     // new DefaultPlantRenderer()
   ];
 
