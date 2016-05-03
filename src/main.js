@@ -45,8 +45,8 @@ window.GeneticSandbox = function (canvas) {
 
     // Renderers
     new BackgroundRenderer(),
-    new DefaultGridRenderer()
-    // new DefaultPlantRenderer()
+    new DefaultGridRenderer(),
+    new DefaultPlantRenderer()
   ];
 
   // Create the universe!

@@ -2,6 +2,7 @@ import ISystem from "../ISystem";
 import Theme from "../../themes/Theme";
 import DefaultGridRenderer from "./DefaultGridRenderer";
 import HexGrid from "../../grid/HexGrid";
+import _ from "underscore";
 
 /**
  * Renders plants for tiles that contain a vegetation component
@@ -19,25 +20,27 @@ class DefaultPlantRenderer extends ISystem {
    * @param {App} app - the currently running GS app
    */
   initialize(app) {
-    const { Group, Path, Symbol } = app.paper;
+    const { Layer, Group, Path, Symbol } = app.paper;
 
-    // Build out the plant graphic and group it as a single item
+    // Make a new layer and group for plants
+    this._plantLayer = new Layer();
 
-    let blades = new Group();
-    let bladeCount = 4;
-    let bladeWidth = 2;
-    let bladeHeight = 12;
-    for (let i = 0; i < bladeCount; i++) {
-      let blade = new Path.Line({
+    // Build out the plant graphic and symbolize it
+    let petals = new Group();
+    let petalCount = 4;
+    let petalWidth = 2;
+    let petalHeight = 12;
+    for (let i = 0; i < petalCount; i++) {
+      let petal = new Path.Line({
         from: [0, 0],
-        to: [0, bladeHeight],
+        to: [0, petalHeight],
         strokeColor: Theme.current.defaultPlantColor,
-        strokeWidth: bladeWidth
+        strokeWidth: petalWidth
       });
-      blade.rotate(i * 180 / bladeCount);
-      blades.addChild(blade);
+      petal.rotate(i * 180 / petalCount);
+      petals.addChild(petal);
     }
-    this._plant = new Symbol(blades);
+    this._plantSymbol = new Symbol(petals);
   }
 
   /**
@@ -45,13 +48,25 @@ class DefaultPlantRenderer extends ISystem {
    * @param {App} app - the currently running GS app
    */
   update(app) {
-    const { Layer, Point, view } = app.paper;
-    let plantLayer = new Layer(); // eslint-disable-line
+    const { Point, view } = app.paper;
 
-    app.grid.getTilesByComponent("vegetation").forEach((tile) => {
+    let vegetationTiles = app.grid.getTilesByComponent("vegetation");
+    let vegetationGraphicTiles = app.grid.getTilesByComponent("!vegetation");
+    let tilesThatNeedGraphicAdded = _.difference(vegetationTiles, vegetationGraphicTiles);
+    let tilesThatNeedGraphicRemoved = _.difference(vegetationGraphicTiles, vegetationTiles);
+
+    // Add a plant graphic to every tile that needs one
+    tilesThatNeedGraphicAdded.forEach((tile) => {
       let coord = tile.get("coord");
       let { x, y } = HexGrid.coordToPixel(coord, DefaultGridRenderer.HEX_SIZE);
-      this._plant.place(new Point(x, y).add(view.center));
+      let instance = this._plantSymbol.place(new Point(x, y).add(view.center));
+      tile.set("!vegetation", instance);
+    });
+
+    // Remove plant graphics from tiles that no longer contain vegetation
+    tilesThatNeedGraphicRemoved.forEach((tile) => {
+      tile.get("!vegetation").remove();
+      tile.delete("!vegetation");
     });
   }
 }
