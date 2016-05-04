@@ -76,66 +76,33 @@ describe("App", () => {
   });
 
   describe("run and stop", () => {
-    let stubSet, stubClear;
+    let stubSetInterval, stubClearInterval;
 
     beforeEach(() => {
-      stubSet = stub(global, "setInterval").returns({});
-      stubClear = stub(global, "clearInterval");
+      stubSetInterval = stub(global, "setInterval").returns({});
+      stubClearInterval = stub(global, "clearInterval");
     });
 
     afterEach(() => {
-      stubSet.restore();
-      stubClear.restore();
+      stubSetInterval.restore();
+      stubClearInterval.restore();
     });
 
     it("should start an interval timer to tick the simulation", () => {
       app.run();
       expect(app._timer).to.be.ok;
-      expect(stubSet.calledOnce).to.be.true;
+      expect(stubSetInterval.calledOnce).to.be.true;
     });
 
     it("should clear the previously set interval", () => {
       app.run();
       app.stop();
-      expect(stubClear.calledWith(app._timer)).to.be.true;
+      expect(stubClearInterval.calledWith(app._timer)).to.be.true;
     });
 
     it("should do nothing if no timer is set", () => {
       app.stop();
-      expect(stubClear.called).to.be.false;
-    });
-  });
-
-  describe("_drawBackground", () => {
-    it("should draw the background", () => {
-      app._drawBackground();
-      expect(app.paper.Path.Rectangle.calledOnce).to.be.true;
-    });
-  });
-
-  describe("_tick", () => {
-    it("should clear the scene", () => {
-      app._tick();
-      expect(app.paper.project.clear.calledOnce).to.be.true;
-    });
-
-    it("should call update", () => {
-      let updateSpy = spy(app, "update");
-      app._tick();
-      updateSpy.restore();
-      expect(updateSpy.calledOnce).to.be.true;
-    });
-
-    it("should call _drawBackground", () => {
-      let drawSpy = spy(app, "_drawBackground");
-      app._tick();
-      drawSpy.restore();
-      expect(drawSpy.calledOnce).to.be.true;
-    });
-
-    it("should draw the view", () => {
-      app._tick();
-      expect(app.paper.view.draw.calledOnce).to.be.true;
+      expect(stubClearInterval.called).to.be.false;
     });
   });
 });

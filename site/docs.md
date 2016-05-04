@@ -43,8 +43,11 @@ containing initialize() and update() functions that operate in some way on
 <dt><a href="#PlantGenerator">PlantGenerator</a></dt>
 <dd><p>Generates initial vegetation</p>
 </dd>
+<dt><a href="#BackgroundRenderer">BackgroundRenderer</a></dt>
+<dd><p>Renders the background</p>
+</dd>
 <dt><a href="#DefaultGridRenderer">DefaultGridRenderer</a></dt>
-<dd><p>The default renderer of all tiles in the grid</p>
+<dd><p>Used to draw a hexagonal border around all tiles in the grid</p>
 </dd>
 <dt><a href="#DefaultPlantRenderer">DefaultPlantRenderer</a></dt>
 <dd><p>Renders plants for tiles that contain a vegetation component</p>
@@ -87,7 +90,6 @@ The entry point and hub of the entire application
     * [.update()](#App+update)
     * [.run()](#App+run)
     * [.stop()](#App+stop)
-    * [._drawBackground()](#App+_drawBackground) ⇒ <code>Paper.Path</code>
 
 <a name="new_App_new"></a>
 
@@ -144,13 +146,6 @@ Kicks off the processing loop to continously update all systems
 Stops the processing loop, essentially pausing the entire simulation
 
 **Kind**: instance method of <code>[App](#App)</code>  
-<a name="App+_drawBackground"></a>
-
-### app._drawBackground() ⇒ <code>Paper.Path</code>
-Draws the background
-
-**Kind**: instance method of <code>[App](#App)</code>  
-**Returns**: <code>Paper.Path</code> - background rectangle path  
 <a name="Coord"></a>
 
 ## Coord
@@ -815,10 +810,49 @@ A no-op for generators
 | --- | --- | --- |
 | app | <code>[App](#App)</code> | the currently running GS app |
 
+<a name="BackgroundRenderer"></a>
+
+## BackgroundRenderer
+Renders the background
+
+**Kind**: global class  
+
+* [BackgroundRenderer](#BackgroundRenderer)
+    * [new BackgroundRenderer()](#new_BackgroundRenderer_new)
+    * [.initialize(app)](#BackgroundRenderer+initialize)
+    * [.update(app)](#BackgroundRenderer+update)
+
+<a name="new_BackgroundRenderer_new"></a>
+
+### new BackgroundRenderer()
+Constructs a new BackgroundRenderer
+
+<a name="BackgroundRenderer+initialize"></a>
+
+### backgroundRenderer.initialize(app)
+Renders the background
+
+**Kind**: instance method of <code>[BackgroundRenderer](#BackgroundRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="BackgroundRenderer+update"></a>
+
+### backgroundRenderer.update(app)
+Called once per tick. No-op for BackgroundRenderer.
+
+**Kind**: instance method of <code>[BackgroundRenderer](#BackgroundRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
 <a name="DefaultGridRenderer"></a>
 
 ## DefaultGridRenderer
-The default renderer of all tiles in the grid
+Used to draw a hexagonal border around all tiles in the grid
 
 **Kind**: global class  
 
@@ -835,7 +869,7 @@ Constructs a new DefaultGridRenderer
 <a name="DefaultGridRenderer+initialize"></a>
 
 ### defaultGridRenderer.initialize(app)
-Prepares the system for rendering
+Renders the grid
 
 **Kind**: instance method of <code>[DefaultGridRenderer](#DefaultGridRenderer)</code>  
 
@@ -846,7 +880,7 @@ Prepares the system for rendering
 <a name="DefaultGridRenderer+update"></a>
 
 ### defaultGridRenderer.update(app)
-Draws all tiles in the app's grid
+Called once per tick. No-op for DefaultGridRenderer.
 
 **Kind**: instance method of <code>[DefaultGridRenderer](#DefaultGridRenderer)</code>  
 
@@ -885,7 +919,8 @@ Prepares the system for rendering plant graphics
 <a name="DefaultPlantRenderer+update"></a>
 
 ### defaultPlantRenderer.update(app)
-Renders a plant graphic for every tile that contains a vegetation component
+Renders a plant graphic for every tile that contains a vegetation component,
+and removing plant graphics for tiles that no longer contain vegetation
 
 **Kind**: instance method of <code>[DefaultPlantRenderer](#DefaultPlantRenderer)</code>  
 

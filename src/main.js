@@ -12,6 +12,7 @@ import HexGrid from "./modules/grid/HexGrid";
 
 // Import all systems
 import PlantGenerator from "./modules/systems/generators/PlantGenerator";
+import BackgroundRenderer from "./modules/systems/renderers/BackgroundRenderer";
 import DefaultGridRenderer from "./modules/systems/renderers/DefaultGridRenderer";
 import DefaultPlantRenderer from "./modules/systems/renderers/DefaultPlantRenderer";
 
@@ -43,6 +44,7 @@ window.GeneticSandbox = function (canvas) {
     new PlantGenerator(),
 
     // Renderers
+    new BackgroundRenderer(),
     new DefaultGridRenderer(),
     new DefaultPlantRenderer()
   ];
