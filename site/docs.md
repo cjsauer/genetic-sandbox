@@ -53,10 +53,10 @@ containing initialize() and update() functions that operate in some way on
 <dt><a href="#BackgroundRenderer">BackgroundRenderer</a></dt>
 <dd><p>Renders the background</p>
 </dd>
-<dt><a href="#DefaultGridRenderer">DefaultGridRenderer</a></dt>
+<dt><a href="#GridRenderer">GridRenderer</a></dt>
 <dd><p>Used to draw a hexagonal border around all tiles in the grid</p>
 </dd>
-<dt><a href="#DefaultPlantRenderer">DefaultPlantRenderer</a></dt>
+<dt><a href="#PlantRenderer">PlantRenderer</a></dt>
 <dd><p>Renders plants for all tiles that contain a plant component</p>
 </dd>
 <dt><a href="#MultiStringHashMap">MultiStringHashMap</a></dt>
@@ -944,80 +944,80 @@ Called once per tick. No-op for BackgroundRenderer.
 | --- | --- | --- |
 | app | <code>[App](#App)</code> | the currently running GS app |
 
-<a name="DefaultGridRenderer"></a>
+<a name="GridRenderer"></a>
 
-## DefaultGridRenderer
+## GridRenderer
 Used to draw a hexagonal border around all tiles in the grid
 
 **Kind**: global class  
 
-* [DefaultGridRenderer](#DefaultGridRenderer)
-    * [new DefaultGridRenderer()](#new_DefaultGridRenderer_new)
-    * [.initialize(app)](#DefaultGridRenderer+initialize)
-    * [.update(app)](#DefaultGridRenderer+update)
+* [GridRenderer](#GridRenderer)
+    * [new GridRenderer()](#new_GridRenderer_new)
+    * [.initialize(app)](#GridRenderer+initialize)
+    * [.update(app)](#GridRenderer+update)
 
-<a name="new_DefaultGridRenderer_new"></a>
+<a name="new_GridRenderer_new"></a>
 
-### new DefaultGridRenderer()
-Constructs a new DefaultGridRenderer
+### new GridRenderer()
+Constructs a new GridRenderer
 
-<a name="DefaultGridRenderer+initialize"></a>
+<a name="GridRenderer+initialize"></a>
 
-### defaultGridRenderer.initialize(app)
+### gridRenderer.initialize(app)
 Renders the grid
 
-**Kind**: instance method of <code>[DefaultGridRenderer](#DefaultGridRenderer)</code>  
+**Kind**: instance method of <code>[GridRenderer](#GridRenderer)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | app | <code>[App](#App)</code> | the currently running GS app |
 
-<a name="DefaultGridRenderer+update"></a>
+<a name="GridRenderer+update"></a>
 
-### defaultGridRenderer.update(app)
-Called once per tick. No-op for DefaultGridRenderer.
+### gridRenderer.update(app)
+Called once per tick. No-op for GridRenderer.
 
-**Kind**: instance method of <code>[DefaultGridRenderer](#DefaultGridRenderer)</code>  
+**Kind**: instance method of <code>[GridRenderer](#GridRenderer)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | app | <code>[App](#App)</code> | the currently running GS app |
 
-<a name="DefaultPlantRenderer"></a>
+<a name="PlantRenderer"></a>
 
-## DefaultPlantRenderer
+## PlantRenderer
 Renders plants for all tiles that contain a plant component
 
 **Kind**: global class  
 
-* [DefaultPlantRenderer](#DefaultPlantRenderer)
-    * [new DefaultPlantRenderer()](#new_DefaultPlantRenderer_new)
-    * [.initialize(app)](#DefaultPlantRenderer+initialize)
-    * [.update(app)](#DefaultPlantRenderer+update)
+* [PlantRenderer](#PlantRenderer)
+    * [new PlantRenderer()](#new_PlantRenderer_new)
+    * [.initialize(app)](#PlantRenderer+initialize)
+    * [.update(app)](#PlantRenderer+update)
 
-<a name="new_DefaultPlantRenderer_new"></a>
+<a name="new_PlantRenderer_new"></a>
 
-### new DefaultPlantRenderer()
-Constructs a new DefaultPlantRenderer
+### new PlantRenderer()
+Constructs a new PlantRenderer
 
-<a name="DefaultPlantRenderer+initialize"></a>
+<a name="PlantRenderer+initialize"></a>
 
-### defaultPlantRenderer.initialize(app)
+### plantRenderer.initialize(app)
 Prepares the system for rendering plant graphics
 
-**Kind**: instance method of <code>[DefaultPlantRenderer](#DefaultPlantRenderer)</code>  
+**Kind**: instance method of <code>[PlantRenderer](#PlantRenderer)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | app | <code>[App](#App)</code> | the currently running GS app |
 
-<a name="DefaultPlantRenderer+update"></a>
+<a name="PlantRenderer+update"></a>
 
-### defaultPlantRenderer.update(app)
+### plantRenderer.update(app)
 Renders a plant graphic for every tile that contains a plant component,
 and removes plant graphics for tiles that no longer have vegetation
 
-**Kind**: instance method of <code>[DefaultPlantRenderer](#DefaultPlantRenderer)</code>  
+**Kind**: instance method of <code>[PlantRenderer](#PlantRenderer)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |

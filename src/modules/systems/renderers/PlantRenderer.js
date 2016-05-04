@@ -1,15 +1,15 @@
 import ISystem from "../ISystem";
 import Theme from "../../themes/Theme";
-import DefaultGridRenderer from "./DefaultGridRenderer";
+import GridRenderer from "./GridRenderer";
 import HexGrid from "../../grid/HexGrid";
 import _ from "underscore";
 
 /**
  * Renders plants for all tiles that contain a plant component
  */
-class DefaultPlantRenderer extends ISystem {
+class PlantRenderer extends ISystem {
   /**
-   * Constructs a new DefaultPlantRenderer
+   * Constructs a new PlantRenderer
    */
   constructor() {
     super("renderer");
@@ -59,7 +59,7 @@ class DefaultPlantRenderer extends ISystem {
     // Add a plant graphic to every tile that needs one
     tilesThatNeedGraphicAdded.forEach((tile) => {
       let coord = tile.get("coord");
-      let { x, y } = HexGrid.coordToPixel(coord, DefaultGridRenderer.HEX_SIZE);
+      let { x, y } = HexGrid.coordToPixel(coord, GridRenderer.HEX_SIZE);
       let instance = this._plantSymbol.place(new Point(x, y).add(view.center));
       tile.set("!plant", instance);
     });
@@ -72,4 +72,4 @@ class DefaultPlantRenderer extends ISystem {
   }
 }
 
-export default DefaultPlantRenderer;
+export default PlantRenderer;

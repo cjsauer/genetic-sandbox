@@ -5,9 +5,9 @@ import HexGrid from "../../grid/HexGrid";
 /**
  * Used to draw a hexagonal border around all tiles in the grid
  */
-class DefaultGridRenderer extends ISystem {
+class GridRenderer extends ISystem {
   /**
-   * Constructs a new DefaultGridRenderer
+   * Constructs a new GridRenderer
    */
   constructor() {
     super("renderer");
@@ -27,7 +27,7 @@ class DefaultGridRenderer extends ISystem {
     this._hexGroup = new Group();
 
     // Create a Symbol for the hex path to place for every tile
-    let path = new Path.RegularPolygon(new Point(0, 0), 6, DefaultGridRenderer.HEX_SIZE);
+    let path = new Path.RegularPolygon(new Point(0, 0), 6, GridRenderer.HEX_SIZE);
     path.style = Theme.current.defaultHexStyle;
     let hexSymbol = new Symbol(path);
 
@@ -35,20 +35,20 @@ class DefaultGridRenderer extends ISystem {
     tiles.forEach((tile) => {
       let coord = tile.get("coord");
       let { x, y } = coord;
-      ({x, y} = HexGrid.coordToPixel(coord, DefaultGridRenderer.HEX_SIZE));
+      ({x, y} = HexGrid.coordToPixel(coord, GridRenderer.HEX_SIZE));
       let instance = hexSymbol.place(new Point(x, y).add(view.center));
       this._hexGroup.addChild(instance);
     });
   }
 
   /**
-   * Called once per tick. No-op for DefaultGridRenderer.
+   * Called once per tick. No-op for GridRenderer.
    * @param {App} app - the currently running GS app
    */
   update(app) {
   }
 }
 
-DefaultGridRenderer.HEX_SIZE = 12;
+GridRenderer.HEX_SIZE = 12;
 
-export default DefaultGridRenderer;
+export default GridRenderer;

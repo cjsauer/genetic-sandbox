@@ -1,14 +1,14 @@
-import DefaultPlantRenderer from "../../../../src/modules/systems/renderers/DefaultPlantRenderer";
+import PlantRenderer from "../../../../src/modules/systems/renderers/PlantRenderer";
 import Coord from "../../../../src/modules/components/Coord";
 import HexGrid from "../../../../src/modules/grid/HexGrid";
 import { expect } from "chai";
 import { stub, spy } from "sinon";
 
-describe("DefaultPlantRenderer", () => {
+describe("PlantRenderer", () => {
   let sys, grid, paper, app;
 
   beforeEach(() => {
-    sys = new DefaultPlantRenderer();
+    sys = new PlantRenderer();
     grid = new HexGrid(1);
 
     // Stub out the dependencies

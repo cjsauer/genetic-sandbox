@@ -13,8 +13,8 @@ import HexGrid from "./modules/grid/HexGrid";
 // Import all systems
 import PlantGenerator from "./modules/systems/generators/PlantGenerator";
 import BackgroundRenderer from "./modules/systems/renderers/BackgroundRenderer";
-import DefaultGridRenderer from "./modules/systems/renderers/DefaultGridRenderer";
-import DefaultPlantRenderer from "./modules/systems/renderers/DefaultPlantRenderer";
+import GridRenderer from "./modules/systems/renderers/GridRenderer";
+import PlantRenderer from "./modules/systems/renderers/PlantRenderer";
 
 // Export the GS bootstrapping function
 window.GeneticSandbox = function (canvas) {
@@ -45,8 +45,8 @@ window.GeneticSandbox = function (canvas) {
 
     // Renderers
     new BackgroundRenderer(),
-    new DefaultGridRenderer(),
-    new DefaultPlantRenderer()
+    new GridRenderer(),
+    new PlantRenderer()
   ];
 
   // Create the universe!
