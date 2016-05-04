@@ -5,7 +5,7 @@ import HexGrid from "../../grid/HexGrid";
 import _ from "underscore";
 
 /**
- * Renders plants for tiles that contain a vegetation component
+ * Renders plants for all tiles that contain a plant component
  */
 class DefaultPlantRenderer extends ISystem {
   /**
@@ -44,30 +44,30 @@ class DefaultPlantRenderer extends ISystem {
   }
 
   /**
-   * Renders a plant graphic for every tile that contains a vegetation component,
-   * and removing plant graphics for tiles that no longer contain vegetation
+   * Renders a plant graphic for every tile that contains a plant component,
+   * and removes plant graphics for tiles that no longer have vegetation
    * @param {App} app - the currently running GS app
    */
   update(app) {
     const { Point, view } = app.paper;
 
-    let vegetationTiles = app.grid.getTilesByComponent("vegetation");
-    let vegetationGraphicTiles = app.grid.getTilesByComponent("!vegetation");
-    let tilesThatNeedGraphicAdded = _.difference(vegetationTiles, vegetationGraphicTiles);
-    let tilesThatNeedGraphicRemoved = _.difference(vegetationGraphicTiles, vegetationTiles);
+    let plantTiles = app.grid.getTilesByComponent("plant");
+    let plantGraphicTiles = app.grid.getTilesByComponent("!plant");
+    let tilesThatNeedGraphicAdded = _.difference(plantTiles, plantGraphicTiles);
+    let tilesThatNeedGraphicRemoved = _.difference(plantGraphicTiles, plantTiles);
 
     // Add a plant graphic to every tile that needs one
     tilesThatNeedGraphicAdded.forEach((tile) => {
       let coord = tile.get("coord");
       let { x, y } = HexGrid.coordToPixel(coord, DefaultGridRenderer.HEX_SIZE);
       let instance = this._plantSymbol.place(new Point(x, y).add(view.center));
-      tile.set("!vegetation", instance);
+      tile.set("!plant", instance);
     });
 
-    // Remove plant graphics from tiles that no longer contain vegetation
+    // Remove plant graphics from tiles that no longer contain plant
     tilesThatNeedGraphicRemoved.forEach((tile) => {
-      tile.get("!vegetation").remove();
-      tile.delete("!vegetation");
+      tile.get("!plant").remove();
+      tile.delete("!plant");
     });
   }
 }

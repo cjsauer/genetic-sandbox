@@ -1,7 +1,7 @@
 /**
  * Components are objects stored inside of [Tiles]{@link Tile} that contain
  * arbitrary data, be it plant data, creature data, tile coordinates, etc.
- * @see Tile
+ * @see {@link Tile}
  */
 class Component {
   /**
@@ -48,7 +48,6 @@ class Component {
  * Restores a component object from its constructor and data, both of which can
  * be pulled from the JSON string resulting from previously calling serialize()
  * on the component.
- * @private
  * @param {Object} Ctor - the constructor that will be used to instantiate
  * the component
  * @param {Object} data - the fields for this component gathered from the JSON
