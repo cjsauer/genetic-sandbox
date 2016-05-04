@@ -1,3 +1,5 @@
+import Theme from "./themes/Theme";
+
 /**
  * The entry point and hub of the entire application
  * @see {@link HexGrid}
@@ -48,15 +50,14 @@ class App {
     this.systems.forEach((system) => {
       system.update(this);
     });
-    this.paper.view.draw();
   }
 
   /**
    * Kicks off the processing loop to continously update all systems
    */
   run() {
-    this._timer = setInterval(this.update.bind(this), 1000);
-    this.update();
+    this._timer = setInterval(this._tick.bind(this), 1000);
+    this._tick();
   }
 
   /**
@@ -66,6 +67,30 @@ class App {
     if (this._timer) {
       clearInterval(this._timer);
     }
+  }
+
+  /**
+   * Draws the background
+   * @returns {Paper.Path} background rectangle path
+   */
+  _drawBackground() {
+    let viewSize = this.paper.view.size;
+    return new this.paper.Path.Rectangle({
+      from: [0, 0],
+      to: [viewSize.width, viewSize.height],
+      style: Theme.current.backgroundStyle
+    });
+  }
+
+  /**
+   * Moves the simulation forward by one full tick
+   * @private
+   */
+  _tick() {
+    this.paper.project.clear();
+    this._drawBackground();
+    this.update();
+    this.paper.view.draw();
   }
 }
 

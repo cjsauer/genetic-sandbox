@@ -24,8 +24,7 @@ describe("DefaultGridRenderer", () => {
       }),
       Color: stub(),
       Group: stub().returns({
-        addChild: stub(),
-        position: {}
+        addChild: stub()
       }),
       Layer: stub().returns({
         addChild: stub()
@@ -46,7 +45,7 @@ describe("DefaultGridRenderer", () => {
   });
 
   describe("initialize", () => {
-    it("should fetch all tiles", () => {
+    it("should cache a reference to all tiles", () => {
       sys.initialize(app);
       expect(grid.getTiles.calledOnce).to.be.true;
     });
@@ -54,7 +53,7 @@ describe("DefaultGridRenderer", () => {
     it("should use a symbol to create a single hex path instance", () => {
       sys.initialize(app);
       expect(paper.Path.RegularPolygon.calledOnce).to.be.true;
-      expect(paper.Symbol.calledWith(paper.Path.RegularPolygon())).to.be.true;
+      expect(paper.Symbol.calledOnce).to.be.true;
     });
 
     it("should place the symbol for each hex and add them to a group", () => {
@@ -69,11 +68,6 @@ describe("DefaultGridRenderer", () => {
       expect(paper.Symbol().place.callCount).to.equal(grid.getTiles().length);
       expect(sys._hexGroup.addChild.callCount).to.equal(grid.getTiles().length);
     });
-
-    it("should render the grid on a new layer", () => {
-      sys.initialize(app);
-      expect(paper.Layer.calledWithNew()).to.be.true;
-    });
   });
 
   describe("update", () => {
@@ -86,6 +80,12 @@ describe("DefaultGridRenderer", () => {
       sys.update(app);
       sys.update(app);
       expect(app.grid.getTiles.callCount).to.equal(1); // 1 call by initialize
+    });
+
+    it("should render the grid on a new layer", () => {
+      sys.update(app);
+      expect(paper.Layer.calledWithNew()).to.be.true;
+      expect(paper.Layer().addChild.calledWith(sys._hexGroup)).to.be.true;
     });
   });
 });

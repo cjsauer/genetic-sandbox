@@ -2,7 +2,6 @@ import ISystem from "../ISystem";
 import Theme from "../../themes/Theme";
 import DefaultGridRenderer from "./DefaultGridRenderer";
 import HexGrid from "../../grid/HexGrid";
-import _ from "underscore";
 
 /**
  * Renders plants for tiles that contain a vegetation component
@@ -20,54 +19,39 @@ class DefaultPlantRenderer extends ISystem {
    * @param {App} app - the currently running GS app
    */
   initialize(app) {
-    const { Layer, Group, Path, Symbol } = app.paper;
+    const { Group, Path, Symbol } = app.paper;
 
-    // Make a new layer and group for plants
-    this._plantLayer = new Layer();
+    // Build out the plant graphic and group it as a single item
 
-    // Build out the plant graphic and symbolize it
-    let petals = new Group();
-    let petalCount = 4;
-    let petalWidth = 2;
-    let petalHeight = 12;
-    for (let i = 0; i < petalCount; i++) {
-      let petal = new Path.Line({
+    let blades = new Group();
+    let bladeCount = 4;
+    let bladeWidth = 2;
+    let bladeHeight = 12;
+    for (let i = 0; i < bladeCount; i++) {
+      let blade = new Path.Line({
         from: [0, 0],
-        to: [0, petalHeight],
+        to: [0, bladeHeight],
         strokeColor: Theme.current.defaultPlantColor,
-        strokeWidth: petalWidth
+        strokeWidth: bladeWidth
       });
-      petal.rotate(i * 180 / petalCount);
-      petals.addChild(petal);
+      blade.rotate(i * 180 / bladeCount);
+      blades.addChild(blade);
     }
-    this._plantSymbol = new Symbol(petals);
+    this._plant = new Symbol(blades);
   }
 
   /**
-   * Renders a plant graphic for every tile that contains a vegetation component,
-   * and removing plant graphics for tiles that no longer contain vegetation
+   * Renders a plant graphic for every tile that contains a vegetation component
    * @param {App} app - the currently running GS app
    */
   update(app) {
-    const { Point, view } = app.paper;
+    const { Layer, Point, view } = app.paper;
+    let plantLayer = new Layer(); // eslint-disable-line
 
-    let vegetationTiles = app.grid.getTilesByComponent("vegetation");
-    let vegetationGraphicTiles = app.grid.getTilesByComponent("!vegetation");
-    let tilesThatNeedGraphicAdded = _.difference(vegetationTiles, vegetationGraphicTiles);
-    let tilesThatNeedGraphicRemoved = _.difference(vegetationGraphicTiles, vegetationTiles);
-
-    // Add a plant graphic to every tile that needs one
-    tilesThatNeedGraphicAdded.forEach((tile) => {
+    app.grid.getTilesByComponent("vegetation").forEach((tile) => {
       let coord = tile.get("coord");
       let { x, y } = HexGrid.coordToPixel(coord, DefaultGridRenderer.HEX_SIZE);
-      let instance = this._plantSymbol.place(new Point(x, y).add(view.center));
-      tile.set("!vegetation", instance);
-    });
-
-    // Remove plant graphics from tiles that no longer contain vegetation
-    tilesThatNeedGraphicRemoved.forEach((tile) => {
-      tile.get("!vegetation").remove();
-      tile.delete("!vegetation");
+      this._plant.place(new Point(x, y).add(view.center));
     });
   }
 }

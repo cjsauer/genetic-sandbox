@@ -76,33 +76,66 @@ describe("App", () => {
   });
 
   describe("run and stop", () => {
-    let stubSetInterval, stubClearInterval;
+    let stubSet, stubClear;
 
     beforeEach(() => {
-      stubSetInterval = stub(global, "setInterval").returns({});
-      stubClearInterval = stub(global, "clearInterval");
+      stubSet = stub(global, "setInterval").returns({});
+      stubClear = stub(global, "clearInterval");
     });
 
     afterEach(() => {
-      stubSetInterval.restore();
-      stubClearInterval.restore();
+      stubSet.restore();
+      stubClear.restore();
     });
 
     it("should start an interval timer to tick the simulation", () => {
       app.run();
       expect(app._timer).to.be.ok;
-      expect(stubSetInterval.calledOnce).to.be.true;
+      expect(stubSet.calledOnce).to.be.true;
     });
 
     it("should clear the previously set interval", () => {
       app.run();
       app.stop();
-      expect(stubClearInterval.calledWith(app._timer)).to.be.true;
+      expect(stubClear.calledWith(app._timer)).to.be.true;
     });
 
     it("should do nothing if no timer is set", () => {
       app.stop();
-      expect(stubClearInterval.called).to.be.false;
+      expect(stubClear.called).to.be.false;
+    });
+  });
+
+  describe("_drawBackground", () => {
+    it("should draw the background", () => {
+      app._drawBackground();
+      expect(app.paper.Path.Rectangle.calledOnce).to.be.true;
+    });
+  });
+
+  describe("_tick", () => {
+    it("should clear the scene", () => {
+      app._tick();
+      expect(app.paper.project.clear.calledOnce).to.be.true;
+    });
+
+    it("should call update", () => {
+      let updateSpy = spy(app, "update");
+      app._tick();
+      updateSpy.restore();
+      expect(updateSpy.calledOnce).to.be.true;
+    });
+
+    it("should call _drawBackground", () => {
+      let drawSpy = spy(app, "_drawBackground");
+      app._tick();
+      drawSpy.restore();
+      expect(drawSpy.calledOnce).to.be.true;
+    });
+
+    it("should draw the view", () => {
+      app._tick();
+      expect(app.paper.view.draw.calledOnce).to.be.true;
     });
   });
 });
