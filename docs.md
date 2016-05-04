@@ -17,6 +17,9 @@ arbitrary data, be it plant data, creature data, tile coordinates, etc.</p>
 <dt><a href="#Coord">Coord</a></dt>
 <dd><p>A two dimensional coordinate of x and y</p>
 </dd>
+<dt><a href="#Plant">Plant</a></dt>
+<dd><p>An edible plant containing energy</p>
+</dd>
 <dt><a href="#HexGrid">HexGrid</a></dt>
 <dd><p>A 2D, hexagonal grid implementation with axial coordinate system.
 Implementation details can be found <a href="http://goo.gl/nLO6sN">here</a>.</p>
@@ -45,7 +48,7 @@ containing initialize() and update() functions that operate in some way on
 <a href="#Tile">Tiles</a> within the <a href="#HexGrid">HexGrid</a>.</p>
 </dd>
 <dt><a href="#PlantGenerator">PlantGenerator</a></dt>
-<dd><p>Generates initial vegetation</p>
+<dd><p>Generates initial plant life, placing Plant components into Tiles</p>
 </dd>
 <dt><a href="#BackgroundRenderer">BackgroundRenderer</a></dt>
 <dd><p>Renders the background</p>
@@ -54,7 +57,7 @@ containing initialize() and update() functions that operate in some way on
 <dd><p>Used to draw a hexagonal border around all tiles in the grid</p>
 </dd>
 <dt><a href="#DefaultPlantRenderer">DefaultPlantRenderer</a></dt>
-<dd><p>Renders plants for tiles that contain a vegetation component</p>
+<dd><p>Renders plants for all tiles that contain a plant component</p>
 </dd>
 <dt><a href="#MultiStringHashMap">MultiStringHashMap</a></dt>
 <dd><p>A key/value store where keys can be a single string, or an array of strings</p>
@@ -157,11 +160,14 @@ Components are objects stored inside of [Tiles](#Tile) that contain
 arbitrary data, be it plant data, creature data, tile coordinates, etc.
 
 **Kind**: global class  
-**See**: Tile  
+**See**: [Tile](#Tile)  
 
 * [Component](#Component)
     * [new Component()](#new_Component_new)
-    * [.serialize([blacklist])](#Component+serialize) ⇒ <code>string</code>
+    * _instance_
+        * [.serialize([blacklist])](#Component+serialize) ⇒ <code>string</code>
+    * _static_
+        * [.restore(Ctor, data)](#Component.restore) ⇒ <code>[Component](#Component)</code>
 
 <a name="new_Component_new"></a>
 
@@ -189,6 +195,22 @@ let coord = new Coord(1, 2);
 coord.serialize() // { ctor: "Coord", data: { x: 1, y: 2}}
 coord.serialize(["y"]) // { ctor: "Coord", data: { x: 1 }}
 ```
+<a name="Component.restore"></a>
+
+### Component.restore(Ctor, data) ⇒ <code>[Component](#Component)</code>
+Restores a component object from its constructor and data, both of which can
+be pulled from the JSON string resulting from previously calling serialize()
+on the component.
+
+**Kind**: static method of <code>[Component](#Component)</code>  
+**Returns**: <code>[Component](#Component)</code> - the restored Component object as it existed at
+its time of serialization  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| Ctor | <code>Object</code> | the constructor that will be used to instantiate the component |
+| data | <code>Object</code> | the fields for this component gathered from the JSON string by previously calling serialize() |
+
 <a name="Coord"></a>
 
 ## Coord
@@ -232,6 +254,34 @@ x value
 y value
 
 **Kind**: instance property of <code>[Coord](#Coord)</code>  
+**Default**: <code>0</code>  
+<a name="Plant"></a>
+
+## Plant
+An edible plant containing energy
+
+**Kind**: global class  
+
+* [Plant](#Plant)
+    * [new Plant([energy])](#new_Plant_new)
+    * [.energy](#Plant+energy) : <code>number</code>
+
+<a name="new_Plant_new"></a>
+
+### new Plant([energy])
+Creates a new plant with the given energy amount
+
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [energy] | <code>number</code> | <code>0</code> | initial energy stored in this plant |
+
+<a name="Plant+energy"></a>
+
+### plant.energy : <code>number</code>
+Energy stored in this plant
+
+**Kind**: instance property of <code>[Plant](#Plant)</code>  
 **Default**: <code>0</code>  
 <a name="HexGrid"></a>
 
@@ -388,6 +438,7 @@ A Tile is a collection of components (data) representing the state at a
 specific place in a grid
 
 **Kind**: global class  
+**See**: [Component](#Component)  
 
 * [Tile](#Tile)
     * [new Tile([initialComponents])](#new_Tile_new)
@@ -817,9 +868,10 @@ Called once per tick to update the simulation
 <a name="PlantGenerator"></a>
 
 ## PlantGenerator
-Generates initial vegetation
+Generates initial plant life, placing Plant components into Tiles
 
 **Kind**: global class  
+**See**: [Plant](#Plant)  
 
 * [PlantGenerator](#PlantGenerator)
     * [new PlantGenerator()](#new_PlantGenerator_new)
@@ -834,7 +886,7 @@ Constructs a new PlantGenerator
 <a name="PlantGenerator+initialize"></a>
 
 ### plantGenerator.initialize(app)
-Seeds the world with vegetation
+Seeds the world with plants
 
 **Kind**: instance method of <code>[PlantGenerator](#PlantGenerator)</code>  
 
@@ -934,7 +986,7 @@ Called once per tick. No-op for DefaultGridRenderer.
 <a name="DefaultPlantRenderer"></a>
 
 ## DefaultPlantRenderer
-Renders plants for tiles that contain a vegetation component
+Renders plants for all tiles that contain a plant component
 
 **Kind**: global class  
 
@@ -962,8 +1014,8 @@ Prepares the system for rendering plant graphics
 <a name="DefaultPlantRenderer+update"></a>
 
 ### defaultPlantRenderer.update(app)
-Renders a plant graphic for every tile that contains a vegetation component,
-and removing plant graphics for tiles that no longer contain vegetation
+Renders a plant graphic for every tile that contains a plant component,
+and removes plant graphics for tiles that no longer have vegetation
 
 **Kind**: instance method of <code>[DefaultPlantRenderer](#DefaultPlantRenderer)</code>  
 
