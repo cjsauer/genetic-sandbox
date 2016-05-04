@@ -10,6 +10,10 @@ permalink: /docs/
 <dt><a href="#App">App</a></dt>
 <dd><p>The entry point and hub of the entire application</p>
 </dd>
+<dt><a href="#Component">Component</a></dt>
+<dd><p>Components are objects stored inside of <a href="#Tile">Tiles</a> that contain
+arbitrary data, be it plant data, creature data, tile coordinates, etc.</p>
+</dd>
 <dt><a href="#Coord">Coord</a></dt>
 <dd><p>A two dimensional coordinate of x and y</p>
 </dd>
@@ -146,6 +150,45 @@ Kicks off the processing loop to continously update all systems
 Stops the processing loop, essentially pausing the entire simulation
 
 **Kind**: instance method of <code>[App](#App)</code>  
+<a name="Component"></a>
+
+## Component
+Components are objects stored inside of [Tiles](#Tile) that contain
+arbitrary data, be it plant data, creature data, tile coordinates, etc.
+
+**Kind**: global class  
+**See**: Tile  
+
+* [Component](#Component)
+    * [new Component()](#new_Component_new)
+    * [.serialize([blacklist])](#Component+serialize) ⇒ <code>string</code>
+
+<a name="new_Component_new"></a>
+
+### new Component()
+Component isn't instantiable directly, but should be extended and its
+methods overridden by a concrete subclass.
+
+<a name="Component+serialize"></a>
+
+### component.serialize([blacklist]) ⇒ <code>string</code>
+Serializes this component to JSON with an optional array of blacklisted
+fields that will not be included in the output
+
+**Kind**: instance method of <code>[Component](#Component)</code>  
+**Returns**: <code>string</code> - JSON string  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [blacklist] | <code>Array.&lt;string&gt;</code> | keys in this list will be excluded from the JSON string |
+
+**Example**  
+
+```js
+let coord = new Coord(1, 2);
+coord.serialize() // { ctor: "Coord", data: { x: 1, y: 2}}
+coord.serialize(["y"]) // { ctor: "Coord", data: { x: 1 }}
+```
 <a name="Coord"></a>
 
 ## Coord
