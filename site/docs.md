@@ -167,7 +167,8 @@ arbitrary data, be it plant data, creature data, tile coordinates, etc.
     * _instance_
         * [.serialize([blacklist])](#Component+serialize) ⇒ <code>string</code>
     * _static_
-        * [.restore(Ctor, data)](#Component.restore) ⇒ <code>[Component](#Component)</code>
+        * [.register(ctor)](#Component.register)
+        * [.restore(json)](#Component.restore) ⇒ <code>[Component](#Component)</code>
 
 <a name="new_Component_new"></a>
 
@@ -195,12 +196,23 @@ let coord = new Coord(1, 2);
 coord.serialize() // '{"ctor":"Coord","data":{"x":1,"y":2}}'
 coord.serialize(["y"]) // '{"ctor":"Coord","data":{"x":1}}'
 ```
+<a name="Component.register"></a>
+
+### Component.register(ctor)
+Registers the given constructor so that it can later be properly restored
+from JSON using Component.restore()
+
+**Kind**: static method of <code>[Component](#Component)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| ctor | <code>function</code> | constructor function for a subclass of Component |
+
 <a name="Component.restore"></a>
 
-### Component.restore(Ctor, data) ⇒ <code>[Component](#Component)</code>
-Restores a component object from its constructor and data, both of which can
-be pulled from the JSON string resulting from previously calling serialize()
-on the component.
+### Component.restore(json) ⇒ <code>[Component](#Component)</code>
+Restores a component object from its JSON string, obtained by originally
+calling serialize() on that component
 
 **Kind**: static method of <code>[Component](#Component)</code>  
 **Returns**: <code>[Component](#Component)</code> - the restored Component object as it existed at
@@ -208,8 +220,7 @@ its time of serialization
 
 | Param | Type | Description |
 | --- | --- | --- |
-| Ctor | <code>Object</code> | the constructor that will be used to instantiate the component |
-| data | <code>Object</code> | the fields for this component gathered from the JSON string by previously calling serialize() |
+| json | <code>string</code> | component's JSON string |
 
 <a name="Coord"></a>
 

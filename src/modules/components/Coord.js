@@ -33,4 +33,6 @@ class Coord extends Component {
   }
 }
 
+Component.register(Coord);
+
 export default Coord;

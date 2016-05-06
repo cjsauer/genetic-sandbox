@@ -27,6 +27,11 @@ describe("Component", () => {
     expect(() => new Component()).to.throw(TypeError);
   });
 
+  it("can register constructors of subclasses for use in restoration", () => {
+    Component.register(PhonyComponent);
+    expect(Component._constructors["PhonyComponent"]).to.eql(PhonyComponent);
+  });
+
   describe("serialize", () => {
     it("should output JSON for arbitrary subclasses", () => {
       const json = phony.serialize();
@@ -42,8 +47,7 @@ describe("Component", () => {
   describe("restore", () => {
     it("should restore the original component and its methods", () => {
       const json = phony.serialize();
-      const { data } = JSON.parse(json);
-      const restoredPhonyComponent = Component.restore(PhonyComponent, data);
+      const restoredPhonyComponent = Component.restore(json);
       expect(restoredPhonyComponent).to.eql(phony);
       expect(restoredPhonyComponent.e(4, 6)).to.equal(10);
       expect(restoredPhonyComponent.f()).to.equal("appleorange");

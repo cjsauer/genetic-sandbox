@@ -8,6 +8,10 @@ describe("Coord", () => {
     expect(coord instanceof Component).to.be.true;
   });
 
+  it("should register its constructor with Component", () => {
+    expect(Component._constructors["Coord"]).to.eql(Coord);
+  });
+
   it("should default to (0, 0) when instantiated with no arguments", () => {
     const coord = new Coord();
     expect(coord).to.be.ok;

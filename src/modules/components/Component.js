@@ -43,17 +43,31 @@ class Component {
 }
 
 /**
- * Restores a component object from its constructor and data, both of which can
- * be pulled from the JSON string resulting from previously calling serialize()
- * on the component.
- * @param {Object} Ctor - the constructor that will be used to instantiate
- * the component
- * @param {Object} data - the fields for this component gathered from the JSON
- * string by previously calling serialize()
+ * A hashmap of constructor functions currently registered
+ * @type {Object}
+ * @private
+ */
+Component._constructors = {};
+
+/**
+ * Registers the given constructor so that it can later be properly restored
+ * from JSON using Component.restore()
+ * @param {Function} ctor - constructor function for a subclass of Component
+ */
+Component.register = (ctor) => {
+  Component._constructors[ctor.name] = ctor;
+};
+
+/**
+ * Restores a component object from its JSON string, obtained by originally
+ * calling serialize() on that component
+ * @param {string} json - component's JSON string
  * @returns {Component} the restored Component object as it existed at
  * its time of serialization
  */
-Component.restore = (Ctor, data) => {
+Component.restore = (json) => {
+  const { ctor, data } = JSON.parse(json);
+  const Ctor = Component._constructors[ctor];
   let component = new Ctor();
   Object.keys(data).forEach((key) => {
     component[key] = data[key];

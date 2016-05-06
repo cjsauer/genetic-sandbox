@@ -21,4 +21,6 @@ class Plant extends Component {
   }
 }
 
+Component.register(Plant);
+
 export default Plant;
