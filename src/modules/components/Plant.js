@@ -2,6 +2,7 @@ import Component from "./Component";
 
 /**
  * An edible plant containing energy
+ * @extends Component
  */
 class Plant extends Component {
   /**

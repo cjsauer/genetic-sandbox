@@ -3,6 +3,7 @@ import Plant from "../../components/Plant";
 
 /**
  * Generates initial plant life, placing Plant components into Tiles
+ * @extends ISystem
  * @see {@link Plant}
  */
 class PlantGenerator extends ISystem {

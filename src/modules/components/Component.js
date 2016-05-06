@@ -5,8 +5,8 @@
  */
 class Component {
   /**
-   * Component isn't instantiable directly, but should be extended and its
-   * methods overridden by a concrete subclass.
+   * Component isn't instantiable directly, but should be extended by a
+   * concrete subclass.
    */
   constructor() {
     /* Prevent instantiation */
@@ -20,15 +20,13 @@ class Component {
    * fields that will not be included in the output
    * @example
    * let coord = new Coord(1, 2);
-   * coord.serialize() // { ctor: "Coord", data: { x: 1, y: 2}}
-   * coord.serialize(["y"]) // { ctor: "Coord", data: { x: 1 }}
-   * @param {string[]} [blacklist] - keys in this list will be excluded
+   * coord.serialize() // '{"ctor":"Coord","data":{"x":1,"y":2}}'
+   * coord.serialize(["y"]) // '{"ctor":"Coord","data":{"x":1}}'
+   * @param {string[]} [blacklist = []] - keys in this list will be excluded
    * from the JSON string
    * @returns {string} JSON string
    */
-  serialize(blacklist) {
-    blacklist = blacklist || [];
-
+  serialize(blacklist = []) {
     let output = {
       ctor: this.constructor.name,
       data: {}

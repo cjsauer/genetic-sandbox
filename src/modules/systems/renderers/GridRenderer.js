@@ -4,6 +4,7 @@ import HexGrid from "../../grid/HexGrid";
 
 /**
  * Used to draw a hexagonal border around all tiles in the grid
+ * @extends ISystem
  */
 class GridRenderer extends ISystem {
   /**

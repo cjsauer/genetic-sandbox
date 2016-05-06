@@ -2,6 +2,7 @@ import Component from "./Component";
 
 /**
  * A two dimensional coordinate of x and y
+ * @extends Component
  */
 class Coord extends Component {
 

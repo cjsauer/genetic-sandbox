@@ -3,6 +3,7 @@ import Theme from "../../themes/Theme";
 
 /**
  * Renders the background
+ * @extends ISystem
  */
 class BackgroundRenderer extends ISystem {
   /**

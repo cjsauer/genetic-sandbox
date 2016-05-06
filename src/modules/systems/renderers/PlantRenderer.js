@@ -5,7 +5,8 @@ import HexGrid from "../../grid/HexGrid";
 import _ from "underscore";
 
 /**
- * Renders plants for all tiles that contain a plant component
+ * Renders plants for all tiles that contain a Plant component
+ * @extends ISystem
  */
 class PlantRenderer extends ISystem {
   /**
@@ -44,7 +45,7 @@ class PlantRenderer extends ISystem {
   }
 
   /**
-   * Renders a plant graphic for every tile that contains a plant component,
+   * Renders a plant graphic for every tile that contains a Plant component,
    * and removes plant graphics for tiles that no longer have vegetation
    * @param {App} app - the currently running GS app
    */

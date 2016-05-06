@@ -21,23 +21,4 @@ describe("Coord", () => {
     expect(coord.x).to.equal(10);
     expect(coord.y).to.equal(12);
   });
-
-  describe("serialization", () => {
-    let coord;
-
-    beforeEach(() => {
-      coord = new Coord(2, 3);
-    });
-
-    it("should produce JSON", () => {
-      const json = coord.serialize();
-      expect(json).to.equal('{"ctor":"Coord","data":{"x":2,"y":3}}');
-    });
-
-    it("can be restored", () => {
-      const { data } = JSON.parse(coord.serialize());
-      const restoredCoord = Component.restore(Coord, data);
-      expect(restoredCoord).to.eql(coord);
-    });
-  });
 });
