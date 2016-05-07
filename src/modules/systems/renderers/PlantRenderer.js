@@ -2,7 +2,7 @@ import ISystem from "../ISystem";
 import Theme from "../../themes/Theme";
 import GridRenderer from "./GridRenderer";
 import HexGrid from "../../grid/HexGrid";
-import _ from "underscore";
+import _ from "lodash";
 
 /**
  * Renders plants for all tiles that contain a Plant component
@@ -54,21 +54,25 @@ class PlantRenderer extends ISystem {
 
     let plantTiles = app.grid.getTilesByComponent("plant");
     let plantGraphicTiles = app.grid.getTilesByComponent("!plant");
-    let tilesThatNeedGraphicAdded = _.difference(plantTiles, plantGraphicTiles);
-    let tilesThatNeedGraphicRemoved = _.difference(plantGraphicTiles, plantTiles);
+    let tilesOfInterest = _.xor(plantTiles, plantGraphicTiles);
 
-    // Add a plant graphic to every tile that needs one
-    tilesThatNeedGraphicAdded.forEach((tile) => {
-      let coord = tile.get("coord");
-      let { x, y } = HexGrid.coordToPixel(coord, GridRenderer.HEX_SIZE);
-      let instance = this._plantSymbol.place(new Point(x, y).add(view.center));
-      tile.set("!plant", instance);
-    });
-
-    // Remove plant graphics from tiles that no longer contain plant
-    tilesThatNeedGraphicRemoved.forEach((tile) => {
-      tile.get("!plant").remove();
-      tile.delete("!plant");
+    /* Tiles that contain both "plant" and "!plant" components are of no
+     * interest; there is a plant there and it has already been rendered.
+     * What we want is the symmetric difference, or plants that contain
+     * explicity either "plant" OR "!plant". Tiles that contain *only* "plant"
+     * need a graphic, and tiles that contain *only* "!plant" need the graphic
+     * removed. There's no plant there anymore!
+     */
+    tilesOfInterest.forEach((tile) => {
+      if (tile.hasComponent("plant")) {
+        let coord = tile.get("coord");
+        let { x, y } = HexGrid.coordToPixel(coord, GridRenderer.HEX_SIZE);
+        let instance = this._plantSymbol.place(new Point(x, y).add(view.center));
+        tile.set("!plant", instance);
+      } else {
+        tile.get("!plant").remove();
+        tile.delete("!plant");
+      }
     });
   }
 }

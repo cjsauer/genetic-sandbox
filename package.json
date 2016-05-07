@@ -29,8 +29,8 @@
   "homepage": "https://github.com/cjsauer/genetic-sandbox#readme",
   "dependencies": {
     "express": "^4.13.4",
+    "lodash": "^4.11.2",
     "paper": "^0.9.25",
-    "underscore": "^1.8.3",
     "wolfy87-eventemitter": "^4.3.0"
   },
   "devDependencies": {
