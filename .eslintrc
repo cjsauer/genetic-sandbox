@@ -11,6 +11,6 @@
     "rules": {
       "space-before-function-paren": 0,
       "semi": [2, "always"],
-      "quotes": [2, "double", "avoid-escape"]
+      "quotes": [2, "double", { avoidEscape: true, allowTemplateLiterals: true }]
     }
 }

@@ -1,7 +1,17 @@
-import Coord from "../../../src/modules/grid/Coord";
+import Coord from "../../../src/modules/components/Coord";
+import Component from "../../../src/modules/components/Component";
 import { expect } from "chai";
 
 describe("Coord", () => {
+  it("should extend Component", () => {
+    const coord = new Coord();
+    expect(coord instanceof Component).to.be.true;
+  });
+
+  it("should register its constructor with Component", () => {
+    expect(Component._constructors["Coord"]).to.eql(Coord);
+  });
+
   it("should default to (0, 0) when instantiated with no arguments", () => {
     const coord = new Coord();
     expect(coord).to.be.ok;

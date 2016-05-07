@@ -1,7 +1,10 @@
 import ISystem from "../ISystem";
+import Plant from "../../components/Plant";
 
 /**
- * Generates initial vegetation
+ * Generates initial plant life, placing Plant components into Tiles
+ * @extends ISystem
+ * @see {@link Plant}
  */
 class PlantGenerator extends ISystem {
   /**
@@ -12,7 +15,7 @@ class PlantGenerator extends ISystem {
   }
 
    /**
-    * Seeds the world with vegetation
+    * Seeds the world with plants
     * @param {App} app - the currently running GS app
     */
   initialize(app) {
@@ -20,7 +23,7 @@ class PlantGenerator extends ISystem {
     tiles.forEach((tile) => {
       let chance = Math.random();
       if (chance < PlantGenerator.VEGETATION_RATE) {
-        tile.set("vegetation", true);
+        tile.set("plant", new Plant(10));
       }
     });
   }

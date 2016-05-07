@@ -1,13 +1,13 @@
-import DefaultGridRenderer from "../../../../src/modules/systems/renderers/DefaultGridRenderer";
+import GridRenderer from "../../../../src/modules/systems/renderers/GridRenderer";
 import HexGrid from "../../../../src/modules/grid/HexGrid";
 import { expect } from "chai";
 import { stub, spy } from "sinon";
 
-describe("DefaultGridRenderer", () => {
+describe("GridRenderer", () => {
   let sys, grid, paper, app;
 
   beforeEach(() => {
-    sys = new DefaultGridRenderer();
+    sys = new GridRenderer();
     grid = new HexGrid(1);
     spy(grid, "getTiles");
 

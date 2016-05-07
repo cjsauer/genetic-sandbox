@@ -10,16 +10,23 @@ permalink: /docs/
 <dt><a href="#App">App</a></dt>
 <dd><p>The entry point and hub of the entire application</p>
 </dd>
-<dt><a href="#Coord">Coord</a></dt>
+<dt><a href="#Component">Component</a></dt>
+<dd><p>Components are objects stored inside of <a href="#Tile">Tiles</a> that contain
+arbitrary data, be it plant data, creature data, tile coordinates, etc.</p>
+</dd>
+<dt><a href="#Coord">Coord</a> ⇐ <code><a href="#Component">Component</a></code></dt>
 <dd><p>A two dimensional coordinate of x and y</p>
+</dd>
+<dt><a href="#Plant">Plant</a> ⇐ <code><a href="#Component">Component</a></code></dt>
+<dd><p>An edible plant containing energy</p>
 </dd>
 <dt><a href="#HexGrid">HexGrid</a></dt>
 <dd><p>A 2D, hexagonal grid implementation with axial coordinate system.
 Implementation details can be found <a href="http://goo.gl/nLO6sN">here</a>.</p>
 </dd>
 <dt><a href="#Tile">Tile</a></dt>
-<dd><p>A Tile is a collection of components (data) representing the state at a
-specific place in a grid</p>
+<dd><p>A Tile is a collection of named <a href="Components">Components</a> (data) representing
+the state at a specific place in a grid</p>
 </dd>
 <dt><a href="#TileComponentIndex">TileComponentIndex</a></dt>
 <dd><p>Builds an index of <a href="Tiles">Tiles</a> for fast lookup by component</p>
@@ -40,17 +47,17 @@ and a height</p>
 containing initialize() and update() functions that operate in some way on
 <a href="#Tile">Tiles</a> within the <a href="#HexGrid">HexGrid</a>.</p>
 </dd>
-<dt><a href="#PlantGenerator">PlantGenerator</a></dt>
-<dd><p>Generates initial vegetation</p>
+<dt><a href="#PlantGenerator">PlantGenerator</a> ⇐ <code><a href="#ISystem">ISystem</a></code></dt>
+<dd><p>Generates initial plant life, placing Plant components into Tiles</p>
 </dd>
-<dt><a href="#BackgroundRenderer">BackgroundRenderer</a></dt>
+<dt><a href="#BackgroundRenderer">BackgroundRenderer</a> ⇐ <code><a href="#ISystem">ISystem</a></code></dt>
 <dd><p>Renders the background</p>
 </dd>
-<dt><a href="#DefaultGridRenderer">DefaultGridRenderer</a></dt>
+<dt><a href="#GridRenderer">GridRenderer</a> ⇐ <code><a href="#ISystem">ISystem</a></code></dt>
 <dd><p>Used to draw a hexagonal border around all tiles in the grid</p>
 </dd>
-<dt><a href="#DefaultPlantRenderer">DefaultPlantRenderer</a></dt>
-<dd><p>Renders plants for tiles that contain a vegetation component</p>
+<dt><a href="#PlantRenderer">PlantRenderer</a> ⇐ <code><a href="#ISystem">ISystem</a></code></dt>
+<dd><p>Renders plants for all tiles that contain a Plant component</p>
 </dd>
 <dt><a href="#MultiStringHashMap">MultiStringHashMap</a></dt>
 <dd><p>A key/value store where keys can be a single string, or an array of strings</p>
@@ -146,17 +153,97 @@ Kicks off the processing loop to continously update all systems
 Stops the processing loop, essentially pausing the entire simulation
 
 **Kind**: instance method of <code>[App](#App)</code>  
+<a name="Component"></a>
+
+## Component
+Components are objects stored inside of [Tiles](#Tile) that contain
+arbitrary data, be it plant data, creature data, tile coordinates, etc.
+
+**Kind**: global class  
+**See**: [Tile](#Tile)  
+
+* [Component](#Component)
+    * [new Component()](#new_Component_new)
+    * _instance_
+        * [.serialize([blacklist])](#Component+serialize) ⇒ <code>string</code>
+    * _static_
+        * [.register(ctor)](#Component.register)
+        * [.restore(json)](#Component.restore) ⇒ <code>[Component](#Component)</code>
+
+<a name="new_Component_new"></a>
+
+### new Component()
+Component isn't instantiable directly, but should be extended by a
+concrete subclass.
+
+<a name="Component+serialize"></a>
+
+### component.serialize([blacklist]) ⇒ <code>string</code>
+Serializes this component to JSON with an optional array of blacklisted
+fields that will not be included in the output. This function will be
+called recursively for nested component instances.
+
+**Kind**: instance method of <code>[Component](#Component)</code>  
+**Returns**: <code>string</code> - JSON string  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [blacklist] | <code>Array.&lt;string&gt;</code> | <code>[]</code> | keys in this list will be excluded from the JSON string |
+
+**Example**  
+
+```js
+let coord = new Coord(1, 2);
+coord.serialize() // '{"ctor":"Coord","data":{"x":1,"y":2}}'
+coord.serialize(["y"]) // '{"ctor":"Coord","data":{"x":1}}'
+```
+<a name="Component.register"></a>
+
+### Component.register(ctor)
+Registers the given constructor so that it can later be properly restored
+from JSON using Component.restore()
+
+**Kind**: static method of <code>[Component](#Component)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| ctor | <code>function</code> | constructor function for a subclass of Component |
+
+<a name="Component.restore"></a>
+
+### Component.restore(json) ⇒ <code>[Component](#Component)</code>
+Restores a component object from its JSON string, obtained by originally
+calling serialize() on that component. Also restores nested components.
+
+**Kind**: static method of <code>[Component](#Component)</code>  
+**Returns**: <code>[Component](#Component)</code> - the restored Component object as it existed at
+its time of serialization  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| json | <code>string</code> | component's JSON string |
+
+**Example**  
+
+```js
+const coord = new Coord(5, 6);
+const restored = Component.restore(coord.serialize());
+coord.x === restored.x; // true
+coord.y === restored.y; // true
+```
 <a name="Coord"></a>
 
-## Coord
+## Coord ⇐ <code>[Component](#Component)</code>
 A two dimensional coordinate of x and y
 
 **Kind**: global class  
+**Extends:** <code>[Component](#Component)</code>  
 
-* [Coord](#Coord)
+* [Coord](#Coord) ⇐ <code>[Component](#Component)</code>
     * [new Coord([x], [y])](#new_Coord_new)
     * [.x](#Coord+x) : <code>number</code>
     * [.y](#Coord+y) : <code>number</code>
+    * [.serialize([blacklist])](#Component+serialize) ⇒ <code>string</code>
 
 <a name="new_Coord_new"></a>
 
@@ -190,6 +277,78 @@ y value
 
 **Kind**: instance property of <code>[Coord](#Coord)</code>  
 **Default**: <code>0</code>  
+<a name="Component+serialize"></a>
+
+### coord.serialize([blacklist]) ⇒ <code>string</code>
+Serializes this component to JSON with an optional array of blacklisted
+fields that will not be included in the output. This function will be
+called recursively for nested component instances.
+
+**Kind**: instance method of <code>[Coord](#Coord)</code>  
+**Returns**: <code>string</code> - JSON string  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [blacklist] | <code>Array.&lt;string&gt;</code> | <code>[]</code> | keys in this list will be excluded from the JSON string |
+
+**Example**  
+
+```js
+let coord = new Coord(1, 2);
+coord.serialize() // '{"ctor":"Coord","data":{"x":1,"y":2}}'
+coord.serialize(["y"]) // '{"ctor":"Coord","data":{"x":1}}'
+```
+<a name="Plant"></a>
+
+## Plant ⇐ <code>[Component](#Component)</code>
+An edible plant containing energy
+
+**Kind**: global class  
+**Extends:** <code>[Component](#Component)</code>  
+
+* [Plant](#Plant) ⇐ <code>[Component](#Component)</code>
+    * [new Plant([energy])](#new_Plant_new)
+    * [.energy](#Plant+energy) : <code>number</code>
+    * [.serialize([blacklist])](#Component+serialize) ⇒ <code>string</code>
+
+<a name="new_Plant_new"></a>
+
+### new Plant([energy])
+Creates a new plant with the given energy amount
+
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [energy] | <code>number</code> | <code>0</code> | initial energy stored in this plant |
+
+<a name="Plant+energy"></a>
+
+### plant.energy : <code>number</code>
+Energy stored in this plant
+
+**Kind**: instance property of <code>[Plant](#Plant)</code>  
+**Default**: <code>0</code>  
+<a name="Component+serialize"></a>
+
+### plant.serialize([blacklist]) ⇒ <code>string</code>
+Serializes this component to JSON with an optional array of blacklisted
+fields that will not be included in the output. This function will be
+called recursively for nested component instances.
+
+**Kind**: instance method of <code>[Plant](#Plant)</code>  
+**Returns**: <code>string</code> - JSON string  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [blacklist] | <code>Array.&lt;string&gt;</code> | <code>[]</code> | keys in this list will be excluded from the JSON string |
+
+**Example**  
+
+```js
+let coord = new Coord(1, 2);
+coord.serialize() // '{"ctor":"Coord","data":{"x":1,"y":2}}'
+coord.serialize(["y"]) // '{"ctor":"Coord","data":{"x":1}}'
+```
 <a name="HexGrid"></a>
 
 ## HexGrid
@@ -341,10 +500,11 @@ Converts a tile's coordinates to its pixel coordinates
 <a name="Tile"></a>
 
 ## Tile
-A Tile is a collection of components (data) representing the state at a
-specific place in a grid
+A Tile is a collection of named [Components](Components) (data) representing
+the state at a specific place in a grid
 
 **Kind**: global class  
+**See**: [Component](#Component)  
 
 * [Tile](#Tile)
     * [new Tile([initialComponents])](#new_Tile_new)
@@ -773,13 +933,16 @@ Called once per tick to update the simulation
 
 <a name="PlantGenerator"></a>
 
-## PlantGenerator
-Generates initial vegetation
+## PlantGenerator ⇐ <code>[ISystem](#ISystem)</code>
+Generates initial plant life, placing Plant components into Tiles
 
 **Kind**: global class  
+**Extends:** <code>[ISystem](#ISystem)</code>  
+**See**: [Plant](#Plant)  
 
-* [PlantGenerator](#PlantGenerator)
+* [PlantGenerator](#PlantGenerator) ⇐ <code>[ISystem](#ISystem)</code>
     * [new PlantGenerator()](#new_PlantGenerator_new)
+    * [.tag](#ISystem+tag) : <code>string</code>
     * [.initialize(app)](#PlantGenerator+initialize)
     * [.update(app)](#PlantGenerator+update)
 
@@ -788,12 +951,20 @@ Generates initial vegetation
 ### new PlantGenerator()
 Constructs a new PlantGenerator
 
+<a name="ISystem+tag"></a>
+
+### plantGenerator.tag : <code>string</code>
+Defines the role of this system. One of "renderer", "generator", or
+"processor".
+
+**Kind**: instance property of <code>[PlantGenerator](#PlantGenerator)</code>  
 <a name="PlantGenerator+initialize"></a>
 
 ### plantGenerator.initialize(app)
-Seeds the world with vegetation
+Seeds the world with plants
 
 **Kind**: instance method of <code>[PlantGenerator](#PlantGenerator)</code>  
+**Overrides:** <code>[initialize](#ISystem+initialize)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -805,6 +976,7 @@ Seeds the world with vegetation
 A no-op for generators
 
 **Kind**: instance method of <code>[PlantGenerator](#PlantGenerator)</code>  
+**Overrides:** <code>[update](#ISystem+update)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -812,13 +984,15 @@ A no-op for generators
 
 <a name="BackgroundRenderer"></a>
 
-## BackgroundRenderer
+## BackgroundRenderer ⇐ <code>[ISystem](#ISystem)</code>
 Renders the background
 
 **Kind**: global class  
+**Extends:** <code>[ISystem](#ISystem)</code>  
 
-* [BackgroundRenderer](#BackgroundRenderer)
+* [BackgroundRenderer](#BackgroundRenderer) ⇐ <code>[ISystem](#ISystem)</code>
     * [new BackgroundRenderer()](#new_BackgroundRenderer_new)
+    * [.tag](#ISystem+tag) : <code>string</code>
     * [.initialize(app)](#BackgroundRenderer+initialize)
     * [.update(app)](#BackgroundRenderer+update)
 
@@ -827,12 +1001,20 @@ Renders the background
 ### new BackgroundRenderer()
 Constructs a new BackgroundRenderer
 
+<a name="ISystem+tag"></a>
+
+### backgroundRenderer.tag : <code>string</code>
+Defines the role of this system. One of "renderer", "generator", or
+"processor".
+
+**Kind**: instance property of <code>[BackgroundRenderer](#BackgroundRenderer)</code>  
 <a name="BackgroundRenderer+initialize"></a>
 
 ### backgroundRenderer.initialize(app)
 Renders the background
 
 **Kind**: instance method of <code>[BackgroundRenderer](#BackgroundRenderer)</code>  
+**Overrides:** <code>[initialize](#ISystem+initialize)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -844,85 +1026,108 @@ Renders the background
 Called once per tick. No-op for BackgroundRenderer.
 
 **Kind**: instance method of <code>[BackgroundRenderer](#BackgroundRenderer)</code>  
+**Overrides:** <code>[update](#ISystem+update)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | app | <code>[App](#App)</code> | the currently running GS app |
 
-<a name="DefaultGridRenderer"></a>
+<a name="GridRenderer"></a>
 
-## DefaultGridRenderer
+## GridRenderer ⇐ <code>[ISystem](#ISystem)</code>
 Used to draw a hexagonal border around all tiles in the grid
 
 **Kind**: global class  
+**Extends:** <code>[ISystem](#ISystem)</code>  
 
-* [DefaultGridRenderer](#DefaultGridRenderer)
-    * [new DefaultGridRenderer()](#new_DefaultGridRenderer_new)
-    * [.initialize(app)](#DefaultGridRenderer+initialize)
-    * [.update(app)](#DefaultGridRenderer+update)
+* [GridRenderer](#GridRenderer) ⇐ <code>[ISystem](#ISystem)</code>
+    * [new GridRenderer()](#new_GridRenderer_new)
+    * [.tag](#ISystem+tag) : <code>string</code>
+    * [.initialize(app)](#GridRenderer+initialize)
+    * [.update(app)](#GridRenderer+update)
 
-<a name="new_DefaultGridRenderer_new"></a>
+<a name="new_GridRenderer_new"></a>
 
-### new DefaultGridRenderer()
-Constructs a new DefaultGridRenderer
+### new GridRenderer()
+Constructs a new GridRenderer
 
-<a name="DefaultGridRenderer+initialize"></a>
+<a name="ISystem+tag"></a>
 
-### defaultGridRenderer.initialize(app)
+### gridRenderer.tag : <code>string</code>
+Defines the role of this system. One of "renderer", "generator", or
+"processor".
+
+**Kind**: instance property of <code>[GridRenderer](#GridRenderer)</code>  
+<a name="GridRenderer+initialize"></a>
+
+### gridRenderer.initialize(app)
 Renders the grid
 
-**Kind**: instance method of <code>[DefaultGridRenderer](#DefaultGridRenderer)</code>  
+**Kind**: instance method of <code>[GridRenderer](#GridRenderer)</code>  
+**Overrides:** <code>[initialize](#ISystem+initialize)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | app | <code>[App](#App)</code> | the currently running GS app |
 
-<a name="DefaultGridRenderer+update"></a>
+<a name="GridRenderer+update"></a>
 
-### defaultGridRenderer.update(app)
-Called once per tick. No-op for DefaultGridRenderer.
+### gridRenderer.update(app)
+Called once per tick. No-op for GridRenderer.
 
-**Kind**: instance method of <code>[DefaultGridRenderer](#DefaultGridRenderer)</code>  
+**Kind**: instance method of <code>[GridRenderer](#GridRenderer)</code>  
+**Overrides:** <code>[update](#ISystem+update)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | app | <code>[App](#App)</code> | the currently running GS app |
 
-<a name="DefaultPlantRenderer"></a>
+<a name="PlantRenderer"></a>
 
-## DefaultPlantRenderer
-Renders plants for tiles that contain a vegetation component
+## PlantRenderer ⇐ <code>[ISystem](#ISystem)</code>
+Renders plants for all tiles that contain a Plant component
 
 **Kind**: global class  
+**Extends:** <code>[ISystem](#ISystem)</code>  
 
-* [DefaultPlantRenderer](#DefaultPlantRenderer)
-    * [new DefaultPlantRenderer()](#new_DefaultPlantRenderer_new)
-    * [.initialize(app)](#DefaultPlantRenderer+initialize)
-    * [.update(app)](#DefaultPlantRenderer+update)
+* [PlantRenderer](#PlantRenderer) ⇐ <code>[ISystem](#ISystem)</code>
+    * [new PlantRenderer()](#new_PlantRenderer_new)
+    * [.tag](#ISystem+tag) : <code>string</code>
+    * [.initialize(app)](#PlantRenderer+initialize)
+    * [.update(app)](#PlantRenderer+update)
 
-<a name="new_DefaultPlantRenderer_new"></a>
+<a name="new_PlantRenderer_new"></a>
 
-### new DefaultPlantRenderer()
-Constructs a new DefaultPlantRenderer
+### new PlantRenderer()
+Constructs a new PlantRenderer
 
-<a name="DefaultPlantRenderer+initialize"></a>
+<a name="ISystem+tag"></a>
 
-### defaultPlantRenderer.initialize(app)
+### plantRenderer.tag : <code>string</code>
+Defines the role of this system. One of "renderer", "generator", or
+"processor".
+
+**Kind**: instance property of <code>[PlantRenderer](#PlantRenderer)</code>  
+<a name="PlantRenderer+initialize"></a>
+
+### plantRenderer.initialize(app)
 Prepares the system for rendering plant graphics
 
-**Kind**: instance method of <code>[DefaultPlantRenderer](#DefaultPlantRenderer)</code>  
+**Kind**: instance method of <code>[PlantRenderer](#PlantRenderer)</code>  
+**Overrides:** <code>[initialize](#ISystem+initialize)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | app | <code>[App](#App)</code> | the currently running GS app |
 
-<a name="DefaultPlantRenderer+update"></a>
+<a name="PlantRenderer+update"></a>
 
-### defaultPlantRenderer.update(app)
-Renders a plant graphic for every tile that contains a vegetation component,
-and removing plant graphics for tiles that no longer contain vegetation
+### plantRenderer.update(app)
+Renders a plant graphic for every tile that contains a Plant component,
+and removes plant graphics for tiles that no longer have vegetation
 
-**Kind**: instance method of <code>[DefaultPlantRenderer](#DefaultPlantRenderer)</code>  
+**Kind**: instance method of <code>[PlantRenderer](#PlantRenderer)</code>  
+**Overrides:** <code>[update](#ISystem+update)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |

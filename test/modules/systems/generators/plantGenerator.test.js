@@ -1,5 +1,6 @@
 import PlantGenerator from "../../../../src/modules/systems/generators/PlantGenerator";
 import Tile from "../../../../src/modules/grid/Tile";
+import Plant from "../../../../src/modules/components/Plant";
 import { expect } from "chai";
 import { stub } from "sinon";
 
@@ -26,7 +27,7 @@ describe("PlantGenerator", () => {
   });
 
   describe("initialize", () => {
-    it("should distribute vegetation to tiles", () => {
+    it("should distribute plants to tiles", () => {
       // Stub out random number generation
       stub(Math, "random");
       Math.random.onCall(0).returns(0); // hit
@@ -40,9 +41,13 @@ describe("PlantGenerator", () => {
       Math.random.restore();
 
       let tilesWithVegetation = grid.getTiles().filter((tile) => {
-        return tile.hasComponent("vegetation");
+        return tile.hasComponent("plant");
       });
+
       expect(tilesWithVegetation).to.have.length(2);
+      tilesWithVegetation.forEach((tile) => {
+        expect(tile.get("plant") instanceof Plant).to.be.true;
+      });
     });
   });
 });

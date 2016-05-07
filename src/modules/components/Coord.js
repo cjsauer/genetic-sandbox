@@ -1,7 +1,10 @@
+import Component from "./Component";
+
 /**
  * A two dimensional coordinate of x and y
+ * @extends Component
  */
-class Coord {
+class Coord extends Component {
 
   /**
    * Constructs a new Coord with coordinates (x,y)
@@ -13,6 +16,7 @@ class Coord {
    * @param {number} [y=0] - y value
    */
   constructor(x = 0, y = 0) {
+    super();
     /**
      * x value
      * @type number
@@ -28,5 +32,7 @@ class Coord {
     this.y = y;
   }
 }
+
+Component.register(Coord);
 
 export default Coord;

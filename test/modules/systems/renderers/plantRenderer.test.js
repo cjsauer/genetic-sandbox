@@ -1,14 +1,14 @@
-import DefaultPlantRenderer from "../../../../src/modules/systems/renderers/DefaultPlantRenderer";
-import Coord from "../../../../src/modules/grid/Coord";
+import PlantRenderer from "../../../../src/modules/systems/renderers/PlantRenderer";
+import Coord from "../../../../src/modules/components/Coord";
 import HexGrid from "../../../../src/modules/grid/HexGrid";
 import { expect } from "chai";
 import { stub, spy } from "sinon";
 
-describe("DefaultPlantRenderer", () => {
+describe("PlantRenderer", () => {
   let sys, grid, paper, app;
 
   beforeEach(() => {
-    sys = new DefaultPlantRenderer();
+    sys = new PlantRenderer();
     grid = new HexGrid(1);
 
     // Stub out the dependencies
@@ -61,9 +61,9 @@ describe("DefaultPlantRenderer", () => {
   describe("update", () => {
     beforeEach(() => {
       sys.initialize(app);
-      grid.getTile(new Coord(0, 0)).set("vegetation", true);
-      grid.getTile(new Coord(1, 0)).set("vegetation", true);
-      grid.getTile(new Coord(0, 1)).set("vegetation", true);
+      grid.getTile(new Coord(0, 0)).set("plant", true);
+      grid.getTile(new Coord(1, 0)).set("plant", true);
+      grid.getTile(new Coord(0, 1)).set("plant", true);
     });
 
     it("should place and store a plant symbol for tiles with vegetation ONCE", () => {
@@ -71,24 +71,24 @@ describe("DefaultPlantRenderer", () => {
       sys.update(app);
       expect(Symbol().place.callCount).to.equal(3);
       expect(() => { sys.update(app); }).to.not.increase(Symbol().place, "callCount");
-      expect(grid.getTilesByComponent("!vegetation")).to.have.length(3);
+      expect(grid.getTilesByComponent("!plant")).to.have.length(3);
     });
 
     it("should remove plant symbols for tiles that no longer have vegetation", () => {
       const { Symbol } = app.paper;
       sys.update(app); // Create the vegeation graphics
 
-      // Remove vegetation from one of the tiles
-      let tile = grid.getTilesByComponent("vegetation")[0];
-      tile.delete("vegetation");
+      // Remove plant from one of the tiles
+      let tile = grid.getTilesByComponent("plant")[0];
+      tile.delete("plant");
 
       // Expect that the graphic was removed from both the scene and the tile
       let deleteSpy = spy(tile, "delete");
       sys.update(app);
       deleteSpy.restore();
       expect(Symbol().place().remove.calledOnce).to.be.true;
-      expect(deleteSpy.calledWith("!vegetation")).to.be.true;
-      expect(tile.get("!vegetation")).to.be.undefined;
+      expect(deleteSpy.calledWith("!plant")).to.be.true;
+      expect(tile.get("!plant")).to.be.undefined;
     });
   });
 });
