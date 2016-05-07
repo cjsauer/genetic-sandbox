@@ -17,7 +17,8 @@ class Component {
 
   /**
    * Serializes this component to JSON with an optional array of blacklisted
-   * fields that will not be included in the output
+   * fields that will not be included in the output. This function will be
+   * called recursively for nested component instances.
    * @example
    * let coord = new Coord(1, 2);
    * coord.serialize() // '{"ctor":"Coord","data":{"x":1,"y":2}}'
@@ -34,7 +35,13 @@ class Component {
 
     Object.keys(this).forEach((key) => {
       if (!blacklist.includes(key)) {
-        output.data[key] = this[key];
+        let member = this[key];
+        // Drill down into nested component instances recursively
+        if (member instanceof Component) {
+          output.data[key] = JSON.parse(member.serialize(blacklist));
+        } else {
+          output.data[key] = member;
+        }
       }
     });
 
@@ -60,7 +67,12 @@ Component.register = (ctor) => {
 
 /**
  * Restores a component object from its JSON string, obtained by originally
- * calling serialize() on that component
+ * calling serialize() on that component. Also restores nested components.
+ * @example
+ * const coord = new Coord(5, 6);
+ * const restored = Component.restore(coord.serialize());
+ * coord.x === restored.x; // true
+ * coord.y === restored.y; // true
  * @param {string} json - component's JSON string
  * @returns {Component} the restored Component object as it existed at
  * its time of serialization
@@ -70,7 +82,18 @@ Component.restore = (json) => {
   const Ctor = Component._constructors[ctor];
   let component = new Ctor();
   Object.keys(data).forEach((key) => {
-    component[key] = data[key];
+    let member = data[key];
+    // Restore nested components. This is admittedly a bit of a "hack".
+    // Basically, if it looks like a serialzed component, and it is contained
+    // in the registered constructors map, try to restore it as a Component
+    // instance.
+    if (member.hasOwnProperty("ctor") &&
+        member.hasOwnProperty("data") &&
+        Component._constructors.hasOwnProperty(member.ctor)) {
+      component[key] = Component.restore(JSON.stringify(member));
+    } else {
+      component[key] = data[key];
+    }
   });
   return component;
 };

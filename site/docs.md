@@ -180,7 +180,8 @@ concrete subclass.
 
 ### component.serialize([blacklist]) ⇒ <code>string</code>
 Serializes this component to JSON with an optional array of blacklisted
-fields that will not be included in the output
+fields that will not be included in the output. This function will be
+called recursively for nested component instances.
 
 **Kind**: instance method of <code>[Component](#Component)</code>  
 **Returns**: <code>string</code> - JSON string  
@@ -212,7 +213,7 @@ from JSON using Component.restore()
 
 ### Component.restore(json) ⇒ <code>[Component](#Component)</code>
 Restores a component object from its JSON string, obtained by originally
-calling serialize() on that component
+calling serialize() on that component. Also restores nested components.
 
 **Kind**: static method of <code>[Component](#Component)</code>  
 **Returns**: <code>[Component](#Component)</code> - the restored Component object as it existed at
@@ -222,6 +223,14 @@ its time of serialization
 | --- | --- | --- |
 | json | <code>string</code> | component's JSON string |
 
+**Example**  
+
+```js
+const coord = new Coord(5, 6);
+const restored = Component.restore(coord.serialize());
+coord.x === restored.x; // true
+coord.y === restored.y; // true
+```
 <a name="Coord"></a>
 
 ## Coord ⇐ <code>[Component](#Component)</code>
@@ -272,7 +281,8 @@ y value
 
 ### coord.serialize([blacklist]) ⇒ <code>string</code>
 Serializes this component to JSON with an optional array of blacklisted
-fields that will not be included in the output
+fields that will not be included in the output. This function will be
+called recursively for nested component instances.
 
 **Kind**: instance method of <code>[Coord](#Coord)</code>  
 **Returns**: <code>string</code> - JSON string  
@@ -322,7 +332,8 @@ Energy stored in this plant
 
 ### plant.serialize([blacklist]) ⇒ <code>string</code>
 Serializes this component to JSON with an optional array of blacklisted
-fields that will not be included in the output
+fields that will not be included in the output. This function will be
+called recursively for nested component instances.
 
 **Kind**: instance method of <code>[Plant](#Plant)</code>  
 **Returns**: <code>string</code> - JSON string  
