@@ -1,3 +1,5 @@
+import Random from "random-js";
+
 /**
  * The entry point and hub of the entire application
  * @see {@link HexGrid}
@@ -10,8 +12,9 @@ class App {
    * @param {Array.<ISystem>} systems - the systems to be included in the main
    * processing loop
    * @param {PaperScope} paperScope - Paper.js graphics context
+   * @param {number} [seed] - the seed for the random number generator
    */
-  constructor(grid, systems, paperScope) {
+  constructor(grid, systems, paperScope, seed) {
     /**
      * A grid of tiles serving as the main stage of the simulation
      * @type {HexGrid}
@@ -30,6 +33,16 @@ class App {
      * @type {PaperScope}
      */
     this.paper = paperScope;
+
+    if (seed === undefined) {
+      /**
+      * An seeded instance of the random-js Mersenne Twister engine for
+      * generating random numbers
+      */
+      this.random = new Random(Random.engines.mt19937().autoSeed());
+    } else {
+      this.random = new Random(Random.engines.mt19937().seed(seed));
+    }
   }
 
   /**

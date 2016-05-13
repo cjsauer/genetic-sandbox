@@ -5,7 +5,9 @@
     <script src="genetic-sandbox.js" charset="utf-8"></script>
     <script type="text/javascript">
       window.onload = function () {
-        var gs = GeneticSandbox(document.getElementById("canvas"));
+        var seed = /seed=([^&]+)/.exec(document.location);
+        seed = seed ? seed[1] : undefined;
+        var gs = GeneticSandbox(document.getElementById("canvas"), seed);
         gs.run();
       }
     </script>

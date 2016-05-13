@@ -5,7 +5,7 @@ import { expect } from "chai";
 import { stub } from "sinon";
 
 describe("PlantGenerator", () => {
-  let sys, app, grid;
+  let sys, app, grid, random;
 
   beforeEach(() => {
     // Stub out the dependencies required by PlantGenerator
@@ -18,7 +18,10 @@ describe("PlantGenerator", () => {
         new Tile()
       ])
     };
-    app = { grid };
+    random = {
+      bool: stub()
+    };
+    app = { grid, random };
     sys = new PlantGenerator(app);
   });
 
@@ -28,23 +31,21 @@ describe("PlantGenerator", () => {
 
   describe("initialize", () => {
     it("should distribute plants to tiles", () => {
-      // Stub out random number generation
-      stub(Math, "random");
-      Math.random.onCall(0).returns(0); // hit
-      Math.random.onCall(1).returns(1); // miss
-      Math.random.onCall(2).returns(PlantGenerator.VEGETATION_RATE); // miss
-      Math.random.onCall(3).returns(PlantGenerator.VEGETATION_RATE - 0.01); // hit
-      Math.random.onCall(4).returns(PlantGenerator.VEGETATION_RATE + 0.01); // miss
+      // Stub out the random boolean generation
+      random.bool.onCall(0).returns(true);
+      random.bool.onCall(1).returns(false);
+      random.bool.onCall(2).returns(true);
+      random.bool.onCall(3).returns(false);
+      random.bool.onCall(4).returns(true);
 
       sys.initialize(app);
-
-      Math.random.restore();
 
       let tilesWithVegetation = grid.getTiles().filter((tile) => {
         return tile.hasComponent("plant");
       });
 
-      expect(tilesWithVegetation).to.have.length(2);
+      expect(app.random.bool.calledWith(PlantGenerator.VEGETATION_RATE)).to.be.true;
+      expect(tilesWithVegetation).to.have.length(3);
       tilesWithVegetation.forEach((tile) => {
         expect(tile.get("plant") instanceof Plant).to.be.true;
       });

@@ -48,6 +48,18 @@ describe("App", () => {
     expect(app).to.be.ok;
   });
 
+  it("can be instantiated with a seed for the random number generator", () => {
+    const app1 = new App({}, [], {}, 1111);
+    const app2 = new App({}, [], {}, 1111);
+    // If the seed is working, both app's random values should produce the same
+    // result.
+    expect(app1.random.integer(0, 100)).to.equal(app2.random.integer(0, 100));
+    expect(app1.random.string(10)).to.equal(app2.random.string(10));
+    expect(app1.random.bool()).to.equal(app2.random.bool());
+    expect(app1.random.die(20)).to.equal(app2.random.die(20));
+    expect(app1.random.real(0, 100)).to.equal(app2.random.real(0, 100));
+  });
+
   it("should contain an array of Systems", () => {
     expect(app.systems).to.be.ok;
     expect(app.systems.constructor === Array).to.be.true;

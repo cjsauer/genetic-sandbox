@@ -19,10 +19,10 @@ class PlantGenerator extends ISystem {
     * @param {App} app - the currently running GS app
     */
   initialize(app) {
-    let tiles = app.grid.getTiles();
+    const random = app.random;
+    const tiles = app.grid.getTiles();
     tiles.forEach((tile) => {
-      let chance = Math.random();
-      if (chance < PlantGenerator.VEGETATION_RATE) {
+      if (random.bool(PlantGenerator.VEGETATION_RATE)) {
         tile.set("plant", new Plant(10));
       }
     });
