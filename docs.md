@@ -89,10 +89,11 @@ The entry point and hub of the entire application
 
 
 * [App](#App)
-    * [new App(grid, systems, paperScope)](#new_App_new)
+    * [new App(grid, systems, paperScope, [seed])](#new_App_new)
     * [.grid](#App+grid) : <code>[HexGrid](#HexGrid)</code>
     * [.systems](#App+systems) : <code>Array.ISystem</code>
     * [.paper](#App+paper) : <code>PaperScope</code>
+    * [.random](#App+random)
     * [.initialize()](#App+initialize)
     * [.update()](#App+update)
     * [.run()](#App+run)
@@ -100,7 +101,7 @@ The entry point and hub of the entire application
 
 <a name="new_App_new"></a>
 
-### new App(grid, systems, paperScope)
+### new App(grid, systems, paperScope, [seed])
 Prepares a Genetic Sandbox application for bootstrapping.
 
 
@@ -109,6 +110,7 @@ Prepares a Genetic Sandbox application for bootstrapping.
 | grid | <code>[HexGrid](#HexGrid)</code> | hex grid to use as the stage |
 | systems | <code>[Array.&lt;ISystem&gt;](#ISystem)</code> | the systems to be included in the main processing loop |
 | paperScope | <code>PaperScope</code> | Paper.js graphics context |
+| [seed] | <code>number</code> | the seed for the random number generator |
 
 <a name="App+grid"></a>
 
@@ -127,6 +129,13 @@ Array of systems included in the main processing loop
 ### app.paper : <code>PaperScope</code>
 Paper.js graphics context used for rendering vector graphics to a
 canvas element
+
+**Kind**: instance property of <code>[App](#App)</code>  
+<a name="App+random"></a>
+
+### app.random
+An seeded instance of the random-js Mersenne Twister engine for
+generating random numbers
 
 **Kind**: instance property of <code>[App](#App)</code>  
 <a name="App+initialize"></a>
