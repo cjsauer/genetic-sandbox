@@ -20,6 +20,20 @@ arbitrary data, be it plant data, creature data, tile coordinates, etc.</p>
 <dt><a href="#Plant">Plant</a> ⇐ <code><a href="#Component">Component</a></code></dt>
 <dd><p>An edible plant containing energy</p>
 </dd>
+<dt><a href="#ConnectionGene">ConnectionGene</a> ⇐ <code><a href="#Component">Component</a></code></dt>
+<dd><p>Genetic representation of a connection between two neurons in a neural
+network</p>
+</dd>
+<dt><a href="#DNA">DNA</a> ⇐ <code><a href="#Component">Component</a></code></dt>
+<dd><p>Genetic encoding of a creature heavily inspired by the
+<a href="http://nn.cs.utexas.edu/downloads/papers/stanley.ec02.pdf">NEAT algorithm</a></p>
+</dd>
+<dt><a href="#NodeGene">NodeGene</a> ⇐ <code><a href="#Component">Component</a></code></dt>
+<dd><p>Genetic representation of a neuron in a neural network</p>
+</dd>
+<dt><a href="#Strand">Strand</a> ⇐ <code><a href="#Component">Component</a></code></dt>
+<dd><p>Genetic representation of a neural network</p>
+</dd>
 <dt><a href="#HexGrid">HexGrid</a></dt>
 <dd><p>A 2D, hexagonal grid implementation with axial coordinate system.
 Implementation details can be found <a href="http://goo.gl/nLO6sN">here</a>.</p>
@@ -62,6 +76,10 @@ containing initialize() and update() functions that operate in some way on
 <dt><a href="#MultiStringHashMap">MultiStringHashMap</a></dt>
 <dd><p>A key/value store where keys can be a single string, or an array of strings</p>
 </dd>
+<dt><a href="#Serializable">Serializable</a></dt>
+<dd><p>An interface for recursively serializing and deserializing object to and from
+JSON.</p>
+</dd>
 </dl>
 
 ## Constants
@@ -73,6 +91,14 @@ containing initialize() and update() functions that operate in some way on
 <dt><a href="#Theme">Theme</a></dt>
 <dd><p>The hub of all styling. Used to set the current theme, and retrieve styling
 values like color, stroke thickness, etc.</p>
+</dd>
+</dl>
+
+## Typedefs
+
+<dl>
+<dt><a href="#HoxGene">HoxGene</a> : <code>number</code></dt>
+<dd><p>Values fed into the trait function (TF) to produce usable trait values</p>
 </dd>
 </dl>
 
@@ -170,76 +196,12 @@ arbitrary data, be it plant data, creature data, tile coordinates, etc.
 
 **Kind**: global class  
 **See**: [Tile](#Tile)  
-
-* [Component](#Component)
-    * [new Component()](#new_Component_new)
-    * _instance_
-        * [.serialize([blacklist])](#Component+serialize) ⇒ <code>string</code>
-    * _static_
-        * [.register(ctor)](#Component.register)
-        * [.restore(json)](#Component.restore) ⇒ <code>[Component](#Component)</code>
-
 <a name="new_Component_new"></a>
 
 ### new Component()
 Component isn't instantiable directly, but should be extended by a
 concrete subclass.
 
-<a name="Component+serialize"></a>
-
-### component.serialize([blacklist]) ⇒ <code>string</code>
-Serializes this component to JSON with an optional array of blacklisted
-fields that will not be included in the output. This function will be
-called recursively for nested component instances.
-
-**Kind**: instance method of <code>[Component](#Component)</code>  
-**Returns**: <code>string</code> - JSON string  
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| [blacklist] | <code>Array.&lt;string&gt;</code> | <code>[]</code> | keys in this list will be excluded from the JSON string |
-
-**Example**  
-
-```js
-let coord = new Coord(1, 2);
-coord.serialize() // '{"ctor":"Coord","data":{"x":1,"y":2}}'
-coord.serialize(["y"]) // '{"ctor":"Coord","data":{"x":1}}'
-```
-<a name="Component.register"></a>
-
-### Component.register(ctor)
-Registers the given constructor so that it can later be properly restored
-from JSON using Component.restore()
-
-**Kind**: static method of <code>[Component](#Component)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| ctor | <code>function</code> | constructor function for a subclass of Component |
-
-<a name="Component.restore"></a>
-
-### Component.restore(json) ⇒ <code>[Component](#Component)</code>
-Restores a component object from its JSON string, obtained by originally
-calling serialize() on that component. Also restores nested components.
-
-**Kind**: static method of <code>[Component](#Component)</code>  
-**Returns**: <code>[Component](#Component)</code> - the restored Component object as it existed at
-its time of serialization  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| json | <code>string</code> | component's JSON string |
-
-**Example**  
-
-```js
-const coord = new Coord(5, 6);
-const restored = Component.restore(coord.serialize());
-coord.x === restored.x; // true
-coord.y === restored.y; // true
-```
 <a name="Coord"></a>
 
 ## Coord ⇐ <code>[Component](#Component)</code>
@@ -252,7 +214,6 @@ A two dimensional coordinate of x and y
     * [new Coord([x], [y])](#new_Coord_new)
     * [.x](#Coord+x) : <code>number</code>
     * [.y](#Coord+y) : <code>number</code>
-    * [.serialize([blacklist])](#Component+serialize) ⇒ <code>string</code>
 
 <a name="new_Coord_new"></a>
 
@@ -286,27 +247,6 @@ y value
 
 **Kind**: instance property of <code>[Coord](#Coord)</code>  
 **Default**: <code>0</code>  
-<a name="Component+serialize"></a>
-
-### coord.serialize([blacklist]) ⇒ <code>string</code>
-Serializes this component to JSON with an optional array of blacklisted
-fields that will not be included in the output. This function will be
-called recursively for nested component instances.
-
-**Kind**: instance method of <code>[Coord](#Coord)</code>  
-**Returns**: <code>string</code> - JSON string  
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| [blacklist] | <code>Array.&lt;string&gt;</code> | <code>[]</code> | keys in this list will be excluded from the JSON string |
-
-**Example**  
-
-```js
-let coord = new Coord(1, 2);
-coord.serialize() // '{"ctor":"Coord","data":{"x":1,"y":2}}'
-coord.serialize(["y"]) // '{"ctor":"Coord","data":{"x":1}}'
-```
 <a name="Plant"></a>
 
 ## Plant ⇐ <code>[Component](#Component)</code>
@@ -318,7 +258,6 @@ An edible plant containing energy
 * [Plant](#Plant) ⇐ <code>[Component](#Component)</code>
     * [new Plant([energy])](#new_Plant_new)
     * [.energy](#Plant+energy) : <code>number</code>
-    * [.serialize([blacklist])](#Component+serialize) ⇒ <code>string</code>
 
 <a name="new_Plant_new"></a>
 
@@ -337,27 +276,204 @@ Energy stored in this plant
 
 **Kind**: instance property of <code>[Plant](#Plant)</code>  
 **Default**: <code>0</code>  
-<a name="Component+serialize"></a>
+<a name="ConnectionGene"></a>
 
-### plant.serialize([blacklist]) ⇒ <code>string</code>
-Serializes this component to JSON with an optional array of blacklisted
-fields that will not be included in the output. This function will be
-called recursively for nested component instances.
+## ConnectionGene ⇐ <code>[Component](#Component)</code>
+Genetic representation of a connection between two neurons in a neural
+network
 
-**Kind**: instance method of <code>[Plant](#Plant)</code>  
-**Returns**: <code>string</code> - JSON string  
+**Kind**: global class  
+**Extends:** <code>[Component](#Component)</code>  
+**See**: {NodeGene}  
 
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| [blacklist] | <code>Array.&lt;string&gt;</code> | <code>[]</code> | keys in this list will be excluded from the JSON string |
+* [ConnectionGene](#ConnectionGene) ⇐ <code>[Component](#Component)</code>
+    * [new ConnectionGene(inID, outID, weight, enabled)](#new_ConnectionGene_new)
+    * _instance_
+        * [.in](#ConnectionGene+in) : <code>number</code>
+        * [.out](#ConnectionGene+out) : <code>number</code>
+        * [.weight](#ConnectionGene+weight) : <code>number</code>
+        * [.enabled](#ConnectionGene+enabled) : <code>boolean</code>
+        * [.innovationNumber](#ConnectionGene+innovationNumber) : <code>number</code>
+    * _static_
+        * [.resetInnovations()](#ConnectionGene.resetInnovations)
 
-**Example**  
+<a name="new_ConnectionGene_new"></a>
 
-```js
-let coord = new Coord(1, 2);
-coord.serialize() // '{"ctor":"Coord","data":{"x":1,"y":2}}'
-coord.serialize(["y"]) // '{"ctor":"Coord","data":{"x":1}}'
-```
+### new ConnectionGene(inID, outID, weight, enabled)
+Constructs a new ConnectionGene
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| inID | <code>number</code> | id of the source node |
+| outID | <code>number</code> | id of the destination node |
+| weight | <code>number</code> | the weight of the connection as a value between 0 and 1 inclusive |
+| enabled | <code>boolean</code> | whether this gene is expressed or not |
+
+<a name="ConnectionGene+in"></a>
+
+### connectionGene.in : <code>number</code>
+ID of the source node for this connection
+
+**Kind**: instance property of <code>[ConnectionGene](#ConnectionGene)</code>  
+<a name="ConnectionGene+out"></a>
+
+### connectionGene.out : <code>number</code>
+ID of the destination node for this connection
+
+**Kind**: instance property of <code>[ConnectionGene](#ConnectionGene)</code>  
+<a name="ConnectionGene+weight"></a>
+
+### connectionGene.weight : <code>number</code>
+The weight of this connection as a value between 0 and 1 inclusive
+
+**Kind**: instance property of <code>[ConnectionGene](#ConnectionGene)</code>  
+<a name="ConnectionGene+enabled"></a>
+
+### connectionGene.enabled : <code>boolean</code>
+True if this gene is expressed, false otherwise
+
+**Kind**: instance property of <code>[ConnectionGene](#ConnectionGene)</code>  
+<a name="ConnectionGene+innovationNumber"></a>
+
+### connectionGene.innovationNumber : <code>number</code>
+ID of the historical origin, or "innovation number" of this connection
+gene.
+
+**Kind**: instance property of <code>[ConnectionGene](#ConnectionGene)</code>  
+<a name="ConnectionGene.resetInnovations"></a>
+
+### ConnectionGene.resetInnovations()
+Resets the innovation history
+
+**Kind**: static method of <code>[ConnectionGene](#ConnectionGene)</code>  
+<a name="DNA"></a>
+
+## DNA ⇐ <code>[Component](#Component)</code>
+Genetic encoding of a creature heavily inspired by the
+[NEAT algorithm](http://nn.cs.utexas.edu/downloads/papers/stanley.ec02.pdf)
+
+**Kind**: global class  
+**Extends:** <code>[Component](#Component)</code>  
+
+* [DNA](#DNA) ⇐ <code>[Component](#Component)</code>
+    * [new DNA(inputCount, outputCount, random)](#new_DNA_new)
+    * [.brainStrand](#DNA+brainStrand) : <code>[Strand](#Strand)</code>
+    * [.traitStrand](#DNA+traitStrand) : <code>[Strand](#Strand)</code>
+    * [.hoxGenes](#DNA+hoxGenes) : <code>[Array.&lt;HoxGene&gt;](#HoxGene)</code>
+
+<a name="new_DNA_new"></a>
+
+### new DNA(inputCount, outputCount, random)
+Constructs the DNA for a brand new creature with base traits and the
+simplest possible brain, meaning one with zero hidden neurons, and a
+single randomly selected input to output connection
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| inputCount | <code>number</code> | the number of possible inputs (senses) to a creature's brain |
+| outputCount | <code>number</code> | the number of possible outputs (actions) from a creature's brain |
+| random | <code>Object</code> | an instance of a random-js engine |
+
+<a name="DNA+brainStrand"></a>
+
+### dnA.brainStrand : <code>[Strand](#Strand)</code>
+Strand of genes describing a creature's brain
+
+**Kind**: instance property of <code>[DNA](#DNA)</code>  
+<a name="DNA+traitStrand"></a>
+
+### dnA.traitStrand : <code>[Strand](#Strand)</code>
+Strand of genes describing the trait function (TF)
+
+**Kind**: instance property of <code>[DNA](#DNA)</code>  
+<a name="DNA+hoxGenes"></a>
+
+### dnA.hoxGenes : <code>[Array.&lt;HoxGene&gt;](#HoxGene)</code>
+Hox genes
+
+**Kind**: instance property of <code>[DNA](#DNA)</code>  
+<a name="NodeGene"></a>
+
+## NodeGene ⇐ <code>[Component](#Component)</code>
+Genetic representation of a neuron in a neural network
+
+**Kind**: global class  
+**Extends:** <code>[Component](#Component)</code>  
+
+* [NodeGene](#NodeGene) ⇐ <code>[Component](#Component)</code>
+    * [new NodeGene(id, type)](#new_NodeGene_new)
+    * [.id](#NodeGene+id) : <code>number</code>
+    * [.type](#NodeGene+type) : <code>string</code>
+
+<a name="new_NodeGene_new"></a>
+
+### new NodeGene(id, type)
+Constructs a new NodeGene
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>number</code> | the id of the neuron |
+| type | <code>string</code> | one of "input", "hidden", or "output" |
+
+<a name="NodeGene+id"></a>
+
+### nodeGene.id : <code>number</code>
+The id of the neuron
+
+**Kind**: instance property of <code>[NodeGene](#NodeGene)</code>  
+<a name="NodeGene+type"></a>
+
+### nodeGene.type : <code>string</code>
+Type of neuron. One of "input", "hidden", or "output".
+
+**Kind**: instance property of <code>[NodeGene](#NodeGene)</code>  
+<a name="Strand"></a>
+
+## Strand ⇐ <code>[Component](#Component)</code>
+Genetic representation of a neural network
+
+**Kind**: global class  
+**Extends:** <code>[Component](#Component)</code>  
+**See**
+
+- {NodeGene}
+- {ConnectionGene}
+
+
+* [Strand](#Strand) ⇐ <code>[Component](#Component)</code>
+    * [new Strand(inputCount, outputCount, enabled, random)](#new_Strand_new)
+    * [.nodeGenes](#Strand+nodeGenes) : <code>[Array.&lt;NodeGene&gt;](#NodeGene)</code>
+    * [.connectionGenes](#Strand+connectionGenes) : <code>[Array.&lt;ConnectionGene&gt;](#ConnectionGene)</code>
+
+<a name="new_Strand_new"></a>
+
+### new Strand(inputCount, outputCount, enabled, random)
+Constructs a new Strand representing a neural network with the given number
+of input/output neurons and random weight values
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| inputCount | <code>number</code> | number of input neuron genes |
+| outputCount | <code>number</code> | number of output neuron genes |
+| enabled | <code>boolean</code> | whether all connection genes are initially enabled, or disabled |
+| random | <code>Object</code> | an instance of a random-js instance |
+
+<a name="Strand+nodeGenes"></a>
+
+### strand.nodeGenes : <code>[Array.&lt;NodeGene&gt;](#NodeGene)</code>
+The list of node genes describing neurons
+
+**Kind**: instance property of <code>[Strand](#Strand)</code>  
+<a name="Strand+connectionGenes"></a>
+
+### strand.connectionGenes : <code>[Array.&lt;ConnectionGene&gt;](#ConnectionGene)</code>
+The list of connection genes describing connections between neurons
+
+**Kind**: instance property of <code>[Strand](#Strand)</code>  
 <a name="HexGrid"></a>
 
 ## HexGrid
@@ -1250,6 +1366,84 @@ Deletes the given key
 let wasDeleted = myHash.delete(["no", "longer", "needed"]);
 // myHash.get(["no", "longer", "needed"]) === undefined
 ```
+<a name="Serializable"></a>
+
+## Serializable
+An interface for recursively serializing and deserializing object to and from
+JSON.
+
+**Kind**: global class  
+
+* [Serializable](#Serializable)
+    * [new Serializable()](#new_Serializable_new)
+    * _instance_
+        * [.serialize([blacklist])](#Serializable+serialize) ⇒ <code>string</code>
+    * _static_
+        * [.register(ctor)](#Serializable.register)
+        * [.restore(json)](#Serializable.restore) ⇒ <code>[Serializable](#Serializable)</code>
+
+<a name="new_Serializable_new"></a>
+
+### new Serializable()
+Serializable isn't instantiable directly, but should be extended by a
+concrete subclass.
+
+<a name="Serializable+serialize"></a>
+
+### serializable.serialize([blacklist]) ⇒ <code>string</code>
+Serializes this object to JSON with an optional array of blacklisted
+fields that will not be included in the output. This function will be
+called recursively for nested Serializable objects.
+
+**Kind**: instance method of <code>[Serializable](#Serializable)</code>  
+**Returns**: <code>string</code> - JSON string  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [blacklist] | <code>Array.&lt;string&gt;</code> | <code>[]</code> | keys in this list will be excluded from the JSON string |
+
+**Example**  
+
+```js
+let coord = new Coord(1, 2);
+coord.serialize() // '{"ctor":"Coord","data":{"x":1,"y":2}}'
+coord.serialize(["y"]) // '{"ctor":"Coord","data":{"x":1}}'
+```
+<a name="Serializable.register"></a>
+
+### Serializable.register(ctor)
+Registers the given constructor so that it can later be properly restored
+from JSON using Serializable.restore()
+
+**Kind**: static method of <code>[Serializable](#Serializable)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| ctor | <code>function</code> | constructor function for a subclass of Serializable |
+
+<a name="Serializable.restore"></a>
+
+### Serializable.restore(json) ⇒ <code>[Serializable](#Serializable)</code>
+Restores a Serializable object from its JSON string, obtained by originally
+calling serialize() on that object. Also restores nested Serializable
+objects..
+
+**Kind**: static method of <code>[Serializable](#Serializable)</code>  
+**Returns**: <code>[Serializable](#Serializable)</code> - the restored Serializable object as it existed at
+its time of serialization  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| json | <code>string</code> | object's JSON string |
+
+**Example**  
+
+```js
+const coord = new Coord(5, 6);
+const restored = Serializable.restore(coord.serialize());
+coord.x === restored.x; // true
+coord.y === restored.y; // true
+```
 <a name="ElementalTheme"></a>
 
 ## ElementalTheme
@@ -1296,3 +1490,9 @@ Sets the current theme
 ```js
 Theme.setTheme("elemental");
 ```
+<a name="HoxGene"></a>
+
+## HoxGene : <code>number</code>
+Values fed into the trait function (TF) to produce usable trait values
+
+**Kind**: global typedef  
