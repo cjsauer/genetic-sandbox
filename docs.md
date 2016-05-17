@@ -34,6 +34,10 @@ network</p>
 <dt><a href="#Strand">Strand</a> ⇐ <code><a href="#Component">Component</a></code></dt>
 <dd><p>Genetic representation of a neural network</p>
 </dd>
+<dt><a href="#Sequencer">Sequencer</a></dt>
+<dd><p>Reads in a <a href="#Strand">Strand</a> and produces a
+<a href="http://synaptic.juancazala.com/#/">Synaptic neural network</a></p>
+</dd>
 <dt><a href="#HexGrid">HexGrid</a></dt>
 <dd><p>A 2D, hexagonal grid implementation with axial coordinate system.
 Implementation details can be found <a href="http://goo.gl/nLO6sN">here</a>.</p>
@@ -68,7 +72,7 @@ containing initialize() and update() functions that operate in some way on
 <dd><p>Renders the background</p>
 </dd>
 <dt><a href="#GridRenderer">GridRenderer</a> ⇐ <code><a href="#ISystem">ISystem</a></code></dt>
-<dd><p>Used to draw a hexagonal border around all tiles in the grid</p>
+<dd><p>Renders a hexagonal border around all tiles in the grid</p>
 </dd>
 <dt><a href="#PlantRenderer">PlantRenderer</a> ⇐ <code><a href="#ISystem">ISystem</a></code></dt>
 <dd><p>Renders plants for all tiles that contain a Plant component</p>
@@ -77,7 +81,7 @@ containing initialize() and update() functions that operate in some way on
 <dd><p>A key/value store where keys can be a single string, or an array of strings</p>
 </dd>
 <dt><a href="#Serializable">Serializable</a></dt>
-<dd><p>An interface for recursively serializing and deserializing object to and from
+<dd><p>An interface for recursively serializing and deserializing objects to and from
 JSON.</p>
 </dd>
 </dl>
@@ -338,7 +342,7 @@ True if this gene is expressed, false otherwise
 
 ### connectionGene.innovationNumber : <code>number</code>
 ID of the historical origin, or "innovation number" of this connection
-gene.
+gene
 
 **Kind**: instance property of <code>[ConnectionGene](#ConnectionGene)</code>  
 <a name="ConnectionGene.resetInnovations"></a>
@@ -474,6 +478,26 @@ The list of node genes describing neurons
 The list of connection genes describing connections between neurons
 
 **Kind**: instance property of <code>[Strand](#Strand)</code>  
+<a name="Sequencer"></a>
+
+## Sequencer
+Reads in a [Strand](#Strand) and produces a
+[Synaptic neural network](http://synaptic.juancazala.com/#/)
+
+**Kind**: global class  
+**See**: [Strand](#Strand)  
+<a name="Sequencer+read"></a>
+
+### sequencer.read(strand) ⇒ <code>Network</code>
+Reads in a Strand and outputs a Synaptic neural network
+
+**Kind**: instance method of <code>[Sequencer](#Sequencer)</code>  
+**Returns**: <code>Network</code> - a Synaptic Network instance  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| strand | <code>[Strand](#Strand)</code> | strand of node and connection genes |
+
 <a name="HexGrid"></a>
 
 ## HexGrid
@@ -1160,7 +1184,7 @@ Called once per tick. No-op for BackgroundRenderer.
 <a name="GridRenderer"></a>
 
 ## GridRenderer ⇐ <code>[ISystem](#ISystem)</code>
-Used to draw a hexagonal border around all tiles in the grid
+Renders a hexagonal border around all tiles in the grid
 
 **Kind**: global class  
 **Extends:** <code>[ISystem](#ISystem)</code>  
@@ -1369,7 +1393,7 @@ let wasDeleted = myHash.delete(["no", "longer", "needed"]);
 <a name="Serializable"></a>
 
 ## Serializable
-An interface for recursively serializing and deserializing object to and from
+An interface for recursively serializing and deserializing objects to and from
 JSON.
 
 **Kind**: global class  
