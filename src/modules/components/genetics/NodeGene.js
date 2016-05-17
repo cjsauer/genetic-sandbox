@@ -7,10 +7,14 @@ import Component from "../Component";
 class NodeGene extends Component {
   /**
    * Constructs a new NodeGene
-   * @param {number} id - the id of the neuron
-   * @param {string} type - one of "input", "hidden", or "output"
+   * @example
+   * const node1 = new NodeGene(1, "input");
+   * const node2 = new NodeGene(2, "output");
+   * const node3 = new NodeGene(3, "hidden");
+   * @param {number} [id=0] - the id of the neuron
+   * @param {string} [type=hidden] - one of "input", "hidden", or "output"
    */
-  constructor(id, type) {
+  constructor(id = 0, type = "hidden") {
     super();
 
     /**

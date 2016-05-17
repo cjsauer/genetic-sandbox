@@ -23,6 +23,11 @@ describe("DNA", () => {
     expect(Component._constructors["DNA"]).to.eql(DNA);
   });
 
+  it("can be instantiated with zero arguments", () => {
+    const emptyDNA = new DNA();
+    expect(emptyDNA).to.be.ok;
+  });
+
   describe("instantiation", () => {
     it("should build 2 strands of genes (brain strand and trait strand)", () => {
       const dna = new DNA(3, 4, random);
@@ -44,8 +49,8 @@ describe("DNA", () => {
 
     it("should contain a single, random Hox gene", () => {
       const dna = new DNA(2, 2, random);
-      expect(dna.hoxGenes).to.have.length(1);
-      expect(dna.hoxGenes[0]).to.equal(0.5);
+      expect(dna._hoxGenes).to.have.length(1);
+      expect(dna._hoxGenes[0]).to.equal(0.5);
     });
   });
 });

@@ -28,8 +28,7 @@ describe("Strand", () => {
 
   it("can be instantiated with zero arguments", () => {
     const emptyStrand = new Strand();
-    expect(emptyStrand.nodeGenes).to.have.length(0);
-    expect(emptyStrand.connectionGenes).to.have.length(0);
+    expect(emptyStrand).to.be.ok;
   });
 
   it("should be instantiated with the correct number of input/output node genes", () => {

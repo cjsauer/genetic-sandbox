@@ -9,6 +9,10 @@ import Component from "../Component";
 class ConnectionGene extends Component {
   /**
    * Constructs a new ConnectionGene
+   * @example
+   * const node1 = new NodeGene(1, "input");
+   * const node2 = new NodeGene(2, "output");
+   * const conn = new ConnectionGene(node1.id, node2.id, 0.2, true);
    * @param {number} inID - id of the source node
    * @param {number} outID - id of the destination node
    * @param {number} weight - the weight of the connection as a value between
@@ -17,6 +21,11 @@ class ConnectionGene extends Component {
    */
   constructor(inID, outID, weight, enabled) {
     super();
+
+    if (arguments.length === 0) {
+      return;
+    }
+
     /**
      * ID of the source node for this connection
      * @type {number}
@@ -36,7 +45,9 @@ class ConnectionGene extends Component {
     this.weight = weight;
 
     /**
-     * True if this gene is expressed, false otherwise
+     * True if this gene is expressed, false otherwise. A connection gene
+     * that is not expressed is given a weight of zero in the resulting
+     * neural network.
      * @type {boolean}
      */
     this.enabled = enabled;
@@ -80,7 +91,6 @@ ConnectionGene._innovationMap = ConnectionGene._innovationMap || {};
  */
 ConnectionGene.resetInnovations = () => {
   ConnectionGene._innovationMap = {};
-  // ConnectionGene._nextInnovationNumber = 0;
 };
 
 Component.register(ConnectionGene);

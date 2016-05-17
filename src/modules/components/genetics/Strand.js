@@ -10,16 +10,28 @@ import ConnectionGene from "./ConnectionGene";
  */
 class Strand extends Component {
   /**
-   * Constructs a new Strand representing a neural network with the given number
-   * of input/output neurons and random weight values
+   * Constructs a new Strand representing a fully connected neural network with
+   * the given number of input/output neurons, zero hidden neurons, and
+   * random weight values
+   * @example
+   * // Represents a neural network with 4 input neurons, 5 output neurons,
+   * // and all connection genes enabled.
+   * const strand1 = new Strand(4, 5, true, random);
+   * // Represents a neural network with 2 input neurons, 4 output neurons,
+   * // and all connection genes disabled.
+   * const strand2 = new Strand(2, 4, false, random);
    * @param {number} inputCount - number of input neuron genes
    * @param {number} outputCount - number of output neuron genes
    * @param {boolean} enabled - whether all connection genes are initially
-   * enabled, or disabled
+   * enabled (true), or disabled (false)
    * @param {Object} random - an instance of a random-js instance
    */
   constructor(inputCount, outputCount, enabled, random) {
     super();
+
+    if (arguments.length === 0) {
+      return;
+    }
 
     /**
      * The list of node genes describing neurons
@@ -39,17 +51,6 @@ class Strand extends Component {
      * @type {number}
      */
     this._nextNodeGeneID = 1;
-
-    /**
-     * The ID to use for the next node gene
-     * @private
-     * @type {number}
-     */
-    this._nextConnectionGeneID = 1;
-
-    if (inputCount === undefined || outputCount === undefined) {
-      return;
-    }
 
     let inputNodeGenes = [];
     let outputNodeGenes = [];

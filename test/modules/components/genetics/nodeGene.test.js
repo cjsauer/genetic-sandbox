@@ -28,4 +28,11 @@ describe("NodeGene", () => {
   it("should register its constructor with Component", () => {
     expect(Component._constructors["NodeGene"]).to.eql(NodeGene);
   });
+
+  it("can be instantiated with zero arguments", () => {
+    const emptyNodeGene = new NodeGene();
+    expect(emptyNodeGene).to.be.ok;
+    expect(emptyNodeGene.id).to.equal(0);
+    expect(emptyNodeGene.type).to.equal("hidden");
+  });
 });

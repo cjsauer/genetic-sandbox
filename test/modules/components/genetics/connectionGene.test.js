@@ -21,6 +21,11 @@ describe("ConnectionGene", () => {
     expect(Component._constructors["ConnectionGene"]).to.eql(ConnectionGene);
   });
 
+  it("can be instantiated with zero arguments", () => {
+    const emptyConnGene = new ConnectionGene();
+    expect(emptyConnGene).to.be.ok;
+  });
+
   describe("innovation tracking", () => {
     beforeEach(() => {
       ConnectionGene.resetInnovations();
