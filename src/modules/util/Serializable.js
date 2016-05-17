@@ -1,5 +1,5 @@
 /**
- * An interface for recursively serializing and deserializing object to and from
+ * An interface for recursively serializing and deserializing objects to and from
  * JSON.
  */
 class Serializable {
