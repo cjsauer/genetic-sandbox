@@ -40,21 +40,24 @@ class ConnectionGene extends Component {
      * @type {boolean}
      */
     this.enabled = enabled;
+
+    const getInnovationNumber = () => {
+      let key = this.in + "," + this.out;
+      let map = ConnectionGene._innovationMap;
+      if (!map.hasOwnProperty(key)) {
+        map[key] = ConnectionGene._nextInnovationNumber++;
+      }
+      return map[key];
+    };
+
+    /**
+    * ID of the historical origin, or "innovation number" of this connection
+    * gene
+    * @type {number}
+    */
+    this.innovationNumber = getInnovationNumber();
   }
 
-  /**
-   * ID of the historical origin, or "innovation number" of this connection
-   * gene.
-   * @type {number}
-   */
-  get innovationNumber() {
-    let key = this.in + "," + this.out;
-    let map = ConnectionGene._innovationMap;
-    if (!map.hasOwnProperty(key)) {
-      map[key] = ++ConnectionGene._innovationNumber;
-    }
-    return map[key];
-  }
 }
 
 /**
@@ -63,7 +66,7 @@ class ConnectionGene extends Component {
  * @private
  * @type {number}
  */
-ConnectionGene._innovationNumber = ConnectionGene._innovationNumber || 0;
+ConnectionGene._nextInnovationNumber = ConnectionGene._nextInnovationNumber || 1;
 
 /**
  * A map that stores historic connection gene mutations
@@ -77,7 +80,7 @@ ConnectionGene._innovationMap = ConnectionGene._innovationMap || {};
  */
 ConnectionGene.resetInnovations = () => {
   ConnectionGene._innovationMap = {};
-  ConnectionGene._innovationNumber = 0;
+  // ConnectionGene._nextInnovationNumber = 0;
 };
 
 export default ConnectionGene;

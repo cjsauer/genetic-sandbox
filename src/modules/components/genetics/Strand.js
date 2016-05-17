@@ -33,23 +33,36 @@ class Strand extends Component {
      */
     this.connectionGenes = [];
 
+    /**
+     * The ID to use for the next node gene
+     * @private
+     * @type {number}
+     */
+    this._nextNodeGeneID = 1;
+
+    /**
+     * The ID to use for the next node gene
+     * @private
+     * @type {number}
+     */
+    this._nextConnectionGeneID = 1;
+
     if (inputCount === undefined || outputCount === undefined) {
       return;
     }
 
-    let id = 1;
     let inputNodeGenes = [];
     let outputNodeGenes = [];
     let connectionGenes = [];
 
     // Create the input node genes
     for (let i = 0; i < inputCount; i++) {
-      inputNodeGenes.push(new NodeGene(id, "input"));
+      inputNodeGenes.push(new NodeGene(this._nextNodeGeneID++, "input"));
     }
 
     // Create the output node genes
     for (let i = 0; i < outputCount; i++) {
-      outputNodeGenes.push(new NodeGene(id, "output"));
+      outputNodeGenes.push(new NodeGene(this._nextNodeGeneID++, "output"));
     }
 
     // Create a connection gene for every input/output combination

@@ -44,6 +44,16 @@ describe("Strand", () => {
     expect(nodeGenes.filter(isOutputNodeGene)).to.have.length(4);
   });
 
+  it("should use sequential node gene IDs", () => {
+    let strand = new Strand(2, 3, true, random);
+    let nodeGenes = strand.nodeGenes;
+
+    let id = 1;
+    nodeGenes.forEach((gene) => {
+      expect(gene.id).to.equal(id++);
+    });
+  });
+
   it("should be instantiated with zero hidden node genes", () => {
     let strand = new Strand(2, 3, true, random);
     let nodeGenes = strand.nodeGenes;
@@ -60,7 +70,7 @@ describe("Strand", () => {
     expect(connectionGenes).to.have.length(63);
   });
 
-  it("is created with either all genes enabled, or all genes disabled", () => {
+  it("is created with either all connection genes enabled, or all connection genes disabled", () => {
     let strand = new Strand(2, 3, false, random); // All disabled
     let connectionGenes = strand.connectionGenes;
     expect(connectionGenes.filter(isDisabled)).to.have.length(6);

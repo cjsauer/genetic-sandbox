@@ -20,6 +20,7 @@ describe("ConnectionGene", () => {
   describe("innovation tracking", () => {
     beforeEach(() => {
       ConnectionGene.resetInnovations();
+      ConnectionGene._nextInnovationNumber = 1;
     });
 
     it("stores a map of historic connection gene mutations", () => {
@@ -33,15 +34,25 @@ describe("ConnectionGene", () => {
       expect(connectionGene4.innovationNumber).to.equal(3);
 
       // Global innovation number should be incremented
-      expect(ConnectionGene._innovationNumber).to.equal(3);
+      expect(ConnectionGene._nextInnovationNumber).to.equal(4);
     });
 
     it("can be reset", () => {
-      ConnectionGene._innovationMap = { "1,2": 1, "2,3": 2 };
-      ConnectionGene._innovationNumber = 2;
+      const connectionGene1 = new ConnectionGene(1, 2, 0.5, true); // New innovation
+      const connectionGene2 = new ConnectionGene(2, 3, 0.5, true); // New innovation
+      expect(connectionGene1.innovationNumber).to.equal(1);
+      expect(connectionGene2.innovationNumber).to.equal(2);
+
       ConnectionGene.resetInnovations();
       expect(ConnectionGene._innovationMap).to.eql({});
-      expect(ConnectionGene._innovationNumber).to.equal(0);
+      expect(ConnectionGene._nextInnovationNumber).to.equal(3);
+
+      // These innovations are "new" again, because the history was reset
+      const connectionGene3 = new ConnectionGene(1, 2, 0.5, true); // New innovation
+      const connectionGene4 = new ConnectionGene(2, 3, 0.5, true); // New innovation
+      expect(connectionGene3.innovationNumber).to.equal(3);
+      expect(connectionGene4.innovationNumber).to.equal(4);
+      expect(ConnectionGene._nextInnovationNumber).to.equal(5);
     });
   });
 });
