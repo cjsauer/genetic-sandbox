@@ -48,4 +48,6 @@ class DNA extends Component {
   }
 }
 
+Component.register(DNA);
+
 export default DNA;

@@ -79,4 +79,6 @@ class Strand extends Component {
   }
 }
 
+Component.register(Strand);
+
 export default Strand;

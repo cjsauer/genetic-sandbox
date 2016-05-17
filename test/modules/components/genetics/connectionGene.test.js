@@ -17,6 +17,10 @@ describe("ConnectionGene", () => {
     expect(gene instanceof Component).to.be.true;
   });
 
+  it("should register its constructor with Component", () => {
+    expect(Component._constructors["ConnectionGene"]).to.eql(ConnectionGene);
+  });
+
   describe("innovation tracking", () => {
     beforeEach(() => {
       ConnectionGene.resetInnovations();

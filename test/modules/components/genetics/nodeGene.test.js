@@ -24,4 +24,8 @@ describe("NodeGene", () => {
     const gene = new NodeGene(1, "input");
     expect(gene instanceof Component).to.be.true;
   });
+
+  it("should register its constructor with Component", () => {
+    expect(Component._constructors["NodeGene"]).to.eql(NodeGene);
+  });
 });

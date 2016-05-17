@@ -83,4 +83,6 @@ ConnectionGene.resetInnovations = () => {
   // ConnectionGene._nextInnovationNumber = 0;
 };
 
+Component.register(ConnectionGene);
+
 export default ConnectionGene;

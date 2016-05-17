@@ -27,4 +27,6 @@ class NodeGene extends Component {
   }
 }
 
+Component.register(NodeGene);
+
 export default NodeGene;

@@ -19,6 +19,10 @@ describe("DNA", () => {
     expect(dna instanceof Component).to.be.true;
   });
 
+  it("should register its constructor with Component", () => {
+    expect(Component._constructors["DNA"]).to.eql(DNA);
+  });
+
   describe("instantiation", () => {
     it("should build 2 strands of genes (brain strand and trait strand)", () => {
       const dna = new DNA(3, 4, random);

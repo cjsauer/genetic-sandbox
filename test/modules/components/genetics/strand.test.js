@@ -22,6 +22,10 @@ describe("Strand", () => {
     expect(strand instanceof Component).to.be.true;
   });
 
+  it("should register its constructor with Component", () => {
+    expect(Component._constructors["Strand"]).to.eql(Strand);
+  });
+
   it("can be instantiated with zero arguments", () => {
     const emptyStrand = new Strand();
     expect(emptyStrand.nodeGenes).to.have.length(0);
