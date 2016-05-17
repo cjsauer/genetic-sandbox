@@ -98,14 +98,6 @@ values like color, stroke thickness, etc.</p>
 </dd>
 </dl>
 
-## Typedefs
-
-<dl>
-<dt><a href="#HoxGene">HoxGene</a> : <code>number</code></dt>
-<dd><p>Values fed into the trait function (TF) to produce usable trait values</p>
-</dd>
-</dl>
-
 <a name="App"></a>
 
 ## App
@@ -314,6 +306,13 @@ Constructs a new ConnectionGene
 | weight | <code>number</code> | the weight of the connection as a value between 0 and 1 inclusive |
 | enabled | <code>boolean</code> | whether this gene is expressed or not |
 
+**Example**  
+
+```js
+const node1 = new NodeGene(1, "input");
+const node2 = new NodeGene(2, "output");
+const conn = new ConnectionGene(node1.id, node2.id, 0.2, true);
+```
 <a name="ConnectionGene+in"></a>
 
 ### connectionGene.in : <code>number</code>
@@ -335,7 +334,9 @@ The weight of this connection as a value between 0 and 1 inclusive
 <a name="ConnectionGene+enabled"></a>
 
 ### connectionGene.enabled : <code>boolean</code>
-True if this gene is expressed, false otherwise
+True if this gene is expressed, false otherwise. A connection gene
+that is not expressed is given a weight of zero in the resulting
+neural network.
 
 **Kind**: instance property of <code>[ConnectionGene](#ConnectionGene)</code>  
 <a name="ConnectionGene+innovationNumber"></a>
@@ -364,22 +365,27 @@ Genetic encoding of a creature heavily inspired by the
     * [new DNA(inputCount, outputCount, random)](#new_DNA_new)
     * [.brainStrand](#DNA+brainStrand) : <code>[Strand](#Strand)</code>
     * [.traitStrand](#DNA+traitStrand) : <code>[Strand](#Strand)</code>
-    * [.hoxGenes](#DNA+hoxGenes) : <code>[Array.&lt;HoxGene&gt;](#HoxGene)</code>
 
 <a name="new_DNA_new"></a>
 
 ### new DNA(inputCount, outputCount, random)
 Constructs the DNA for a brand new creature with base traits and the
-simplest possible brain, meaning one with zero hidden neurons, and a
-single randomly selected input to output connection
+simplest possible brain: one with only one enabled connection between
+a random input neuron and a random output neuron.
 
 
 | Param | Type | Description |
 | --- | --- | --- |
-| inputCount | <code>number</code> | the number of possible inputs (senses) to a creature's brain |
-| outputCount | <code>number</code> | the number of possible outputs (actions) from a creature's brain |
+| inputCount | <code>number</code> | the total number of possible inputs (senses) to a creature's brain |
+| outputCount | <code>number</code> | the total number of possible outputs (actions) from a creature's brain |
 | random | <code>Object</code> | an instance of a random-js engine |
 
+**Example**  
+
+```js
+// Creates DNA for a creature that has 3 brain inputs, and 4 brain outputs
+const myDNA = new DNA(3, 4, random);
+```
 <a name="DNA+brainStrand"></a>
 
 ### dnA.brainStrand : <code>[Strand](#Strand)</code>
@@ -392,12 +398,6 @@ Strand of genes describing a creature's brain
 Strand of genes describing the trait function (TF)
 
 **Kind**: instance property of <code>[DNA](#DNA)</code>  
-<a name="DNA+hoxGenes"></a>
-
-### dnA.hoxGenes : <code>[Array.&lt;HoxGene&gt;](#HoxGene)</code>
-Hox genes
-
-**Kind**: instance property of <code>[DNA](#DNA)</code>  
 <a name="NodeGene"></a>
 
 ## NodeGene ⇐ <code>[Component](#Component)</code>
@@ -407,21 +407,28 @@ Genetic representation of a neuron in a neural network
 **Extends:** <code>[Component](#Component)</code>  
 
 * [NodeGene](#NodeGene) ⇐ <code>[Component](#Component)</code>
-    * [new NodeGene(id, type)](#new_NodeGene_new)
+    * [new NodeGene([id], [type])](#new_NodeGene_new)
     * [.id](#NodeGene+id) : <code>number</code>
     * [.type](#NodeGene+type) : <code>string</code>
 
 <a name="new_NodeGene_new"></a>
 
-### new NodeGene(id, type)
+### new NodeGene([id], [type])
 Constructs a new NodeGene
 
 
-| Param | Type | Description |
-| --- | --- | --- |
-| id | <code>number</code> | the id of the neuron |
-| type | <code>string</code> | one of "input", "hidden", or "output" |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [id] | <code>number</code> | <code>0</code> | the id of the neuron |
+| [type] | <code>string</code> | <code>&quot;hidden&quot;</code> | one of "input", "hidden", or "output" |
 
+**Example**  
+
+```js
+const node1 = new NodeGene(1, "input");
+const node2 = new NodeGene(2, "output");
+const node3 = new NodeGene(3, "hidden");
+```
 <a name="NodeGene+id"></a>
 
 ### nodeGene.id : <code>number</code>
@@ -455,17 +462,28 @@ Genetic representation of a neural network
 <a name="new_Strand_new"></a>
 
 ### new Strand(inputCount, outputCount, enabled, random)
-Constructs a new Strand representing a neural network with the given number
-of input/output neurons and random weight values
+Constructs a new Strand representing a fully connected neural network with
+the given number of input/output neurons, zero hidden neurons, and
+random weight values
 
 
 | Param | Type | Description |
 | --- | --- | --- |
 | inputCount | <code>number</code> | number of input neuron genes |
 | outputCount | <code>number</code> | number of output neuron genes |
-| enabled | <code>boolean</code> | whether all connection genes are initially enabled, or disabled |
+| enabled | <code>boolean</code> | whether all connection genes are initially enabled (true), or disabled (false) |
 | random | <code>Object</code> | an instance of a random-js instance |
 
+**Example**  
+
+```js
+// Represents a neural network with 4 input neurons, 5 output neurons,
+// and all connection genes enabled.
+const strand1 = new Strand(4, 5, true, random);
+// Represents a neural network with 2 input neurons, 4 output neurons,
+// and all connection genes disabled.
+const strand2 = new Strand(2, 4, false, random);
+```
 <a name="Strand+nodeGenes"></a>
 
 ### strand.nodeGenes : <code>[Array.&lt;NodeGene&gt;](#NodeGene)</code>
@@ -1514,9 +1532,3 @@ Sets the current theme
 ```js
 Theme.setTheme("elemental");
 ```
-<a name="HoxGene"></a>
-
-## HoxGene : <code>number</code>
-Values fed into the trait function (TF) to produce usable trait values
-
-**Kind**: global typedef  
