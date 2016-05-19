@@ -29,9 +29,7 @@ class Strand extends Component {
   constructor(inputCount, outputCount, enabled, random) {
     super();
 
-    if (arguments.length === 0) {
-      return;
-    }
+    if (arguments.length === 0) return;
 
     /**
      * The list of node genes describing neurons

@@ -22,9 +22,7 @@ class ConnectionGene extends Component {
   constructor(inID, outID, weight, enabled) {
     super();
 
-    if (arguments.length === 0) {
-      return;
-    }
+    if (arguments.length === 0) return;
 
     /**
      * ID of the source node for this connection

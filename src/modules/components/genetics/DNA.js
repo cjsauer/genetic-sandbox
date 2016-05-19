@@ -23,9 +23,7 @@ class DNA extends Component {
   constructor(inputCount, outputCount, random) {
     super();
 
-    if (arguments.length === 0) {
-      return;
-    }
+    if (arguments.length === 0) return;
 
     /**
      * Strand of genes describing a creature's brain
