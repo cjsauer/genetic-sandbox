@@ -1,5 +1,5 @@
 import Sequencer from "../../../src/modules/genetics/Sequencer";
-import Strand from "../../../src/modules/components/genetics/Strand";
+import Strand from "../../../src/modules/plugins/core/components/genetics/Strand";
 import { expect } from "chai";
 import { stub } from "sinon";
 

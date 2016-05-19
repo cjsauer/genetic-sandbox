@@ -1,6 +1,6 @@
 import Tile from "./Tile";
 import TileComponentIndex from "./TileComponentIndex";
-import Coord from "../components/Coord";
+import Coord from "../plugins/core/components/Coord";
 import Point from "../shapes/Point";
 
 /**

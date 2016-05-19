@@ -1,12 +1,12 @@
 import App from "../../src/modules/App";
-import ISystem from "../../src/modules/systems/ISystem";
+import System from "../../src/modules/plugins/System";
 import { expect } from "chai";
 import { spy, stub } from "sinon";
 
 describe("App", () => {
   let app, grid, systems, paper;
 
-  class FakeSystem extends ISystem {
+  class FakeSystem extends System {
     initialize() {}
     update() {}
   }

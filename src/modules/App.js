@@ -3,13 +3,13 @@ import Random from "random-js";
 /**
  * The entry point and hub of the entire application
  * @see {@link HexGrid}
- * @see {@link ISystem}
+ * @see {@link System}
  */
 class App {
   /**
    * Prepares a Genetic Sandbox application for bootstrapping.
    * @param {HexGrid} grid - hex grid to use as the stage
-   * @param {Array.<ISystem>} systems - the systems to be included in the main
+   * @param {Array.<System>} systems - the systems to be included in the main
    * processing loop
    * @param {PaperScope} paperScope - Paper.js graphics context
    * @param {number} [seed] - the seed for the random number generator
@@ -23,7 +23,7 @@ class App {
 
     /**
      * Array of systems included in the main processing loop
-     * @type {Array.ISystem}
+     * @type {Array.System}
      */
     this.systems = systems;
 

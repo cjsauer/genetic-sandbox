@@ -1,6 +1,6 @@
 import HexGrid from "../../../src/modules/grid/HexGrid";
 import Tile from "../../../src/modules/grid/Tile";
-import Coord from "../../../src/modules/components/Coord";
+import Coord from "../../../src/modules/plugins/core/components/Coord";
 import { expect } from "chai";
 
 describe("HexGrid", () => {

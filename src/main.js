@@ -11,10 +11,10 @@ import App from "./modules/App";
 import HexGrid from "./modules/grid/HexGrid";
 
 // Import all systems
-import PlantGenerator from "./modules/systems/generators/PlantGenerator";
-import BackgroundRenderer from "./modules/systems/renderers/BackgroundRenderer";
-import GridRenderer from "./modules/systems/renderers/GridRenderer";
-import PlantRenderer from "./modules/systems/renderers/PlantRenderer";
+import PlantGenerator from "./modules/plugins/plants/systems/PlantGenerator";
+import BackgroundRenderer from "./modules/plugins/core/systems/BackgroundRenderer";
+import GridRenderer from "./modules/plugins/core/systems/GridRenderer";
+import PlantRenderer from "./modules/plugins/plants/systems/PlantRenderer";
 
 // Export the GS bootstrapping function
 window.GeneticSandbox = function (canvas, seed) {
