@@ -9,7 +9,6 @@ describe("DNA", () => {
   beforeEach(() => {
     random = {
       real: stub().returns(0.5),
-      integer: stub().returns(0),
       pick: stub().returns({ enabled: false })
     };
   });
