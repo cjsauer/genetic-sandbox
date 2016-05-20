@@ -4,6 +4,7 @@ import { expect } from "chai";
 
 describe("Shape", () => {
   it("should not be instantiable", () => {
+    expect(Shape instanceof Function).to.be.true;
     expect(() => new Shape()).to.throw(TypeError);
   });
 

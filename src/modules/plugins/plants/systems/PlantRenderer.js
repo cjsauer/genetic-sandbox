@@ -1,8 +1,8 @@
+import _ from "lodash";
 import System from "../../System";
 import Theme from "../../../themes/Theme";
-import GridRenderer from "../../core/systems/GridRenderer";
 import HexGrid from "../../../grid/HexGrid";
-import _ from "lodash";
+import config from "../../../config";
 
 /**
  * Renders plants for all tiles that contain a Plant component
@@ -66,7 +66,7 @@ class PlantRenderer extends System {
     tilesOfInterest.forEach((tile) => {
       if (tile.hasComponent("plant")) {
         let coord = tile.get("coord");
-        let { x, y } = HexGrid.coordToPixel(coord, GridRenderer.HEX_SIZE);
+        let { x, y } = HexGrid.coordToPixel(coord, config.core.hexRadius);
         let instance = this._plantSymbol.place(new Point(x, y).add(view.center));
         tile.set("!plant", instance);
       } else {

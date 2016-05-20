@@ -1,5 +1,6 @@
 import System from "../../System";
 import Plant from "../components/Plant";
+import config from "../../../config";
 
 /**
  * Generates initial plant life, placing Plant components into Tiles
@@ -22,7 +23,7 @@ class PlantGenerator extends System {
     const random = app.random;
     const tiles = app.grid.getTiles();
     tiles.forEach((tile) => {
-      if (random.bool(PlantGenerator.VEGETATION_RATE)) {
+      if (random.bool(config.plants.vegetationRate)) {
         tile.set("plant", new Plant(10));
       }
     });
@@ -35,7 +36,5 @@ class PlantGenerator extends System {
   update(app) {
   }
 }
-
-PlantGenerator.VEGETATION_RATE = 0.1;
 
 export default PlantGenerator;

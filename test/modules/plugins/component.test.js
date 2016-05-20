@@ -8,6 +8,7 @@ describe("Component", () => {
   }
 
   it("should not be instantiable directly", () => {
+    expect(Component instanceof Function).to.be.true;
     expect(() => new Component()).to.throw(TypeError);
     expect(() => new PhonyComponent()).to.not.throw(TypeError);
   });

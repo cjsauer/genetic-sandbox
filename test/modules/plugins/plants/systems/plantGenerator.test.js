@@ -1,6 +1,7 @@
 import PlantGenerator from "../../../../../src/modules/plugins/plants/systems/PlantGenerator";
 import Tile from "../../../../../src/modules/grid/Tile";
 import Plant from "../../../../../src/modules/plugins/plants/components/Plant";
+import config from "../../../../../src/modules/config";
 import { expect } from "chai";
 import { stub } from "sinon";
 
@@ -44,7 +45,7 @@ describe("PlantGenerator", () => {
         return tile.hasComponent("plant");
       });
 
-      expect(app.random.bool.calledWith(PlantGenerator.VEGETATION_RATE)).to.be.true;
+      expect(app.random.bool.calledWith(config.plants.vegetationRate)).to.be.true;
       expect(tilesWithVegetation).to.have.length(3);
       tilesWithVegetation.forEach((tile) => {
         expect(tile.get("plant") instanceof Plant).to.be.true;

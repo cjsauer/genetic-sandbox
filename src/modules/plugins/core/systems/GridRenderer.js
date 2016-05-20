@@ -1,6 +1,7 @@
 import System from "../../System";
 import Theme from "../../../themes/Theme";
 import HexGrid from "../../../grid/HexGrid";
+import config from "../../../config";
 
 /**
  * Renders a hexagonal border around all tiles in the grid
@@ -28,7 +29,7 @@ class GridRenderer extends System {
     this._hexGroup = new Group();
 
     // Create a Symbol for the hex path to place for every tile
-    let path = new Path.RegularPolygon(new Point(0, 0), 6, GridRenderer.HEX_SIZE);
+    let path = new Path.RegularPolygon(new Point(0, 0), 6, config.core.hexRadius);
     path.style = Theme.current.defaultHexStyle;
     let hexSymbol = new Symbol(path);
 
@@ -36,7 +37,7 @@ class GridRenderer extends System {
     tiles.forEach((tile) => {
       let coord = tile.get("coord");
       let { x, y } = coord;
-      ({x, y} = HexGrid.coordToPixel(coord, GridRenderer.HEX_SIZE));
+      ({x, y} = HexGrid.coordToPixel(coord, config.core.hexRadius));
       let instance = hexSymbol.place(new Point(x, y).add(view.center));
       this._hexGroup.addChild(instance);
     });
@@ -49,7 +50,5 @@ class GridRenderer extends System {
   update(app) {
   }
 }
-
-GridRenderer.HEX_SIZE = 12;
 
 export default GridRenderer;

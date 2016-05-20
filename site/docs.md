@@ -29,6 +29,10 @@ the state at a specific place in a grid</p>
 <dd><p>Components are objects stored inside of <a href="#Tile">Tiles</a> that contain
 arbitrary data, be it plant data, creature data, tile coordinates, etc.</p>
 </dd>
+<dt><a href="#Plugin">Plugin</a></dt>
+<dd><p>A toggleable plugin containing an array of <a href="#System">Systems</a> and
+configuration options</p>
+</dd>
 <dt><a href="#System">System</a></dt>
 <dd><p>Interface for defining new systems. A system in Genetic Sandbox is a class
 containing initialize() and update() functions that operate in some way on
@@ -93,6 +97,16 @@ JSON.</p>
 ## Constants
 
 <dl>
+<dt><a href="#config">config</a> : <code>Object</code></dt>
+<dd><p>An aggregation of all plugin configuration options, and the main interface
+for tweaking them.</p>
+</dd>
+<dt><a href="#core">core</a> : <code>Object</code></dt>
+<dd><p>Core configuration options</p>
+</dd>
+<dt><a href="#plants">plants</a> : <code>Object</code></dt>
+<dd><p>Plant configuration options</p>
+</dd>
 <dt><a href="#ElementalTheme">ElementalTheme</a></dt>
 <dd><p>An elemental inspired theme</p>
 </dd>
@@ -111,13 +125,13 @@ The entry point and hub of the entire application
 **See**
 
 - [HexGrid](#HexGrid)
-- [System](#System)
+- [Plugin](#Plugin)
 
 
 * [App](#App)
-    * [new App(grid, systems, paperScope, [seed])](#new_App_new)
+    * [new App(grid, plugins, paperScope, [seed])](#new_App_new)
     * [.grid](#App+grid) : <code>[HexGrid](#HexGrid)</code>
-    * [.systems](#App+systems) : <code>Array.System</code>
+    * [.plugins](#App+plugins) : <code>[Array.&lt;Plugin&gt;](#Plugin)</code>
     * [.paper](#App+paper) : <code>PaperScope</code>
     * [.random](#App+random)
     * [.initialize()](#App+initialize)
@@ -127,14 +141,14 @@ The entry point and hub of the entire application
 
 <a name="new_App_new"></a>
 
-### new App(grid, systems, paperScope, [seed])
+### new App(grid, plugins, paperScope, [seed])
 Prepares a Genetic Sandbox application for bootstrapping.
 
 
 | Param | Type | Description |
 | --- | --- | --- |
 | grid | <code>[HexGrid](#HexGrid)</code> | hex grid to use as the stage |
-| systems | <code>[Array.&lt;System&gt;](#System)</code> | the systems to be included in the main processing loop |
+| plugins | <code>[Array.&lt;Plugin&gt;](#Plugin)</code> | the plugins to be included in the main processing loop |
 | paperScope | <code>PaperScope</code> | Paper.js graphics context |
 | [seed] | <code>number</code> | the seed for the random number generator |
 
@@ -144,10 +158,10 @@ Prepares a Genetic Sandbox application for bootstrapping.
 A grid of tiles serving as the main stage of the simulation
 
 **Kind**: instance property of <code>[App](#App)</code>  
-<a name="App+systems"></a>
+<a name="App+plugins"></a>
 
-### app.systems : <code>Array.System</code>
-Array of systems included in the main processing loop
+### app.plugins : <code>[Array.&lt;Plugin&gt;](#Plugin)</code>
+Array of plugins included in the main processing loop
 
 **Kind**: instance property of <code>[App](#App)</code>  
 <a name="App+paper"></a>
@@ -167,13 +181,13 @@ generating random numbers
 <a name="App+initialize"></a>
 
 ### app.initialize()
-Initializes every System in the systems array
+Initializes every system included in all enabled plugins
 
 **Kind**: instance method of <code>[App](#App)</code>  
 <a name="App+update"></a>
 
 ### app.update()
-Updates every System in the systems array
+Updates every system included in all enabled plugins
 
 **Kind**: instance method of <code>[App](#App)</code>  
 <a name="App+run"></a>
@@ -563,6 +577,73 @@ arbitrary data, be it plant data, creature data, tile coordinates, etc.
 Component isn't instantiable directly, but should be extended by a
 concrete subclass.
 
+<a name="Plugin"></a>
+
+## Plugin
+A toggleable plugin containing an array of [Systems](#System) and
+configuration options
+
+**Kind**: global class  
+
+* [Plugin](#Plugin)
+    * [new Plugin(name, systems, config, [enabled])](#new_Plugin_new)
+    * [.name](#Plugin+name) : <code>string</code>
+    * [.systems](#Plugin+systems) : <code>[Array.&lt;System&gt;](#System)</code>
+    * [.config](#Plugin+config) : <code>Object</code>
+    * [.enabled](#Plugin+enabled) : <code>boolean</code>
+
+<a name="new_Plugin_new"></a>
+
+### new Plugin(name, systems, config, [enabled])
+Constructs a new plugin
+
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| name | <code>string</code> |  | name of the plugin |
+| systems | <code>[Array.&lt;System&gt;](#System)</code> |  | the systems that this plugin includes |
+| config | <code>Object</code> |  | configuration options that this plugin exposes |
+| [enabled] | <code>boolean</code> | <code>true</code> | whether this plugin is enabled or not |
+
+**Example**  
+
+```js
+import MySystem from "./systems/MySystem";
+import MyOtherSystem from "./systems/MyOtherSystem";
+const systems = [ new MySystem(), new MyOtherSystem() ];
+const config = { someSetting: 10 };
+const myPlugin = new Plugin("mine", systems, config);
+
+// Assuming myPlugin is registered in `config.js`, in some other file
+// we can do:
+import config from "../config";
+config.mine.someSetting = 12; // someSetting has been exposed via config global
+```
+<a name="Plugin+name"></a>
+
+### plugin.name : <code>string</code>
+Name of the plugin
+
+**Kind**: instance property of <code>[Plugin](#Plugin)</code>  
+<a name="Plugin+systems"></a>
+
+### plugin.systems : <code>[Array.&lt;System&gt;](#System)</code>
+The array of systems that this plugin includes
+
+**Kind**: instance property of <code>[Plugin](#Plugin)</code>  
+<a name="Plugin+config"></a>
+
+### plugin.config : <code>Object</code>
+The configuration options that this plugin exposes
+
+**Kind**: instance property of <code>[Plugin](#Plugin)</code>  
+<a name="Plugin+enabled"></a>
+
+### plugin.enabled : <code>boolean</code>
+True if this plugin is enabled, false otherwise. A disabled plugin
+will be excluded from the processing loop.
+
+**Kind**: instance property of <code>[Plugin](#Plugin)</code>  
 <a name="System"></a>
 
 ## *System*
@@ -1594,6 +1675,57 @@ const restored = Serializable.restore(coord.serialize());
 coord.x === restored.x; // true
 coord.y === restored.y; // true
 ```
+<a name="config"></a>
+
+## config : <code>Object</code>
+An aggregation of all plugin configuration options, and the main interface
+for tweaking them.
+
+**Kind**: global constant  
+**Example**  
+
+```js
+import config from "../config";
+// Change the vegetation rate
+config.plants.vegetationRate = 0.2;
+// Change the size of the world
+config.core.gridRadius = 35;
+```
+<a name="core"></a>
+
+## core : <code>Object</code>
+Core configuration options
+
+**Kind**: global constant  
+
+* [core](#core) : <code>Object</code>
+    * [.gridRadius](#core.gridRadius) : <code>number</code>
+    * [.hexRadius](#core.hexRadius) : <code>number</code>
+
+<a name="core.gridRadius"></a>
+
+### core.gridRadius : <code>number</code>
+The radius in hexagons of the world
+
+**Kind**: static property of <code>[core](#core)</code>  
+<a name="core.hexRadius"></a>
+
+### core.hexRadius : <code>number</code>
+The radius in pixels of a hexagon within the grid
+
+**Kind**: static property of <code>[core](#core)</code>  
+<a name="plants"></a>
+
+## plants : <code>Object</code>
+Plant configuration options
+
+**Kind**: global constant  
+<a name="plants.vegetationRate"></a>
+
+### plants.vegetationRate : <code>number</code>
+The percentage of the grid that will be covered in vegetation
+
+**Kind**: static property of <code>[plants](#plants)</code>  
 <a name="ElementalTheme"></a>
 
 ## ElementalTheme

@@ -1,10 +1,11 @@
 import App from "../../src/modules/App";
+import Plugin from "../../src/modules/plugins/Plugin";
 import System from "../../src/modules/plugins/System";
 import { expect } from "chai";
 import { spy, stub } from "sinon";
 
 describe("App", () => {
-  let app, grid, systems, paper;
+  let app, grid, plugins, systems, paper;
 
   class FakeSystem extends System {
     initialize() {}
@@ -25,6 +26,8 @@ describe("App", () => {
       spy(system, "update");
     });
 
+    plugins = [ new Plugin("fake", systems, {}) ];
+
     paper = {
       Path: {
         Rectangle: stub()
@@ -41,7 +44,7 @@ describe("App", () => {
       }
     };
 
-    app = new App(grid, systems, paper);
+    app = new App(grid, plugins, paper);
   });
 
   it("can be instantiated", () => {
@@ -60,16 +63,24 @@ describe("App", () => {
     expect(app1.random.real(0, 100)).to.equal(app2.random.real(0, 100));
   });
 
-  it("should contain an array of Systems", () => {
-    expect(app.systems).to.be.ok;
-    expect(app.systems.constructor === Array).to.be.true;
+  it("should contain an array of Plugins", () => {
+    expect(app.plugins).to.be.ok;
+    expect(app.plugins.constructor === Array).to.be.true;
   });
 
   describe("initialize", () => {
-    it("should call initialize() on every System in the systems array", () => {
+    it("should call initialize() on every system in every enabled plugin", () => {
       app.initialize();
-      app.systems.forEach((system) => {
+      systems.forEach((system) => {
         expect(system.initialize.calledOnce).to.be.true;
+      });
+    });
+
+    it("should skip disabled plugins", () => {
+      plugins[0].enabled = false;
+      app.initialize();
+      systems.forEach((system) => {
+        expect(system.initialize.calledOnce).to.be.false;
       });
     });
   });
@@ -79,10 +90,18 @@ describe("App", () => {
       app.initialize();
     });
 
-    it("should call update() on every System in the systems array", () => {
+    it("should call update() on every system in every enabld plugin", () => {
       app.update();
-      app.systems.forEach((system) => {
+      systems.forEach((system) => {
         expect(system.update.calledOnce).to.be.true;
+      });
+    });
+
+    it("should skip disabled plugins", () => {
+      plugins[0].enabled = false;
+      app.update();
+      systems.forEach((system) => {
+        expect(system.update.calledOnce).to.be.false;
       });
     });
   });

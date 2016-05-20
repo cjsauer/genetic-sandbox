@@ -31,6 +31,7 @@ describe("Serializable", () => {
   });
 
   it("should not be instantiable directly", () => {
+    expect(Serializable instanceof Function).to.be.true;
     expect(() => new Serializable()).to.throw(TypeError);
   });
 
