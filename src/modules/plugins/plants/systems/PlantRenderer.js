@@ -1,4 +1,3 @@
-import _ from "lodash";
 import System from "../../System";
 import Theme from "../../../themes/Theme";
 import HexGrid from "../../../grid/HexGrid";
@@ -53,25 +52,14 @@ class PlantRenderer extends System {
     const { Point, view } = app.paper;
 
     let plantTiles = app.grid.getTilesByComponent("plant");
-    let plantGraphicTiles = app.grid.getTilesByComponent("!plant");
-    let tilesOfInterest = _.xor(plantTiles, plantGraphicTiles);
 
-    /* Tiles that contain both "plant" and "!plant" components are of no
-     * interest; there is a plant there and it has already been rendered.
-     * What we want is the symmetric difference, or plants that contain
-     * explicity either "plant" OR "!plant". Tiles that contain *only* "plant"
-     * need a graphic, and tiles that contain *only* "!plant" need the graphic
-     * removed. There's no plant there anymore!
-     */
-    tilesOfInterest.forEach((tile) => {
-      if (tile.hasComponent("plant")) {
+    plantTiles.forEach((tile) => {
+      let plant = tile.get("plant");
+      if (!plant.hasOwnProperty("!graphic")) {
         let coord = tile.get("coord");
         let { x, y } = HexGrid.coordToPixel(coord, config.core.hexRadius);
         let instance = this._plantSymbol.place(new Point(x, y).add(view.center));
-        tile.set("!plant", instance);
-      } else {
-        tile.get("!plant").remove();
-        tile.delete("!plant");
+        plant["!graphic"] = instance;
       }
     });
   }
