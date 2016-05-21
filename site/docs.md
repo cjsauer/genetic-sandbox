@@ -45,6 +45,9 @@ actions on the behalf of a creature</p>
 <dt><a href="#Coord">Coord</a> ⇐ <code><a href="#Component">Component</a></code></dt>
 <dd><p>A two dimensional coordinate of x and y</p>
 </dd>
+<dt><a href="#Creature">Creature</a> ⇐ <code><a href="#Component">Component</a></code></dt>
+<dd><p>Intelligent organism with the capability to evolve</p>
+</dd>
 <dt><a href="#ConnectionGene">ConnectionGene</a> ⇐ <code><a href="#Component">Component</a></code></dt>
 <dd><p>Genetic representation of a connection between two neurons in a neural
 network</p>
@@ -897,6 +900,99 @@ y value
 
 **Kind**: instance property of <code>[Coord](#Coord)</code>  
 **Default**: <code>0</code>  
+<a name="Creature"></a>
+
+## Creature ⇐ <code>[Component](#Component)</code>
+Intelligent organism with the capability to evolve
+
+**Kind**: global class  
+**Extends:** <code>[Component](#Component)</code>  
+
+* [Creature](#Creature) ⇐ <code>[Component](#Component)</code>
+    * [new Creature(dna, [energy])](#new_Creature_new)
+    * [.energy](#Creature+energy) : <code>number</code>
+    * [.dna](#Creature+dna) : <code>[DNA](#DNA)</code>
+    * [.brain](#Creature+brain) : <code>[Brain](#Brain)</code>
+    * [.alive](#Creature+alive) : <code>boolean</code>
+    * [.eat(plant)](#Creature+eat) ⇒ <code>number</code>
+    * [.expend(expenditure)](#Creature+expend) ⇒ <code>boolean</code>
+    * [.die()](#Creature+die)
+
+<a name="new_Creature_new"></a>
+
+### new Creature(dna, [energy])
+Constructs a new creature
+
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| dna | <code>[DNA](#DNA)</code> |  | the genetic representaiton of a creature |
+| [energy] | <code>number</code> | <code>10</code> | initial energy level |
+
+**Example**  
+
+```js
+const dna = new DNA(3, 4, random);
+const creature = new Creature(dna, 12);
+creature.energy === 12; // true
+```
+<a name="Creature+energy"></a>
+
+### creature.energy : <code>number</code>
+Energy level of this creature. When this reaches zero the creature,
+is dead.
+
+**Kind**: instance property of <code>[Creature](#Creature)</code>  
+<a name="Creature+dna"></a>
+
+### creature.dna : <code>[DNA](#DNA)</code>
+The genetic representaiton of this creature
+
+**Kind**: instance property of <code>[Creature](#Creature)</code>  
+<a name="Creature+brain"></a>
+
+### creature.brain : <code>[Brain](#Brain)</code>
+The brain of this creature
+
+**Kind**: instance property of <code>[Creature](#Creature)</code>  
+<a name="Creature+alive"></a>
+
+### creature.alive : <code>boolean</code>
+True if this creature is alive, false otherwise
+
+**Kind**: instance property of <code>[Creature](#Creature)</code>  
+<a name="Creature+eat"></a>
+
+### creature.eat(plant) ⇒ <code>number</code>
+Eats the given plant, raising the creature's energy level by the amount
+stored in the plant
+
+**Kind**: instance method of <code>[Creature](#Creature)</code>  
+**Returns**: <code>number</code> - the creature's new energy level  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| plant | <code>[Plant](#Plant)</code> | plant to eat |
+
+<a name="Creature+expend"></a>
+
+### creature.expend(expenditure) ⇒ <code>boolean</code>
+Expends the given amount of energy. If the creature's energy drops below
+zero, it dies.
+
+**Kind**: instance method of <code>[Creature](#Creature)</code>  
+**Returns**: <code>boolean</code> - True if the creature is still alive, false otherwise  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| expenditure | <code>number</code> | the amount of energy to expend |
+
+<a name="Creature+die"></a>
+
+### creature.die()
+Kills this creature
+
+**Kind**: instance method of <code>[Creature](#Creature)</code>  
 <a name="ConnectionGene"></a>
 
 ## ConnectionGene ⇐ <code>[Component](#Component)</code>
