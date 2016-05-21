@@ -28,13 +28,6 @@ class PlantGenerator extends System {
       }
     });
   }
-
-  /**
-   * A no-op for generators
-   * @param {App} app - the currently running GS app
-   */
-  update(app) {
-  }
 }
 
 export default PlantGenerator;

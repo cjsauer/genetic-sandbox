@@ -58,7 +58,7 @@ describe("PlantRenderer", () => {
     });
   });
 
-  describe("update", () => {
+  describe("draw", () => {
     beforeEach(() => {
       sys.initialize(app);
       grid.getTile(new Coord(0, 0)).set("plant", true);
@@ -68,15 +68,15 @@ describe("PlantRenderer", () => {
 
     it("should place and store a plant symbol for tiles with vegetation ONCE", () => {
       const { Symbol } = app.paper;
-      sys.update(app);
+      sys.draw(app);
       expect(Symbol().place.callCount).to.equal(3);
-      expect(() => { sys.update(app); }).to.not.increase(Symbol().place, "callCount");
+      expect(() => { sys.draw(app); }).to.not.increase(Symbol().place, "callCount");
       expect(grid.getTilesByComponent("!plant")).to.have.length(3);
     });
 
     it("should remove plant symbols for tiles that no longer have vegetation", () => {
       const { Symbol } = app.paper;
-      sys.update(app); // Create the vegeation graphics
+      sys.draw(app); // Create the vegeation graphics
 
       // Remove plant from one of the tiles
       let tile = grid.getTilesByComponent("plant")[0];
@@ -84,7 +84,7 @@ describe("PlantRenderer", () => {
 
       // Expect that the graphic was removed from both the scene and the tile
       let deleteSpy = spy(tile, "delete");
-      sys.update(app);
+      sys.draw(app);
       deleteSpy.restore();
       expect(Symbol().place().remove.calledOnce).to.be.true;
       expect(deleteSpy.calledWith("!plant")).to.be.true;

@@ -42,13 +42,6 @@ class GridRenderer extends System {
       this._hexGroup.addChild(instance);
     });
   }
-
-  /**
-   * Called once per tick. No-op for GridRenderer.
-   * @param {App} app - the currently running GS app
-   */
-  update(app) {
-  }
 }
 
 export default GridRenderer;

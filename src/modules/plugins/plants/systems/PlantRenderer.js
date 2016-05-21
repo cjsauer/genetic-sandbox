@@ -49,7 +49,7 @@ class PlantRenderer extends System {
    * and removes plant graphics for tiles that no longer have vegetation
    * @param {App} app - the currently running GS app
    */
-  update(app) {
+  draw(app) {
     const { Point, view } = app.paper;
 
     let plantTiles = app.grid.getTilesByComponent("plant");

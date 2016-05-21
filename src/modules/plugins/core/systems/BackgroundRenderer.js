@@ -26,13 +26,6 @@ class BackgroundRenderer extends System {
       style: Theme.current.backgroundStyle
     });
   }
-
-  /**
-   * Called once per tick. No-op for BackgroundRenderer.
-   * @param {App} app - the currently running GS app
-   */
-  update(app) {
-  }
 }
 
 export default BackgroundRenderer;

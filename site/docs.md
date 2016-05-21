@@ -35,8 +35,8 @@ configuration options</p>
 </dd>
 <dt><a href="#System">System</a></dt>
 <dd><p>Interface for defining new systems. A system in Genetic Sandbox is a class
-containing initialize() and update() functions that operate in some way on
-<a href="#Tile">Tiles</a> within the <a href="#HexGrid">HexGrid</a>.</p>
+containing logic that operates in some way on <a href="#Tile">Tiles</a> within the
+<a href="#HexGrid">HexGrid</a>.</p>
 </dd>
 <dt><a href="#Brain">Brain</a> ⇐ <code><a href="#Component">Component</a></code></dt>
 <dd><p>A neural network that receives sense input from the environment and produces
@@ -135,7 +135,7 @@ The entry point and hub of the entire application
     * [.paper](#App+paper) : <code>PaperScope</code>
     * [.random](#App+random)
     * [.initialize()](#App+initialize)
-    * [.update()](#App+update)
+    * [.tick()](#App+tick)
     * [.run()](#App+run)
     * [.stop()](#App+stop)
 
@@ -181,13 +181,14 @@ generating random numbers
 <a name="App+initialize"></a>
 
 ### app.initialize()
-Initializes every system included in all enabled plugins
+Initializes all enabled plugins by calling *reserve()* and *initialize()*
+on their constituent systems
 
 **Kind**: instance method of <code>[App](#App)</code>  
-<a name="App+update"></a>
+<a name="App+tick"></a>
 
-### app.update()
-Updates every system included in all enabled plugins
+### app.tick()
+Ticks the simulation forward by one full iteration
 
 **Kind**: instance method of <code>[App](#App)</code>  
 <a name="App+run"></a>
@@ -648,16 +649,20 @@ will be excluded from the processing loop.
 
 ## *System*
 Interface for defining new systems. A system in Genetic Sandbox is a class
-containing initialize() and update() functions that operate in some way on
-[Tiles](#Tile) within the [HexGrid](#HexGrid).
+containing logic that operates in some way on [Tiles](#Tile) within the
+[HexGrid](#HexGrid).
 
 **Kind**: global abstract class  
 
 * *[System](#System)*
     * *[new System(tag)](#new_System_new)*
     * *[.tag](#System+tag) : <code>string</code>*
+    * *[.reserve(app)](#System+reserve)*
     * *[.initialize(app)](#System+initialize)*
     * *[.update(app)](#System+update)*
+    * *[.draw(app)](#System+draw)*
+    * *[.sense(app)](#System+sense)*
+    * *[.attempt(app)](#System+attempt)*
 
 <a name="new_System_new"></a>
 
@@ -673,10 +678,21 @@ and its instance methods overridden.
 <a name="System+tag"></a>
 
 ### *system.tag : <code>string</code>*
-Defines the role of this system. One of "renderer", "generator", or
-"processor".
+Defines the overall role of this system. One of "renderer", "generator",
+or "processor".
 
 **Kind**: instance property of <code>[System](#System)</code>  
+<a name="System+reserve"></a>
+
+### *system.reserve(app)*
+Hook for reserving input and ouput neurons in the Brain
+
+**Kind**: instance method of <code>[System](#System)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
 <a name="System+initialize"></a>
 
 ### *system.initialize(app)*
@@ -691,7 +707,40 @@ Initializes this system allowing it to perform one-time preparation logic
 <a name="System+update"></a>
 
 ### *system.update(app)*
-Called once per tick to update the simulation
+Hook for updating the state of the world
+
+**Kind**: instance method of <code>[System](#System)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+draw"></a>
+
+### *system.draw(app)*
+Called once per frame to perform drawing logic
+
+**Kind**: instance method of <code>[System](#System)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+sense"></a>
+
+### *system.sense(app)*
+Hook for inputting sense data into the brain
+
+**Kind**: instance method of <code>[System](#System)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+attempt"></a>
+
+### *system.attempt(app)*
+Hook for reading output data from the brain and attempting actions
 
 **Kind**: instance method of <code>[System](#System)</code>  
 
@@ -1084,7 +1133,11 @@ Renders the background
     * [new BackgroundRenderer()](#new_BackgroundRenderer_new)
     * [.tag](#System+tag) : <code>string</code>
     * [.initialize(app)](#BackgroundRenderer+initialize)
-    * [.update(app)](#BackgroundRenderer+update)
+    * [.reserve(app)](#System+reserve)
+    * [.update(app)](#System+update)
+    * [.draw(app)](#System+draw)
+    * [.sense(app)](#System+sense)
+    * [.attempt(app)](#System+attempt)
 
 <a name="new_BackgroundRenderer_new"></a>
 
@@ -1094,8 +1147,8 @@ Constructs a new BackgroundRenderer
 <a name="System+tag"></a>
 
 ### backgroundRenderer.tag : <code>string</code>
-Defines the role of this system. One of "renderer", "generator", or
-"processor".
+Defines the overall role of this system. One of "renderer", "generator",
+or "processor".
 
 **Kind**: instance property of <code>[BackgroundRenderer](#BackgroundRenderer)</code>  
 <a name="BackgroundRenderer+initialize"></a>
@@ -1110,13 +1163,56 @@ Renders the background
 | --- | --- | --- |
 | app | <code>[App](#App)</code> | the currently running GS app |
 
-<a name="BackgroundRenderer+update"></a>
+<a name="System+reserve"></a>
 
-### backgroundRenderer.update(app)
-Called once per tick. No-op for BackgroundRenderer.
+### backgroundRenderer.reserve(app)
+Hook for reserving input and ouput neurons in the Brain
 
 **Kind**: instance method of <code>[BackgroundRenderer](#BackgroundRenderer)</code>  
-**Overrides:** <code>[update](#System+update)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+update"></a>
+
+### backgroundRenderer.update(app)
+Hook for updating the state of the world
+
+**Kind**: instance method of <code>[BackgroundRenderer](#BackgroundRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+draw"></a>
+
+### backgroundRenderer.draw(app)
+Called once per frame to perform drawing logic
+
+**Kind**: instance method of <code>[BackgroundRenderer](#BackgroundRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+sense"></a>
+
+### backgroundRenderer.sense(app)
+Hook for inputting sense data into the brain
+
+**Kind**: instance method of <code>[BackgroundRenderer](#BackgroundRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+attempt"></a>
+
+### backgroundRenderer.attempt(app)
+Hook for reading output data from the brain and attempting actions
+
+**Kind**: instance method of <code>[BackgroundRenderer](#BackgroundRenderer)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1134,7 +1230,11 @@ Renders a hexagonal border around all tiles in the grid
     * [new GridRenderer()](#new_GridRenderer_new)
     * [.tag](#System+tag) : <code>string</code>
     * [.initialize(app)](#GridRenderer+initialize)
-    * [.update(app)](#GridRenderer+update)
+    * [.reserve(app)](#System+reserve)
+    * [.update(app)](#System+update)
+    * [.draw(app)](#System+draw)
+    * [.sense(app)](#System+sense)
+    * [.attempt(app)](#System+attempt)
 
 <a name="new_GridRenderer_new"></a>
 
@@ -1144,8 +1244,8 @@ Constructs a new GridRenderer
 <a name="System+tag"></a>
 
 ### gridRenderer.tag : <code>string</code>
-Defines the role of this system. One of "renderer", "generator", or
-"processor".
+Defines the overall role of this system. One of "renderer", "generator",
+or "processor".
 
 **Kind**: instance property of <code>[GridRenderer](#GridRenderer)</code>  
 <a name="GridRenderer+initialize"></a>
@@ -1160,13 +1260,56 @@ Renders the grid
 | --- | --- | --- |
 | app | <code>[App](#App)</code> | the currently running GS app |
 
-<a name="GridRenderer+update"></a>
+<a name="System+reserve"></a>
 
-### gridRenderer.update(app)
-Called once per tick. No-op for GridRenderer.
+### gridRenderer.reserve(app)
+Hook for reserving input and ouput neurons in the Brain
 
 **Kind**: instance method of <code>[GridRenderer](#GridRenderer)</code>  
-**Overrides:** <code>[update](#System+update)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+update"></a>
+
+### gridRenderer.update(app)
+Hook for updating the state of the world
+
+**Kind**: instance method of <code>[GridRenderer](#GridRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+draw"></a>
+
+### gridRenderer.draw(app)
+Called once per frame to perform drawing logic
+
+**Kind**: instance method of <code>[GridRenderer](#GridRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+sense"></a>
+
+### gridRenderer.sense(app)
+Hook for inputting sense data into the brain
+
+**Kind**: instance method of <code>[GridRenderer](#GridRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+attempt"></a>
+
+### gridRenderer.attempt(app)
+Hook for reading output data from the brain and attempting actions
+
+**Kind**: instance method of <code>[GridRenderer](#GridRenderer)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1214,7 +1357,11 @@ Generates initial plant life, placing Plant components into Tiles
     * [new PlantGenerator()](#new_PlantGenerator_new)
     * [.tag](#System+tag) : <code>string</code>
     * [.initialize(app)](#PlantGenerator+initialize)
-    * [.update(app)](#PlantGenerator+update)
+    * [.reserve(app)](#System+reserve)
+    * [.update(app)](#System+update)
+    * [.draw(app)](#System+draw)
+    * [.sense(app)](#System+sense)
+    * [.attempt(app)](#System+attempt)
 
 <a name="new_PlantGenerator_new"></a>
 
@@ -1224,8 +1371,8 @@ Constructs a new PlantGenerator
 <a name="System+tag"></a>
 
 ### plantGenerator.tag : <code>string</code>
-Defines the role of this system. One of "renderer", "generator", or
-"processor".
+Defines the overall role of this system. One of "renderer", "generator",
+or "processor".
 
 **Kind**: instance property of <code>[PlantGenerator](#PlantGenerator)</code>  
 <a name="PlantGenerator+initialize"></a>
@@ -1240,13 +1387,56 @@ Seeds the world with plants
 | --- | --- | --- |
 | app | <code>[App](#App)</code> | the currently running GS app |
 
-<a name="PlantGenerator+update"></a>
+<a name="System+reserve"></a>
 
-### plantGenerator.update(app)
-A no-op for generators
+### plantGenerator.reserve(app)
+Hook for reserving input and ouput neurons in the Brain
 
 **Kind**: instance method of <code>[PlantGenerator](#PlantGenerator)</code>  
-**Overrides:** <code>[update](#System+update)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+update"></a>
+
+### plantGenerator.update(app)
+Hook for updating the state of the world
+
+**Kind**: instance method of <code>[PlantGenerator](#PlantGenerator)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+draw"></a>
+
+### plantGenerator.draw(app)
+Called once per frame to perform drawing logic
+
+**Kind**: instance method of <code>[PlantGenerator](#PlantGenerator)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+sense"></a>
+
+### plantGenerator.sense(app)
+Hook for inputting sense data into the brain
+
+**Kind**: instance method of <code>[PlantGenerator](#PlantGenerator)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+attempt"></a>
+
+### plantGenerator.attempt(app)
+Hook for reading output data from the brain and attempting actions
+
+**Kind**: instance method of <code>[PlantGenerator](#PlantGenerator)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1264,7 +1454,11 @@ Renders plants for all tiles that contain a Plant component
     * [new PlantRenderer()](#new_PlantRenderer_new)
     * [.tag](#System+tag) : <code>string</code>
     * [.initialize(app)](#PlantRenderer+initialize)
-    * [.update(app)](#PlantRenderer+update)
+    * [.draw(app)](#PlantRenderer+draw)
+    * [.reserve(app)](#System+reserve)
+    * [.update(app)](#System+update)
+    * [.sense(app)](#System+sense)
+    * [.attempt(app)](#System+attempt)
 
 <a name="new_PlantRenderer_new"></a>
 
@@ -1274,8 +1468,8 @@ Constructs a new PlantRenderer
 <a name="System+tag"></a>
 
 ### plantRenderer.tag : <code>string</code>
-Defines the role of this system. One of "renderer", "generator", or
-"processor".
+Defines the overall role of this system. One of "renderer", "generator",
+or "processor".
 
 **Kind**: instance property of <code>[PlantRenderer](#PlantRenderer)</code>  
 <a name="PlantRenderer+initialize"></a>
@@ -1290,14 +1484,58 @@ Prepares the system for rendering plant graphics
 | --- | --- | --- |
 | app | <code>[App](#App)</code> | the currently running GS app |
 
-<a name="PlantRenderer+update"></a>
+<a name="PlantRenderer+draw"></a>
 
-### plantRenderer.update(app)
+### plantRenderer.draw(app)
 Renders a plant graphic for every tile that contains a Plant component,
 and removes plant graphics for tiles that no longer have vegetation
 
 **Kind**: instance method of <code>[PlantRenderer](#PlantRenderer)</code>  
-**Overrides:** <code>[update](#System+update)</code>  
+**Overrides:** <code>[draw](#System+draw)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+reserve"></a>
+
+### plantRenderer.reserve(app)
+Hook for reserving input and ouput neurons in the Brain
+
+**Kind**: instance method of <code>[PlantRenderer](#PlantRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+update"></a>
+
+### plantRenderer.update(app)
+Hook for updating the state of the world
+
+**Kind**: instance method of <code>[PlantRenderer](#PlantRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+sense"></a>
+
+### plantRenderer.sense(app)
+Hook for inputting sense data into the brain
+
+**Kind**: instance method of <code>[PlantRenderer](#PlantRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+attempt"></a>
+
+### plantRenderer.attempt(app)
+Hook for reading output data from the brain and attempting actions
+
+**Kind**: instance method of <code>[PlantRenderer](#PlantRenderer)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |

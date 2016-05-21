@@ -62,17 +62,23 @@ class App {
   }
 
   /**
-   * Initializes every system included in all enabled plugins
+   * Initializes all enabled plugins by calling *reserve()* and *initialize()*
+   * on their constituent systems
    */
   initialize() {
+    this._forEachSystem((system) => system.reserve(this));
     this._forEachSystem((system) => system.initialize(this));
   }
 
   /**
-   * Updates every system included in all enabled plugins
+   * Ticks the simulation forward by one full iteration
    */
-  update() {
+  tick() {
     this._forEachSystem((system) => system.update(this));
+    this._forEachSystem((system) => system.draw(this));
+    this._forEachSystem((system) => system.sense(this));
+    this._forEachSystem((system) => system.think(this));
+    this._forEachSystem((system) => system.attempt(this));
     this.paper.view.draw();
   }
 
@@ -80,8 +86,8 @@ class App {
    * Kicks off the processing loop to continously update all systems
    */
   run() {
-    this._timer = setInterval(this.update.bind(this), 1000);
-    this.update();
+    this._timer = setInterval(this.tick.bind(this), 1000);
+    this.tick();
   }
 
   /**

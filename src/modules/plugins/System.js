@@ -1,7 +1,7 @@
 /**
  * Interface for defining new systems. A system in Genetic Sandbox is a class
- * containing initialize() and update() functions that operate in some way on
- * [Tiles]{@link Tile} within the [HexGrid]{@link HexGrid}.
+ * containing logic that operates in some way on [Tiles]{@link Tile} within the
+ * [HexGrid]{@link HexGrid}.
  * @abstract
  */
 class System {
@@ -16,11 +16,18 @@ class System {
     }
 
     /**
-     * Defines the role of this system. One of "renderer", "generator", or
-     * "processor".
+     * Defines the overall role of this system. One of "renderer", "generator",
+     * or "processor".
      * @type {string}
      */
     this.tag = tag;
+  }
+
+  /**
+   * Hook for reserving input and ouput neurons in the Brain
+   * @param {App} app - the currently running GS app
+   */
+  reserve(app) {
   }
 
   /**
@@ -28,15 +35,42 @@ class System {
    * @param {App} app - the currently running GS app
    */
   initialize(app) {
-    throw new Error("System#initialize must be implemented by a concrete subclass");
   }
 
   /**
-   * Called once per tick to update the simulation
+   * Hook for updating the state of the world
    * @param {App} app - the currently running GS app
    */
   update(app) {
-    throw new Error("System#update must be implemented by a concrete subclass");
+  }
+
+  /**
+   * Called once per frame to perform drawing logic
+   * @param {App} app - the currently running GS app
+   */
+  draw(app) {
+  }
+
+  /**
+   * Hook for inputting sense data into the brain
+   * @param {App} app - the currently running GS app
+   */
+  sense(app) {
+  }
+
+  /**
+   * Hook for activating the all creature brains
+   * @private
+   * @param {App} app - the currently running GS app
+   */
+  think(app) {
+  }
+
+  /**
+   * Hook for reading output data from the brain and attempting actions
+   * @param {App} app - the currently running GS app
+   */
+  attempt(app) {
   }
 }
 
