@@ -9,12 +9,7 @@ import "./styles/style.css";
 import paper from "paper";
 import App from "./modules/App";
 import HexGrid from "./modules/grid/HexGrid";
-
-// Import all systems
-import PlantGenerator from "./modules/systems/generators/PlantGenerator";
-import BackgroundRenderer from "./modules/systems/renderers/BackgroundRenderer";
-import GridRenderer from "./modules/systems/renderers/GridRenderer";
-import PlantRenderer from "./modules/systems/renderers/PlantRenderer";
+import config, { plugins } from "./modules/config";
 
 // Export the GS bootstrapping function
 window.GeneticSandbox = function (canvas, seed) {
@@ -33,22 +28,11 @@ window.GeneticSandbox = function (canvas, seed) {
   window.onresize = fitToContainer();
   fitToContainer();
 
-  // Add systems to this list to include them in the processing loop
-  const systems = [
-    // Generators
-    new PlantGenerator(),
-
-    // Renderers
-    new BackgroundRenderer(),
-    new GridRenderer(),
-    new PlantRenderer()
-  ];
-
   // Create the universe!
-  const grid = new HexGrid(25);
+  const grid = new HexGrid(config.core.gridRadius);
 
   // Finally, create an instance of App and initialize it
-  const app = new App(grid, systems, paperScope, seed);
+  const app = new App(grid, plugins, paperScope, seed);
   app.initialize();
 
   return app;

@@ -3,18 +3,18 @@ import Random from "random-js";
 /**
  * The entry point and hub of the entire application
  * @see {@link HexGrid}
- * @see {@link ISystem}
+ * @see {@link Plugin}
  */
 class App {
   /**
    * Prepares a Genetic Sandbox application for bootstrapping.
    * @param {HexGrid} grid - hex grid to use as the stage
-   * @param {Array.<ISystem>} systems - the systems to be included in the main
+   * @param {Plugin[]} plugins - the plugins to be included in the main
    * processing loop
    * @param {PaperScope} paperScope - Paper.js graphics context
    * @param {number} [seed] - the seed for the random number generator
    */
-  constructor(grid, systems, paperScope, seed) {
+  constructor(grid, plugins, paperScope, seed) {
     /**
      * A grid of tiles serving as the main stage of the simulation
      * @type {HexGrid}
@@ -22,10 +22,10 @@ class App {
     this.grid = grid;
 
     /**
-     * Array of systems included in the main processing loop
-     * @type {Array.ISystem}
+     * Array of plugins included in the main processing loop
+     * @type {Plugin[]}
      */
-    this.systems = systems;
+    this.plugins = plugins;
 
     /**
      * Paper.js graphics context used for rendering vector graphics to a
@@ -46,21 +46,39 @@ class App {
   }
 
   /**
-   * Initializes every System in the systems array
+   * Helper function for calling the given function with every system
+   * in all enabled plugins as an argument
+   * @private
+   * @param {Function} func - the function to apply with every system
    */
-  initialize() {
-    this.systems.forEach((system) => {
-      system.initialize(this);
+  _forEachSystem(func) {
+    this.plugins.forEach((plugin) => {
+      if (plugin.enabled) {
+        plugin.systems.forEach((system) => {
+          func(system);
+        });
+      }
     });
   }
 
   /**
-   * Updates every System in the systems array
+   * Initializes all enabled plugins by calling *reserve()* and *initialize()*
+   * on their constituent systems
    */
-  update() {
-    this.systems.forEach((system) => {
-      system.update(this);
-    });
+  initialize() {
+    this._forEachSystem((system) => system.reserve(this));
+    this._forEachSystem((system) => system.initialize(this));
+  }
+
+  /**
+   * Ticks the simulation forward by one full iteration
+   */
+  tick() {
+    this._forEachSystem((system) => system.update(this));
+    this._forEachSystem((system) => system.draw(this));
+    this._forEachSystem((system) => system.sense(this));
+    this._forEachSystem((system) => system.think(this));
+    this._forEachSystem((system) => system.attempt(this));
     this.paper.view.draw();
   }
 
@@ -68,8 +86,8 @@ class App {
    * Kicks off the processing loop to continously update all systems
    */
   run() {
-    this._timer = setInterval(this.update.bind(this), 1000);
-    this.update();
+    this._timer = setInterval(this.tick.bind(this), 1000);
+    this.tick();
   }
 
   /**

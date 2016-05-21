@@ -1,14 +1,20 @@
 import App from "../../src/modules/App";
-import ISystem from "../../src/modules/systems/ISystem";
+import Plugin from "../../src/modules/plugins/Plugin";
+import System from "../../src/modules/plugins/System";
 import { expect } from "chai";
 import { spy, stub } from "sinon";
 
 describe("App", () => {
-  let app, grid, systems, paper;
+  let app, grid, plugins, systems, paper;
 
-  class FakeSystem extends ISystem {
+  class FakeSystem extends System {
+    reserve() {}
     initialize() {}
     update() {}
+    draw() {}
+    sense() {}
+    think() {}
+    attempt() {}
   }
 
   beforeEach(() => {
@@ -21,9 +27,16 @@ describe("App", () => {
     ];
 
     systems.forEach((system) => {
+      spy(system, "reserve");
       spy(system, "initialize");
       spy(system, "update");
+      spy(system, "draw");
+      spy(system, "sense");
+      spy(system, "think");
+      spy(system, "attempt");
     });
+
+    plugins = [ new Plugin("fake", systems, {}) ];
 
     paper = {
       Path: {
@@ -41,7 +54,7 @@ describe("App", () => {
       }
     };
 
-    app = new App(grid, systems, paper);
+    app = new App(grid, plugins, paper);
   });
 
   it("can be instantiated", () => {
@@ -60,29 +73,69 @@ describe("App", () => {
     expect(app1.random.real(0, 100)).to.equal(app2.random.real(0, 100));
   });
 
-  it("should contain an array of Systems", () => {
-    expect(app.systems).to.be.ok;
-    expect(app.systems.constructor === Array).to.be.true;
+  it("should contain an array of Plugins", () => {
+    expect(app.plugins).to.be.ok;
+    expect(app.plugins.constructor === Array).to.be.true;
+  });
+
+  it("should skip disabled plugins in its processing loop", () => {
+    plugins[0].enabled = false;
+    const systemSpy = spy();
+    app._forEachSystem((system) => systemSpy(system));
+    systems.forEach((system) => {
+      expect(systemSpy.calledWith(system)).to.be.false;
+    });
   });
 
   describe("initialize", () => {
-    it("should call initialize() on every System in the systems array", () => {
+    it("should call reserve() on every system in every enabled plugin", () => {
       app.initialize();
-      app.systems.forEach((system) => {
+      systems.forEach((system) => {
+        expect(system.reserve.calledOnce).to.be.true;
+      });
+    });
+
+    it("should call initialize() on every system in every enabled plugin", () => {
+      app.initialize();
+      systems.forEach((system) => {
         expect(system.initialize.calledOnce).to.be.true;
       });
     });
   });
 
-  describe("update", () => {
-    beforeEach(() => {
-      app.initialize();
+  describe("tick", () => {
+    it("should call update() on every system in every enabld plugin", () => {
+      app.tick();
+      systems.forEach((system) => {
+        expect(system.update.calledOnce).to.be.true;
+      });
     });
 
-    it("should call update() on every System in the systems array", () => {
-      app.update();
-      app.systems.forEach((system) => {
-        expect(system.update.calledOnce).to.be.true;
+    it("should call draw() on every system in every enabld plugin", () => {
+      app.tick();
+      systems.forEach((system) => {
+        expect(system.draw.calledOnce).to.be.true;
+      });
+    });
+
+    it("should call sense() on every system in every enabld plugin", () => {
+      app.tick();
+      systems.forEach((system) => {
+        expect(system.sense.calledOnce).to.be.true;
+      });
+    });
+
+    it("should call think() on every system in every enabld plugin", () => {
+      app.tick();
+      systems.forEach((system) => {
+        expect(system.think.calledOnce).to.be.true;
+      });
+    });
+
+    it("should call attempt() on every system in every enabld plugin", () => {
+      app.tick();
+      systems.forEach((system) => {
+        expect(system.attempt.calledOnce).to.be.true;
       });
     });
   });

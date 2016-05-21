@@ -1,14 +1,14 @@
 import Hexagon from "../../../src/modules/shapes/Hexagon";
-import IShape from "../../../src/modules/shapes/IShape";
+import Shape from "../../../src/modules/shapes/Shape";
 import Point from "../../../src/modules/shapes/Point";
 import { expect } from "chai";
 
 describe("Hexagon", () => {
   const errorMargin = 0.00001;
 
-  it("should extend IShape", () => {
+  it("should extend Shape", () => {
     const hex = new Hexagon(new Point(0, 0), 1);
-    expect(hex instanceof IShape).to.be.true;
+    expect(hex instanceof Shape).to.be.true;
   });
 
   it("should be instantiable with x,y coordinates and a radius", () => {
