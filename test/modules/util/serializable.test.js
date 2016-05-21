@@ -58,6 +58,12 @@ describe("Serializable", () => {
       const json = bologna.serialize(["a", "b"]);
       expect(json).to.equal('{"ctor":"Bologna","data":{"nested":{"ctor":"Phony","data":{"c":{"fruit":"orange"},"d":[1,2,3]}}}}');
     });
+
+    it("skips properties that begin with a bang (!)", () => {
+      phony["!graphics"] = { color: "red" };
+      const json = phony.serialize();
+      expect(json).to.equal('{"ctor":"Phony","data":{"a":"apple","b":12,"c":{"fruit":"orange"},"d":[1,2,3]}}');
+    });
   });
 
   describe("restore", () => {

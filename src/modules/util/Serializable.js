@@ -33,7 +33,7 @@ class Serializable {
     };
 
     Object.keys(this).forEach((key) => {
-      if (!blacklist.includes(key)) {
+      if (!blacklist.includes(key) && !key.startsWith("!")) {
         let member = this[key];
         // Drill down into nested objects recursively
         if (member instanceof Serializable) {
