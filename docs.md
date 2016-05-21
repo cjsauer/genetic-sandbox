@@ -45,9 +45,6 @@ actions on the behalf of a creature</p>
 <dt><a href="#Coord">Coord</a> ⇐ <code><a href="#Component">Component</a></code></dt>
 <dd><p>A two dimensional coordinate of x and y</p>
 </dd>
-<dt><a href="#Creature">Creature</a> ⇐ <code><a href="#Component">Component</a></code></dt>
-<dd><p>Intelligent organism with the capability to evolve</p>
-</dd>
 <dt><a href="#ConnectionGene">ConnectionGene</a> ⇐ <code><a href="#Component">Component</a></code></dt>
 <dd><p>Genetic representation of a connection between two neurons in a neural
 network</p>
@@ -67,6 +64,15 @@ network</p>
 </dd>
 <dt><a href="#GridRenderer">GridRenderer</a> ⇐ <code><a href="#System">System</a></code></dt>
 <dd><p>Renders a hexagonal border around all tiles in the grid</p>
+</dd>
+<dt><a href="#Creature">Creature</a> ⇐ <code><a href="#Component">Component</a></code></dt>
+<dd><p>Intelligent organism with the capability to evolve</p>
+</dd>
+<dt><a href="#CreatureGenerator">CreatureGenerator</a> ⇐ <code><a href="#System">System</a></code></dt>
+<dd><p>Generates initial creatures with random DNA</p>
+</dd>
+<dt><a href="#CreatureRenderer">CreatureRenderer</a> ⇐ <code><a href="#System">System</a></code></dt>
+<dd><p>Renders creatures for all tiles that contain a Creature component</p>
 </dd>
 <dt><a href="#Plant">Plant</a> ⇐ <code><a href="#Component">Component</a></code></dt>
 <dd><p>An edible plant containing energy</p>
@@ -106,6 +112,9 @@ for tweaking them.</p>
 </dd>
 <dt><a href="#core">core</a> : <code>Object</code></dt>
 <dd><p>Core configuration options</p>
+</dd>
+<dt><a href="#creatures">creatures</a> : <code>Object</code></dt>
+<dd><p>Creature configuration options</p>
 </dd>
 <dt><a href="#plants">plants</a> : <code>Object</code></dt>
 <dd><p>Plant configuration options</p>
@@ -767,6 +776,8 @@ actions on the behalf of a creature
         * [.output(id)](#Brain+output)
         * [.activate()](#Brain+activate)
     * _static_
+        * [.inputNeuronCount](#Brain.inputNeuronCount) : <code>number</code>
+        * [.outputNeuronCount](#Brain.outputNeuronCount) : <code>number</code>
         * [.reserveInput()](#Brain.reserveInput) ⇒ <code>number</code>
         * [.reserveOutput()](#Brain.reserveOutput) ⇒ <code>number</code>
 
@@ -827,6 +838,20 @@ const outputValue = myBrain.output(myOutputID);
 Activates the brain on the inputs entered thus far
 
 **Kind**: instance method of <code>[Brain](#Brain)</code>  
+<a name="Brain.inputNeuronCount"></a>
+
+### Brain.inputNeuronCount : <code>number</code>
+The number of input neurons that every creature's brain will be initialized
+with
+
+**Kind**: static property of <code>[Brain](#Brain)</code>  
+<a name="Brain.outputNeuronCount"></a>
+
+### Brain.outputNeuronCount : <code>number</code>
+The number of output neurons that every creature's brain will be initialized
+with
+
+**Kind**: static property of <code>[Brain](#Brain)</code>  
 <a name="Brain.reserveInput"></a>
 
 ### Brain.reserveInput() ⇒ <code>number</code>
@@ -900,99 +925,6 @@ y value
 
 **Kind**: instance property of <code>[Coord](#Coord)</code>  
 **Default**: <code>0</code>  
-<a name="Creature"></a>
-
-## Creature ⇐ <code>[Component](#Component)</code>
-Intelligent organism with the capability to evolve
-
-**Kind**: global class  
-**Extends:** <code>[Component](#Component)</code>  
-
-* [Creature](#Creature) ⇐ <code>[Component](#Component)</code>
-    * [new Creature(dna, [energy])](#new_Creature_new)
-    * [.energy](#Creature+energy) : <code>number</code>
-    * [.dna](#Creature+dna) : <code>[DNA](#DNA)</code>
-    * [.brain](#Creature+brain) : <code>[Brain](#Brain)</code>
-    * [.alive](#Creature+alive) : <code>boolean</code>
-    * [.eat(plant)](#Creature+eat) ⇒ <code>number</code>
-    * [.expend(expenditure)](#Creature+expend) ⇒ <code>boolean</code>
-    * [.die()](#Creature+die)
-
-<a name="new_Creature_new"></a>
-
-### new Creature(dna, [energy])
-Constructs a new creature
-
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| dna | <code>[DNA](#DNA)</code> |  | the genetic representaiton of a creature |
-| [energy] | <code>number</code> | <code>10</code> | initial energy level |
-
-**Example**  
-
-```js
-const dna = new DNA(3, 4, random);
-const creature = new Creature(dna, 12);
-creature.energy === 12; // true
-```
-<a name="Creature+energy"></a>
-
-### creature.energy : <code>number</code>
-Energy level of this creature. When this reaches zero the creature,
-is dead.
-
-**Kind**: instance property of <code>[Creature](#Creature)</code>  
-<a name="Creature+dna"></a>
-
-### creature.dna : <code>[DNA](#DNA)</code>
-The genetic representaiton of this creature
-
-**Kind**: instance property of <code>[Creature](#Creature)</code>  
-<a name="Creature+brain"></a>
-
-### creature.brain : <code>[Brain](#Brain)</code>
-The brain of this creature
-
-**Kind**: instance property of <code>[Creature](#Creature)</code>  
-<a name="Creature+alive"></a>
-
-### creature.alive : <code>boolean</code>
-True if this creature is alive, false otherwise
-
-**Kind**: instance property of <code>[Creature](#Creature)</code>  
-<a name="Creature+eat"></a>
-
-### creature.eat(plant) ⇒ <code>number</code>
-Eats the given plant, raising the creature's energy level by the amount
-stored in the plant
-
-**Kind**: instance method of <code>[Creature](#Creature)</code>  
-**Returns**: <code>number</code> - the creature's new energy level  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| plant | <code>[Plant](#Plant)</code> | plant to eat |
-
-<a name="Creature+expend"></a>
-
-### creature.expend(expenditure) ⇒ <code>boolean</code>
-Expends the given amount of energy. If the creature's energy drops below
-zero, it dies.
-
-**Kind**: instance method of <code>[Creature](#Creature)</code>  
-**Returns**: <code>boolean</code> - True if the creature is still alive, false otherwise  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| expenditure | <code>number</code> | the amount of energy to expend |
-
-<a name="Creature+die"></a>
-
-### creature.die()
-Kills this creature
-
-**Kind**: instance method of <code>[Creature](#Creature)</code>  
 <a name="ConnectionGene"></a>
 
 ## ConnectionGene ⇐ <code>[Component](#Component)</code>
@@ -1406,6 +1338,296 @@ Hook for inputting sense data into the brain
 Hook for reading output data from the brain and attempting actions
 
 **Kind**: instance method of <code>[GridRenderer](#GridRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="Creature"></a>
+
+## Creature ⇐ <code>[Component](#Component)</code>
+Intelligent organism with the capability to evolve
+
+**Kind**: global class  
+**Extends:** <code>[Component](#Component)</code>  
+
+* [Creature](#Creature) ⇐ <code>[Component](#Component)</code>
+    * [new Creature(dna, [energy])](#new_Creature_new)
+    * [.energy](#Creature+energy) : <code>number</code>
+    * [.dna](#Creature+dna) : <code>[DNA](#DNA)</code>
+    * [.brain](#Creature+brain) : <code>[Brain](#Brain)</code>
+    * [.alive](#Creature+alive) : <code>boolean</code>
+    * [.eat(plant)](#Creature+eat) ⇒ <code>number</code>
+    * [.expend(expenditure)](#Creature+expend) ⇒ <code>boolean</code>
+    * [.die()](#Creature+die)
+
+<a name="new_Creature_new"></a>
+
+### new Creature(dna, [energy])
+Constructs a new creature
+
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| dna | <code>[DNA](#DNA)</code> |  | the genetic representaiton of a creature |
+| [energy] | <code>number</code> | <code>10</code> | initial energy level |
+
+**Example**  
+
+```js
+const dna = new DNA(3, 4, random);
+const creature = new Creature(dna, 12);
+creature.energy === 12; // true
+```
+<a name="Creature+energy"></a>
+
+### creature.energy : <code>number</code>
+Energy level of this creature. When this reaches zero the creature,
+is dead.
+
+**Kind**: instance property of <code>[Creature](#Creature)</code>  
+<a name="Creature+dna"></a>
+
+### creature.dna : <code>[DNA](#DNA)</code>
+The genetic representaiton of this creature
+
+**Kind**: instance property of <code>[Creature](#Creature)</code>  
+<a name="Creature+brain"></a>
+
+### creature.brain : <code>[Brain](#Brain)</code>
+The brain of this creature
+
+**Kind**: instance property of <code>[Creature](#Creature)</code>  
+<a name="Creature+alive"></a>
+
+### creature.alive : <code>boolean</code>
+True if this creature is alive, false otherwise
+
+**Kind**: instance property of <code>[Creature](#Creature)</code>  
+<a name="Creature+eat"></a>
+
+### creature.eat(plant) ⇒ <code>number</code>
+Eats the given plant, raising the creature's energy level by the amount
+stored in the plant
+
+**Kind**: instance method of <code>[Creature](#Creature)</code>  
+**Returns**: <code>number</code> - the creature's new energy level  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| plant | <code>[Plant](#Plant)</code> | plant to eat |
+
+<a name="Creature+expend"></a>
+
+### creature.expend(expenditure) ⇒ <code>boolean</code>
+Expends the given amount of energy. If the creature's energy drops below
+zero, it dies.
+
+**Kind**: instance method of <code>[Creature](#Creature)</code>  
+**Returns**: <code>boolean</code> - True if the creature is still alive, false otherwise  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| expenditure | <code>number</code> | the amount of energy to expend |
+
+<a name="Creature+die"></a>
+
+### creature.die()
+Kills this creature
+
+**Kind**: instance method of <code>[Creature](#Creature)</code>  
+<a name="CreatureGenerator"></a>
+
+## CreatureGenerator ⇐ <code>[System](#System)</code>
+Generates initial creatures with random DNA
+
+**Kind**: global class  
+**Extends:** <code>[System](#System)</code>  
+**See**: [Creature](#Creature)  
+
+* [CreatureGenerator](#CreatureGenerator) ⇐ <code>[System](#System)</code>
+    * [new CreatureGenerator()](#new_CreatureGenerator_new)
+    * [.tag](#System+tag) : <code>string</code>
+    * [.initialize(app)](#CreatureGenerator+initialize)
+    * [.reserve(app)](#System+reserve)
+    * [.update(app)](#System+update)
+    * [.draw(app)](#System+draw)
+    * [.sense(app)](#System+sense)
+    * [.attempt(app)](#System+attempt)
+
+<a name="new_CreatureGenerator_new"></a>
+
+### new CreatureGenerator()
+Constructs a new CreatureGenerator
+
+<a name="System+tag"></a>
+
+### creatureGenerator.tag : <code>string</code>
+Defines the overall role of this system. One of "renderer", "generator",
+or "processor".
+
+**Kind**: instance property of <code>[CreatureGenerator](#CreatureGenerator)</code>  
+<a name="CreatureGenerator+initialize"></a>
+
+### creatureGenerator.initialize(app)
+Seeds the world with creatures
+
+**Kind**: instance method of <code>[CreatureGenerator](#CreatureGenerator)</code>  
+**Overrides:** <code>[initialize](#System+initialize)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+reserve"></a>
+
+### creatureGenerator.reserve(app)
+Hook for reserving input and ouput neurons in the Brain
+
+**Kind**: instance method of <code>[CreatureGenerator](#CreatureGenerator)</code>  
+**Overrides:** <code>[reserve](#System+reserve)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+update"></a>
+
+### creatureGenerator.update(app)
+Hook for updating the state of the world
+
+**Kind**: instance method of <code>[CreatureGenerator](#CreatureGenerator)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+draw"></a>
+
+### creatureGenerator.draw(app)
+Called once per frame to perform drawing logic
+
+**Kind**: instance method of <code>[CreatureGenerator](#CreatureGenerator)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+sense"></a>
+
+### creatureGenerator.sense(app)
+Hook for inputting sense data into the brain
+
+**Kind**: instance method of <code>[CreatureGenerator](#CreatureGenerator)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+attempt"></a>
+
+### creatureGenerator.attempt(app)
+Hook for reading output data from the brain and attempting actions
+
+**Kind**: instance method of <code>[CreatureGenerator](#CreatureGenerator)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="CreatureRenderer"></a>
+
+## CreatureRenderer ⇐ <code>[System](#System)</code>
+Renders creatures for all tiles that contain a Creature component
+
+**Kind**: global class  
+**Extends:** <code>[System](#System)</code>  
+
+* [CreatureRenderer](#CreatureRenderer) ⇐ <code>[System](#System)</code>
+    * [new CreatureRenderer()](#new_CreatureRenderer_new)
+    * [.tag](#System+tag) : <code>string</code>
+    * [.initialize(app)](#CreatureRenderer+initialize)
+    * [.draw(app)](#CreatureRenderer+draw)
+    * [.reserve(app)](#System+reserve)
+    * [.update(app)](#System+update)
+    * [.sense(app)](#System+sense)
+    * [.attempt(app)](#System+attempt)
+
+<a name="new_CreatureRenderer_new"></a>
+
+### new CreatureRenderer()
+Constructs a new CreatureRenderer
+
+<a name="System+tag"></a>
+
+### creatureRenderer.tag : <code>string</code>
+Defines the overall role of this system. One of "renderer", "generator",
+or "processor".
+
+**Kind**: instance property of <code>[CreatureRenderer](#CreatureRenderer)</code>  
+<a name="CreatureRenderer+initialize"></a>
+
+### creatureRenderer.initialize(app)
+Prepares the system for rendering creature graphics
+
+**Kind**: instance method of <code>[CreatureRenderer](#CreatureRenderer)</code>  
+**Overrides:** <code>[initialize](#System+initialize)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="CreatureRenderer+draw"></a>
+
+### creatureRenderer.draw(app)
+Renders a creature graphic for every tile that contains a Creature component
+
+**Kind**: instance method of <code>[CreatureRenderer](#CreatureRenderer)</code>  
+**Overrides:** <code>[draw](#System+draw)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+reserve"></a>
+
+### creatureRenderer.reserve(app)
+Hook for reserving input and ouput neurons in the Brain
+
+**Kind**: instance method of <code>[CreatureRenderer](#CreatureRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+update"></a>
+
+### creatureRenderer.update(app)
+Hook for updating the state of the world
+
+**Kind**: instance method of <code>[CreatureRenderer](#CreatureRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+sense"></a>
+
+### creatureRenderer.sense(app)
+Hook for inputting sense data into the brain
+
+**Kind**: instance method of <code>[CreatureRenderer](#CreatureRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+attempt"></a>
+
+### creatureRenderer.attempt(app)
+Hook for reading output data from the brain and attempting actions
+
+**Kind**: instance method of <code>[CreatureRenderer](#CreatureRenderer)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -2048,6 +2270,18 @@ The radius in hexagons of the world
 The radius in pixels of a hexagon within the grid
 
 **Kind**: static property of <code>[core](#core)</code>  
+<a name="creatures"></a>
+
+## creatures : <code>Object</code>
+Creature configuration options
+
+**Kind**: global constant  
+<a name="creatures.creatureRate"></a>
+
+### creatures.creatureRate : <code>number</code>
+The chance that each tile has of spawning an initial creature
+
+**Kind**: static property of <code>[creatures](#creatures)</code>  
 <a name="plants"></a>
 
 ## plants : <code>Object</code>
