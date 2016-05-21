@@ -149,21 +149,44 @@ class HexGrid {
     ({x: x2, y: y2, z: z2} = HexGrid._axialToCubic(q2, r2));
     return Math.max(Math.abs(x1 - x2), Math.abs(y1 - y2), Math.abs(z1 - z2));
   }
-}
 
-/**
- * Converts a tile's coordinates to its pixel coordinates
- * @param {Coord} coord - tile coordinates
- * @param {number} radius - radius of hexagons (for correct spacing)
- * @returns {Point} pixel coordinates of center of tile
- */
-HexGrid.coordToPixel = (coord, radius) => {
-  let { x: q, y: r } = coord;
-  return new Point(
-    radius * Math.sqrt(3) * (r + (q / 2)),
-    radius * (3 / 2) * q
-  );
-};
+  /**
+  * Converts a tile's coordinates to its pixel coordinates
+  * @param {Coord} coord - tile coordinates
+  * @param {number} radius - radius of hexagons (for correct spacing)
+  * @returns {Point} pixel coordinates of center of tile
+  */
+  static coordToPixel (coord, radius) {
+    let { x: q, y: r } = coord;
+    return new Point(
+      radius * Math.sqrt(3) * (r + (q / 2)),
+      radius * (3 / 2) * q
+    );
+  }
+
+  /**
+   * Internal helper function for converting from axial coordinates to cubic
+   * @private
+   */
+  static _axialToCubic(q, r) {
+    return {
+      x: q,
+      z: r,
+      y: -q - r
+    };
+  }
+
+  /**
+   * Internal helper function for converting from cubic coordinates to axial
+   * @private
+   */
+  static _cubicToAxial (x, y, z) {
+    return {
+      q: x,
+      r: z
+    };
+  }
+}
 
 // The six unit directions in the axial coordinate system
 HexGrid._axialUnitDirections = [
@@ -184,22 +207,5 @@ HexGrid._cubicUnitDirections = [
   [-1, 0, 1],
   [0, -1, 1]
 ];
-
-// Internal helper function for converting from axial coordinates to cubic
-HexGrid._axialToCubic = (q, r) => {
-  return {
-    x: q,
-    z: r,
-    y: -q - r
-  };
-};
-
-// Internal helper function for converting from cubic coordinates to axial
-HexGrid._cubicToAxial = (x, y, z) => {
-  return {
-    q: x,
-    r: z
-  };
-};
 
 export default HexGrid;

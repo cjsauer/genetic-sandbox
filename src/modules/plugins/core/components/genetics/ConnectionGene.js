@@ -67,6 +67,12 @@ class ConnectionGene extends Component {
     this.innovationNumber = getInnovationNumber();
   }
 
+  /**
+  * Resets the innovation history
+  */
+  static resetInnovations () {
+    ConnectionGene._innovationMap = {};
+  }
 }
 
 /**
@@ -75,21 +81,14 @@ class ConnectionGene extends Component {
  * @private
  * @type {number}
  */
-ConnectionGene._nextInnovationNumber = ConnectionGene._nextInnovationNumber || 1;
+ConnectionGene._nextInnovationNumber = 1;
 
 /**
  * A map that stores historic connection gene mutations
  * @private
  * @type {Object}
  */
-ConnectionGene._innovationMap = ConnectionGene._innovationMap || {};
-
-/**
- * Resets the innovation history
- */
-ConnectionGene.resetInnovations = () => {
-  ConnectionGene._innovationMap = {};
-};
+ConnectionGene._innovationMap = {};
 
 Component.register(ConnectionGene);
 

@@ -80,6 +80,30 @@ class Brain extends Component {
   activate() {
     this._outputs = this._activate(this._inputs);
   }
+
+  /**
+  * Reserves a single input neuron. This function is expected to be called only
+  * once in the reservation step by systems that will be feeding sense data into
+  * the brain.
+  * @example
+  * const senseID = Brain.reserveInput();
+  * @returns {number} the ID of the reserved input neuron
+  */
+  static reserveInput() {
+    return Brain._inputNeuronCount++;
+  }
+
+  /**
+  * Reserves a single output neuron. This function is expected to be called only
+  * once in the reservation step by systems that will be feeding sense data into
+  * the brain.
+  * @example
+  * const actionID = Brain.reserveOutput();
+  * @returns {number} the ID of the reserved output neuron
+  */
+  static reserveOutput() {
+    return Brain._outputNeuronCount++;
+  }
 }
 
 /**
@@ -88,19 +112,7 @@ class Brain extends Component {
 * @private
 * @type {number}
 */
-Brain._inputNeuronCount = Brain._inputNeuronCount || 0;
-
-/**
- * Reserves a single input neuron. This function is expected to be called only
- * once in the reservation step by systems that will be feeding sense data into
- * the brain.
- * @example
- * const senseID = Brain.reserveInput();
- * @returns {number} the ID of the reserved input neuron
- */
-Brain.reserveInput = () => {
-  return Brain._inputNeuronCount++;
-};
+Brain._inputNeuronCount = 0;
 
 /**
 * The number of output neurons that every creature's brain will be initialized
@@ -108,19 +120,7 @@ Brain.reserveInput = () => {
 * @private
 * @type {number}
 */
-Brain._outputNeuronCount = Brain._outputNeuronCount || 0;
-
-/**
- * Reserves a single output neuron. This function is expected to be called only
- * once in the reservation step by systems that will be feeding sense data into
- * the brain.
- * @example
- * const actionID = Brain.reserveOutput();
- * @returns {number} the ID of the reserved output neuron
- */
-Brain.reserveOutput = () => {
-  return Brain._outputNeuronCount++;
-};
+Brain._outputNeuronCount = 0;
 
 Component.register(Brain);
 
