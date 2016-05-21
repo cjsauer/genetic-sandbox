@@ -1,5 +1,5 @@
 import Component from "../../Component";
-import Brain from "./Brain";
+import Brain from "../../core/components/Brain";
 import Sequencer from "../../../genetics/Sequencer";
 
 /**
@@ -39,6 +39,12 @@ class Creature extends Component {
      * @type {Brain}
      */
     this.brain = new Brain(dna, new Sequencer());
+
+    /**
+     * Skin color of this creature
+     * @type {Color}
+     */
+
   }
 
   /**

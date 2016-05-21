@@ -1,4 +1,4 @@
-import Creature from "../../../../../src/modules/plugins/core/components/Creature";
+import Creature from "../../../../../src/modules/plugins/creatures/components/Creature";
 import Component from "../../../../../src/modules/plugins/Component";
 import Brain from "../../../../../src/modules/plugins/core/components/Brain";
 import DNA from "../../../../../src/modules/plugins/core/components/genetics/DNA";
@@ -19,6 +19,7 @@ describe("Creature", () => {
   });
 
   it("should extend Component", () => {
+    const creature = new Creature();
     expect(creature instanceof Component).to.be.true;
   });
 

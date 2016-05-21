@@ -1,10 +1,12 @@
 import core from "./plugins/core";
 import plants from "./plugins/plants";
+import creatures from "./plugins/creatures";
 
 /* Here is where you can add your plugin! */
 export const plugins = [
   core,
-  plants
+  plants,
+  creatures
 ];
 
 /**
