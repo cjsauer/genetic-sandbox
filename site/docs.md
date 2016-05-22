@@ -68,6 +68,9 @@ network</p>
 <dt><a href="#Creature">Creature</a> ⇐ <code><a href="#Component">Component</a></code></dt>
 <dd><p>Intelligent organism with the capability to evolve</p>
 </dd>
+<dt><a href="#AgingProcessor">AgingProcessor</a> ⇐ <code><a href="#System">System</a></code></dt>
+<dd><p>Ages creatures, removing them if they run out of energy</p>
+</dd>
 <dt><a href="#BrainProcessor">BrainProcessor</a> ⇐ <code><a href="#System">System</a></code></dt>
 <dd><p>Activates the brains of all creatures</p>
 </dd>
@@ -76,6 +79,9 @@ network</p>
 </dd>
 <dt><a href="#CreatureRenderer">CreatureRenderer</a> ⇐ <code><a href="#System">System</a></code></dt>
 <dd><p>Renders creatures for all tiles that contain a Creature component</p>
+</dd>
+<dt><a href="#EatingProcessor">EatingProcessor</a> ⇐ <code><a href="#System">System</a></code></dt>
+<dd><p>Processes the eating of plants by creatures</p>
 </dd>
 <dt><a href="#MovementProcessor">MovementProcessor</a> ⇐ <code><a href="#System">System</a></code></dt>
 <dd><p>Processes locomotion for creatures</p>
@@ -1445,6 +1451,103 @@ zero, it dies.
 Kills this creature
 
 **Kind**: instance method of <code>[Creature](#Creature)</code>  
+<a name="AgingProcessor"></a>
+
+## AgingProcessor ⇐ <code>[System](#System)</code>
+Ages creatures, removing them if they run out of energy
+
+**Kind**: global class  
+**Extends:** <code>[System](#System)</code>  
+
+* [AgingProcessor](#AgingProcessor) ⇐ <code>[System](#System)</code>
+    * [new AgingProcessor()](#new_AgingProcessor_new)
+    * [.tag](#System+tag) : <code>string</code>
+    * [.update(app)](#AgingProcessor+update)
+    * [.reserve(app)](#System+reserve)
+    * [.initialize(app)](#System+initialize)
+    * [.draw(app)](#System+draw)
+    * [.sense(app)](#System+sense)
+    * [.attempt(app)](#System+attempt)
+
+<a name="new_AgingProcessor_new"></a>
+
+### new AgingProcessor()
+Constructs a new AgingProcessor
+
+<a name="System+tag"></a>
+
+### agingProcessor.tag : <code>string</code>
+Defines the overall role of this system. One of "renderer", "generator",
+or "processor".
+
+**Kind**: instance property of <code>[AgingProcessor](#AgingProcessor)</code>  
+<a name="AgingProcessor+update"></a>
+
+### agingProcessor.update(app)
+Expends energy (ages) creatures, removing them if they run out of energy
+
+**Kind**: instance method of <code>[AgingProcessor](#AgingProcessor)</code>  
+**Overrides:** <code>[update](#System+update)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+reserve"></a>
+
+### agingProcessor.reserve(app)
+Hook for reserving input and ouput neurons in the Brain
+
+**Kind**: instance method of <code>[AgingProcessor](#AgingProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+initialize"></a>
+
+### agingProcessor.initialize(app)
+Initializes this system allowing it to perform one-time preparation logic
+
+**Kind**: instance method of <code>[AgingProcessor](#AgingProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+draw"></a>
+
+### agingProcessor.draw(app)
+Called once per frame to perform drawing logic
+
+**Kind**: instance method of <code>[AgingProcessor](#AgingProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+sense"></a>
+
+### agingProcessor.sense(app)
+Hook for inputting sense data into the brain
+
+**Kind**: instance method of <code>[AgingProcessor](#AgingProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+attempt"></a>
+
+### agingProcessor.attempt(app)
+Hook for reading output data from the brain and attempting actions
+
+**Kind**: instance method of <code>[AgingProcessor](#AgingProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
 <a name="BrainProcessor"></a>
 
 ## BrainProcessor ⇐ <code>[System](#System)</code>
@@ -1750,6 +1853,104 @@ Hook for reading output data from the brain and attempting actions
 | --- | --- | --- |
 | app | <code>[App](#App)</code> | the currently running GS app |
 
+<a name="EatingProcessor"></a>
+
+## EatingProcessor ⇐ <code>[System](#System)</code>
+Processes the eating of plants by creatures
+
+**Kind**: global class  
+**Extends:** <code>[System](#System)</code>  
+
+* [EatingProcessor](#EatingProcessor) ⇐ <code>[System](#System)</code>
+    * [new EatingProcessor()](#new_EatingProcessor_new)
+    * [.tag](#System+tag) : <code>string</code>
+    * [.update(app)](#EatingProcessor+update)
+    * [.reserve(app)](#System+reserve)
+    * [.initialize(app)](#System+initialize)
+    * [.draw(app)](#System+draw)
+    * [.sense(app)](#System+sense)
+    * [.attempt(app)](#System+attempt)
+
+<a name="new_EatingProcessor_new"></a>
+
+### new EatingProcessor()
+Constructs a new EatingProcessor
+
+<a name="System+tag"></a>
+
+### eatingProcessor.tag : <code>string</code>
+Defines the overall role of this system. One of "renderer", "generator",
+or "processor".
+
+**Kind**: instance property of <code>[EatingProcessor](#EatingProcessor)</code>  
+<a name="EatingProcessor+update"></a>
+
+### eatingProcessor.update(app)
+Resolves the event of a creature and plant residing in the same tile
+to the creature eating that plant
+
+**Kind**: instance method of <code>[EatingProcessor](#EatingProcessor)</code>  
+**Overrides:** <code>[update](#System+update)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+reserve"></a>
+
+### eatingProcessor.reserve(app)
+Hook for reserving input and ouput neurons in the Brain
+
+**Kind**: instance method of <code>[EatingProcessor](#EatingProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+initialize"></a>
+
+### eatingProcessor.initialize(app)
+Initializes this system allowing it to perform one-time preparation logic
+
+**Kind**: instance method of <code>[EatingProcessor](#EatingProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+draw"></a>
+
+### eatingProcessor.draw(app)
+Called once per frame to perform drawing logic
+
+**Kind**: instance method of <code>[EatingProcessor](#EatingProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+sense"></a>
+
+### eatingProcessor.sense(app)
+Hook for inputting sense data into the brain
+
+**Kind**: instance method of <code>[EatingProcessor](#EatingProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+attempt"></a>
+
+### eatingProcessor.attempt(app)
+Hook for reading output data from the brain and attempting actions
+
+**Kind**: instance method of <code>[EatingProcessor](#EatingProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
 <a name="MovementProcessor"></a>
 
 ## MovementProcessor ⇐ <code>[System](#System)</code>
@@ -1783,7 +1984,7 @@ or "processor".
 <a name="MovementProcessor+reserve"></a>
 
 ### movementProcessor.reserve(app)
-Reserves 6 input neurons, one for each touch direction
+Reserves 7 output neurons, one for each direction plus no direction
 
 **Kind**: instance method of <code>[MovementProcessor](#MovementProcessor)</code>  
 **Overrides:** <code>[reserve](#System+reserve)</code>  
@@ -2593,10 +2794,35 @@ The radius in pixels of a hexagon within the grid
 Creature configuration options
 
 **Kind**: global constant  
+
+* [creatures](#creatures) : <code>Object</code>
+    * [.creatureRate](#creatures.creatureRate) : <code>number</code>
+    * [.initialEnergy](#creatures.initialEnergy) : <code>number</code>
+    * [.moveCost](#creatures.moveCost) : <code>number</code>
+    * [.tickCost](#creatures.tickCost) : <code>number</code>
+
 <a name="creatures.creatureRate"></a>
 
 ### creatures.creatureRate : <code>number</code>
 The chance that each tile has of spawning an initial creature
+
+**Kind**: static property of <code>[creatures](#creatures)</code>  
+<a name="creatures.initialEnergy"></a>
+
+### creatures.initialEnergy : <code>number</code>
+The amount of energy every creature starts with
+
+**Kind**: static property of <code>[creatures](#creatures)</code>  
+<a name="creatures.moveCost"></a>
+
+### creatures.moveCost : <code>number</code>
+The amount of energy expended to move one tile
+
+**Kind**: static property of <code>[creatures](#creatures)</code>  
+<a name="creatures.tickCost"></a>
+
+### creatures.tickCost : <code>number</code>
+The amount of energy expended per tick regardless of action taken
 
 **Kind**: static property of <code>[creatures](#creatures)</code>  
 <a name="plants"></a>

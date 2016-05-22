@@ -27,7 +27,7 @@ class CreatureGenerator extends System {
     tiles.forEach((tile) => {
       if (random.bool(config.creatures.creatureRate)) {
         let dna = new DNA(Brain.inputNeuronCount, Brain.outputNeuronCount, random);
-        tile.set("creature", new Creature(dna, 10));
+        tile.set("creature", new Creature(dna, config.creatures.initialEnergy));
       }
     });
   }

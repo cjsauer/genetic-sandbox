@@ -1,6 +1,7 @@
 import System from "../../System";
 import Brain from "../../core/components/Brain";
 import Coord from "../../core/components/Coord";
+import config from "../../../config";
 
 /**
  * Processes locomotion for creatures
@@ -15,7 +16,7 @@ class MovementProcessor extends System {
   }
 
   /**
-   * Reserves 6 input neurons, one for each touch direction
+   * Reserves 7 output neurons, one for each direction plus no direction
    * @param {App} app - the currently running GS app
    */
   reserve(app) {
@@ -78,9 +79,10 @@ class MovementProcessor extends System {
 
         // Move the creature to the destination tile if it exists and is open
         let creature = sourceTile.get("creature");
-        if (creature !== undefined && !destinationTile.hasComponent("creature")) {
+        if (creature !== undefined && !destinationTile.hasComponent("creature") && sourceTile !== destinationTile) {
           sourceTile.delete("creature");
           destinationTile.set("creature", creature);
+          creature.expend(config.creatures.moveCost);
         }
       } catch (e) {}
     });

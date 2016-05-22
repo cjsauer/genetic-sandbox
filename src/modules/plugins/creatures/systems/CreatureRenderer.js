@@ -1,3 +1,4 @@
+import _ from "lodash";
 import System from "../../System";
 import Theme from "../../../themes/Theme";
 import HexGrid from "../../../grid/HexGrid";
@@ -42,15 +43,26 @@ class CreatureRenderer extends System {
     const { Point, view } = app.paper;
 
     let creatureTiles = app.grid.getTilesByComponent("creature");
+    let creatureGraphicTiles = app.grid.getTilesByComponent("!creature");
+    let tilesOfInterest = _.xor(creatureTiles, creatureGraphicTiles);
 
-    creatureTiles.forEach((tile) => {
-      let creature = tile.get("creature");
-      let coord = tile.get("coord");
-      let { x, y } = HexGrid.coordToPixel(coord, config.core.hexRadius);
-      if (!creature.hasOwnProperty("!graphic")) {
-        creature["!graphic"] = this._creatureSymbol.place();
+    /* Tiles that contain both "creature" and "!creature" components are of no
+     * interest; there is a creature there and it has already been rendered.
+     * What we want is the symmetric difference, or creatures that contain
+     * explicity either "creature" OR "!creature". Tiles that contain *only* "creature"
+     * need a graphic, and tiles that contain *only* "!creature" need the graphic
+     * removed. There's no creature there anymore!
+     */
+    tilesOfInterest.forEach((tile) => {
+      if (tile.hasComponent("creature")) {
+        let coord = tile.get("coord");
+        let { x, y } = HexGrid.coordToPixel(coord, config.core.hexRadius);
+        let instance = this._creatureSymbol.place(new Point(x, y).add(view.center));
+        tile.set("!creature", instance);
+      } else {
+        tile.get("!creature").remove();
+        tile.delete("!creature");
       }
-      creature["!graphic"].position = new Point(x, y).add(view.center);
     });
   }
 }

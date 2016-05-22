@@ -2,7 +2,7 @@ import CreatureRenderer from "../../../../../src/modules/plugins/creatures/syste
 import Coord from "../../../../../src/modules/plugins/core/components/Coord";
 import HexGrid from "../../../../../src/modules/grid/HexGrid";
 import { expect } from "chai";
-import { stub } from "sinon";
+import { stub, spy } from "sinon";
 
 describe("CreatureRenderer", () => {
   let sys, grid, paper, app;
@@ -65,10 +65,24 @@ describe("CreatureRenderer", () => {
       sys.draw(app);
       expect(Symbol().place.callCount).to.equal(3);
       expect(() => { sys.draw(app); }).to.not.increase(Symbol().place, "callCount");
-      grid.getTilesByComponent("creature").forEach((tile) => {
-        let creature = tile.get("creature");
-        expect(creature.hasOwnProperty("!graphic")).to.be.true;
-      });
+      expect(grid.getTilesByComponent("!creature")).to.have.length(3);
+    });
+
+    it("should remove creature symbols for tiles that no longer have vegetation", () => {
+      const { Symbol } = app.paper;
+      sys.draw(app); // Create the vegeation graphics
+
+      // Remove creature from one of the tiles
+      let tile = grid.getTilesByComponent("creature")[0];
+      tile.delete("creature");
+
+      // Expect that the graphic was removed from both the scene and the tile
+      let deleteSpy = spy(tile, "delete");
+      sys.draw(app);
+      deleteSpy.restore();
+      expect(Symbol().place().remove.calledOnce).to.be.true;
+      expect(deleteSpy.calledWith("!creature")).to.be.true;
+      expect(tile.get("!creature")).to.be.undefined;
     });
   });
 });

@@ -2,8 +2,9 @@ import MovementProcessor from "../../../../../src/modules/plugins/creatures/syst
 import Brain from "../../../../../src/modules/plugins/core/components/Brain";
 import HexGrid from "../../../../../src/modules/grid/HexGrid";
 import Coord from "../../../../../src/modules/plugins/core/components/Coord";
+import config from "../../../../../src/modules/config";
 import { expect } from "chai";
-import { stub } from "sinon";
+import { stub, spy } from "sinon";
 
 describe("MovementProcessor", () => {
   let sys, reserveStub, app, creature1, creature2;
@@ -12,10 +13,10 @@ describe("MovementProcessor", () => {
     const grid = new HexGrid(1);
 
     // Creature at (0, 0)
-    creature1 = { brain: { output: stub() } };
+    creature1 = { brain: { output: stub() }, expend: spy() };
     grid.getTile(new Coord(0, 0)).set("creature", creature1);
     // Creature at (1, 0)
-    creature2 = { brain: { output: stub() } };
+    creature2 = { brain: { output: stub() }, expend: spy() };
     grid.getTile(new Coord(1, 0)).set("creature", creature2);
 
     app = { grid };
@@ -143,6 +144,32 @@ describe("MovementProcessor", () => {
 
       // Second creature did not
       expect(app.grid.getTile(new Coord(1, 0)).hasComponent("creature")).to.be.true;
+    });
+
+    it("expends a creature's energy to move", () => {
+      // Signals a move in the left and downward direction from (0, 0) to (-1, 1)
+      creature1.brain.output.onCall(0).returns(0.1);
+      creature1.brain.output.onCall(1).returns(0.2);
+      creature1.brain.output.onCall(2).returns(0.3);
+      creature1.brain.output.onCall(3).returns(0.8);
+      creature1.brain.output.onCall(4).returns(0.2);
+      creature1.brain.output.onCall(5).returns(0.1);
+      creature1.brain.output.onCall(6).returns(0.3);
+
+      // Signals no move attempt
+      creature2.brain.output.onCall(0).returns(0.9);
+      creature2.brain.output.onCall(1).returns(0.1);
+      creature2.brain.output.onCall(2).returns(0.2);
+      creature2.brain.output.onCall(3).returns(0.3);
+      creature2.brain.output.onCall(4).returns(0.8);
+      creature2.brain.output.onCall(5).returns(0.2);
+      creature2.brain.output.onCall(6).returns(0.1);
+
+      sys.attempt(app);
+      sys.update(app);
+
+      expect(creature1.expend.calledWith(config.creatures.moveCost)).to.be.true;
+      expect(creature2.expend.callCount).to.equal(0);
     });
 
     it("does not allow a creature to move out of bounds", () => {
