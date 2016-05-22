@@ -68,11 +68,20 @@ network</p>
 <dt><a href="#Creature">Creature</a> ⇐ <code><a href="#Component">Component</a></code></dt>
 <dd><p>Intelligent organism with the capability to evolve</p>
 </dd>
+<dt><a href="#BrainProcessor">BrainProcessor</a> ⇐ <code><a href="#System">System</a></code></dt>
+<dd><p>Activates the brains of all creatures</p>
+</dd>
 <dt><a href="#CreatureGenerator">CreatureGenerator</a> ⇐ <code><a href="#System">System</a></code></dt>
 <dd><p>Generates initial creatures with random DNA</p>
 </dd>
 <dt><a href="#CreatureRenderer">CreatureRenderer</a> ⇐ <code><a href="#System">System</a></code></dt>
 <dd><p>Renders creatures for all tiles that contain a Creature component</p>
+</dd>
+<dt><a href="#MovementProcessor">MovementProcessor</a> ⇐ <code><a href="#System">System</a></code></dt>
+<dd><p>Processes locomotion for creatures</p>
+</dd>
+<dt><a href="#TouchProcessor">TouchProcessor</a> ⇐ <code><a href="#System">System</a></code></dt>
+<dd><p>Inputs touch sense data into the brains of creatures</p>
 </dd>
 <dt><a href="#Plant">Plant</a> ⇐ <code><a href="#Component">Component</a></code></dt>
 <dd><p>An edible plant containing energy</p>
@@ -1436,6 +1445,115 @@ zero, it dies.
 Kills this creature
 
 **Kind**: instance method of <code>[Creature](#Creature)</code>  
+<a name="BrainProcessor"></a>
+
+## BrainProcessor ⇐ <code>[System](#System)</code>
+Activates the brains of all creatures
+
+**Kind**: global class  
+**Extends:** <code>[System](#System)</code>  
+
+* [BrainProcessor](#BrainProcessor) ⇐ <code>[System](#System)</code>
+    * [new BrainProcessor()](#new_BrainProcessor_new)
+    * [.tag](#System+tag) : <code>string</code>
+    * [.think(app)](#BrainProcessor+think)
+    * [.reserve(app)](#System+reserve)
+    * [.initialize(app)](#System+initialize)
+    * [.update(app)](#System+update)
+    * [.draw(app)](#System+draw)
+    * [.sense(app)](#System+sense)
+    * [.attempt(app)](#System+attempt)
+
+<a name="new_BrainProcessor_new"></a>
+
+### new BrainProcessor()
+Constructs a new BrainProcessor
+
+<a name="System+tag"></a>
+
+### brainProcessor.tag : <code>string</code>
+Defines the overall role of this system. One of "renderer", "generator",
+or "processor".
+
+**Kind**: instance property of <code>[BrainProcessor](#BrainProcessor)</code>  
+<a name="BrainProcessor+think"></a>
+
+### brainProcessor.think(app)
+Activates the brain of every creature
+
+**Kind**: instance method of <code>[BrainProcessor](#BrainProcessor)</code>  
+**Overrides:** <code>System#think</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+reserve"></a>
+
+### brainProcessor.reserve(app)
+Hook for reserving input and ouput neurons in the Brain
+
+**Kind**: instance method of <code>[BrainProcessor](#BrainProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+initialize"></a>
+
+### brainProcessor.initialize(app)
+Initializes this system allowing it to perform one-time preparation logic
+
+**Kind**: instance method of <code>[BrainProcessor](#BrainProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+update"></a>
+
+### brainProcessor.update(app)
+Hook for updating the state of the world
+
+**Kind**: instance method of <code>[BrainProcessor](#BrainProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+draw"></a>
+
+### brainProcessor.draw(app)
+Called once per frame to perform drawing logic
+
+**Kind**: instance method of <code>[BrainProcessor](#BrainProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+sense"></a>
+
+### brainProcessor.sense(app)
+Hook for inputting sense data into the brain
+
+**Kind**: instance method of <code>[BrainProcessor](#BrainProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+attempt"></a>
+
+### brainProcessor.attempt(app)
+Hook for reading output data from the brain and attempting actions
+
+**Kind**: instance method of <code>[BrainProcessor](#BrainProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
 <a name="CreatureGenerator"></a>
 
 ## CreatureGenerator ⇐ <code>[System](#System)</code>
@@ -1485,7 +1603,6 @@ Seeds the world with creatures
 Hook for reserving input and ouput neurons in the Brain
 
 **Kind**: instance method of <code>[CreatureGenerator](#CreatureGenerator)</code>  
-**Overrides:** <code>[reserve](#System+reserve)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1628,6 +1745,206 @@ Hook for inputting sense data into the brain
 Hook for reading output data from the brain and attempting actions
 
 **Kind**: instance method of <code>[CreatureRenderer](#CreatureRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="MovementProcessor"></a>
+
+## MovementProcessor ⇐ <code>[System](#System)</code>
+Processes locomotion for creatures
+
+**Kind**: global class  
+**Extends:** <code>[System](#System)</code>  
+
+* [MovementProcessor](#MovementProcessor) ⇐ <code>[System](#System)</code>
+    * [new MovementProcessor()](#new_MovementProcessor_new)
+    * [.tag](#System+tag) : <code>string</code>
+    * [.reserve(app)](#MovementProcessor+reserve)
+    * [.initialize(app)](#MovementProcessor+initialize)
+    * [.attempt(app)](#MovementProcessor+attempt)
+    * [.update(app)](#MovementProcessor+update)
+    * [.draw(app)](#System+draw)
+    * [.sense(app)](#System+sense)
+
+<a name="new_MovementProcessor_new"></a>
+
+### new MovementProcessor()
+Constructs a new MovementProcessor
+
+<a name="System+tag"></a>
+
+### movementProcessor.tag : <code>string</code>
+Defines the overall role of this system. One of "renderer", "generator",
+or "processor".
+
+**Kind**: instance property of <code>[MovementProcessor](#MovementProcessor)</code>  
+<a name="MovementProcessor+reserve"></a>
+
+### movementProcessor.reserve(app)
+Reserves 6 input neurons, one for each touch direction
+
+**Kind**: instance method of <code>[MovementProcessor](#MovementProcessor)</code>  
+**Overrides:** <code>[reserve](#System+reserve)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="MovementProcessor+initialize"></a>
+
+### movementProcessor.initialize(app)
+Prepares the system for use
+
+**Kind**: instance method of <code>[MovementProcessor](#MovementProcessor)</code>  
+**Overrides:** <code>[initialize](#System+initialize)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="MovementProcessor+attempt"></a>
+
+### movementProcessor.attempt(app)
+Makes plans to move a creature in the most prevailing direction signaled
+by the brain
+
+**Kind**: instance method of <code>[MovementProcessor](#MovementProcessor)</code>  
+**Overrides:** <code>[attempt](#System+attempt)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="MovementProcessor+update"></a>
+
+### movementProcessor.update(app)
+Moves creature to their planned positions
+
+**Kind**: instance method of <code>[MovementProcessor](#MovementProcessor)</code>  
+**Overrides:** <code>[update](#System+update)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+draw"></a>
+
+### movementProcessor.draw(app)
+Called once per frame to perform drawing logic
+
+**Kind**: instance method of <code>[MovementProcessor](#MovementProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+sense"></a>
+
+### movementProcessor.sense(app)
+Hook for inputting sense data into the brain
+
+**Kind**: instance method of <code>[MovementProcessor](#MovementProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="TouchProcessor"></a>
+
+## TouchProcessor ⇐ <code>[System](#System)</code>
+Inputs touch sense data into the brains of creatures
+
+**Kind**: global class  
+**Extends:** <code>[System](#System)</code>  
+
+* [TouchProcessor](#TouchProcessor) ⇐ <code>[System](#System)</code>
+    * [new TouchProcessor()](#new_TouchProcessor_new)
+    * [.tag](#System+tag) : <code>string</code>
+    * [.reserve(app)](#TouchProcessor+reserve)
+    * [.sense(app)](#TouchProcessor+sense)
+    * [.initialize(app)](#System+initialize)
+    * [.update(app)](#System+update)
+    * [.draw(app)](#System+draw)
+    * [.attempt(app)](#System+attempt)
+
+<a name="new_TouchProcessor_new"></a>
+
+### new TouchProcessor()
+Constructs a new TouchProcessor
+
+<a name="System+tag"></a>
+
+### touchProcessor.tag : <code>string</code>
+Defines the overall role of this system. One of "renderer", "generator",
+or "processor".
+
+**Kind**: instance property of <code>[TouchProcessor](#TouchProcessor)</code>  
+<a name="TouchProcessor+reserve"></a>
+
+### touchProcessor.reserve(app)
+Reserves 6 input neurons, one for each touch direction
+
+**Kind**: instance method of <code>[TouchProcessor](#TouchProcessor)</code>  
+**Overrides:** <code>[reserve](#System+reserve)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="TouchProcessor+sense"></a>
+
+### touchProcessor.sense(app)
+Inputs touch sense data into the brain. Inputs a 1 for plant, 0.5 for
+creature, and 0 for no item present.
+
+**Kind**: instance method of <code>[TouchProcessor](#TouchProcessor)</code>  
+**Overrides:** <code>[sense](#System+sense)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+initialize"></a>
+
+### touchProcessor.initialize(app)
+Initializes this system allowing it to perform one-time preparation logic
+
+**Kind**: instance method of <code>[TouchProcessor](#TouchProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+update"></a>
+
+### touchProcessor.update(app)
+Hook for updating the state of the world
+
+**Kind**: instance method of <code>[TouchProcessor](#TouchProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+draw"></a>
+
+### touchProcessor.draw(app)
+Called once per frame to perform drawing logic
+
+**Kind**: instance method of <code>[TouchProcessor](#TouchProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+attempt"></a>
+
+### touchProcessor.attempt(app)
+Hook for reading output data from the brain and attempting actions
+
+**Kind**: instance method of <code>[TouchProcessor](#TouchProcessor)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |

@@ -76,17 +76,17 @@ class App {
   tick() {
     this._forEachSystem((system) => system.update(this));
     this._forEachSystem((system) => system.draw(this));
+    this.paper.view.draw();
     this._forEachSystem((system) => system.sense(this));
     this._forEachSystem((system) => system.think(this));
     this._forEachSystem((system) => system.attempt(this));
-    this.paper.view.draw();
   }
 
   /**
    * Kicks off the processing loop to continously update all systems
    */
   run() {
-    this._timer = setInterval(this.tick.bind(this), 1000);
+    this._timer = setInterval(this.tick.bind(this), 500);
     this.tick();
   }
 

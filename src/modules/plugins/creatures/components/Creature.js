@@ -39,12 +39,6 @@ class Creature extends Component {
      * @type {Brain}
      */
     this.brain = new Brain(dna, new Sequencer());
-
-    /**
-     * Skin color of this creature
-     * @type {Color}
-     */
-
   }
 
   /**

@@ -22,7 +22,7 @@ class CreatureRenderer extends System {
   initialize(app) {
     const { Layer, Path, Symbol } = app.paper;
 
-    // Make a new layer and group for creatures
+    // Make a new layer for creatures
     this._creatureLayer = new Layer();
 
     // Build out the creature graphic
@@ -50,7 +50,7 @@ class CreatureRenderer extends System {
       if (!creature.hasOwnProperty("!graphic")) {
         creature["!graphic"] = this._creatureSymbol.place();
       }
-      creature["!graphic"].position	= new Point(x, y).add(view.center);
+      creature["!graphic"].position = new Point(x, y).add(view.center);
     });
   }
 }

@@ -17,12 +17,6 @@ class CreatureGenerator extends System {
     super("generator");
   }
 
-  reserve(app) {
-    // TODO: These are temporary to get the brain working
-    Brain.reserveInput();
-    Brain.reserveOutput();
-  }
-
    /**
     * Seeds the world with creatures
     * @param {App} app - the currently running GS app

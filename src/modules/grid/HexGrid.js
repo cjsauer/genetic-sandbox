@@ -129,8 +129,6 @@ class HexGrid {
       } catch (e) {
         return null;
       }
-    }).filter((tile) => {
-      return tile !== null;
     });
   }
 

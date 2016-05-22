@@ -1,10 +1,16 @@
 import Plugin from "../Plugin";
 import CreatureGenerator from "./systems/CreatureGenerator";
 import CreatureRenderer from "./systems/CreatureRenderer";
+import TouchProcessor from "./systems/TouchProcessor";
+import BrainProcessor from "./systems/BrainProcessor";
+import MovementProcessor from "./systems/MovementProcessor";
 
 const systems = [
   new CreatureGenerator(),
-  new CreatureRenderer()
+  new CreatureRenderer(),
+  new TouchProcessor(),
+  new BrainProcessor(),
+  new MovementProcessor()
 ];
 
 /**
