@@ -1,22 +1,20 @@
-import PlantRenderer from "../../../../../src/modules/plugins/plants/systems/PlantRenderer";
+import CreatureRenderer from "../../../../../src/modules/plugins/creatures/systems/CreatureRenderer";
 import Coord from "../../../../../src/modules/plugins/core/components/Coord";
 import HexGrid from "../../../../../src/modules/grid/HexGrid";
 import { expect } from "chai";
 import { stub, spy } from "sinon";
 
-describe("PlantRenderer", () => {
+describe("CreatureRenderer", () => {
   let sys, grid, paper, app;
 
   beforeEach(() => {
-    sys = new PlantRenderer();
+    sys = new CreatureRenderer();
     grid = new HexGrid(1);
 
     // Stub out the dependencies
     paper = {
       Path: {
-        Line: stub().returns({
-          rotate: stub()
-        })
+        Circle: stub().returns({})
       },
       Symbol: stub().returns({
         place: stub().returns({
@@ -27,9 +25,6 @@ describe("PlantRenderer", () => {
         add: stub()
       }),
       Color: stub(),
-      Group: stub().returns({
-        addChild: stub()
-      }),
       Layer: stub().returns({
         addChild: stub()
       }),
@@ -49,11 +44,10 @@ describe("PlantRenderer", () => {
   });
 
   describe("initialize", () => {
-    it("should prebuild the plant graphic", () => {
-      const { Group, Path, Symbol } = app.paper;
+    it("should prebuild the creature graphic", () => {
+      const { Path, Symbol } = app.paper;
       sys.initialize(app);
-      expect(Group.calledWithNew()).to.be.true;
-      expect(Path.Line.calledWithNew()).to.be.true;
+      expect(Path.Circle.calledWithNew()).to.be.true;
       expect(Symbol.calledWithNew()).to.be.true;
     });
   });
@@ -61,34 +55,34 @@ describe("PlantRenderer", () => {
   describe("draw", () => {
     beforeEach(() => {
       sys.initialize(app);
-      grid.getTile(new Coord(0, 0)).set("plant", {});
-      grid.getTile(new Coord(1, 0)).set("plant", {});
-      grid.getTile(new Coord(0, 1)).set("plant", {});
+      grid.getTile(new Coord(0, 0)).set("creature", {});
+      grid.getTile(new Coord(1, 0)).set("creature", {});
+      grid.getTile(new Coord(0, 1)).set("creature", {});
     });
 
-    it("should place and store a plant symbol for tiles with vegetation ONCE", () => {
+    it("should place and store a creature symbol for tiles with a creature ONCE", () => {
       const { Symbol } = app.paper;
       sys.draw(app);
       expect(Symbol().place.callCount).to.equal(3);
       expect(() => { sys.draw(app); }).to.not.increase(Symbol().place, "callCount");
-      expect(grid.getTilesByComponent("!plant")).to.have.length(3);
+      expect(grid.getTilesByComponent("!creature")).to.have.length(3);
     });
 
-    it("should remove plant symbols for tiles that no longer have vegetation", () => {
+    it("should remove creature symbols for tiles that no longer have vegetation", () => {
       const { Symbol } = app.paper;
       sys.draw(app); // Create the vegeation graphics
 
-      // Remove plant from one of the tiles
-      let tile = grid.getTilesByComponent("plant")[0];
-      tile.delete("plant");
+      // Remove creature from one of the tiles
+      let tile = grid.getTilesByComponent("creature")[0];
+      tile.delete("creature");
 
       // Expect that the graphic was removed from both the scene and the tile
       let deleteSpy = spy(tile, "delete");
       sys.draw(app);
       deleteSpy.restore();
       expect(Symbol().place().remove.calledOnce).to.be.true;
-      expect(deleteSpy.calledWith("!plant")).to.be.true;
-      expect(tile.get("!plant")).to.be.undefined;
+      expect(deleteSpy.calledWith("!creature")).to.be.true;
+      expect(tile.get("!creature")).to.be.undefined;
     });
   });
 });

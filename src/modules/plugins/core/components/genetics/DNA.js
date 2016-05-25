@@ -29,7 +29,7 @@ class DNA extends Component {
      * Strand of genes describing a creature's brain
      * @type {Strand}
      */
-    this.brainStrand = new Strand(inputCount, outputCount, false, random);
+    this.brainStrand = new Strand(inputCount, outputCount, true, random);
 
     // Randomly enable a single connection
     random.pick(this.brainStrand.connectionGenes).enabled = true;

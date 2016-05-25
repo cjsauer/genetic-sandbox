@@ -189,8 +189,9 @@ describe("HexGrid", () => {
       });
 
       const neighbors = hexGrid.neighborsOf(new Coord(1, -1));
-      expect(neighbors.length).to.equal(expectedNeighbors.length);
+      expect(neighbors.length).to.equal(6);
       expect(neighbors).to.deep.include.members(expectedNeighbors);
+      expect(neighbors.filter((neighbor) => neighbor === null).length).to.equal(3);
     });
   });
 

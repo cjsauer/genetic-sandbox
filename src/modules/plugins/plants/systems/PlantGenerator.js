@@ -24,7 +24,7 @@ class PlantGenerator extends System {
     const tiles = app.grid.getTiles();
     tiles.forEach((tile) => {
       if (random.bool(config.plants.vegetationRate)) {
-        tile.set("plant", new Plant(10));
+        tile.set("plant", new Plant(config.plants.plantEnergy));
       }
     });
   }

@@ -16,7 +16,13 @@ const plants = {
    * The percentage of the grid that will be covered in vegetation
    * @type {number}
    */
-  vegetationRate: 0.1
+  vegetationRate: 0.2,
+
+  /**
+   * Energy contained in a plant
+   * @type {number}
+   */
+  plantEnergy: 6
 };
 
 export default new Plugin("plants", systems, plants);
