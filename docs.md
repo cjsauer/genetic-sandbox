@@ -69,7 +69,7 @@ network</p>
 <dd><p>Intelligent organism with the capability to evolve</p>
 </dd>
 <dt><a href="#AgingProcessor">AgingProcessor</a> ⇐ <code><a href="#System">System</a></code></dt>
-<dd><p>Ages creatures, removing them if they run out of energy</p>
+<dd><p>Saps energy from creatures every tick</p>
 </dd>
 <dt><a href="#BrainProcessor">BrainProcessor</a> ⇐ <code><a href="#System">System</a></code></dt>
 <dd><p>Activates the brains of all creatures</p>
@@ -350,6 +350,8 @@ let habitatTiles = grid.getTilesByComponent(["biome", "temperature"]);
 
 ### hexGrid.neighborsOf(coord) ⇒ <code>Array.Tile</code>
 Returns the Tiles that are adjacent to the Tile at the provided (x, y) coordinates.
+Will return `null` for a neighbor that doesn't exist, at the edges of the
+grid for example.
 
 **Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
 **Returns**: <code>Array.Tile</code> - The array of neighboring Tiles  
@@ -791,8 +793,10 @@ actions on the behalf of a creature
         * [.output(id)](#Brain+output)
         * [.activate()](#Brain+activate)
     * _static_
-        * [.inputNeuronCount](#Brain.inputNeuronCount) : <code>number</code>
-        * [.outputNeuronCount](#Brain.outputNeuronCount) : <code>number</code>
+        * [.inputNeuronCount](#Brain.inputNeuronCount) ⇒ <code>number</code>
+        * [.outputNeuronCount](#Brain.outputNeuronCount) ⇒ <code>number</code>
+        * [._inputNeuronCount](#Brain._inputNeuronCount) : <code>number</code>
+        * [._outputNeuronCount](#Brain._outputNeuronCount) : <code>number</code>
         * [.reserveInput()](#Brain.reserveInput) ⇒ <code>number</code>
         * [.reserveOutput()](#Brain.reserveOutput) ⇒ <code>number</code>
 
@@ -855,14 +859,28 @@ Activates the brain on the inputs entered thus far
 **Kind**: instance method of <code>[Brain](#Brain)</code>  
 <a name="Brain.inputNeuronCount"></a>
 
-### Brain.inputNeuronCount : <code>number</code>
+### Brain.inputNeuronCount ⇒ <code>number</code>
+Returns the total number of reserved input neurons
+
+**Kind**: static property of <code>[Brain](#Brain)</code>  
+**Returns**: <code>number</code> - total number of reserved input neurons  
+<a name="Brain.outputNeuronCount"></a>
+
+### Brain.outputNeuronCount ⇒ <code>number</code>
+Returns the total number of reserved output neurons
+
+**Kind**: static property of <code>[Brain](#Brain)</code>  
+**Returns**: <code>number</code> - total number of reserved output neurons  
+<a name="Brain._inputNeuronCount"></a>
+
+### Brain._inputNeuronCount : <code>number</code>
 The number of input neurons that every creature's brain will be initialized
 with
 
 **Kind**: static property of <code>[Brain](#Brain)</code>  
-<a name="Brain.outputNeuronCount"></a>
+<a name="Brain._outputNeuronCount"></a>
 
-### Brain.outputNeuronCount : <code>number</code>
+### Brain._outputNeuronCount : <code>number</code>
 The number of output neurons that every creature's brain will be initialized
 with
 
@@ -1051,8 +1069,9 @@ a random input neuron and a random output neuron.
 **Example**  
 
 ```js
-// Creates DNA for a creature that has 3 brain inputs, and 4 brain outputs
-const myDNA = new DNA(3, 4, random);
+// Creates DNA for a creature with the current count of reserved input and
+// output neurons
+const myDNA = new DNA(Brain.inputNeuronCount, Brain.outputNeuronCount, random);
 ```
 <a name="DNA+brainStrand"></a>
 
@@ -1367,7 +1386,7 @@ Intelligent organism with the capability to evolve
 **Extends:** <code>[Component](#Component)</code>  
 
 * [Creature](#Creature) ⇐ <code>[Component](#Component)</code>
-    * [new Creature(dna, [energy])](#new_Creature_new)
+    * [new Creature(dna, energy)](#new_Creature_new)
     * [.energy](#Creature+energy) : <code>number</code>
     * [.dna](#Creature+dna) : <code>[DNA](#DNA)</code>
     * [.brain](#Creature+brain) : <code>[Brain](#Brain)</code>
@@ -1378,14 +1397,14 @@ Intelligent organism with the capability to evolve
 
 <a name="new_Creature_new"></a>
 
-### new Creature(dna, [energy])
+### new Creature(dna, energy)
 Constructs a new creature
 
 
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| dna | <code>[DNA](#DNA)</code> |  | the genetic representaiton of a creature |
-| [energy] | <code>number</code> | <code>10</code> | initial energy level |
+| Param | Type | Description |
+| --- | --- | --- |
+| dna | <code>[DNA](#DNA)</code> | the genetic representaiton of a creature |
+| energy | <code>number</code> | initial energy level |
 
 **Example**  
 
@@ -1423,7 +1442,7 @@ True if this creature is alive, false otherwise
 
 ### creature.eat(plant) ⇒ <code>number</code>
 Eats the given plant, raising the creature's energy level by the amount
-stored in the plant
+stored in the plant. Does NOT affect the plant in any way.
 
 **Kind**: instance method of <code>[Creature](#Creature)</code>  
 **Returns**: <code>number</code> - the creature's new energy level  
@@ -1454,7 +1473,7 @@ Kills this creature
 <a name="AgingProcessor"></a>
 
 ## AgingProcessor ⇐ <code>[System](#System)</code>
-Ages creatures, removing them if they run out of energy
+Saps energy from creatures every tick
 
 **Kind**: global class  
 **Extends:** <code>[System](#System)</code>  
@@ -1484,7 +1503,7 @@ or "processor".
 <a name="AgingProcessor+update"></a>
 
 ### agingProcessor.update(app)
-Expends energy (ages) creatures, removing them if they run out of energy
+Saps energy from all creatures every tick, removing them if they die
 
 **Kind**: instance method of <code>[AgingProcessor](#AgingProcessor)</code>  
 **Overrides:** <code>[update](#System+update)</code>  
@@ -1966,6 +1985,8 @@ Processes locomotion for creatures
     * [.initialize(app)](#MovementProcessor+initialize)
     * [.attempt(app)](#MovementProcessor+attempt)
     * [.update(app)](#MovementProcessor+update)
+    * [._hashCoord(coord)](#MovementProcessor+_hashCoord) ⇒ <code>string</code>
+    * [._unhashCoord(hash)](#MovementProcessor+_unhashCoord) ⇒ <code>[Coord](#Coord)</code>
     * [.draw(app)](#System+draw)
     * [.sense(app)](#System+sense)
 
@@ -2029,6 +2050,30 @@ Moves creature to their planned positions
 | Param | Type | Description |
 | --- | --- | --- |
 | app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="MovementProcessor+_hashCoord"></a>
+
+### movementProcessor._hashCoord(coord) ⇒ <code>string</code>
+Hashes a Coord instance for use as an object key
+
+**Kind**: instance method of <code>[MovementProcessor](#MovementProcessor)</code>  
+**Returns**: <code>string</code> - hashed version of the given coord  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| coord | <code>[Coord](#Coord)</code> | the coord to hash |
+
+<a name="MovementProcessor+_unhashCoord"></a>
+
+### movementProcessor._unhashCoord(hash) ⇒ <code>[Coord](#Coord)</code>
+Reverses the effect of hashing a Coord instance using _hashCoord
+
+**Kind**: instance method of <code>[MovementProcessor](#MovementProcessor)</code>  
+**Returns**: <code>[Coord](#Coord)</code> - the restored Coord instance  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| hash | <code>string</code> | the hashed Coord instance |
 
 <a name="System+draw"></a>
 
@@ -2831,10 +2876,21 @@ The amount of energy expended per tick regardless of action taken
 Plant configuration options
 
 **Kind**: global constant  
+
+* [plants](#plants) : <code>Object</code>
+    * [.vegetationRate](#plants.vegetationRate) : <code>number</code>
+    * [.plantEnergy](#plants.plantEnergy) : <code>number</code>
+
 <a name="plants.vegetationRate"></a>
 
 ### plants.vegetationRate : <code>number</code>
 The percentage of the grid that will be covered in vegetation
+
+**Kind**: static property of <code>[plants](#plants)</code>  
+<a name="plants.plantEnergy"></a>
+
+### plants.plantEnergy : <code>number</code>
+Energy contained in a plant
 
 **Kind**: static property of <code>[plants](#plants)</code>  
 <a name="ElementalTheme"></a>
