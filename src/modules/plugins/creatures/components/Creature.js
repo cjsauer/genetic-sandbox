@@ -14,9 +14,9 @@ class Creature extends Component {
    * const creature = new Creature(dna, 12);
    * creature.energy === 12; // true
    * @param {DNA} dna - the genetic representaiton of a creature
-   * @param {number} [energy=10] - initial energy level
+   * @param {number} energy - initial energy level
    */
-  constructor(dna, energy = 10) {
+  constructor(dna, energy) {
     super();
 
     if (arguments.length === 0) return;
@@ -51,7 +51,7 @@ class Creature extends Component {
 
   /**
    * Eats the given plant, raising the creature's energy level by the amount
-   * stored in the plant
+   * stored in the plant. Does NOT affect the plant in any way.
    * @param {Plant} plant - plant to eat
    * @returns {number} the creature's new energy level
    */
@@ -67,7 +67,7 @@ class Creature extends Component {
    */
   expend(expenditure) {
     this.energy -= expenditure;
-    if (this.energy <= 0) {
+    if (!this.alive) {
       this.die();
       return false;
     }

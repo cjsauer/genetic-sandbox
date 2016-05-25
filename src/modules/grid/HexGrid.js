@@ -114,6 +114,8 @@ class HexGrid {
 
   /**
    * Returns the Tiles that are adjacent to the Tile at the provided (x, y) coordinates.
+   * Will return `null` for a neighbor that doesn't exist, at the edges of the
+   * grid for example.
    * @example
    * let neighborsOfOrigin = myGrid.neighborsOf(new Coord(0, 0));
    * neighborsOfOrigin.forEach((tile) => {

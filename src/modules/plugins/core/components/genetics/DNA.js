@@ -12,8 +12,9 @@ class DNA extends Component {
    * simplest possible brain: one with only one enabled connection between
    * a random input neuron and a random output neuron.
    * @example
-   * // Creates DNA for a creature that has 3 brain inputs, and 4 brain outputs
-   * const myDNA = new DNA(3, 4, random);
+   * // Creates DNA for a creature with the current count of reserved input and
+   * // output neurons
+   * const myDNA = new DNA(Brain.inputNeuronCount, Brain.outputNeuronCount, random);
    * @param {number} inputCount - the total number of possible inputs (senses)
    * to a creature's brain
    * @param {number} outputCount - the total number of possible outputs (actions)

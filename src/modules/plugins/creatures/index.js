@@ -26,7 +26,7 @@ const creatures = {
    * The chance that each tile has of spawning an initial creature
    * @type {number}
    */
-  creatureRate: 0.01,
+  creatureRate: 0.02,
 
   /**
    * The amount of energy every creature starts with
@@ -38,7 +38,7 @@ const creatures = {
    * The amount of energy expended to move one tile
    * @type {number}
    */
-  moveCost: 2,
+  moveCost: 1,
 
   /**
    * The amount of energy expended per tick regardless of action taken

@@ -86,7 +86,7 @@ class App {
    * Kicks off the processing loop to continously update all systems
    */
   run() {
-    this._timer = setInterval(this.tick.bind(this), 500);
+    this._timer = setInterval(this.tick.bind(this), 100);
     this.tick();
   }
 

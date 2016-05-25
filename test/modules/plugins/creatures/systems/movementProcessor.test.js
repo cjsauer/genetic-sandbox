@@ -118,54 +118,37 @@ describe("MovementProcessor", () => {
   describe("update", () => {
     it("moves a creature to its planned tile", () => {
       // Signals a move in the left and downward direction from (0, 0) to (-1, 1)
-      creature1.brain.output.onCall(0).returns(0.1);
-      creature1.brain.output.onCall(1).returns(0.2);
-      creature1.brain.output.onCall(2).returns(0.3);
-      creature1.brain.output.onCall(3).returns(0.8);
-      creature1.brain.output.onCall(4).returns(0.2);
-      creature1.brain.output.onCall(5).returns(0.1);
-      creature1.brain.output.onCall(6).returns(0.3);
+      sys._movePlans["0,0"] = new Coord(-1, 1);
 
-      // Signals no move attempt
-      creature2.brain.output.onCall(0).returns(0.9);
-      creature2.brain.output.onCall(1).returns(0.1);
-      creature2.brain.output.onCall(2).returns(0.2);
-      creature2.brain.output.onCall(3).returns(0.3);
-      creature2.brain.output.onCall(4).returns(0.8);
-      creature2.brain.output.onCall(5).returns(0.2);
-      creature2.brain.output.onCall(6).returns(0.1);
+      // Signals no move attempt from (1, 0)
+      sys._movePlans["1,0"] = new Coord(0, 0);
 
-      sys.attempt(app);
+      // Assert intitial positions
+      let tile = app.grid.getTile(new Coord(0, 0));
+      expect(tile.get("creature")).to.eql(creature1);
+
+      tile = app.grid.getTile(new Coord(1, 0));
+      expect(tile.get("creature")).to.eql(creature2);
+
       sys.update(app);
 
       // First creature moved
       expect(app.grid.getTile(new Coord(0, 0)).hasComponent("creature")).to.be.false;
-      expect(app.grid.getTile(new Coord(-1, 1)).hasComponent("creature")).to.be.true;
+      tile = app.grid.getTile(new Coord(-1, 1));
+      expect(tile.get("creature")).to.eql(creature1);
 
       // Second creature did not
-      expect(app.grid.getTile(new Coord(1, 0)).hasComponent("creature")).to.be.true;
+      tile = app.grid.getTile(new Coord(1, 0));
+      expect(tile.get("creature")).to.eql(creature2);
     });
 
     it("expends a creature's energy to move", () => {
       // Signals a move in the left and downward direction from (0, 0) to (-1, 1)
-      creature1.brain.output.onCall(0).returns(0.1);
-      creature1.brain.output.onCall(1).returns(0.2);
-      creature1.brain.output.onCall(2).returns(0.3);
-      creature1.brain.output.onCall(3).returns(0.8);
-      creature1.brain.output.onCall(4).returns(0.2);
-      creature1.brain.output.onCall(5).returns(0.1);
-      creature1.brain.output.onCall(6).returns(0.3);
+      sys._movePlans["0,0"] = new Coord(-1, 1);
 
-      // Signals no move attempt
-      creature2.brain.output.onCall(0).returns(0.9);
-      creature2.brain.output.onCall(1).returns(0.1);
-      creature2.brain.output.onCall(2).returns(0.2);
-      creature2.brain.output.onCall(3).returns(0.3);
-      creature2.brain.output.onCall(4).returns(0.8);
-      creature2.brain.output.onCall(5).returns(0.2);
-      creature2.brain.output.onCall(6).returns(0.1);
+      // Signals no move attempt from (1, 0)
+      sys._movePlans["1,0"] = new Coord(0, 0);
 
-      sys.attempt(app);
       sys.update(app);
 
       expect(creature1.expend.calledWith(config.creatures.moveCost)).to.be.true;
@@ -173,37 +156,49 @@ describe("MovementProcessor", () => {
     });
 
     it("does not allow a creature to move out of bounds", () => {
-      // Signals a move to (2, 0) which is out of bounds
-      creature2.brain.output.onCall(1).returns(0.2);
-      creature2.brain.output.onCall(0).returns(0.9);
-      creature2.brain.output.onCall(2).returns(0.7);
-      creature2.brain.output.onCall(3).returns(0.3);
-      creature2.brain.output.onCall(4).returns(0.2);
-      creature2.brain.output.onCall(5).returns(0.1);
-      creature2.brain.output.onCall(6).returns(0.3);
+      // Signals a move from (1, 0) to (2, 0) which is out of bounds
+      sys._movePlans["1,0"] = new Coord(1, 0);
 
-      sys.attempt(app);
+      // Assert intitial position
+      let tile = app.grid.getTile(new Coord(0, 0));
+      expect(tile.get("creature")).to.eql(creature1);
+
       sys.update(app);
 
       // Did not move
-      expect(app.grid.getTile(new Coord(1, 0)).hasComponent("creature")).to.be.true;
+      tile = app.grid.getTile(new Coord(1, 0));
+      expect(tile.hasComponent("creature")).to.be.true;
+      expect(tile.get("creature")).to.eql(creature2);
     });
 
     it("does not allow a creature to move on top of another creature", () => {
-      // Signals a move to (0, 0) which is on top of the first creature
-      creature2.brain.output.onCall(0).returns(0.3);
-      creature2.brain.output.onCall(1).returns(0.2);
-      creature2.brain.output.onCall(2).returns(0.7);
-      creature2.brain.output.onCall(3).returns(0.2);
-      creature2.brain.output.onCall(4).returns(0.9);
-      creature2.brain.output.onCall(5).returns(0.1);
-      creature2.brain.output.onCall(6).returns(0.3);
+      // Signals a move from (1, 0) to (0, 0) which is on top of the first creature
+      sys._movePlans["1,0"] = new Coord(-1, 0);
 
-      sys.attempt(app);
+      // Assert intitial position
+      let tile = app.grid.getTile(new Coord(0, 0));
+      expect(tile.get("creature")).to.eql(creature1);
+
       sys.update(app);
 
       // Did not move
-      expect(app.grid.getTile(new Coord(1, 0)).hasComponent("creature")).to.be.true;
+      tile = app.grid.getTile(new Coord(1, 0));
+      expect(tile.hasComponent("creature")).to.be.true;
+      expect(tile.get("creature")).to.eql(creature2);
     });
+  });
+
+  it("can hash a Coord instance", () => {
+    let coord = new Coord(2, 3);
+    expect(sys._hashCoord(coord)).to.eql("2,3");
+    coord = new Coord(5, 6);
+    expect(sys._hashCoord(coord)).to.eql("5,6");
+  });
+
+  it("can unhash (restore) a hashed Coord instance", () => {
+    let coord = new Coord(2, 3);
+    expect(sys._unhashCoord(sys._hashCoord(coord))).to.eql(coord);
+    coord = new Coord(2, 3);
+    expect(sys._unhashCoord(sys._hashCoord(coord))).to.eql(coord);
   });
 });

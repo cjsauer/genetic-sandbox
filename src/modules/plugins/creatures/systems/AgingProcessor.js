@@ -2,7 +2,7 @@ import System from "../../System";
 import config from "../../../config";
 
 /**
- * Ages creatures, removing them if they run out of energy
+ * Saps energy from creatures every tick
  * @extends System
  */
 class AgingProcessor extends System {
@@ -14,15 +14,14 @@ class AgingProcessor extends System {
   }
 
   /**
-   * Expends energy (ages) creatures, removing them if they run out of energy
+   * Saps energy from all creatures every tick, removing them if they die
    * @param {App} app - the currently running GS app
    */
   update(app) {
     const grid = app.grid;
     grid.getTilesByComponent("creature").forEach((tile) => {
       const creature = tile.get("creature");
-      creature.expend(config.creatures.tickCost);
-      if (!creature.alive) {
+      if (!creature.expend(config.creatures.tickCost)) {
         tile.delete("creature");
       }
     });

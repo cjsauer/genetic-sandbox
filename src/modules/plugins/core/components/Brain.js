@@ -37,7 +37,7 @@ class Brain extends Component {
      * @private
      * @type {number[]}
      */
-    this._inputs = new Array(Brain.inputNeuronCount);
+    this._inputs = new Array(Brain._inputNeuronCount);
 
     /**
      * The outputs produced by activating the brain
@@ -90,7 +90,7 @@ class Brain extends Component {
   * @returns {number} the ID of the reserved input neuron
   */
   static reserveInput() {
-    return Brain.inputNeuronCount++;
+    return Brain._inputNeuronCount++;
   }
 
   /**
@@ -102,7 +102,23 @@ class Brain extends Component {
   * @returns {number} the ID of the reserved output neuron
   */
   static reserveOutput() {
-    return Brain.outputNeuronCount++;
+    return Brain._outputNeuronCount++;
+  }
+
+  /**
+   * Returns the total number of reserved input neurons
+   * @returns {number} total number of reserved input neurons
+   */
+  static get inputNeuronCount() {
+    return Brain._inputNeuronCount;
+  }
+
+  /**
+   * Returns the total number of reserved output neurons
+   * @returns {number} total number of reserved output neurons
+   */
+  static get outputNeuronCount() {
+    return Brain._outputNeuronCount;
   }
 }
 
@@ -111,14 +127,14 @@ class Brain extends Component {
 * with
 * @type {number}
 */
-Brain.inputNeuronCount = 0;
+Brain._inputNeuronCount = 0;
 
 /**
 * The number of output neurons that every creature's brain will be initialized
 * with
 * @type {number}
 */
-Brain.outputNeuronCount = 0;
+Brain._outputNeuronCount = 0;
 
 Component.register(Brain);
 

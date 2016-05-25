@@ -57,7 +57,7 @@ class MovementProcessor extends System {
     grid.getTilesByComponent("creature").forEach((tile) => {
       let creature = tile.get("creature");
       let coord = tile.get("coord");
-      this._movePlans[coord.x + "," + coord.y] = this._calculatePreferredDirection(creature);
+      this._movePlans[this._hashCoord(coord)] = this._calculatePreferredDirection(creature);
     });
   }
 
@@ -69,13 +69,13 @@ class MovementProcessor extends System {
     // For each movement plan...
     Object.keys(this._movePlans).forEach((key) => {
       // Grab the source tile
-      let [x, y] = key.split(",").map((k) => +k);
-      let sourceTile = app.grid.getTile(new Coord(x, y));
+      const coord = this._unhashCoord(key);
+      let sourceTile = app.grid.getTile(coord);
 
       try {
         let dir = this._movePlans[key];
         // Tile the creature is trying to move to
-        let destinationTile = app.grid.getTile(new Coord(x + dir.x, y + dir.y));
+        let destinationTile = app.grid.getTile(new Coord(coord.x + dir.x, coord.y + dir.y));
 
         // Move the creature to the destination tile if it exists and is open
         let creature = sourceTile.get("creature");
@@ -133,6 +133,25 @@ class MovementProcessor extends System {
       case 6:
         return new Coord(1, -1);
     }
+  }
+
+  /**
+   * Hashes a Coord instance for use as an object key
+   * @param {Coord} coord - the coord to hash
+   * @returns {string} hashed version of the given coord
+   */
+  _hashCoord(coord) {
+    return coord.x + "," + coord.y;
+  }
+
+  /**
+   * Reverses the effect of hashing a Coord instance using _hashCoord
+   * @param {string} hash - the hashed Coord instance
+   * @returns {Coord} the restored Coord instance
+   */
+  _unhashCoord(hash) {
+    const [x, y] = hash.split(",").map((x) => +x);
+    return new Coord(x, y);
   }
 }
 

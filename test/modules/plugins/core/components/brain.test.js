@@ -25,8 +25,8 @@ describe("Brain", () => {
     };
 
     // Reset reservation state each test case
-    Brain.inputNeuronCount = 0;
-    Brain.outputNeuronCount = 0;
+    Brain._inputNeuronCount = 0;
+    Brain._outputNeuronCount = 0;
   });
 
   it("should extend Component", () => {

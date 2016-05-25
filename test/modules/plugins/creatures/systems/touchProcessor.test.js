@@ -6,7 +6,7 @@ import { expect } from "chai";
 import { stub, spy } from "sinon";
 
 describe("TouchProcessor", () => {
-  let app, creature1, creature2, plant;
+  let app, creature1, creature2, plant, reserveStub;
 
   beforeEach(() => {
     const grid = new HexGrid(1);
@@ -22,6 +22,12 @@ describe("TouchProcessor", () => {
     grid.getTile(new Coord(-1, 0)).set("plant", plant);
 
     app = { grid };
+
+    reserveStub = stub(Brain, "reserveInput").returns(0);
+  });
+
+  afterEach(() => {
+    reserveStub.restore();
   });
 
   it("should be tagged as 'processor'", () => {
@@ -31,20 +37,16 @@ describe("TouchProcessor", () => {
 
   it("reserves 6 input neurons, one for each direction", () => {
     const sys = new TouchProcessor();
-    const reserveStub = stub(Brain, "reserveInput");
     sys.reserve();
-    reserveStub.restore();
     expect(reserveStub.callCount).to.equal(6);
   });
 
   it("inputs 6 values to the brain", () => {
     const sys = new TouchProcessor();
     const getSpy = spy(app.grid, "getTilesByComponent");
-    const reserveStub = stub(Brain, "reserveInput").returns(0);
     sys.reserve(app);
     sys.sense(app);
     getSpy.restore();
-    reserveStub.restore();
 
     expect(getSpy.calledWith("creature")).to.be.true;
     expect(creature1.brain.input.getCall(0).args[1]).to.equal(0.5);
