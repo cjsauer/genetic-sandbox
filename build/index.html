@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Genetic Sandbox</title>
+    <script src="genetic-sandbox.js" charset="utf-8"></script>
+    <script type="text/javascript">
+      window.onload = function () {
+        var seed = /seed=([^&]+)/.exec(document.location);
+        seed = seed ? seed[1] : undefined;
+        var gs = GeneticSandbox(document.getElementById("canvas"), seed);
+        gs.run();
+      }
+    </script>
+  </head>
+  <body>
+    <canvas id="canvas" width="800" height="600"></canvas>
+  </body>
+</html>
