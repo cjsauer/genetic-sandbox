@@ -1,6 +1,6 @@
 {
   "name": "genetic-sandbox",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "A simulation of life itself",
   "main": "express.js",
   "scripts": {
@@ -29,7 +29,10 @@
   "homepage": "https://github.com/cjsauer/genetic-sandbox#readme",
   "dependencies": {
     "express": "^4.13.4",
+    "lodash": "^4.11.2",
     "paper": "^0.9.25",
+    "random-js": "^1.0.8",
+    "synaptic": "^1.0.2",
     "wolfy87-eventemitter": "^4.3.0"
   },
   "devDependencies": {

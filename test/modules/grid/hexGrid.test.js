@@ -1,6 +1,6 @@
 import HexGrid from "../../../src/modules/grid/HexGrid";
 import Tile from "../../../src/modules/grid/Tile";
-import Coord from "../../../src/modules/grid/Coord";
+import Coord from "../../../src/modules/plugins/core/components/Coord";
 import { expect } from "chai";
 
 describe("HexGrid", () => {
@@ -189,8 +189,9 @@ describe("HexGrid", () => {
       });
 
       const neighbors = hexGrid.neighborsOf(new Coord(1, -1));
-      expect(neighbors.length).to.equal(expectedNeighbors.length);
+      expect(neighbors.length).to.equal(6);
       expect(neighbors).to.deep.include.members(expectedNeighbors);
+      expect(neighbors.filter((neighbor) => neighbor === null).length).to.equal(3);
     });
   });
 

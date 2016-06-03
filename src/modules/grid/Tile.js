@@ -1,8 +1,9 @@
 import EventEmitter from "wolfy87-eventemitter";
 
 /**
- * A Tile is a collection of components (data) representing the state at a
- * specific place in a grid
+ * A Tile is a collection of named {@link Components} (data) representing
+ * the state at a specific place in a grid
+ * @see {@link Component}
  */
 class Tile extends EventEmitter {
   /**

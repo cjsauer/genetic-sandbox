@@ -10,53 +10,130 @@ permalink: /docs/
 <dt><a href="#App">App</a></dt>
 <dd><p>The entry point and hub of the entire application</p>
 </dd>
-<dt><a href="#Coord">Coord</a></dt>
-<dd><p>A two dimensional coordinate of x and y</p>
+<dt><a href="#Sequencer">Sequencer</a></dt>
+<dd><p>Reads in a <a href="#Strand">Strand</a> and produces a
+<a href="http://synaptic.juancazala.com/#/">Synaptic neural network</a></p>
 </dd>
 <dt><a href="#HexGrid">HexGrid</a></dt>
 <dd><p>A 2D, hexagonal grid implementation with axial coordinate system.
 Implementation details can be found <a href="http://goo.gl/nLO6sN">here</a>.</p>
 </dd>
 <dt><a href="#Tile">Tile</a></dt>
-<dd><p>A Tile is a collection of components (data) representing the state at a
-specific place in a grid</p>
+<dd><p>A Tile is a collection of named <a href="Components">Components</a> (data) representing
+the state at a specific place in a grid</p>
 </dd>
 <dt><a href="#TileComponentIndex">TileComponentIndex</a></dt>
 <dd><p>Builds an index of <a href="Tiles">Tiles</a> for fast lookup by component</p>
 </dd>
-<dt><a href="#Hexagon">Hexagon</a> ⇐ <code><a href="#IShape">IShape</a></code></dt>
+<dt><a href="#Component">Component</a></dt>
+<dd><p>Components are objects stored inside of <a href="#Tile">Tiles</a> that contain
+arbitrary data, be it plant data, creature data, tile coordinates, etc.</p>
+</dd>
+<dt><a href="#Plugin">Plugin</a></dt>
+<dd><p>A toggleable plugin containing an array of <a href="#System">Systems</a> and
+configuration options</p>
+</dd>
+<dt><a href="#System">System</a></dt>
+<dd><p>Interface for defining new systems. A system in Genetic Sandbox is a class
+containing logic that operates in some way on <a href="#Tile">Tiles</a> within the
+<a href="#HexGrid">HexGrid</a>.</p>
+</dd>
+<dt><a href="#Brain">Brain</a> ⇐ <code><a href="#Component">Component</a></code></dt>
+<dd><p>A neural network that receives sense input from the environment and produces
+actions on the behalf of a creature</p>
+</dd>
+<dt><a href="#Coord">Coord</a> ⇐ <code><a href="#Component">Component</a></code></dt>
+<dd><p>A two dimensional coordinate of x and y</p>
+</dd>
+<dt><a href="#ConnectionGene">ConnectionGene</a> ⇐ <code><a href="#Component">Component</a></code></dt>
+<dd><p>Genetic representation of a connection between two neurons in a neural
+network</p>
+</dd>
+<dt><a href="#DNA">DNA</a> ⇐ <code><a href="#Component">Component</a></code></dt>
+<dd><p>Genetic encoding of a creature heavily inspired by the
+<a href="http://nn.cs.utexas.edu/downloads/papers/stanley.ec02.pdf">NEAT algorithm</a></p>
+</dd>
+<dt><a href="#NodeGene">NodeGene</a> ⇐ <code><a href="#Component">Component</a></code></dt>
+<dd><p>Genetic representation of a neuron in a neural network</p>
+</dd>
+<dt><a href="#Strand">Strand</a> ⇐ <code><a href="#Component">Component</a></code></dt>
+<dd><p>Genetic representation of a neural network</p>
+</dd>
+<dt><a href="#BackgroundRenderer">BackgroundRenderer</a> ⇐ <code><a href="#System">System</a></code></dt>
+<dd><p>Renders the background</p>
+</dd>
+<dt><a href="#GridRenderer">GridRenderer</a> ⇐ <code><a href="#System">System</a></code></dt>
+<dd><p>Renders a hexagonal border around all tiles in the grid</p>
+</dd>
+<dt><a href="#Creature">Creature</a> ⇐ <code><a href="#Component">Component</a></code></dt>
+<dd><p>Intelligent organism with the capability to evolve</p>
+</dd>
+<dt><a href="#AgingProcessor">AgingProcessor</a> ⇐ <code><a href="#System">System</a></code></dt>
+<dd><p>Saps energy from creatures every tick</p>
+</dd>
+<dt><a href="#BrainProcessor">BrainProcessor</a> ⇐ <code><a href="#System">System</a></code></dt>
+<dd><p>Activates the brains of all creatures</p>
+</dd>
+<dt><a href="#CreatureGenerator">CreatureGenerator</a> ⇐ <code><a href="#System">System</a></code></dt>
+<dd><p>Generates initial creatures with random DNA</p>
+</dd>
+<dt><a href="#CreatureRenderer">CreatureRenderer</a> ⇐ <code><a href="#System">System</a></code></dt>
+<dd><p>Renders creatures for all tiles that contain a Creature component</p>
+</dd>
+<dt><a href="#EatingProcessor">EatingProcessor</a> ⇐ <code><a href="#System">System</a></code></dt>
+<dd><p>Processes the eating of plants by creatures</p>
+</dd>
+<dt><a href="#MovementProcessor">MovementProcessor</a> ⇐ <code><a href="#System">System</a></code></dt>
+<dd><p>Processes locomotion for creatures</p>
+</dd>
+<dt><a href="#TouchProcessor">TouchProcessor</a> ⇐ <code><a href="#System">System</a></code></dt>
+<dd><p>Inputs touch sense data into the brains of creatures</p>
+</dd>
+<dt><a href="#Plant">Plant</a> ⇐ <code><a href="#Component">Component</a></code></dt>
+<dd><p>An edible plant containing energy</p>
+</dd>
+<dt><a href="#PlantGenerator">PlantGenerator</a> ⇐ <code><a href="#System">System</a></code></dt>
+<dd><p>Generates initial plant life, placing Plant components into Tiles</p>
+</dd>
+<dt><a href="#PlantRenderer">PlantRenderer</a> ⇐ <code><a href="#System">System</a></code></dt>
+<dd><p>Renders plants for all tiles that contain a Plant component</p>
+</dd>
+<dt><a href="#Hexagon">Hexagon</a> ⇐ <code><a href="#Shape">Shape</a></code></dt>
 <dd><p>A flat-topped, regular hexagon. Implementation details can be found
 <a href="http://www.redblobgames.com/grids/hexagons/">here</a>.</p>
-</dd>
-<dt><a href="#IShape">IShape</a></dt>
-<dd><p>An abstract class representing 2D geometric shapes that have a center, a width,
-and a height</p>
 </dd>
 <dt><a href="#Point">Point</a></dt>
 <dd><p>A 2D point in space. Contains (x, y) coordinates.</p>
 </dd>
-<dt><a href="#ISystem">ISystem</a></dt>
-<dd><p>Interface for defining new systems. A system in Genetic Sandbox is a class
-containing initialize() and update() functions that operate in some way on
-<a href="#Tile">Tiles</a> within the <a href="#HexGrid">HexGrid</a>.</p>
-</dd>
-<dt><a href="#PlantGenerator">PlantGenerator</a></dt>
-<dd><p>Generates initial vegetation</p>
-</dd>
-<dt><a href="#DefaultGridRenderer">DefaultGridRenderer</a></dt>
-<dd><p>The default renderer of all tiles in the grid</p>
-</dd>
-<dt><a href="#DefaultPlantRenderer">DefaultPlantRenderer</a></dt>
-<dd><p>Renders plants for tiles that contain a vegetation component</p>
+<dt><a href="#Shape">Shape</a></dt>
+<dd><p>An abstract class representing 2D geometric shapes that have a center, a width,
+and a height</p>
 </dd>
 <dt><a href="#MultiStringHashMap">MultiStringHashMap</a></dt>
 <dd><p>A key/value store where keys can be a single string, or an array of strings</p>
+</dd>
+<dt><a href="#Serializable">Serializable</a></dt>
+<dd><p>An interface for recursively serializing and deserializing objects to and from
+JSON.</p>
 </dd>
 </dl>
 
 ## Constants
 
 <dl>
+<dt><a href="#config">config</a> : <code>Object</code></dt>
+<dd><p>An aggregation of all plugin configuration options, and the main interface
+for tweaking them.</p>
+</dd>
+<dt><a href="#core">core</a> : <code>Object</code></dt>
+<dd><p>Core configuration options</p>
+</dd>
+<dt><a href="#creatures">creatures</a> : <code>Object</code></dt>
+<dd><p>Creature configuration options</p>
+</dd>
+<dt><a href="#plants">plants</a> : <code>Object</code></dt>
+<dd><p>Plant configuration options</p>
+</dd>
 <dt><a href="#ElementalTheme">ElementalTheme</a></dt>
 <dd><p>An elemental inspired theme</p>
 </dd>
@@ -75,31 +152,32 @@ The entry point and hub of the entire application
 **See**
 
 - [HexGrid](#HexGrid)
-- [ISystem](#ISystem)
+- [Plugin](#Plugin)
 
 
 * [App](#App)
-    * [new App(grid, systems, paperScope)](#new_App_new)
+    * [new App(grid, plugins, paperScope, [seed])](#new_App_new)
     * [.grid](#App+grid) : <code>[HexGrid](#HexGrid)</code>
-    * [.systems](#App+systems) : <code>Array.ISystem</code>
+    * [.plugins](#App+plugins) : <code>[Array.&lt;Plugin&gt;](#Plugin)</code>
     * [.paper](#App+paper) : <code>PaperScope</code>
+    * [.random](#App+random)
     * [.initialize()](#App+initialize)
-    * [.update()](#App+update)
+    * [.tick()](#App+tick)
     * [.run()](#App+run)
     * [.stop()](#App+stop)
-    * [._drawBackground()](#App+_drawBackground) ⇒ <code>Paper.Path</code>
 
 <a name="new_App_new"></a>
 
-### new App(grid, systems, paperScope)
+### new App(grid, plugins, paperScope, [seed])
 Prepares a Genetic Sandbox application for bootstrapping.
 
 
 | Param | Type | Description |
 | --- | --- | --- |
 | grid | <code>[HexGrid](#HexGrid)</code> | hex grid to use as the stage |
-| systems | <code>[Array.&lt;ISystem&gt;](#ISystem)</code> | the systems to be included in the main processing loop |
+| plugins | <code>[Array.&lt;Plugin&gt;](#Plugin)</code> | the plugins to be included in the main processing loop |
 | paperScope | <code>PaperScope</code> | Paper.js graphics context |
+| [seed] | <code>number</code> | the seed for the random number generator |
 
 <a name="App+grid"></a>
 
@@ -107,10 +185,10 @@ Prepares a Genetic Sandbox application for bootstrapping.
 A grid of tiles serving as the main stage of the simulation
 
 **Kind**: instance property of <code>[App](#App)</code>  
-<a name="App+systems"></a>
+<a name="App+plugins"></a>
 
-### app.systems : <code>Array.ISystem</code>
-Array of systems included in the main processing loop
+### app.plugins : <code>[Array.&lt;Plugin&gt;](#Plugin)</code>
+Array of plugins included in the main processing loop
 
 **Kind**: instance property of <code>[App](#App)</code>  
 <a name="App+paper"></a>
@@ -120,16 +198,24 @@ Paper.js graphics context used for rendering vector graphics to a
 canvas element
 
 **Kind**: instance property of <code>[App](#App)</code>  
+<a name="App+random"></a>
+
+### app.random
+An seeded instance of the random-js Mersenne Twister engine for
+generating random numbers
+
+**Kind**: instance property of <code>[App](#App)</code>  
 <a name="App+initialize"></a>
 
 ### app.initialize()
-Initializes every System in the systems array
+Initializes all enabled plugins by calling *reserve()* and *initialize()*
+on their constituent systems
 
 **Kind**: instance method of <code>[App](#App)</code>  
-<a name="App+update"></a>
+<a name="App+tick"></a>
 
-### app.update()
-Updates every System in the systems array
+### app.tick()
+Ticks the simulation forward by one full iteration
 
 **Kind**: instance method of <code>[App](#App)</code>  
 <a name="App+run"></a>
@@ -144,57 +230,26 @@ Kicks off the processing loop to continously update all systems
 Stops the processing loop, essentially pausing the entire simulation
 
 **Kind**: instance method of <code>[App](#App)</code>  
-<a name="App+_drawBackground"></a>
+<a name="Sequencer"></a>
 
-### app._drawBackground() ⇒ <code>Paper.Path</code>
-Draws the background
-
-**Kind**: instance method of <code>[App](#App)</code>  
-**Returns**: <code>Paper.Path</code> - background rectangle path  
-<a name="Coord"></a>
-
-## Coord
-A two dimensional coordinate of x and y
+## Sequencer
+Reads in a [Strand](#Strand) and produces a
+[Synaptic neural network](http://synaptic.juancazala.com/#/)
 
 **Kind**: global class  
+**See**: [Strand](#Strand)  
+<a name="Sequencer+read"></a>
 
-* [Coord](#Coord)
-    * [new Coord([x], [y])](#new_Coord_new)
-    * [.x](#Coord+x) : <code>number</code>
-    * [.y](#Coord+y) : <code>number</code>
+### sequencer.read(strand) ⇒ <code>Network</code>
+Reads in a Strand and outputs a Synaptic neural network
 
-<a name="new_Coord_new"></a>
+**Kind**: instance method of <code>[Sequencer](#Sequencer)</code>  
+**Returns**: <code>Network</code> - a Synaptic Network instance  
 
-### new Coord([x], [y])
-Constructs a new Coord with coordinates (x,y)
+| Param | Type | Description |
+| --- | --- | --- |
+| strand | <code>[Strand](#Strand)</code> | strand of node and connection genes |
 
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| [x] | <code>number</code> | <code>0</code> | x value |
-| [y] | <code>number</code> | <code>0</code> | y value |
-
-**Example**  
-
-```js
-let myCoord = new Coord(-5, 10);
-myCoord.x = 0;
-myCoord.y = 0;
-```
-<a name="Coord+x"></a>
-
-### coord.x : <code>number</code>
-x value
-
-**Kind**: instance property of <code>[Coord](#Coord)</code>  
-**Default**: <code>0</code>  
-<a name="Coord+y"></a>
-
-### coord.y : <code>number</code>
-y value
-
-**Kind**: instance property of <code>[Coord](#Coord)</code>  
-**Default**: <code>0</code>  
 <a name="HexGrid"></a>
 
 ## HexGrid
@@ -295,6 +350,8 @@ let habitatTiles = grid.getTilesByComponent(["biome", "temperature"]);
 
 ### hexGrid.neighborsOf(coord) ⇒ <code>Array.Tile</code>
 Returns the Tiles that are adjacent to the Tile at the provided (x, y) coordinates.
+Will return `null` for a neighbor that doesn't exist, at the edges of the
+grid for example.
 
 **Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
 **Returns**: <code>Array.Tile</code> - The array of neighboring Tiles  
@@ -346,10 +403,11 @@ Converts a tile's coordinates to its pixel coordinates
 <a name="Tile"></a>
 
 ## Tile
-A Tile is a collection of components (data) representing the state at a
-specific place in a grid
+A Tile is a collection of named [Components](Components) (data) representing
+the state at a specific place in a grid
 
 **Kind**: global class  
+**See**: [Component](#Component)  
 
 * [Tile](#Tile)
     * [new Tile([initialComponents])](#new_Tile_new)
@@ -535,21 +593,1850 @@ components
 // Returns all tiles that have "biome" and "temperature" components
 let habitatTiles = tileIndex.getTilesByComponent(["biome", "temperature"]);
 ```
+<a name="Component"></a>
+
+## Component
+Components are objects stored inside of [Tiles](#Tile) that contain
+arbitrary data, be it plant data, creature data, tile coordinates, etc.
+
+**Kind**: global class  
+**See**: [Tile](#Tile)  
+<a name="new_Component_new"></a>
+
+### new Component()
+Component isn't instantiable directly, but should be extended by a
+concrete subclass.
+
+<a name="Plugin"></a>
+
+## Plugin
+A toggleable plugin containing an array of [Systems](#System) and
+configuration options
+
+**Kind**: global class  
+
+* [Plugin](#Plugin)
+    * [new Plugin(name, systems, config, [enabled])](#new_Plugin_new)
+    * [.name](#Plugin+name) : <code>string</code>
+    * [.systems](#Plugin+systems) : <code>[Array.&lt;System&gt;](#System)</code>
+    * [.config](#Plugin+config) : <code>Object</code>
+    * [.enabled](#Plugin+enabled) : <code>boolean</code>
+
+<a name="new_Plugin_new"></a>
+
+### new Plugin(name, systems, config, [enabled])
+Constructs a new plugin
+
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| name | <code>string</code> |  | name of the plugin |
+| systems | <code>[Array.&lt;System&gt;](#System)</code> |  | the systems that this plugin includes |
+| config | <code>Object</code> |  | configuration options that this plugin exposes |
+| [enabled] | <code>boolean</code> | <code>true</code> | whether this plugin is enabled or not |
+
+**Example**  
+
+```js
+import MySystem from "./systems/MySystem";
+import MyOtherSystem from "./systems/MyOtherSystem";
+const systems = [ new MySystem(), new MyOtherSystem() ];
+const config = { someSetting: 10 };
+const myPlugin = new Plugin("mine", systems, config);
+
+// Assuming myPlugin is registered in `config.js`, in some other file
+// we can do:
+import config from "../config";
+config.mine.someSetting = 12; // someSetting has been exposed via config global
+```
+<a name="Plugin+name"></a>
+
+### plugin.name : <code>string</code>
+Name of the plugin
+
+**Kind**: instance property of <code>[Plugin](#Plugin)</code>  
+<a name="Plugin+systems"></a>
+
+### plugin.systems : <code>[Array.&lt;System&gt;](#System)</code>
+The array of systems that this plugin includes
+
+**Kind**: instance property of <code>[Plugin](#Plugin)</code>  
+<a name="Plugin+config"></a>
+
+### plugin.config : <code>Object</code>
+The configuration options that this plugin exposes
+
+**Kind**: instance property of <code>[Plugin](#Plugin)</code>  
+<a name="Plugin+enabled"></a>
+
+### plugin.enabled : <code>boolean</code>
+True if this plugin is enabled, false otherwise. A disabled plugin
+will be excluded from the processing loop.
+
+**Kind**: instance property of <code>[Plugin](#Plugin)</code>  
+<a name="System"></a>
+
+## *System*
+Interface for defining new systems. A system in Genetic Sandbox is a class
+containing logic that operates in some way on [Tiles](#Tile) within the
+[HexGrid](#HexGrid).
+
+**Kind**: global abstract class  
+
+* *[System](#System)*
+    * *[new System(tag)](#new_System_new)*
+    * *[.tag](#System+tag) : <code>string</code>*
+    * *[.reserve(app)](#System+reserve)*
+    * *[.initialize(app)](#System+initialize)*
+    * *[.update(app)](#System+update)*
+    * *[.draw(app)](#System+draw)*
+    * *[.sense(app)](#System+sense)*
+    * *[.attempt(app)](#System+attempt)*
+
+<a name="new_System_new"></a>
+
+### *new System(tag)*
+System can not be instantiated directly, but instead should be extended
+and its instance methods overridden.
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| tag | <code>string</code> | one of "renderer", "generator", or "processor" |
+
+<a name="System+tag"></a>
+
+### *system.tag : <code>string</code>*
+Defines the overall role of this system. One of "renderer", "generator",
+or "processor".
+
+**Kind**: instance property of <code>[System](#System)</code>  
+<a name="System+reserve"></a>
+
+### *system.reserve(app)*
+Hook for reserving input and ouput neurons in the Brain
+
+**Kind**: instance method of <code>[System](#System)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+initialize"></a>
+
+### *system.initialize(app)*
+Initializes this system allowing it to perform one-time preparation logic
+
+**Kind**: instance method of <code>[System](#System)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+update"></a>
+
+### *system.update(app)*
+Hook for updating the state of the world
+
+**Kind**: instance method of <code>[System](#System)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+draw"></a>
+
+### *system.draw(app)*
+Called once per frame to perform drawing logic
+
+**Kind**: instance method of <code>[System](#System)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+sense"></a>
+
+### *system.sense(app)*
+Hook for inputting sense data into the brain
+
+**Kind**: instance method of <code>[System](#System)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+attempt"></a>
+
+### *system.attempt(app)*
+Hook for reading output data from the brain and attempting actions
+
+**Kind**: instance method of <code>[System](#System)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="Brain"></a>
+
+## Brain ⇐ <code>[Component](#Component)</code>
+A neural network that receives sense input from the environment and produces
+actions on the behalf of a creature
+
+**Kind**: global class  
+**Extends:** <code>[Component](#Component)</code>  
+
+* [Brain](#Brain) ⇐ <code>[Component](#Component)</code>
+    * [new Brain(dna, sequencer)](#new_Brain_new)
+    * _instance_
+        * [.input(id, value)](#Brain+input)
+        * [.output(id)](#Brain+output)
+        * [.activate()](#Brain+activate)
+    * _static_
+        * [.inputNeuronCount](#Brain.inputNeuronCount) ⇒ <code>number</code>
+        * [.outputNeuronCount](#Brain.outputNeuronCount) ⇒ <code>number</code>
+        * [._inputNeuronCount](#Brain._inputNeuronCount) : <code>number</code>
+        * [._outputNeuronCount](#Brain._outputNeuronCount) : <code>number</code>
+        * [.reserveInput()](#Brain.reserveInput) ⇒ <code>number</code>
+        * [.reserveOutput()](#Brain.reserveOutput) ⇒ <code>number</code>
+
+<a name="new_Brain_new"></a>
+
+### new Brain(dna, sequencer)
+Constructs a new brain resulting from reading the given [DNA](#DNA) with
+the supplied [Sequencer](#Sequencer)
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| dna | <code>[DNA](#DNA)</code> | creature DNA |
+| sequencer | <code>[Sequencer](#Sequencer)</code> | the sequencer to use to read the brain strand from the DNA |
+
+<a name="Brain+input"></a>
+
+### brain.input(id, value)
+Inputs the given sense value to the specified neuron
+
+**Kind**: instance method of <code>[Brain](#Brain)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>number</code> | id of neuron |
+| value | <code>number</code> | value to input between 0 and 1 inclusive |
+
+**Example**  
+
+```js
+// Called in the System#reserve() method
+const mySenseID = Brain.reserveInput();
+// ...
+myBrain.input(mySenseID, 0.5);
+```
+<a name="Brain+output"></a>
+
+### brain.output(id)
+Fetches the output value of the given neuron
+
+**Kind**: instance method of <code>[Brain](#Brain)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>number</code> | id of neuron |
+
+**Example**  
+
+```js
+// Called in the System#reserve() method
+const myOutputID = Brain.reserveOutput();
+// ...
+const outputValue = myBrain.output(myOutputID);
+```
+<a name="Brain+activate"></a>
+
+### brain.activate()
+Activates the brain on the inputs entered thus far
+
+**Kind**: instance method of <code>[Brain](#Brain)</code>  
+<a name="Brain.inputNeuronCount"></a>
+
+### Brain.inputNeuronCount ⇒ <code>number</code>
+Returns the total number of reserved input neurons
+
+**Kind**: static property of <code>[Brain](#Brain)</code>  
+**Returns**: <code>number</code> - total number of reserved input neurons  
+<a name="Brain.outputNeuronCount"></a>
+
+### Brain.outputNeuronCount ⇒ <code>number</code>
+Returns the total number of reserved output neurons
+
+**Kind**: static property of <code>[Brain](#Brain)</code>  
+**Returns**: <code>number</code> - total number of reserved output neurons  
+<a name="Brain._inputNeuronCount"></a>
+
+### Brain._inputNeuronCount : <code>number</code>
+The number of input neurons that every creature's brain will be initialized
+with
+
+**Kind**: static property of <code>[Brain](#Brain)</code>  
+<a name="Brain._outputNeuronCount"></a>
+
+### Brain._outputNeuronCount : <code>number</code>
+The number of output neurons that every creature's brain will be initialized
+with
+
+**Kind**: static property of <code>[Brain](#Brain)</code>  
+<a name="Brain.reserveInput"></a>
+
+### Brain.reserveInput() ⇒ <code>number</code>
+Reserves a single input neuron. This function is expected to be called only
+once in the reservation step by systems that will be feeding sense data into
+the brain.
+
+**Kind**: static method of <code>[Brain](#Brain)</code>  
+**Returns**: <code>number</code> - the ID of the reserved input neuron  
+**Example**  
+
+```js
+const senseID = Brain.reserveInput();
+```
+<a name="Brain.reserveOutput"></a>
+
+### Brain.reserveOutput() ⇒ <code>number</code>
+Reserves a single output neuron. This function is expected to be called only
+once in the reservation step by systems that will be feeding sense data into
+the brain.
+
+**Kind**: static method of <code>[Brain](#Brain)</code>  
+**Returns**: <code>number</code> - the ID of the reserved output neuron  
+**Example**  
+
+```js
+const actionID = Brain.reserveOutput();
+```
+<a name="Coord"></a>
+
+## Coord ⇐ <code>[Component](#Component)</code>
+A two dimensional coordinate of x and y
+
+**Kind**: global class  
+**Extends:** <code>[Component](#Component)</code>  
+
+* [Coord](#Coord) ⇐ <code>[Component](#Component)</code>
+    * [new Coord([x], [y])](#new_Coord_new)
+    * [.x](#Coord+x) : <code>number</code>
+    * [.y](#Coord+y) : <code>number</code>
+
+<a name="new_Coord_new"></a>
+
+### new Coord([x], [y])
+Constructs a new Coord with coordinates (x,y)
+
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [x] | <code>number</code> | <code>0</code> | x value |
+| [y] | <code>number</code> | <code>0</code> | y value |
+
+**Example**  
+
+```js
+let myCoord = new Coord(-5, 10);
+myCoord.x = 0;
+myCoord.y = 0;
+```
+<a name="Coord+x"></a>
+
+### coord.x : <code>number</code>
+x value
+
+**Kind**: instance property of <code>[Coord](#Coord)</code>  
+**Default**: <code>0</code>  
+<a name="Coord+y"></a>
+
+### coord.y : <code>number</code>
+y value
+
+**Kind**: instance property of <code>[Coord](#Coord)</code>  
+**Default**: <code>0</code>  
+<a name="ConnectionGene"></a>
+
+## ConnectionGene ⇐ <code>[Component](#Component)</code>
+Genetic representation of a connection between two neurons in a neural
+network
+
+**Kind**: global class  
+**Extends:** <code>[Component](#Component)</code>  
+**See**: {NodeGene}  
+
+* [ConnectionGene](#ConnectionGene) ⇐ <code>[Component](#Component)</code>
+    * [new ConnectionGene(inID, outID, weight, enabled)](#new_ConnectionGene_new)
+    * _instance_
+        * [.in](#ConnectionGene+in) : <code>number</code>
+        * [.out](#ConnectionGene+out) : <code>number</code>
+        * [.weight](#ConnectionGene+weight) : <code>number</code>
+        * [.enabled](#ConnectionGene+enabled) : <code>boolean</code>
+        * [.innovationNumber](#ConnectionGene+innovationNumber) : <code>number</code>
+    * _static_
+        * [.resetInnovations()](#ConnectionGene.resetInnovations)
+
+<a name="new_ConnectionGene_new"></a>
+
+### new ConnectionGene(inID, outID, weight, enabled)
+Constructs a new ConnectionGene
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| inID | <code>number</code> | id of the source node |
+| outID | <code>number</code> | id of the destination node |
+| weight | <code>number</code> | the weight of the connection as a value between 0 and 1 inclusive |
+| enabled | <code>boolean</code> | whether this gene is expressed or not |
+
+**Example**  
+
+```js
+const node1 = new NodeGene(1, "input");
+const node2 = new NodeGene(2, "output");
+const conn = new ConnectionGene(node1.id, node2.id, 0.2, true);
+```
+<a name="ConnectionGene+in"></a>
+
+### connectionGene.in : <code>number</code>
+ID of the source node for this connection
+
+**Kind**: instance property of <code>[ConnectionGene](#ConnectionGene)</code>  
+<a name="ConnectionGene+out"></a>
+
+### connectionGene.out : <code>number</code>
+ID of the destination node for this connection
+
+**Kind**: instance property of <code>[ConnectionGene](#ConnectionGene)</code>  
+<a name="ConnectionGene+weight"></a>
+
+### connectionGene.weight : <code>number</code>
+The weight of this connection as a value between 0 and 1 inclusive
+
+**Kind**: instance property of <code>[ConnectionGene](#ConnectionGene)</code>  
+<a name="ConnectionGene+enabled"></a>
+
+### connectionGene.enabled : <code>boolean</code>
+True if this gene is expressed, false otherwise. A connection gene
+that is not expressed is given a weight of zero in the resulting
+neural network.
+
+**Kind**: instance property of <code>[ConnectionGene](#ConnectionGene)</code>  
+<a name="ConnectionGene+innovationNumber"></a>
+
+### connectionGene.innovationNumber : <code>number</code>
+ID of the historical origin, or "innovation number" of this connection
+gene
+
+**Kind**: instance property of <code>[ConnectionGene](#ConnectionGene)</code>  
+<a name="ConnectionGene.resetInnovations"></a>
+
+### ConnectionGene.resetInnovations()
+Resets the innovation history
+
+**Kind**: static method of <code>[ConnectionGene](#ConnectionGene)</code>  
+<a name="DNA"></a>
+
+## DNA ⇐ <code>[Component](#Component)</code>
+Genetic encoding of a creature heavily inspired by the
+[NEAT algorithm](http://nn.cs.utexas.edu/downloads/papers/stanley.ec02.pdf)
+
+**Kind**: global class  
+**Extends:** <code>[Component](#Component)</code>  
+
+* [DNA](#DNA) ⇐ <code>[Component](#Component)</code>
+    * [new DNA(inputCount, outputCount, random)](#new_DNA_new)
+    * [.brainStrand](#DNA+brainStrand) : <code>[Strand](#Strand)</code>
+    * [.traitStrand](#DNA+traitStrand) : <code>[Strand](#Strand)</code>
+
+<a name="new_DNA_new"></a>
+
+### new DNA(inputCount, outputCount, random)
+Constructs the DNA for a brand new creature with base traits and the
+simplest possible brain: one with only one enabled connection between
+a random input neuron and a random output neuron.
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| inputCount | <code>number</code> | the total number of possible inputs (senses) to a creature's brain |
+| outputCount | <code>number</code> | the total number of possible outputs (actions) from a creature's brain |
+| random | <code>Object</code> | an instance of a random-js engine |
+
+**Example**  
+
+```js
+// Creates DNA for a creature with the current count of reserved input and
+// output neurons
+const myDNA = new DNA(Brain.inputNeuronCount, Brain.outputNeuronCount, random);
+```
+<a name="DNA+brainStrand"></a>
+
+### dnA.brainStrand : <code>[Strand](#Strand)</code>
+Strand of genes describing a creature's brain
+
+**Kind**: instance property of <code>[DNA](#DNA)</code>  
+<a name="DNA+traitStrand"></a>
+
+### dnA.traitStrand : <code>[Strand](#Strand)</code>
+Strand of genes describing the trait function (TF)
+
+**Kind**: instance property of <code>[DNA](#DNA)</code>  
+<a name="NodeGene"></a>
+
+## NodeGene ⇐ <code>[Component](#Component)</code>
+Genetic representation of a neuron in a neural network
+
+**Kind**: global class  
+**Extends:** <code>[Component](#Component)</code>  
+
+* [NodeGene](#NodeGene) ⇐ <code>[Component](#Component)</code>
+    * [new NodeGene([id], [type])](#new_NodeGene_new)
+    * [.id](#NodeGene+id) : <code>number</code>
+    * [.type](#NodeGene+type) : <code>string</code>
+
+<a name="new_NodeGene_new"></a>
+
+### new NodeGene([id], [type])
+Constructs a new NodeGene
+
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [id] | <code>number</code> | <code>0</code> | the id of the neuron |
+| [type] | <code>string</code> | <code>&quot;hidden&quot;</code> | one of "input", "hidden", or "output" |
+
+**Example**  
+
+```js
+const node1 = new NodeGene(1, "input");
+const node2 = new NodeGene(2, "output");
+const node3 = new NodeGene(3, "hidden");
+```
+<a name="NodeGene+id"></a>
+
+### nodeGene.id : <code>number</code>
+The id of the neuron
+
+**Kind**: instance property of <code>[NodeGene](#NodeGene)</code>  
+<a name="NodeGene+type"></a>
+
+### nodeGene.type : <code>string</code>
+Type of neuron. One of "input", "hidden", or "output".
+
+**Kind**: instance property of <code>[NodeGene](#NodeGene)</code>  
+<a name="Strand"></a>
+
+## Strand ⇐ <code>[Component](#Component)</code>
+Genetic representation of a neural network
+
+**Kind**: global class  
+**Extends:** <code>[Component](#Component)</code>  
+**See**
+
+- {NodeGene}
+- {ConnectionGene}
+
+
+* [Strand](#Strand) ⇐ <code>[Component](#Component)</code>
+    * [new Strand(inputCount, outputCount, enabled, random)](#new_Strand_new)
+    * [.nodeGenes](#Strand+nodeGenes) : <code>[Array.&lt;NodeGene&gt;](#NodeGene)</code>
+    * [.connectionGenes](#Strand+connectionGenes) : <code>[Array.&lt;ConnectionGene&gt;](#ConnectionGene)</code>
+
+<a name="new_Strand_new"></a>
+
+### new Strand(inputCount, outputCount, enabled, random)
+Constructs a new Strand representing a fully connected neural network with
+the given number of input/output neurons, zero hidden neurons, and
+random weight values
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| inputCount | <code>number</code> | number of input neuron genes |
+| outputCount | <code>number</code> | number of output neuron genes |
+| enabled | <code>boolean</code> | whether all connection genes are initially enabled (true), or disabled (false) |
+| random | <code>Object</code> | an instance of a random-js instance |
+
+**Example**  
+
+```js
+// Represents a neural network with 4 input neurons, 5 output neurons,
+// and all connection genes enabled.
+const strand1 = new Strand(4, 5, true, random);
+// Represents a neural network with 2 input neurons, 4 output neurons,
+// and all connection genes disabled.
+const strand2 = new Strand(2, 4, false, random);
+```
+<a name="Strand+nodeGenes"></a>
+
+### strand.nodeGenes : <code>[Array.&lt;NodeGene&gt;](#NodeGene)</code>
+The list of node genes describing neurons
+
+**Kind**: instance property of <code>[Strand](#Strand)</code>  
+<a name="Strand+connectionGenes"></a>
+
+### strand.connectionGenes : <code>[Array.&lt;ConnectionGene&gt;](#ConnectionGene)</code>
+The list of connection genes describing connections between neurons
+
+**Kind**: instance property of <code>[Strand](#Strand)</code>  
+<a name="BackgroundRenderer"></a>
+
+## BackgroundRenderer ⇐ <code>[System](#System)</code>
+Renders the background
+
+**Kind**: global class  
+**Extends:** <code>[System](#System)</code>  
+
+* [BackgroundRenderer](#BackgroundRenderer) ⇐ <code>[System](#System)</code>
+    * [new BackgroundRenderer()](#new_BackgroundRenderer_new)
+    * [.tag](#System+tag) : <code>string</code>
+    * [.initialize(app)](#BackgroundRenderer+initialize)
+    * [.reserve(app)](#System+reserve)
+    * [.update(app)](#System+update)
+    * [.draw(app)](#System+draw)
+    * [.sense(app)](#System+sense)
+    * [.attempt(app)](#System+attempt)
+
+<a name="new_BackgroundRenderer_new"></a>
+
+### new BackgroundRenderer()
+Constructs a new BackgroundRenderer
+
+<a name="System+tag"></a>
+
+### backgroundRenderer.tag : <code>string</code>
+Defines the overall role of this system. One of "renderer", "generator",
+or "processor".
+
+**Kind**: instance property of <code>[BackgroundRenderer](#BackgroundRenderer)</code>  
+<a name="BackgroundRenderer+initialize"></a>
+
+### backgroundRenderer.initialize(app)
+Renders the background
+
+**Kind**: instance method of <code>[BackgroundRenderer](#BackgroundRenderer)</code>  
+**Overrides:** <code>[initialize](#System+initialize)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+reserve"></a>
+
+### backgroundRenderer.reserve(app)
+Hook for reserving input and ouput neurons in the Brain
+
+**Kind**: instance method of <code>[BackgroundRenderer](#BackgroundRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+update"></a>
+
+### backgroundRenderer.update(app)
+Hook for updating the state of the world
+
+**Kind**: instance method of <code>[BackgroundRenderer](#BackgroundRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+draw"></a>
+
+### backgroundRenderer.draw(app)
+Called once per frame to perform drawing logic
+
+**Kind**: instance method of <code>[BackgroundRenderer](#BackgroundRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+sense"></a>
+
+### backgroundRenderer.sense(app)
+Hook for inputting sense data into the brain
+
+**Kind**: instance method of <code>[BackgroundRenderer](#BackgroundRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+attempt"></a>
+
+### backgroundRenderer.attempt(app)
+Hook for reading output data from the brain and attempting actions
+
+**Kind**: instance method of <code>[BackgroundRenderer](#BackgroundRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="GridRenderer"></a>
+
+## GridRenderer ⇐ <code>[System](#System)</code>
+Renders a hexagonal border around all tiles in the grid
+
+**Kind**: global class  
+**Extends:** <code>[System](#System)</code>  
+
+* [GridRenderer](#GridRenderer) ⇐ <code>[System](#System)</code>
+    * [new GridRenderer()](#new_GridRenderer_new)
+    * [.tag](#System+tag) : <code>string</code>
+    * [.initialize(app)](#GridRenderer+initialize)
+    * [.reserve(app)](#System+reserve)
+    * [.update(app)](#System+update)
+    * [.draw(app)](#System+draw)
+    * [.sense(app)](#System+sense)
+    * [.attempt(app)](#System+attempt)
+
+<a name="new_GridRenderer_new"></a>
+
+### new GridRenderer()
+Constructs a new GridRenderer
+
+<a name="System+tag"></a>
+
+### gridRenderer.tag : <code>string</code>
+Defines the overall role of this system. One of "renderer", "generator",
+or "processor".
+
+**Kind**: instance property of <code>[GridRenderer](#GridRenderer)</code>  
+<a name="GridRenderer+initialize"></a>
+
+### gridRenderer.initialize(app)
+Renders the grid
+
+**Kind**: instance method of <code>[GridRenderer](#GridRenderer)</code>  
+**Overrides:** <code>[initialize](#System+initialize)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+reserve"></a>
+
+### gridRenderer.reserve(app)
+Hook for reserving input and ouput neurons in the Brain
+
+**Kind**: instance method of <code>[GridRenderer](#GridRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+update"></a>
+
+### gridRenderer.update(app)
+Hook for updating the state of the world
+
+**Kind**: instance method of <code>[GridRenderer](#GridRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+draw"></a>
+
+### gridRenderer.draw(app)
+Called once per frame to perform drawing logic
+
+**Kind**: instance method of <code>[GridRenderer](#GridRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+sense"></a>
+
+### gridRenderer.sense(app)
+Hook for inputting sense data into the brain
+
+**Kind**: instance method of <code>[GridRenderer](#GridRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+attempt"></a>
+
+### gridRenderer.attempt(app)
+Hook for reading output data from the brain and attempting actions
+
+**Kind**: instance method of <code>[GridRenderer](#GridRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="Creature"></a>
+
+## Creature ⇐ <code>[Component](#Component)</code>
+Intelligent organism with the capability to evolve
+
+**Kind**: global class  
+**Extends:** <code>[Component](#Component)</code>  
+
+* [Creature](#Creature) ⇐ <code>[Component](#Component)</code>
+    * [new Creature(dna, energy)](#new_Creature_new)
+    * [.energy](#Creature+energy) : <code>number</code>
+    * [.dna](#Creature+dna) : <code>[DNA](#DNA)</code>
+    * [.brain](#Creature+brain) : <code>[Brain](#Brain)</code>
+    * [.alive](#Creature+alive) : <code>boolean</code>
+    * [.eat(plant)](#Creature+eat) ⇒ <code>number</code>
+    * [.expend(expenditure)](#Creature+expend) ⇒ <code>boolean</code>
+    * [.die()](#Creature+die)
+
+<a name="new_Creature_new"></a>
+
+### new Creature(dna, energy)
+Constructs a new creature
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| dna | <code>[DNA](#DNA)</code> | the genetic representaiton of a creature |
+| energy | <code>number</code> | initial energy level |
+
+**Example**  
+
+```js
+const dna = new DNA(3, 4, random);
+const creature = new Creature(dna, 12);
+creature.energy === 12; // true
+```
+<a name="Creature+energy"></a>
+
+### creature.energy : <code>number</code>
+Energy level of this creature. When this reaches zero the creature,
+is dead.
+
+**Kind**: instance property of <code>[Creature](#Creature)</code>  
+<a name="Creature+dna"></a>
+
+### creature.dna : <code>[DNA](#DNA)</code>
+The genetic representaiton of this creature
+
+**Kind**: instance property of <code>[Creature](#Creature)</code>  
+<a name="Creature+brain"></a>
+
+### creature.brain : <code>[Brain](#Brain)</code>
+The brain of this creature
+
+**Kind**: instance property of <code>[Creature](#Creature)</code>  
+<a name="Creature+alive"></a>
+
+### creature.alive : <code>boolean</code>
+True if this creature is alive, false otherwise
+
+**Kind**: instance property of <code>[Creature](#Creature)</code>  
+<a name="Creature+eat"></a>
+
+### creature.eat(plant) ⇒ <code>number</code>
+Eats the given plant, raising the creature's energy level by the amount
+stored in the plant. Does NOT affect the plant in any way.
+
+**Kind**: instance method of <code>[Creature](#Creature)</code>  
+**Returns**: <code>number</code> - the creature's new energy level  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| plant | <code>[Plant](#Plant)</code> | plant to eat |
+
+<a name="Creature+expend"></a>
+
+### creature.expend(expenditure) ⇒ <code>boolean</code>
+Expends the given amount of energy. If the creature's energy drops below
+zero, it dies.
+
+**Kind**: instance method of <code>[Creature](#Creature)</code>  
+**Returns**: <code>boolean</code> - True if the creature is still alive, false otherwise  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| expenditure | <code>number</code> | the amount of energy to expend |
+
+<a name="Creature+die"></a>
+
+### creature.die()
+Kills this creature
+
+**Kind**: instance method of <code>[Creature](#Creature)</code>  
+<a name="AgingProcessor"></a>
+
+## AgingProcessor ⇐ <code>[System](#System)</code>
+Saps energy from creatures every tick
+
+**Kind**: global class  
+**Extends:** <code>[System](#System)</code>  
+
+* [AgingProcessor](#AgingProcessor) ⇐ <code>[System](#System)</code>
+    * [new AgingProcessor()](#new_AgingProcessor_new)
+    * [.tag](#System+tag) : <code>string</code>
+    * [.update(app)](#AgingProcessor+update)
+    * [.reserve(app)](#System+reserve)
+    * [.initialize(app)](#System+initialize)
+    * [.draw(app)](#System+draw)
+    * [.sense(app)](#System+sense)
+    * [.attempt(app)](#System+attempt)
+
+<a name="new_AgingProcessor_new"></a>
+
+### new AgingProcessor()
+Constructs a new AgingProcessor
+
+<a name="System+tag"></a>
+
+### agingProcessor.tag : <code>string</code>
+Defines the overall role of this system. One of "renderer", "generator",
+or "processor".
+
+**Kind**: instance property of <code>[AgingProcessor](#AgingProcessor)</code>  
+<a name="AgingProcessor+update"></a>
+
+### agingProcessor.update(app)
+Saps energy from all creatures every tick, removing them if they die
+
+**Kind**: instance method of <code>[AgingProcessor](#AgingProcessor)</code>  
+**Overrides:** <code>[update](#System+update)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+reserve"></a>
+
+### agingProcessor.reserve(app)
+Hook for reserving input and ouput neurons in the Brain
+
+**Kind**: instance method of <code>[AgingProcessor](#AgingProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+initialize"></a>
+
+### agingProcessor.initialize(app)
+Initializes this system allowing it to perform one-time preparation logic
+
+**Kind**: instance method of <code>[AgingProcessor](#AgingProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+draw"></a>
+
+### agingProcessor.draw(app)
+Called once per frame to perform drawing logic
+
+**Kind**: instance method of <code>[AgingProcessor](#AgingProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+sense"></a>
+
+### agingProcessor.sense(app)
+Hook for inputting sense data into the brain
+
+**Kind**: instance method of <code>[AgingProcessor](#AgingProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+attempt"></a>
+
+### agingProcessor.attempt(app)
+Hook for reading output data from the brain and attempting actions
+
+**Kind**: instance method of <code>[AgingProcessor](#AgingProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="BrainProcessor"></a>
+
+## BrainProcessor ⇐ <code>[System](#System)</code>
+Activates the brains of all creatures
+
+**Kind**: global class  
+**Extends:** <code>[System](#System)</code>  
+
+* [BrainProcessor](#BrainProcessor) ⇐ <code>[System](#System)</code>
+    * [new BrainProcessor()](#new_BrainProcessor_new)
+    * [.tag](#System+tag) : <code>string</code>
+    * [.think(app)](#BrainProcessor+think)
+    * [.reserve(app)](#System+reserve)
+    * [.initialize(app)](#System+initialize)
+    * [.update(app)](#System+update)
+    * [.draw(app)](#System+draw)
+    * [.sense(app)](#System+sense)
+    * [.attempt(app)](#System+attempt)
+
+<a name="new_BrainProcessor_new"></a>
+
+### new BrainProcessor()
+Constructs a new BrainProcessor
+
+<a name="System+tag"></a>
+
+### brainProcessor.tag : <code>string</code>
+Defines the overall role of this system. One of "renderer", "generator",
+or "processor".
+
+**Kind**: instance property of <code>[BrainProcessor](#BrainProcessor)</code>  
+<a name="BrainProcessor+think"></a>
+
+### brainProcessor.think(app)
+Activates the brain of every creature
+
+**Kind**: instance method of <code>[BrainProcessor](#BrainProcessor)</code>  
+**Overrides:** <code>System#think</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+reserve"></a>
+
+### brainProcessor.reserve(app)
+Hook for reserving input and ouput neurons in the Brain
+
+**Kind**: instance method of <code>[BrainProcessor](#BrainProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+initialize"></a>
+
+### brainProcessor.initialize(app)
+Initializes this system allowing it to perform one-time preparation logic
+
+**Kind**: instance method of <code>[BrainProcessor](#BrainProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+update"></a>
+
+### brainProcessor.update(app)
+Hook for updating the state of the world
+
+**Kind**: instance method of <code>[BrainProcessor](#BrainProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+draw"></a>
+
+### brainProcessor.draw(app)
+Called once per frame to perform drawing logic
+
+**Kind**: instance method of <code>[BrainProcessor](#BrainProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+sense"></a>
+
+### brainProcessor.sense(app)
+Hook for inputting sense data into the brain
+
+**Kind**: instance method of <code>[BrainProcessor](#BrainProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+attempt"></a>
+
+### brainProcessor.attempt(app)
+Hook for reading output data from the brain and attempting actions
+
+**Kind**: instance method of <code>[BrainProcessor](#BrainProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="CreatureGenerator"></a>
+
+## CreatureGenerator ⇐ <code>[System](#System)</code>
+Generates initial creatures with random DNA
+
+**Kind**: global class  
+**Extends:** <code>[System](#System)</code>  
+**See**: [Creature](#Creature)  
+
+* [CreatureGenerator](#CreatureGenerator) ⇐ <code>[System](#System)</code>
+    * [new CreatureGenerator()](#new_CreatureGenerator_new)
+    * [.tag](#System+tag) : <code>string</code>
+    * [.initialize(app)](#CreatureGenerator+initialize)
+    * [.reserve(app)](#System+reserve)
+    * [.update(app)](#System+update)
+    * [.draw(app)](#System+draw)
+    * [.sense(app)](#System+sense)
+    * [.attempt(app)](#System+attempt)
+
+<a name="new_CreatureGenerator_new"></a>
+
+### new CreatureGenerator()
+Constructs a new CreatureGenerator
+
+<a name="System+tag"></a>
+
+### creatureGenerator.tag : <code>string</code>
+Defines the overall role of this system. One of "renderer", "generator",
+or "processor".
+
+**Kind**: instance property of <code>[CreatureGenerator](#CreatureGenerator)</code>  
+<a name="CreatureGenerator+initialize"></a>
+
+### creatureGenerator.initialize(app)
+Seeds the world with creatures
+
+**Kind**: instance method of <code>[CreatureGenerator](#CreatureGenerator)</code>  
+**Overrides:** <code>[initialize](#System+initialize)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+reserve"></a>
+
+### creatureGenerator.reserve(app)
+Hook for reserving input and ouput neurons in the Brain
+
+**Kind**: instance method of <code>[CreatureGenerator](#CreatureGenerator)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+update"></a>
+
+### creatureGenerator.update(app)
+Hook for updating the state of the world
+
+**Kind**: instance method of <code>[CreatureGenerator](#CreatureGenerator)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+draw"></a>
+
+### creatureGenerator.draw(app)
+Called once per frame to perform drawing logic
+
+**Kind**: instance method of <code>[CreatureGenerator](#CreatureGenerator)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+sense"></a>
+
+### creatureGenerator.sense(app)
+Hook for inputting sense data into the brain
+
+**Kind**: instance method of <code>[CreatureGenerator](#CreatureGenerator)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+attempt"></a>
+
+### creatureGenerator.attempt(app)
+Hook for reading output data from the brain and attempting actions
+
+**Kind**: instance method of <code>[CreatureGenerator](#CreatureGenerator)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="CreatureRenderer"></a>
+
+## CreatureRenderer ⇐ <code>[System](#System)</code>
+Renders creatures for all tiles that contain a Creature component
+
+**Kind**: global class  
+**Extends:** <code>[System](#System)</code>  
+
+* [CreatureRenderer](#CreatureRenderer) ⇐ <code>[System](#System)</code>
+    * [new CreatureRenderer()](#new_CreatureRenderer_new)
+    * [.tag](#System+tag) : <code>string</code>
+    * [.initialize(app)](#CreatureRenderer+initialize)
+    * [.draw(app)](#CreatureRenderer+draw)
+    * [.reserve(app)](#System+reserve)
+    * [.update(app)](#System+update)
+    * [.sense(app)](#System+sense)
+    * [.attempt(app)](#System+attempt)
+
+<a name="new_CreatureRenderer_new"></a>
+
+### new CreatureRenderer()
+Constructs a new CreatureRenderer
+
+<a name="System+tag"></a>
+
+### creatureRenderer.tag : <code>string</code>
+Defines the overall role of this system. One of "renderer", "generator",
+or "processor".
+
+**Kind**: instance property of <code>[CreatureRenderer](#CreatureRenderer)</code>  
+<a name="CreatureRenderer+initialize"></a>
+
+### creatureRenderer.initialize(app)
+Prepares the system for rendering creature graphics
+
+**Kind**: instance method of <code>[CreatureRenderer](#CreatureRenderer)</code>  
+**Overrides:** <code>[initialize](#System+initialize)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="CreatureRenderer+draw"></a>
+
+### creatureRenderer.draw(app)
+Renders a creature graphic for every tile that contains a Creature component
+
+**Kind**: instance method of <code>[CreatureRenderer](#CreatureRenderer)</code>  
+**Overrides:** <code>[draw](#System+draw)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+reserve"></a>
+
+### creatureRenderer.reserve(app)
+Hook for reserving input and ouput neurons in the Brain
+
+**Kind**: instance method of <code>[CreatureRenderer](#CreatureRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+update"></a>
+
+### creatureRenderer.update(app)
+Hook for updating the state of the world
+
+**Kind**: instance method of <code>[CreatureRenderer](#CreatureRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+sense"></a>
+
+### creatureRenderer.sense(app)
+Hook for inputting sense data into the brain
+
+**Kind**: instance method of <code>[CreatureRenderer](#CreatureRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+attempt"></a>
+
+### creatureRenderer.attempt(app)
+Hook for reading output data from the brain and attempting actions
+
+**Kind**: instance method of <code>[CreatureRenderer](#CreatureRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="EatingProcessor"></a>
+
+## EatingProcessor ⇐ <code>[System](#System)</code>
+Processes the eating of plants by creatures
+
+**Kind**: global class  
+**Extends:** <code>[System](#System)</code>  
+
+* [EatingProcessor](#EatingProcessor) ⇐ <code>[System](#System)</code>
+    * [new EatingProcessor()](#new_EatingProcessor_new)
+    * [.tag](#System+tag) : <code>string</code>
+    * [.update(app)](#EatingProcessor+update)
+    * [.reserve(app)](#System+reserve)
+    * [.initialize(app)](#System+initialize)
+    * [.draw(app)](#System+draw)
+    * [.sense(app)](#System+sense)
+    * [.attempt(app)](#System+attempt)
+
+<a name="new_EatingProcessor_new"></a>
+
+### new EatingProcessor()
+Constructs a new EatingProcessor
+
+<a name="System+tag"></a>
+
+### eatingProcessor.tag : <code>string</code>
+Defines the overall role of this system. One of "renderer", "generator",
+or "processor".
+
+**Kind**: instance property of <code>[EatingProcessor](#EatingProcessor)</code>  
+<a name="EatingProcessor+update"></a>
+
+### eatingProcessor.update(app)
+Resolves the event of a creature and plant residing in the same tile
+to the creature eating that plant
+
+**Kind**: instance method of <code>[EatingProcessor](#EatingProcessor)</code>  
+**Overrides:** <code>[update](#System+update)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+reserve"></a>
+
+### eatingProcessor.reserve(app)
+Hook for reserving input and ouput neurons in the Brain
+
+**Kind**: instance method of <code>[EatingProcessor](#EatingProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+initialize"></a>
+
+### eatingProcessor.initialize(app)
+Initializes this system allowing it to perform one-time preparation logic
+
+**Kind**: instance method of <code>[EatingProcessor](#EatingProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+draw"></a>
+
+### eatingProcessor.draw(app)
+Called once per frame to perform drawing logic
+
+**Kind**: instance method of <code>[EatingProcessor](#EatingProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+sense"></a>
+
+### eatingProcessor.sense(app)
+Hook for inputting sense data into the brain
+
+**Kind**: instance method of <code>[EatingProcessor](#EatingProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+attempt"></a>
+
+### eatingProcessor.attempt(app)
+Hook for reading output data from the brain and attempting actions
+
+**Kind**: instance method of <code>[EatingProcessor](#EatingProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="MovementProcessor"></a>
+
+## MovementProcessor ⇐ <code>[System](#System)</code>
+Processes locomotion for creatures
+
+**Kind**: global class  
+**Extends:** <code>[System](#System)</code>  
+
+* [MovementProcessor](#MovementProcessor) ⇐ <code>[System](#System)</code>
+    * [new MovementProcessor()](#new_MovementProcessor_new)
+    * [.tag](#System+tag) : <code>string</code>
+    * [.reserve(app)](#MovementProcessor+reserve)
+    * [.initialize(app)](#MovementProcessor+initialize)
+    * [.attempt(app)](#MovementProcessor+attempt)
+    * [.update(app)](#MovementProcessor+update)
+    * [._hashCoord(coord)](#MovementProcessor+_hashCoord) ⇒ <code>string</code>
+    * [._unhashCoord(hash)](#MovementProcessor+_unhashCoord) ⇒ <code>[Coord](#Coord)</code>
+    * [.draw(app)](#System+draw)
+    * [.sense(app)](#System+sense)
+
+<a name="new_MovementProcessor_new"></a>
+
+### new MovementProcessor()
+Constructs a new MovementProcessor
+
+<a name="System+tag"></a>
+
+### movementProcessor.tag : <code>string</code>
+Defines the overall role of this system. One of "renderer", "generator",
+or "processor".
+
+**Kind**: instance property of <code>[MovementProcessor](#MovementProcessor)</code>  
+<a name="MovementProcessor+reserve"></a>
+
+### movementProcessor.reserve(app)
+Reserves 7 output neurons, one for each direction plus no direction
+
+**Kind**: instance method of <code>[MovementProcessor](#MovementProcessor)</code>  
+**Overrides:** <code>[reserve](#System+reserve)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="MovementProcessor+initialize"></a>
+
+### movementProcessor.initialize(app)
+Prepares the system for use
+
+**Kind**: instance method of <code>[MovementProcessor](#MovementProcessor)</code>  
+**Overrides:** <code>[initialize](#System+initialize)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="MovementProcessor+attempt"></a>
+
+### movementProcessor.attempt(app)
+Makes plans to move a creature in the most prevailing direction signaled
+by the brain
+
+**Kind**: instance method of <code>[MovementProcessor](#MovementProcessor)</code>  
+**Overrides:** <code>[attempt](#System+attempt)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="MovementProcessor+update"></a>
+
+### movementProcessor.update(app)
+Moves creature to their planned positions
+
+**Kind**: instance method of <code>[MovementProcessor](#MovementProcessor)</code>  
+**Overrides:** <code>[update](#System+update)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="MovementProcessor+_hashCoord"></a>
+
+### movementProcessor._hashCoord(coord) ⇒ <code>string</code>
+Hashes a Coord instance for use as an object key
+
+**Kind**: instance method of <code>[MovementProcessor](#MovementProcessor)</code>  
+**Returns**: <code>string</code> - hashed version of the given coord  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| coord | <code>[Coord](#Coord)</code> | the coord to hash |
+
+<a name="MovementProcessor+_unhashCoord"></a>
+
+### movementProcessor._unhashCoord(hash) ⇒ <code>[Coord](#Coord)</code>
+Reverses the effect of hashing a Coord instance using _hashCoord
+
+**Kind**: instance method of <code>[MovementProcessor](#MovementProcessor)</code>  
+**Returns**: <code>[Coord](#Coord)</code> - the restored Coord instance  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| hash | <code>string</code> | the hashed Coord instance |
+
+<a name="System+draw"></a>
+
+### movementProcessor.draw(app)
+Called once per frame to perform drawing logic
+
+**Kind**: instance method of <code>[MovementProcessor](#MovementProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+sense"></a>
+
+### movementProcessor.sense(app)
+Hook for inputting sense data into the brain
+
+**Kind**: instance method of <code>[MovementProcessor](#MovementProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="TouchProcessor"></a>
+
+## TouchProcessor ⇐ <code>[System](#System)</code>
+Inputs touch sense data into the brains of creatures
+
+**Kind**: global class  
+**Extends:** <code>[System](#System)</code>  
+
+* [TouchProcessor](#TouchProcessor) ⇐ <code>[System](#System)</code>
+    * [new TouchProcessor()](#new_TouchProcessor_new)
+    * [.tag](#System+tag) : <code>string</code>
+    * [.reserve(app)](#TouchProcessor+reserve)
+    * [.sense(app)](#TouchProcessor+sense)
+    * [.initialize(app)](#System+initialize)
+    * [.update(app)](#System+update)
+    * [.draw(app)](#System+draw)
+    * [.attempt(app)](#System+attempt)
+
+<a name="new_TouchProcessor_new"></a>
+
+### new TouchProcessor()
+Constructs a new TouchProcessor
+
+<a name="System+tag"></a>
+
+### touchProcessor.tag : <code>string</code>
+Defines the overall role of this system. One of "renderer", "generator",
+or "processor".
+
+**Kind**: instance property of <code>[TouchProcessor](#TouchProcessor)</code>  
+<a name="TouchProcessor+reserve"></a>
+
+### touchProcessor.reserve(app)
+Reserves 6 input neurons, one for each touch direction
+
+**Kind**: instance method of <code>[TouchProcessor](#TouchProcessor)</code>  
+**Overrides:** <code>[reserve](#System+reserve)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="TouchProcessor+sense"></a>
+
+### touchProcessor.sense(app)
+Inputs touch sense data into the brain. Inputs a 1 for plant, 0.5 for
+creature, and 0 for no item present.
+
+**Kind**: instance method of <code>[TouchProcessor](#TouchProcessor)</code>  
+**Overrides:** <code>[sense](#System+sense)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+initialize"></a>
+
+### touchProcessor.initialize(app)
+Initializes this system allowing it to perform one-time preparation logic
+
+**Kind**: instance method of <code>[TouchProcessor](#TouchProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+update"></a>
+
+### touchProcessor.update(app)
+Hook for updating the state of the world
+
+**Kind**: instance method of <code>[TouchProcessor](#TouchProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+draw"></a>
+
+### touchProcessor.draw(app)
+Called once per frame to perform drawing logic
+
+**Kind**: instance method of <code>[TouchProcessor](#TouchProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+attempt"></a>
+
+### touchProcessor.attempt(app)
+Hook for reading output data from the brain and attempting actions
+
+**Kind**: instance method of <code>[TouchProcessor](#TouchProcessor)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="Plant"></a>
+
+## Plant ⇐ <code>[Component](#Component)</code>
+An edible plant containing energy
+
+**Kind**: global class  
+**Extends:** <code>[Component](#Component)</code>  
+
+* [Plant](#Plant) ⇐ <code>[Component](#Component)</code>
+    * [new Plant([energy])](#new_Plant_new)
+    * [.energy](#Plant+energy) : <code>number</code>
+
+<a name="new_Plant_new"></a>
+
+### new Plant([energy])
+Creates a new plant with the given energy amount
+
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [energy] | <code>number</code> | <code>0</code> | initial energy stored in this plant |
+
+<a name="Plant+energy"></a>
+
+### plant.energy : <code>number</code>
+Energy stored in this plant
+
+**Kind**: instance property of <code>[Plant](#Plant)</code>  
+**Default**: <code>0</code>  
+<a name="PlantGenerator"></a>
+
+## PlantGenerator ⇐ <code>[System](#System)</code>
+Generates initial plant life, placing Plant components into Tiles
+
+**Kind**: global class  
+**Extends:** <code>[System](#System)</code>  
+**See**: [Plant](#Plant)  
+
+* [PlantGenerator](#PlantGenerator) ⇐ <code>[System](#System)</code>
+    * [new PlantGenerator()](#new_PlantGenerator_new)
+    * [.tag](#System+tag) : <code>string</code>
+    * [.initialize(app)](#PlantGenerator+initialize)
+    * [.reserve(app)](#System+reserve)
+    * [.update(app)](#System+update)
+    * [.draw(app)](#System+draw)
+    * [.sense(app)](#System+sense)
+    * [.attempt(app)](#System+attempt)
+
+<a name="new_PlantGenerator_new"></a>
+
+### new PlantGenerator()
+Constructs a new PlantGenerator
+
+<a name="System+tag"></a>
+
+### plantGenerator.tag : <code>string</code>
+Defines the overall role of this system. One of "renderer", "generator",
+or "processor".
+
+**Kind**: instance property of <code>[PlantGenerator](#PlantGenerator)</code>  
+<a name="PlantGenerator+initialize"></a>
+
+### plantGenerator.initialize(app)
+Seeds the world with plants
+
+**Kind**: instance method of <code>[PlantGenerator](#PlantGenerator)</code>  
+**Overrides:** <code>[initialize](#System+initialize)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+reserve"></a>
+
+### plantGenerator.reserve(app)
+Hook for reserving input and ouput neurons in the Brain
+
+**Kind**: instance method of <code>[PlantGenerator](#PlantGenerator)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+update"></a>
+
+### plantGenerator.update(app)
+Hook for updating the state of the world
+
+**Kind**: instance method of <code>[PlantGenerator](#PlantGenerator)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+draw"></a>
+
+### plantGenerator.draw(app)
+Called once per frame to perform drawing logic
+
+**Kind**: instance method of <code>[PlantGenerator](#PlantGenerator)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+sense"></a>
+
+### plantGenerator.sense(app)
+Hook for inputting sense data into the brain
+
+**Kind**: instance method of <code>[PlantGenerator](#PlantGenerator)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+attempt"></a>
+
+### plantGenerator.attempt(app)
+Hook for reading output data from the brain and attempting actions
+
+**Kind**: instance method of <code>[PlantGenerator](#PlantGenerator)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="PlantRenderer"></a>
+
+## PlantRenderer ⇐ <code>[System](#System)</code>
+Renders plants for all tiles that contain a Plant component
+
+**Kind**: global class  
+**Extends:** <code>[System](#System)</code>  
+
+* [PlantRenderer](#PlantRenderer) ⇐ <code>[System](#System)</code>
+    * [new PlantRenderer()](#new_PlantRenderer_new)
+    * [.tag](#System+tag) : <code>string</code>
+    * [.initialize(app)](#PlantRenderer+initialize)
+    * [.draw(app)](#PlantRenderer+draw)
+    * [.reserve(app)](#System+reserve)
+    * [.update(app)](#System+update)
+    * [.sense(app)](#System+sense)
+    * [.attempt(app)](#System+attempt)
+
+<a name="new_PlantRenderer_new"></a>
+
+### new PlantRenderer()
+Constructs a new PlantRenderer
+
+<a name="System+tag"></a>
+
+### plantRenderer.tag : <code>string</code>
+Defines the overall role of this system. One of "renderer", "generator",
+or "processor".
+
+**Kind**: instance property of <code>[PlantRenderer](#PlantRenderer)</code>  
+<a name="PlantRenderer+initialize"></a>
+
+### plantRenderer.initialize(app)
+Prepares the system for rendering plant graphics
+
+**Kind**: instance method of <code>[PlantRenderer](#PlantRenderer)</code>  
+**Overrides:** <code>[initialize](#System+initialize)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="PlantRenderer+draw"></a>
+
+### plantRenderer.draw(app)
+Renders a plant graphic for every tile that contains a Plant component,
+and removes plant graphics for tiles that no longer have vegetation
+
+**Kind**: instance method of <code>[PlantRenderer](#PlantRenderer)</code>  
+**Overrides:** <code>[draw](#System+draw)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+reserve"></a>
+
+### plantRenderer.reserve(app)
+Hook for reserving input and ouput neurons in the Brain
+
+**Kind**: instance method of <code>[PlantRenderer](#PlantRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+update"></a>
+
+### plantRenderer.update(app)
+Hook for updating the state of the world
+
+**Kind**: instance method of <code>[PlantRenderer](#PlantRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+sense"></a>
+
+### plantRenderer.sense(app)
+Hook for inputting sense data into the brain
+
+**Kind**: instance method of <code>[PlantRenderer](#PlantRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+attempt"></a>
+
+### plantRenderer.attempt(app)
+Hook for reading output data from the brain and attempting actions
+
+**Kind**: instance method of <code>[PlantRenderer](#PlantRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
 <a name="Hexagon"></a>
 
-## Hexagon ⇐ <code>[IShape](#IShape)</code>
+## Hexagon ⇐ <code>[Shape](#Shape)</code>
 A flat-topped, regular hexagon. Implementation details can be found
 [here](http://www.redblobgames.com/grids/hexagons/).
 
 **Kind**: global class  
-**Extends:** <code>[IShape](#IShape)</code>  
+**Extends:** <code>[Shape](#Shape)</code>  
 
-* [Hexagon](#Hexagon) ⇐ <code>[IShape](#IShape)</code>
+* [Hexagon](#Hexagon) ⇐ <code>[Shape](#Shape)</code>
     * [new Hexagon(center, radius)](#new_Hexagon_new)
     * [.radius](#Hexagon+radius) : <code>number</code>
     * [.width](#Hexagon+width) ⇒ <code>number</code>
     * [.height](#Hexagon+height) ⇒ <code>number</code>
-    * [.center](#IShape+center) : <code>[Point](#Point)</code>
+    * [.center](#Shape+center) : <code>[Point](#Point)</code>
     * [.cornerAt(i)](#Hexagon+cornerAt) ⇒ <code>[Point](#Point)</code>
 
 <a name="new_Hexagon_new"></a>
@@ -580,7 +2467,7 @@ Distance from the center to the corners
 The width of the bounding box of the hexagon
 
 **Kind**: instance property of <code>[Hexagon](#Hexagon)</code>  
-**Overrides:** <code>[width](#IShape+width)</code>  
+**Overrides:** <code>[width](#Shape+width)</code>  
 **Returns**: <code>number</code> - The width of the bounding box of the hexagon  
 **Example**  
 
@@ -593,14 +2480,14 @@ let w = hex.width;
 The height of the bounding box of the hexagon
 
 **Kind**: instance property of <code>[Hexagon](#Hexagon)</code>  
-**Overrides:** <code>[height](#IShape+height)</code>  
+**Overrides:** <code>[height](#Shape+height)</code>  
 **Returns**: <code>number</code> - The height of the bounding box of the hexagon  
 **Example**  
 
 ```js
 let h = hex.height;
 ```
-<a name="IShape+center"></a>
+<a name="Shape+center"></a>
 
 ### hexagon.center : <code>[Point](#Point)</code>
 The center position of this shape
@@ -620,63 +2507,6 @@ order starting from the right-most.
 | --- | --- | --- |
 | i | <code>number</code> | Index of the corner for which to calculate the position. |
 
-<a name="IShape"></a>
-
-## *IShape*
-An abstract class representing 2D geometric shapes that have a center, a width,
-and a height
-
-**Kind**: global abstract class  
-
-* *[IShape](#IShape)*
-    * *[new IShape([center])](#new_IShape_new)*
-    * *[.center](#IShape+center) : <code>[Point](#Point)</code>*
-    * **[.width](#IShape+width) ⇒ <code>number</code>**
-    * **[.height](#IShape+height) ⇒ <code>number</code>**
-
-<a name="new_IShape_new"></a>
-
-### *new IShape([center])*
-Creates a new shape at given point
-IShape should be extended and its members overridden by a concrete subclass.
-
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| [center] | <code>[Point](#Point)</code> | <code>new Point(0, 0)</code> | center point of shape |
-
-**Example**  
-
-```js
-class Circle extends IShape {
-  constructor(point, radius) {
-    super(point);
-    this.r = radius;
-  }
-  get width() { return this.radius * 2; }
-  get height() { return this.width; }
-}
-```
-<a name="IShape+center"></a>
-
-### *iShape.center : <code>[Point](#Point)</code>*
-The center position of this shape
-
-**Kind**: instance property of <code>[IShape](#IShape)</code>  
-<a name="IShape+width"></a>
-
-### **iShape.width ⇒ <code>number</code>**
-The width of the bounding box containing this shape
-
-**Kind**: instance abstract property of <code>[IShape](#IShape)</code>  
-**Returns**: <code>number</code> - The width of the bounding box containing this shape  
-<a name="IShape+height"></a>
-
-### **iShape.height ⇒ <code>number</code>**
-The height of the bounding box containing this shape
-
-**Kind**: instance abstract property of <code>[IShape](#IShape)</code>  
-**Returns**: <code>number</code> - The height of the bounding box containing this shape  
 <a name="Point"></a>
 
 ## Point
@@ -721,178 +2551,63 @@ The y coordinate of this point
 
 **Kind**: instance property of <code>[Point](#Point)</code>  
 **Default**: <code>0</code>  
-<a name="ISystem"></a>
+<a name="Shape"></a>
 
-## *ISystem*
-Interface for defining new systems. A system in Genetic Sandbox is a class
-containing initialize() and update() functions that operate in some way on
-[Tiles](#Tile) within the [HexGrid](#HexGrid).
+## *Shape*
+An abstract class representing 2D geometric shapes that have a center, a width,
+and a height
 
 **Kind**: global abstract class  
 
-* *[ISystem](#ISystem)*
-    * *[new ISystem(tag)](#new_ISystem_new)*
-    * *[.tag](#ISystem+tag) : <code>string</code>*
-    * *[.initialize(app)](#ISystem+initialize)*
-    * *[.update(app)](#ISystem+update)*
+* *[Shape](#Shape)*
+    * *[new Shape([center])](#new_Shape_new)*
+    * *[.center](#Shape+center) : <code>[Point](#Point)</code>*
+    * **[.width](#Shape+width) ⇒ <code>number</code>**
+    * **[.height](#Shape+height) ⇒ <code>number</code>**
 
-<a name="new_ISystem_new"></a>
+<a name="new_Shape_new"></a>
 
-### *new ISystem(tag)*
-ISystem can not be instantiated directly, but instead should be extended
-and its instance methods overridden.
+### *new Shape([center])*
+Creates a new shape at given point
+Shape should be extended and its members overridden by a concrete subclass.
 
 
-| Param | Type | Description |
-| --- | --- | --- |
-| tag | <code>string</code> | one of "renderer", "generator", or "processor" |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [center] | <code>[Point](#Point)</code> | <code>new Point(0, 0)</code> | center point of shape |
 
-<a name="ISystem+tag"></a>
+**Example**  
 
-### *iSystem.tag : <code>string</code>*
-Defines the role of this system. One of "renderer", "generator", or
-"processor".
+```js
+class Circle extends Shape {
+  constructor(point, radius) {
+    super(point);
+    this.r = radius;
+  }
+  get width() { return this.radius * 2; }
+  get height() { return this.width; }
+}
+```
+<a name="Shape+center"></a>
 
-**Kind**: instance property of <code>[ISystem](#ISystem)</code>  
-<a name="ISystem+initialize"></a>
+### *shape.center : <code>[Point](#Point)</code>*
+The center position of this shape
 
-### *iSystem.initialize(app)*
-Initializes this system allowing it to perform one-time preparation logic
+**Kind**: instance property of <code>[Shape](#Shape)</code>  
+<a name="Shape+width"></a>
 
-**Kind**: instance method of <code>[ISystem](#ISystem)</code>  
+### **shape.width ⇒ <code>number</code>**
+The width of the bounding box containing this shape
 
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
+**Kind**: instance abstract property of <code>[Shape](#Shape)</code>  
+**Returns**: <code>number</code> - The width of the bounding box containing this shape  
+<a name="Shape+height"></a>
 
-<a name="ISystem+update"></a>
+### **shape.height ⇒ <code>number</code>**
+The height of the bounding box containing this shape
 
-### *iSystem.update(app)*
-Called once per tick to update the simulation
-
-**Kind**: instance method of <code>[ISystem](#ISystem)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="PlantGenerator"></a>
-
-## PlantGenerator
-Generates initial vegetation
-
-**Kind**: global class  
-
-* [PlantGenerator](#PlantGenerator)
-    * [new PlantGenerator()](#new_PlantGenerator_new)
-    * [.initialize(app)](#PlantGenerator+initialize)
-    * [.update(app)](#PlantGenerator+update)
-
-<a name="new_PlantGenerator_new"></a>
-
-### new PlantGenerator()
-Constructs a new PlantGenerator
-
-<a name="PlantGenerator+initialize"></a>
-
-### plantGenerator.initialize(app)
-Seeds the world with vegetation
-
-**Kind**: instance method of <code>[PlantGenerator](#PlantGenerator)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="PlantGenerator+update"></a>
-
-### plantGenerator.update(app)
-A no-op for generators
-
-**Kind**: instance method of <code>[PlantGenerator](#PlantGenerator)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="DefaultGridRenderer"></a>
-
-## DefaultGridRenderer
-The default renderer of all tiles in the grid
-
-**Kind**: global class  
-
-* [DefaultGridRenderer](#DefaultGridRenderer)
-    * [new DefaultGridRenderer()](#new_DefaultGridRenderer_new)
-    * [.initialize(app)](#DefaultGridRenderer+initialize)
-    * [.update(app)](#DefaultGridRenderer+update)
-
-<a name="new_DefaultGridRenderer_new"></a>
-
-### new DefaultGridRenderer()
-Constructs a new DefaultGridRenderer
-
-<a name="DefaultGridRenderer+initialize"></a>
-
-### defaultGridRenderer.initialize(app)
-Prepares the system for rendering
-
-**Kind**: instance method of <code>[DefaultGridRenderer](#DefaultGridRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="DefaultGridRenderer+update"></a>
-
-### defaultGridRenderer.update(app)
-Draws all tiles in the app's grid
-
-**Kind**: instance method of <code>[DefaultGridRenderer](#DefaultGridRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="DefaultPlantRenderer"></a>
-
-## DefaultPlantRenderer
-Renders plants for tiles that contain a vegetation component
-
-**Kind**: global class  
-
-* [DefaultPlantRenderer](#DefaultPlantRenderer)
-    * [new DefaultPlantRenderer()](#new_DefaultPlantRenderer_new)
-    * [.initialize(app)](#DefaultPlantRenderer+initialize)
-    * [.update(app)](#DefaultPlantRenderer+update)
-
-<a name="new_DefaultPlantRenderer_new"></a>
-
-### new DefaultPlantRenderer()
-Constructs a new DefaultPlantRenderer
-
-<a name="DefaultPlantRenderer+initialize"></a>
-
-### defaultPlantRenderer.initialize(app)
-Prepares the system for rendering plant graphics
-
-**Kind**: instance method of <code>[DefaultPlantRenderer](#DefaultPlantRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="DefaultPlantRenderer+update"></a>
-
-### defaultPlantRenderer.update(app)
-Renders a plant graphic for every tile that contains a vegetation component
-
-**Kind**: instance method of <code>[DefaultPlantRenderer](#DefaultPlantRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
+**Kind**: instance abstract property of <code>[Shape](#Shape)</code>  
+**Returns**: <code>number</code> - The height of the bounding box containing this shape  
 <a name="MultiStringHashMap"></a>
 
 ## MultiStringHashMap
@@ -1001,6 +2716,183 @@ Deletes the given key
 let wasDeleted = myHash.delete(["no", "longer", "needed"]);
 // myHash.get(["no", "longer", "needed"]) === undefined
 ```
+<a name="Serializable"></a>
+
+## Serializable
+An interface for recursively serializing and deserializing objects to and from
+JSON.
+
+**Kind**: global class  
+
+* [Serializable](#Serializable)
+    * [new Serializable()](#new_Serializable_new)
+    * _instance_
+        * [.serialize([blacklist])](#Serializable+serialize) ⇒ <code>string</code>
+    * _static_
+        * [.register(ctor)](#Serializable.register)
+        * [.restore(json)](#Serializable.restore) ⇒ <code>[Serializable](#Serializable)</code>
+
+<a name="new_Serializable_new"></a>
+
+### new Serializable()
+Serializable isn't instantiable directly, but should be extended by a
+concrete subclass.
+
+<a name="Serializable+serialize"></a>
+
+### serializable.serialize([blacklist]) ⇒ <code>string</code>
+Serializes this object to JSON with an optional array of blacklisted
+fields that will not be included in the output. This function will be
+called recursively for nested Serializable objects.
+
+**Kind**: instance method of <code>[Serializable](#Serializable)</code>  
+**Returns**: <code>string</code> - JSON string  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [blacklist] | <code>Array.&lt;string&gt;</code> | <code>[]</code> | keys in this list will be excluded from the JSON string |
+
+**Example**  
+
+```js
+let coord = new Coord(1, 2);
+coord.serialize() // '{"ctor":"Coord","data":{"x":1,"y":2}}'
+coord.serialize(["y"]) // '{"ctor":"Coord","data":{"x":1}}'
+```
+<a name="Serializable.register"></a>
+
+### Serializable.register(ctor)
+Registers the given constructor so that it can later be properly restored
+from JSON using Serializable.restore()
+
+**Kind**: static method of <code>[Serializable](#Serializable)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| ctor | <code>function</code> | constructor function for a subclass of Serializable |
+
+<a name="Serializable.restore"></a>
+
+### Serializable.restore(json) ⇒ <code>[Serializable](#Serializable)</code>
+Restores a Serializable object from its JSON string, obtained by originally
+calling serialize() on that object. Also restores nested Serializable
+objects..
+
+**Kind**: static method of <code>[Serializable](#Serializable)</code>  
+**Returns**: <code>[Serializable](#Serializable)</code> - the restored Serializable object as it existed at
+its time of serialization  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| json | <code>string</code> | object's JSON string |
+
+**Example**  
+
+```js
+const coord = new Coord(5, 6);
+const restored = Serializable.restore(coord.serialize());
+coord.x === restored.x; // true
+coord.y === restored.y; // true
+```
+<a name="config"></a>
+
+## config : <code>Object</code>
+An aggregation of all plugin configuration options, and the main interface
+for tweaking them.
+
+**Kind**: global constant  
+**Example**  
+
+```js
+import config from "../config";
+// Change the vegetation rate
+config.plants.vegetationRate = 0.2;
+// Change the size of the world
+config.core.gridRadius = 35;
+```
+<a name="core"></a>
+
+## core : <code>Object</code>
+Core configuration options
+
+**Kind**: global constant  
+
+* [core](#core) : <code>Object</code>
+    * [.gridRadius](#core.gridRadius) : <code>number</code>
+    * [.hexRadius](#core.hexRadius) : <code>number</code>
+
+<a name="core.gridRadius"></a>
+
+### core.gridRadius : <code>number</code>
+The radius in hexagons of the world
+
+**Kind**: static property of <code>[core](#core)</code>  
+<a name="core.hexRadius"></a>
+
+### core.hexRadius : <code>number</code>
+The radius in pixels of a hexagon within the grid
+
+**Kind**: static property of <code>[core](#core)</code>  
+<a name="creatures"></a>
+
+## creatures : <code>Object</code>
+Creature configuration options
+
+**Kind**: global constant  
+
+* [creatures](#creatures) : <code>Object</code>
+    * [.creatureRate](#creatures.creatureRate) : <code>number</code>
+    * [.initialEnergy](#creatures.initialEnergy) : <code>number</code>
+    * [.moveCost](#creatures.moveCost) : <code>number</code>
+    * [.tickCost](#creatures.tickCost) : <code>number</code>
+
+<a name="creatures.creatureRate"></a>
+
+### creatures.creatureRate : <code>number</code>
+The chance that each tile has of spawning an initial creature
+
+**Kind**: static property of <code>[creatures](#creatures)</code>  
+<a name="creatures.initialEnergy"></a>
+
+### creatures.initialEnergy : <code>number</code>
+The amount of energy every creature starts with
+
+**Kind**: static property of <code>[creatures](#creatures)</code>  
+<a name="creatures.moveCost"></a>
+
+### creatures.moveCost : <code>number</code>
+The amount of energy expended to move one tile
+
+**Kind**: static property of <code>[creatures](#creatures)</code>  
+<a name="creatures.tickCost"></a>
+
+### creatures.tickCost : <code>number</code>
+The amount of energy expended per tick regardless of action taken
+
+**Kind**: static property of <code>[creatures](#creatures)</code>  
+<a name="plants"></a>
+
+## plants : <code>Object</code>
+Plant configuration options
+
+**Kind**: global constant  
+
+* [plants](#plants) : <code>Object</code>
+    * [.vegetationRate](#plants.vegetationRate) : <code>number</code>
+    * [.plantEnergy](#plants.plantEnergy) : <code>number</code>
+
+<a name="plants.vegetationRate"></a>
+
+### plants.vegetationRate : <code>number</code>
+The percentage of the grid that will be covered in vegetation
+
+**Kind**: static property of <code>[plants](#plants)</code>  
+<a name="plants.plantEnergy"></a>
+
+### plants.plantEnergy : <code>number</code>
+Energy contained in a plant
+
+**Kind**: static property of <code>[plants](#plants)</code>  
 <a name="ElementalTheme"></a>
 
 ## ElementalTheme
