@@ -1,4 +1,4 @@
-import Component from "../../../Component";
+import Component from "../../../../ecs/Component";
 
 /**
  * Genetic representation of a neuron in a neural network

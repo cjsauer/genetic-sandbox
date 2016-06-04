@@ -1,5 +1,5 @@
 import _ from "lodash";
-import System from "../../System";
+import System from "../../../ecs/System";
 import Theme from "../../../themes/Theme";
 import HexGrid from "../../../grid/HexGrid";
 import config from "../../../config";

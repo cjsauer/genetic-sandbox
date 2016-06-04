@@ -1,4 +1,4 @@
-import Component from "../../Component";
+import Component from "../../../ecs/Component";
 
 /**
  * A two dimensional coordinate of x and y

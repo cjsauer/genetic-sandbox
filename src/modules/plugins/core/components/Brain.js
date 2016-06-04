@@ -1,4 +1,4 @@
-import Component from "../../Component";
+import Component from "../../../ecs/Component";
 
 /**
  * A neural network that receives sense input from the environment and produces

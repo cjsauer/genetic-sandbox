@@ -1,4 +1,4 @@
-import System from "../../System";
+import System from "../../../ecs/System";
 import Plant from "../components/Plant";
 import config from "../../../config";
 

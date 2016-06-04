@@ -1,4 +1,4 @@
-import Component from "../../Component";
+import Component from "../../../ecs/Component";
 import Brain from "../../core/components/Brain";
 import Sequencer from "../../../genetics/Sequencer";
 

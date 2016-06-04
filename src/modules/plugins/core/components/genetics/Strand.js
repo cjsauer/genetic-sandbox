@@ -1,4 +1,4 @@
-import Component from "../../../Component";
+import Component from "../../../../ecs/Component";
 import NodeGene from "./NodeGene";
 import ConnectionGene from "./ConnectionGene";
 

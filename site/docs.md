@@ -10,6 +10,23 @@ permalink: /docs/
 <dt><a href="#App">App</a></dt>
 <dd><p>The entry point and hub of the entire application</p>
 </dd>
+<dt><a href="#Component">Component</a></dt>
+<dd><p>Components are bags of properties that entities possess. It is possible for
+Components to contain other nested Components. They may also contain helper
+methods.</p>
+</dd>
+<dt><a href="#Entity">Entity</a></dt>
+<dd><p>An entity is a container of Components, and represents all &quot;things&quot; in the
+world</p>
+</dd>
+<dt><a href="#Family">Family</a></dt>
+<dd><p>A collection of entities containing all of the specified components</p>
+</dd>
+<dt><a href="#System">System</a></dt>
+<dd><p>Interface for defining new systems. A system in Genetic Sandbox is a class
+containing logic that operates in some way on <a href="#Tile">Tiles</a> within the
+<a href="#HexGrid">HexGrid</a>.</p>
+</dd>
 <dt><a href="#Sequencer">Sequencer</a></dt>
 <dd><p>Reads in a <a href="#Strand">Strand</a> and produces a
 <a href="http://synaptic.juancazala.com/#/">Synaptic neural network</a></p>
@@ -25,19 +42,9 @@ the state at a specific place in a grid</p>
 <dt><a href="#TileComponentIndex">TileComponentIndex</a></dt>
 <dd><p>Builds an index of <a href="Tiles">Tiles</a> for fast lookup by component</p>
 </dd>
-<dt><a href="#Component">Component</a></dt>
-<dd><p>Components are bags of properties that entities possess. It is possible for
-Components to contain other nested Components. They may also contain helper
-methods.</p>
-</dd>
 <dt><a href="#Plugin">Plugin</a></dt>
 <dd><p>A toggleable plugin containing an array of <a href="#System">Systems</a> and
 configuration options</p>
-</dd>
-<dt><a href="#System">System</a></dt>
-<dd><p>Interface for defining new systems. A system in Genetic Sandbox is a class
-containing logic that operates in some way on <a href="#Tile">Tiles</a> within the
-<a href="#HexGrid">HexGrid</a>.</p>
 </dd>
 <dt><a href="#Brain">Brain</a> ⇐ <code><a href="#Component">Component</a></code></dt>
 <dd><p>A neural network that receives sense input from the environment and produces
@@ -231,6 +238,403 @@ Kicks off the processing loop to continously update all systems
 Stops the processing loop, essentially pausing the entire simulation
 
 **Kind**: instance method of <code>[App](#App)</code>  
+<a name="Component"></a>
+
+## Component
+Components are bags of properties that entities possess. It is possible for
+Components to contain other nested Components. They may also contain helper
+methods.
+
+**Kind**: global class  
+
+* [Component](#Component)
+    * [new Component(name)](#new_Component_new)
+    * [.name](#Component+name) : <code>string</code>
+
+<a name="new_Component_new"></a>
+
+### new Component(name)
+Component isn't instantiable directly, but should be extended by a
+concrete subclass.
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | the name of the component |
+
+<a name="Component+name"></a>
+
+### component.name : <code>string</code>
+Name of the component. Expected to be unique among Components.
+
+**Kind**: instance property of <code>[Component](#Component)</code>  
+<a name="Entity"></a>
+
+## Entity
+An entity is a container of Components, and represents all "things" in the
+world
+
+**Kind**: global class  
+**See**: [Component](#Component)  
+
+* [Entity](#Entity)
+    * [new Entity()](#new_Entity_new)
+    * [.id](#Entity+id) : <code>number</code>
+    * [.getComponent(name)](#Entity+getComponent) ⇒ <code>[Component](#Component)</code>
+    * [.hasComponent(name)](#Entity+hasComponent) ⇒ <code>boolean</code>
+    * [.addComponent(component)](#Entity+addComponent)
+    * [.removeComponent(name)](#Entity+removeComponent)
+    * ["componentAdded"](#Entity+event_componentAdded)
+    * ["componentDeleted"](#Entity+event_componentDeleted)
+
+<a name="new_Entity_new"></a>
+
+### new Entity()
+Creates a new, empty Entity
+
+**Example**  
+
+```js
+const myEntity = new Entity();
+```
+<a name="Entity+id"></a>
+
+### entity.id : <code>number</code>
+Unique ID of this entity
+
+**Kind**: instance property of <code>[Entity](#Entity)</code>  
+<a name="Entity+getComponent"></a>
+
+### entity.getComponent(name) ⇒ <code>[Component](#Component)</code>
+Returns the component with the given name, or null if it does not exist
+
+**Kind**: instance method of <code>[Entity](#Entity)</code>  
+**Returns**: <code>[Component](#Component)</code> - the component, or null if it does not exist  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | Name of the component |
+
+**Example**  
+
+```js
+let plant = myEntity.getComponent("plant");
+```
+<a name="Entity+hasComponent"></a>
+
+### entity.hasComponent(name) ⇒ <code>boolean</code>
+Returns true if this entity has the given component, false otherwise
+
+**Kind**: instance method of <code>[Entity](#Entity)</code>  
+**Returns**: <code>boolean</code> - True if the entity has the given component, false
+otherwise  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | the name of the component to check for |
+
+<a name="Entity+addComponent"></a>
+
+### entity.addComponent(component)
+Adds the given component to this entity
+
+**Kind**: instance method of <code>[Entity](#Entity)</code>  
+**Emits**: <code>[componentAdded](#Entity+event_componentAdded)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| component | <code>[Component](#Component)</code> | the component instance to add |
+
+**Example**  
+
+```js
+myEntity.addComponent(new Plant(10));
+```
+<a name="Entity+removeComponent"></a>
+
+### entity.removeComponent(name)
+Removes the specified component from this entity
+
+**Kind**: instance method of <code>[Entity](#Entity)</code>  
+**Emits**: <code>[componentDeleted](#Entity+event_componentDeleted)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | name of the component to delete |
+
+**Example**  
+
+```js
+myEntity.addComponent(new Plant(10));
+myEntity.removeComponent("plant");
+```
+<a name="Entity+event_componentAdded"></a>
+
+### "componentAdded"
+Fired when a new component is added to an entity
+
+**Kind**: event emitted by <code>[Entity](#Entity)</code>  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| entity | <code>[Entity](#Entity)</code> | the entity that was modified |
+| name | <code>string</code> | the name of the component that was added |
+
+<a name="Entity+event_componentDeleted"></a>
+
+### "componentDeleted"
+Fired when a component is deleted from a entity
+
+**Kind**: event emitted by <code>[Entity](#Entity)</code>  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| entity | <code>[Entity](#Entity)</code> | the entity that was modified |
+| name | <code>string</code> | name of the component that was deleted |
+
+<a name="Family"></a>
+
+## Family
+A collection of entities containing all of the specified components
+
+**Kind**: global class  
+**See**
+
+- {Entity}
+- {Component}
+
+
+* [Family](#Family)
+    * [new Family(componentNames)](#new_Family_new)
+    * _instance_
+        * [.hash](#Family+hash) : <code>string</code>
+        * [.addEntityIfMatch(entity)](#Family+addEntityIfMatch)
+        * [.removeEntity(entity)](#Family+removeEntity)
+        * [.getEntities()](#Family+getEntities) ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
+        * [.onComponentRemoved(event)](#Family+onComponentRemoved)
+    * _static_
+        * [.hashComponentNames(componentNames)](#Family.hashComponentNames) ⇒ <code>string</code>
+
+<a name="new_Family_new"></a>
+
+### new Family(componentNames)
+Creates a new family matching entities containing all of the given
+components
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| componentNames | <code>Array.&lt;string&gt;</code> | the names of the components that an entity must contain all of to be included in this family |
+
+**Example**  
+
+```js
+const family = new Family(["creature", "plant"]);
+```
+<a name="Family+hash"></a>
+
+### family.hash : <code>string</code>
+Hash key representation of this family. Two families that require
+the same components of their entities will hash to the same value.
+
+**Kind**: instance property of <code>[Family](#Family)</code>  
+<a name="Family+addEntityIfMatch"></a>
+
+### family.addEntityIfMatch(entity)
+Adds the given entity to this family if it contains all of its specified
+components
+
+**Kind**: instance method of <code>[Family](#Family)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| entity | <code>[Entity](#Entity)</code> | the entity to add |
+
+**Example**  
+
+```js
+const myEntity = new Entity();
+myEntity.addComponent(new Plant(10));
+const family = new Family(["plant"]);
+family.addEntityIfMatch(myEntity);
+```
+<a name="Family+removeEntity"></a>
+
+### family.removeEntity(entity)
+Removes the given entity from this family
+
+**Kind**: instance method of <code>[Family](#Family)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| entity | <code>[Entity](#Entity)</code> | the entity to remove |
+
+**Example**  
+
+```js
+const myEntity = new Entity();
+myEntity.addComponent(new Plant(10));
+const family = new Family(["plant"]);
+family.addEntityIfMatch(myEntity);
+family.removeEntity(myEntity);
+```
+<a name="Family+getEntities"></a>
+
+### family.getEntities() ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
+Returns an array of all entities currently in this family
+
+**Kind**: instance method of <code>[Family](#Family)</code>  
+**Returns**: <code>[Array.&lt;Entity&gt;](#Entity)</code> - array of all entities in this family  
+**Example**  
+
+```js
+family.getEntities().forEach((entity) => {
+  // Do something with each entity
+});
+```
+<a name="Family+onComponentRemoved"></a>
+
+### family.onComponentRemoved(event)
+Event handler to be called when a component is removed from an entity.
+If the component removed was required to qualify for this family,
+the entity is removed from the family.
+
+**Kind**: instance method of <code>[Family](#Family)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| event | <code>Object</code> | event object |
+| event.entity | <code>[Entity](#Entity)</code> | the entity from which the component was removed |
+| event.component | <code>[Component](#Component)</code> | the component that was removed |
+
+**Example**  
+
+```js
+myEntity.addListener("componentRemoved", family.onComponentRemoved.bind(family));
+```
+<a name="Family.hashComponentNames"></a>
+
+### Family.hashComponentNames(componentNames) ⇒ <code>string</code>
+Hash key representation of an array of component names
+
+**Kind**: static method of <code>[Family](#Family)</code>  
+**Returns**: <code>string</code> - hash key representation of the passed array of component
+names  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| componentNames | <code>Array.&lt;string&gt;</code> | array of component names |
+
+**Example**  
+
+```js
+Family.hashComponentNames(["a", "b", "c"]); // "$a,b,c"
+```
+<a name="System"></a>
+
+## *System*
+Interface for defining new systems. A system in Genetic Sandbox is a class
+containing logic that operates in some way on [Tiles](#Tile) within the
+[HexGrid](#HexGrid).
+
+**Kind**: global abstract class  
+
+* *[System](#System)*
+    * *[new System(tag)](#new_System_new)*
+    * *[.tag](#System+tag) : <code>string</code>*
+    * *[.reserve(app)](#System+reserve)*
+    * *[.initialize(app)](#System+initialize)*
+    * *[.update(app)](#System+update)*
+    * *[.draw(app)](#System+draw)*
+    * *[.sense(app)](#System+sense)*
+    * *[.attempt(app)](#System+attempt)*
+
+<a name="new_System_new"></a>
+
+### *new System(tag)*
+System can not be instantiated directly, but instead should be extended
+and its instance methods overridden.
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| tag | <code>string</code> | one of "renderer", "generator", or "processor" |
+
+<a name="System+tag"></a>
+
+### *system.tag : <code>string</code>*
+Defines the overall role of this system. One of "renderer", "generator",
+or "processor".
+
+**Kind**: instance property of <code>[System](#System)</code>  
+<a name="System+reserve"></a>
+
+### *system.reserve(app)*
+Hook for reserving input and ouput neurons in the Brain
+
+**Kind**: instance method of <code>[System](#System)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+initialize"></a>
+
+### *system.initialize(app)*
+Initializes this system allowing it to perform one-time preparation logic
+
+**Kind**: instance method of <code>[System](#System)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+update"></a>
+
+### *system.update(app)*
+Hook for updating the state of the world
+
+**Kind**: instance method of <code>[System](#System)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+draw"></a>
+
+### *system.draw(app)*
+Called once per frame to perform drawing logic
+
+**Kind**: instance method of <code>[System](#System)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+sense"></a>
+
+### *system.sense(app)*
+Hook for inputting sense data into the brain
+
+**Kind**: instance method of <code>[System](#System)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+attempt"></a>
+
+### *system.attempt(app)*
+Hook for reading output data from the brain and attempting actions
+
+**Kind**: instance method of <code>[System](#System)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
 <a name="Sequencer"></a>
 
 ## Sequencer
@@ -594,36 +998,6 @@ components
 // Returns all tiles that have "biome" and "temperature" components
 let habitatTiles = tileIndex.getTilesByComponent(["biome", "temperature"]);
 ```
-<a name="Component"></a>
-
-## Component
-Components are bags of properties that entities possess. It is possible for
-Components to contain other nested Components. They may also contain helper
-methods.
-
-**Kind**: global class  
-
-* [Component](#Component)
-    * [new Component(name)](#new_Component_new)
-    * [.name](#Component+name) : <code>string</code>
-
-<a name="new_Component_new"></a>
-
-### new Component(name)
-Component isn't instantiable directly, but should be extended by a
-concrete subclass.
-
-
-| Param | Type | Description |
-| --- | --- | --- |
-| name | <code>string</code> | the name of the component |
-
-<a name="Component+name"></a>
-
-### component.name : <code>string</code>
-Name of the component. Expected to be unique among Components.
-
-**Kind**: instance property of <code>[Component](#Component)</code>  
 <a name="Plugin"></a>
 
 ## Plugin
@@ -691,109 +1065,6 @@ True if this plugin is enabled, false otherwise. A disabled plugin
 will be excluded from the processing loop.
 
 **Kind**: instance property of <code>[Plugin](#Plugin)</code>  
-<a name="System"></a>
-
-## *System*
-Interface for defining new systems. A system in Genetic Sandbox is a class
-containing logic that operates in some way on [Tiles](#Tile) within the
-[HexGrid](#HexGrid).
-
-**Kind**: global abstract class  
-
-* *[System](#System)*
-    * *[new System(tag)](#new_System_new)*
-    * *[.tag](#System+tag) : <code>string</code>*
-    * *[.reserve(app)](#System+reserve)*
-    * *[.initialize(app)](#System+initialize)*
-    * *[.update(app)](#System+update)*
-    * *[.draw(app)](#System+draw)*
-    * *[.sense(app)](#System+sense)*
-    * *[.attempt(app)](#System+attempt)*
-
-<a name="new_System_new"></a>
-
-### *new System(tag)*
-System can not be instantiated directly, but instead should be extended
-and its instance methods overridden.
-
-
-| Param | Type | Description |
-| --- | --- | --- |
-| tag | <code>string</code> | one of "renderer", "generator", or "processor" |
-
-<a name="System+tag"></a>
-
-### *system.tag : <code>string</code>*
-Defines the overall role of this system. One of "renderer", "generator",
-or "processor".
-
-**Kind**: instance property of <code>[System](#System)</code>  
-<a name="System+reserve"></a>
-
-### *system.reserve(app)*
-Hook for reserving input and ouput neurons in the Brain
-
-**Kind**: instance method of <code>[System](#System)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="System+initialize"></a>
-
-### *system.initialize(app)*
-Initializes this system allowing it to perform one-time preparation logic
-
-**Kind**: instance method of <code>[System](#System)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="System+update"></a>
-
-### *system.update(app)*
-Hook for updating the state of the world
-
-**Kind**: instance method of <code>[System](#System)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="System+draw"></a>
-
-### *system.draw(app)*
-Called once per frame to perform drawing logic
-
-**Kind**: instance method of <code>[System](#System)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="System+sense"></a>
-
-### *system.sense(app)*
-Hook for inputting sense data into the brain
-
-**Kind**: instance method of <code>[System](#System)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="System+attempt"></a>
-
-### *system.attempt(app)*
-Hook for reading output data from the brain and attempting actions
-
-**Kind**: instance method of <code>[System](#System)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
 <a name="Brain"></a>
 
 ## Brain ⇐ <code>[Component](#Component)</code>

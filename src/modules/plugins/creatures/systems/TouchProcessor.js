@@ -1,4 +1,4 @@
-import System from "../../System";
+import System from "../../../ecs/System";
 import Brain from "../../core/components/Brain";
 
 /**

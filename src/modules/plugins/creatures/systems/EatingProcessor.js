@@ -1,5 +1,5 @@
 import _ from "lodash";
-import System from "../../System";
+import System from "../../../ecs/System";
 
 /**
  * Processes the eating of plants by creatures
