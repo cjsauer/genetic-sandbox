@@ -10,7 +10,7 @@ class Plant extends Component {
    * @param {number} [energy = 0] - initial energy stored in this plant
    */
   constructor(energy = 0) {
-    super();
+    super("plant");
 
     /**
      * Energy stored in this plant

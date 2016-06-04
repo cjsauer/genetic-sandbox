@@ -14,7 +14,7 @@ class Brain extends Component {
    * strand from the DNA
    */
   constructor(dna, sequencer) {
-    super();
+    super("brain");
 
     if (arguments.length === 0) return;
 

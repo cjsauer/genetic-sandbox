@@ -5,6 +5,9 @@ import { expect } from "chai";
 describe("Component", () => {
   /* Stub out a fake component */
   class PhonyComponent extends Component {
+    constructor() {
+      super("phony");
+    }
   }
 
   it("should not be instantiable directly", () => {
@@ -16,5 +19,10 @@ describe("Component", () => {
   it("should extend Serializable", () => {
     const phony = new PhonyComponent();
     expect(phony instanceof Serializable).to.be.true;
+  });
+
+  it("should possess a name", () => {
+    const phony = new PhonyComponent();
+    expect(phony.name).to.equal("phony");
   });
 });

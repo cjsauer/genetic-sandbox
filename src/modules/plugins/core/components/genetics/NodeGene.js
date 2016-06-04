@@ -15,7 +15,7 @@ class NodeGene extends Component {
    * @param {string} [type=hidden] - one of "input", "hidden", or "output"
    */
   constructor(id = 0, type = "hidden") {
-    super();
+    super("nodeGene");
 
     /**
      * The id of the neuron

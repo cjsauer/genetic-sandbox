@@ -16,7 +16,7 @@ class Coord extends Component {
    * @param {number} [y=0] - y value
    */
   constructor(x = 0, y = 0) {
-    super();
+    super("coord");
     /**
      * x value
      * @type number

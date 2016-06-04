@@ -20,7 +20,7 @@ class ConnectionGene extends Component {
    * @param {boolean} enabled - whether this gene is expressed or not
    */
   constructor(inID, outID, weight, enabled) {
-    super();
+    super("connectionGene");
 
     if (arguments.length === 0) return;
 

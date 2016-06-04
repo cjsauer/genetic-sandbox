@@ -17,7 +17,7 @@ class Creature extends Component {
    * @param {number} energy - initial energy level
    */
   constructor(dna, energy) {
-    super();
+    super("creature");
 
     if (arguments.length === 0) return;
 

@@ -22,7 +22,7 @@ class DNA extends Component {
    * @param {Object} random - an instance of a random-js engine
    */
   constructor(inputCount, outputCount, random) {
-    super();
+    super("dna");
 
     if (arguments.length === 0) return;
 

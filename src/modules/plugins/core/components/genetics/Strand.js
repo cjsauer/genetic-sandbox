@@ -27,7 +27,7 @@ class Strand extends Component {
    * @param {Object} random - an instance of a random-js instance
    */
   constructor(inputCount, outputCount, enabled, random) {
-    super();
+    super("strand");
 
     if (arguments.length === 0) return;
 
