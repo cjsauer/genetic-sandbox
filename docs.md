@@ -26,8 +26,9 @@ the state at a specific place in a grid</p>
 <dd><p>Builds an index of <a href="Tiles">Tiles</a> for fast lookup by component</p>
 </dd>
 <dt><a href="#Component">Component</a></dt>
-<dd><p>Components are objects stored inside of <a href="#Tile">Tiles</a> that contain
-arbitrary data, be it plant data, creature data, tile coordinates, etc.</p>
+<dd><p>Components are bags of properties that entities possess. It is possible for
+Components to contain other nested Components. They may also contain helper
+methods.</p>
 </dd>
 <dt><a href="#Plugin">Plugin</a></dt>
 <dd><p>A toggleable plugin containing an array of <a href="#System">Systems</a> and
@@ -596,17 +597,33 @@ let habitatTiles = tileIndex.getTilesByComponent(["biome", "temperature"]);
 <a name="Component"></a>
 
 ## Component
-Components are objects stored inside of [Tiles](#Tile) that contain
-arbitrary data, be it plant data, creature data, tile coordinates, etc.
+Components are bags of properties that entities possess. It is possible for
+Components to contain other nested Components. They may also contain helper
+methods.
 
 **Kind**: global class  
-**See**: [Tile](#Tile)  
+
+* [Component](#Component)
+    * [new Component(name)](#new_Component_new)
+    * [.name](#Component+name) : <code>string</code>
+
 <a name="new_Component_new"></a>
 
-### new Component()
+### new Component(name)
 Component isn't instantiable directly, but should be extended by a
 concrete subclass.
 
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | the name of the component |
+
+<a name="Component+name"></a>
+
+### component.name : <code>string</code>
+Name of the component. Expected to be unique among Components.
+
+**Kind**: instance property of <code>[Component](#Component)</code>  
 <a name="Plugin"></a>
 
 ## Plugin
@@ -789,6 +806,7 @@ actions on the behalf of a creature
 * [Brain](#Brain) ⇐ <code>[Component](#Component)</code>
     * [new Brain(dna, sequencer)](#new_Brain_new)
     * _instance_
+        * [.name](#Component+name) : <code>string</code>
         * [.input(id, value)](#Brain+input)
         * [.output(id)](#Brain+output)
         * [.activate()](#Brain+activate)
@@ -812,6 +830,12 @@ the supplied [Sequencer](#Sequencer)
 | dna | <code>[DNA](#DNA)</code> | creature DNA |
 | sequencer | <code>[Sequencer](#Sequencer)</code> | the sequencer to use to read the brain strand from the DNA |
 
+<a name="Component+name"></a>
+
+### brain.name : <code>string</code>
+Name of the component. Expected to be unique among Components.
+
+**Kind**: instance property of <code>[Brain](#Brain)</code>  
 <a name="Brain+input"></a>
 
 ### brain.input(id, value)
@@ -925,6 +949,7 @@ A two dimensional coordinate of x and y
     * [new Coord([x], [y])](#new_Coord_new)
     * [.x](#Coord+x) : <code>number</code>
     * [.y](#Coord+y) : <code>number</code>
+    * [.name](#Component+name) : <code>string</code>
 
 <a name="new_Coord_new"></a>
 
@@ -958,6 +983,12 @@ y value
 
 **Kind**: instance property of <code>[Coord](#Coord)</code>  
 **Default**: <code>0</code>  
+<a name="Component+name"></a>
+
+### coord.name : <code>string</code>
+Name of the component. Expected to be unique among Components.
+
+**Kind**: instance property of <code>[Coord](#Coord)</code>  
 <a name="ConnectionGene"></a>
 
 ## ConnectionGene ⇐ <code>[Component](#Component)</code>
@@ -976,6 +1007,7 @@ network
         * [.weight](#ConnectionGene+weight) : <code>number</code>
         * [.enabled](#ConnectionGene+enabled) : <code>boolean</code>
         * [.innovationNumber](#ConnectionGene+innovationNumber) : <code>number</code>
+        * [.name](#Component+name) : <code>string</code>
     * _static_
         * [.resetInnovations()](#ConnectionGene.resetInnovations)
 
@@ -1032,6 +1064,12 @@ ID of the historical origin, or "innovation number" of this connection
 gene
 
 **Kind**: instance property of <code>[ConnectionGene](#ConnectionGene)</code>  
+<a name="Component+name"></a>
+
+### connectionGene.name : <code>string</code>
+Name of the component. Expected to be unique among Components.
+
+**Kind**: instance property of <code>[ConnectionGene](#ConnectionGene)</code>  
 <a name="ConnectionGene.resetInnovations"></a>
 
 ### ConnectionGene.resetInnovations()
@@ -1051,6 +1089,7 @@ Genetic encoding of a creature heavily inspired by the
     * [new DNA(inputCount, outputCount, random)](#new_DNA_new)
     * [.brainStrand](#DNA+brainStrand) : <code>[Strand](#Strand)</code>
     * [.traitStrand](#DNA+traitStrand) : <code>[Strand](#Strand)</code>
+    * [.name](#Component+name) : <code>string</code>
 
 <a name="new_DNA_new"></a>
 
@@ -1085,6 +1124,12 @@ Strand of genes describing a creature's brain
 Strand of genes describing the trait function (TF)
 
 **Kind**: instance property of <code>[DNA](#DNA)</code>  
+<a name="Component+name"></a>
+
+### dnA.name : <code>string</code>
+Name of the component. Expected to be unique among Components.
+
+**Kind**: instance property of <code>[DNA](#DNA)</code>  
 <a name="NodeGene"></a>
 
 ## NodeGene ⇐ <code>[Component](#Component)</code>
@@ -1097,6 +1142,7 @@ Genetic representation of a neuron in a neural network
     * [new NodeGene([id], [type])](#new_NodeGene_new)
     * [.id](#NodeGene+id) : <code>number</code>
     * [.type](#NodeGene+type) : <code>string</code>
+    * [.name](#Component+name) : <code>string</code>
 
 <a name="new_NodeGene_new"></a>
 
@@ -1128,6 +1174,12 @@ The id of the neuron
 Type of neuron. One of "input", "hidden", or "output".
 
 **Kind**: instance property of <code>[NodeGene](#NodeGene)</code>  
+<a name="Component+name"></a>
+
+### nodeGene.name : <code>string</code>
+Name of the component. Expected to be unique among Components.
+
+**Kind**: instance property of <code>[NodeGene](#NodeGene)</code>  
 <a name="Strand"></a>
 
 ## Strand ⇐ <code>[Component](#Component)</code>
@@ -1145,6 +1197,7 @@ Genetic representation of a neural network
     * [new Strand(inputCount, outputCount, enabled, random)](#new_Strand_new)
     * [.nodeGenes](#Strand+nodeGenes) : <code>[Array.&lt;NodeGene&gt;](#NodeGene)</code>
     * [.connectionGenes](#Strand+connectionGenes) : <code>[Array.&lt;ConnectionGene&gt;](#ConnectionGene)</code>
+    * [.name](#Component+name) : <code>string</code>
 
 <a name="new_Strand_new"></a>
 
@@ -1181,6 +1234,12 @@ The list of node genes describing neurons
 
 ### strand.connectionGenes : <code>[Array.&lt;ConnectionGene&gt;](#ConnectionGene)</code>
 The list of connection genes describing connections between neurons
+
+**Kind**: instance property of <code>[Strand](#Strand)</code>  
+<a name="Component+name"></a>
+
+### strand.name : <code>string</code>
+Name of the component. Expected to be unique among Components.
 
 **Kind**: instance property of <code>[Strand](#Strand)</code>  
 <a name="BackgroundRenderer"></a>
@@ -1391,6 +1450,7 @@ Intelligent organism with the capability to evolve
     * [.dna](#Creature+dna) : <code>[DNA](#DNA)</code>
     * [.brain](#Creature+brain) : <code>[Brain](#Brain)</code>
     * [.alive](#Creature+alive) : <code>boolean</code>
+    * [.name](#Component+name) : <code>string</code>
     * [.eat(plant)](#Creature+eat) ⇒ <code>number</code>
     * [.expend(expenditure)](#Creature+expend) ⇒ <code>boolean</code>
     * [.die()](#Creature+die)
@@ -1436,6 +1496,12 @@ The brain of this creature
 
 ### creature.alive : <code>boolean</code>
 True if this creature is alive, false otherwise
+
+**Kind**: instance property of <code>[Creature](#Creature)</code>  
+<a name="Component+name"></a>
+
+### creature.name : <code>string</code>
+Name of the component. Expected to be unique among Components.
 
 **Kind**: instance property of <code>[Creature](#Creature)</code>  
 <a name="Creature+eat"></a>
@@ -2207,6 +2273,7 @@ An edible plant containing energy
 * [Plant](#Plant) ⇐ <code>[Component](#Component)</code>
     * [new Plant([energy])](#new_Plant_new)
     * [.energy](#Plant+energy) : <code>number</code>
+    * [.name](#Component+name) : <code>string</code>
 
 <a name="new_Plant_new"></a>
 
@@ -2225,6 +2292,12 @@ Energy stored in this plant
 
 **Kind**: instance property of <code>[Plant](#Plant)</code>  
 **Default**: <code>0</code>  
+<a name="Component+name"></a>
+
+### plant.name : <code>string</code>
+Name of the component. Expected to be unique among Components.
+
+**Kind**: instance property of <code>[Plant](#Plant)</code>  
 <a name="PlantGenerator"></a>
 
 ## PlantGenerator ⇐ <code>[System](#System)</code>
