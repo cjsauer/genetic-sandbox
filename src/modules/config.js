@@ -2,6 +2,9 @@ import core from "./plugins/core";
 import plants from "./plugins/plants";
 import creatures from "./plugins/creatures";
 
+// TODO: This is a temporary fix to get building to work during the refactor!
+creatures.enabled = false;
+
 /* Here is where you can add your plugin! */
 export const plugins = [
   core,
