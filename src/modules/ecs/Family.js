@@ -47,12 +47,14 @@ class Family {
    * @param {Entity} entity - the entity to add
    */
   addEntityIfMatch(entity) {
-    let matches = this._componentNames.every((name) => {
-      return entity.hasComponent(name);
-    });
+    if (!this._entities.hasOwnProperty(entity.id)) {
+      let matches = this._componentNames.every((name) => {
+        return entity.hasComponent(name);
+      });
 
-    if (matches) {
-      this._entities[entity.id] = entity;
+      if (matches) {
+        this._entities[entity.id] = entity;
+      }
     }
   }
 
