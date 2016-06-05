@@ -36,7 +36,7 @@ class App {
 
     if (seed === undefined) {
       /**
-      * An seeded instance of the random-js Mersenne Twister engine for
+      * A seeded instance of the random-js Mersenne Twister engine for
       * generating random numbers
       */
       this.random = new Random(Random.engines.mt19937().autoSeed());
