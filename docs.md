@@ -11,9 +11,8 @@ permalink: /docs/
 <dd><p>The entry point and hub of the entire application</p>
 </dd>
 <dt><a href="#Component">Component</a></dt>
-<dd><p>Components are bags of properties that entities possess. It is possible for
-Components to contain other nested Components. They may also contain helper
-methods.</p>
+<dd><p>Components are bags of properties that entities possess. They may also
+contain helper methods.</p>
 </dd>
 <dt><a href="#Entity">Entity</a></dt>
 <dd><p>An entity is a container of Components, and represents all &quot;things&quot; in the
@@ -26,6 +25,10 @@ world</p>
 <dd><p>Interface for defining new systems. A system in Genetic Sandbox is a class
 containing logic that operates in some way on <a href="#Tile">Tiles</a> within the
 <a href="#HexGrid">HexGrid</a>.</p>
+</dd>
+<dt><a href="#World">World</a></dt>
+<dd><p>World is a container of all entities in existence, and provides super fast
+lookup of entities by component</p>
 </dd>
 <dt><a href="#Sequencer">Sequencer</a></dt>
 <dd><p>Reads in a <a href="#Strand">Strand</a> and produces a
@@ -52,6 +55,9 @@ actions on the behalf of a creature</p>
 </dd>
 <dt><a href="#Coord">Coord</a> ⇐ <code><a href="#Component">Component</a></code></dt>
 <dd><p>A two dimensional coordinate of x and y</p>
+</dd>
+<dt><a href="#Sprite">Sprite</a> ⇐ <code><a href="#Component">Component</a></code></dt>
+<dd><p>Graphical representation of an entity</p>
 </dd>
 <dt><a href="#ConnectionGene">ConnectionGene</a> ⇐ <code><a href="#Component">Component</a></code></dt>
 <dd><p>Genetic representation of a connection between two neurons in a neural
@@ -209,7 +215,7 @@ canvas element
 <a name="App+random"></a>
 
 ### app.random
-An seeded instance of the random-js Mersenne Twister engine for
+A seeded instance of the random-js Mersenne Twister engine for
 generating random numbers
 
 **Kind**: instance property of <code>[App](#App)</code>  
@@ -241,9 +247,8 @@ Stops the processing loop, essentially pausing the entire simulation
 <a name="Component"></a>
 
 ## Component
-Components are bags of properties that entities possess. It is possible for
-Components to contain other nested Components. They may also contain helper
-methods.
+Components are bags of properties that entities possess. They may also
+contain helper methods.
 
 **Kind**: global class  
 
@@ -634,6 +639,61 @@ Hook for reading output data from the brain and attempting actions
 | Param | Type | Description |
 | --- | --- | --- |
 | app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="World"></a>
+
+## World
+World is a container of all entities in existence, and provides super fast
+lookup of entities by component
+
+**Kind**: global class  
+**See**
+
+- {Entity}
+- {System}
+
+
+* [World](#World)
+    * [new World()](#new_World_new)
+    * [.addEntity(entity)](#World+addEntity)
+    * [.getEntities()](#World+getEntities) ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
+    * [.getEntitiesWith(...componentNames)](#World+getEntitiesWith) ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
+
+<a name="new_World_new"></a>
+
+### new World()
+And on the seventh day...
+
+<a name="World+addEntity"></a>
+
+### world.addEntity(entity)
+Adds the given entity to this world, or does nothing if that entity
+is already in the world
+
+**Kind**: instance method of <code>[World](#World)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| entity | <code>[Entity](#Entity)</code> | the entity to add |
+
+<a name="World+getEntities"></a>
+
+### world.getEntities() ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
+Retrieves all entities currently in the world
+
+**Kind**: instance method of <code>[World](#World)</code>  
+**Returns**: <code>[Array.&lt;Entity&gt;](#Entity)</code> - array of all entities in the world  
+<a name="World+getEntitiesWith"></a>
+
+### world.getEntitiesWith(...componentNames) ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
+Retrieves an array of all entities that contain ALL of the given components
+
+**Kind**: instance method of <code>[World](#World)</code>  
+**Returns**: <code>[Array.&lt;Entity&gt;](#Entity)</code> - the array of entities  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| ...componentNames | <code>string</code> | The name of a component |
 
 <a name="Sequencer"></a>
 
@@ -1260,6 +1320,57 @@ y value
 Name of the component. Expected to be unique among Components.
 
 **Kind**: instance property of <code>[Coord](#Coord)</code>  
+<a name="Sprite"></a>
+
+## Sprite ⇐ <code>[Component](#Component)</code>
+Graphical representation of an entity
+
+**Kind**: global class  
+**Extends:** <code>[Component](#Component)</code>  
+
+* [Sprite](#Sprite) ⇐ <code>[Component](#Component)</code>
+    * [new Sprite(spriteName)](#new_Sprite_new)
+    * [.spriteName](#Sprite+spriteName) : <code>string</code>
+    * [.name](#Component+name) : <code>string</code>
+    * [.getItem(paper)](#Sprite+getItem) ⇒ <code>Item</code>
+
+<a name="new_Sprite_new"></a>
+
+### new Sprite(spriteName)
+Constructs a new sprite component with the given graphic defined by the
+current theme, or falls back to the "default" graphic if not defined
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| spriteName | <code>string</code> | the name of the graphic as defined by the current theme |
+
+<a name="Sprite+spriteName"></a>
+
+### sprite.spriteName : <code>string</code>
+Name of the graphic that this sprite represents as defined by the
+current theme
+
+**Kind**: instance property of <code>[Sprite](#Sprite)</code>  
+<a name="Component+name"></a>
+
+### sprite.name : <code>string</code>
+Name of the component. Expected to be unique among Components.
+
+**Kind**: instance property of <code>[Sprite](#Sprite)</code>  
+<a name="Sprite+getItem"></a>
+
+### sprite.getItem(paper) ⇒ <code>Item</code>
+Returns a [Paper.js Item](http://paperjs.org/reference/item)
+instance representing the vector graphic of this sprite
+
+**Kind**: instance method of <code>[Sprite](#Sprite)</code>  
+**Returns**: <code>Item</code> - Paper.js Item instance  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| paper | <code>PaperScope</code> | an active paper scope |
+
 <a name="ConnectionGene"></a>
 
 ## ConnectionGene ⇐ <code>[Component](#Component)</code>
@@ -3254,6 +3365,7 @@ values like color, stroke thickness, etc.
 * [Theme](#Theme)
     * [.current](#Theme.current) : <code>object</code>
     * [.setTheme(name)](#Theme.setTheme)
+    * [.getSprite(name, paper)](#Theme.getSprite) ⇒ <code>Item</code>
 
 <a name="Theme.current"></a>
 
@@ -3283,3 +3395,18 @@ Sets the current theme
 ```js
 Theme.setTheme("elemental");
 ```
+<a name="Theme.getSprite"></a>
+
+### Theme.getSprite(name, paper) ⇒ <code>Item</code>
+Retrieves a [Paper.js item](http://paperjs.org/reference/item/)
+for the given sprite name as defined by the current theme, or the default
+sprite if the given name is not defined
+
+**Kind**: static method of <code>[Theme](#Theme)</code>  
+**Returns**: <code>Item</code> - a Paper.js Item instance  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | name of the sprite |
+| paper | <code>PaperScope</code> | an active paper scope |
+
