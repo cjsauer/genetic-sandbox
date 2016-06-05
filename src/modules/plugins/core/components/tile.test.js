@@ -1,14 +1,14 @@
-import Plant from "./Plant";
+import Tile from "./Tile";
 import Component from "../../../ecs/Component";
 import { expect } from "chai";
 
-describe("Plant", () => {
+describe("Tile", () => {
   it("should extend Component", () => {
-    const plant = new Plant();
-    expect(plant instanceof Component).to.be.true;
+    const energy = new Tile();
+    expect(energy instanceof Component).to.be.true;
   });
 
   it("should register its constructor with Component", () => {
-    expect(Component._constructors["Plant"]).to.eql(Plant);
+    expect(Component._constructors["Tile"]).to.eql(Tile);
   });
 });

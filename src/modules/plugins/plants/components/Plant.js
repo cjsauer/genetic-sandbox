@@ -1,23 +1,15 @@
 import Component from "../../../ecs/Component";
 
 /**
- * An edible plant containing energy
+ * An edible plant
  * @extends Component
  */
 class Plant extends Component {
   /**
-   * Creates a new plant with the given energy amount
-   * @param {number} [energy = 0] - initial energy stored in this plant
+   * Creates a new plant
    */
-  constructor(energy = 0) {
+  constructor() {
     super("plant");
-
-    /**
-     * Energy stored in this plant
-     * @type number
-     * @default 0
-     */
-    this.energy = energy;
   }
 }
 

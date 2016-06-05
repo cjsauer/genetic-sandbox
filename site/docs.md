@@ -56,8 +56,14 @@ actions on the behalf of a creature</p>
 <dt><a href="#Coord">Coord</a> ⇐ <code><a href="#Component">Component</a></code></dt>
 <dd><p>A two dimensional coordinate of x and y</p>
 </dd>
+<dt><a href="#Energy">Energy</a> ⇐ <code><a href="#Component">Component</a></code></dt>
+<dd><p>Energy is the currency of existence</p>
+</dd>
 <dt><a href="#Sprite">Sprite</a> ⇐ <code><a href="#Component">Component</a></code></dt>
 <dd><p>Graphical representation of an entity</p>
+</dd>
+<dt><a href="#Tile">Tile</a> ⇐ <code><a href="#Component">Component</a></code></dt>
+<dd><p>Tile is a location in the world that an entity can exist at</p>
 </dd>
 <dt><a href="#ConnectionGene">ConnectionGene</a> ⇐ <code><a href="#Component">Component</a></code></dt>
 <dd><p>Genetic representation of a connection between two neurons in a neural
@@ -104,7 +110,7 @@ network</p>
 <dd><p>Inputs touch sense data into the brains of creatures</p>
 </dd>
 <dt><a href="#Plant">Plant</a> ⇐ <code><a href="#Component">Component</a></code></dt>
-<dd><p>An edible plant containing energy</p>
+<dd><p>An edible plant</p>
 </dd>
 <dt><a href="#PlantGenerator">PlantGenerator</a> ⇐ <code><a href="#System">System</a></code></dt>
 <dd><p>Generates initial plant life, placing Plant components into Tiles</p>
@@ -876,6 +882,8 @@ the state at a specific place in a grid
 
 * [Tile](#Tile)
     * [new Tile([initialComponents])](#new_Tile_new)
+    * [new Tile()](#new_Tile_new)
+    * [.name](#Component+name) : <code>string</code>
     * [.get(name)](#Tile+get) ⇒ <code>\*</code>
     * [.hasComponent(name)](#Tile+hasComponent) ⇒ <code>boolean</code>
     * [.set(name, component)](#Tile+set) ⇒ <code>[Tile](#Tile)</code>
@@ -907,6 +915,17 @@ const hotTile = new Tile({
   ]
 });
 ```
+<a name="new_Tile_new"></a>
+
+### new Tile()
+Constructs a new tile component
+
+<a name="Component+name"></a>
+
+### tile.name : <code>string</code>
+Name of the component. Expected to be unique among Components.
+
+**Kind**: instance property of <code>[Tile](#Tile)</code>  
 <a name="Tile+get"></a>
 
 ### tile.get(name) ⇒ <code>\*</code>
@@ -1320,6 +1339,68 @@ y value
 Name of the component. Expected to be unique among Components.
 
 **Kind**: instance property of <code>[Coord](#Coord)</code>  
+<a name="Energy"></a>
+
+## Energy ⇐ <code>[Component](#Component)</code>
+Energy is the currency of existence
+
+**Kind**: global class  
+**Extends:** <code>[Component](#Component)</code>  
+
+* [Energy](#Energy) ⇐ <code>[Component](#Component)</code>
+    * [new Energy(energyLevel)](#new_Energy_new)
+    * [.level](#Energy+level) ⇒ <code>number</code>
+    * [.name](#Component+name) : <code>string</code>
+    * [.gain(amount, the)](#Energy+gain)
+    * [.expend(amount)](#Energy+expend) ⇒ <code>number</code>
+
+<a name="new_Energy_new"></a>
+
+### new Energy(energyLevel)
+Constructs a new energy component with the given energy level
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| energyLevel | <code>number</code> | level of energy to initiate this component with |
+
+<a name="Energy+level"></a>
+
+### energy.level ⇒ <code>number</code>
+The current energy level
+
+**Kind**: instance property of <code>[Energy](#Energy)</code>  
+**Returns**: <code>number</code> - current energy level  
+<a name="Component+name"></a>
+
+### energy.name : <code>string</code>
+Name of the component. Expected to be unique among Components.
+
+**Kind**: instance property of <code>[Energy](#Energy)</code>  
+<a name="Energy+gain"></a>
+
+### energy.gain(amount, the)
+Increases the current energy level by the given amount
+
+**Kind**: instance method of <code>[Energy](#Energy)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| amount | <code>number</code> | amount of energy to gain |
+| the | <code>number</code> | updated energy level |
+
+<a name="Energy+expend"></a>
+
+### energy.expend(amount) ⇒ <code>number</code>
+Expends the given amount of energy, capped at zero
+
+**Kind**: instance method of <code>[Energy](#Energy)</code>  
+**Returns**: <code>number</code> - the updated energy level  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| amount | <code>number</code> | amount of energy to expend |
+
 <a name="Sprite"></a>
 
 ## Sprite ⇐ <code>[Component](#Component)</code>
@@ -1370,6 +1451,158 @@ instance representing the vector graphic of this sprite
 | Param | Type | Description |
 | --- | --- | --- |
 | paper | <code>PaperScope</code> | an active paper scope |
+
+<a name="Tile"></a>
+
+## Tile ⇐ <code>[Component](#Component)</code>
+Tile is a location in the world that an entity can exist at
+
+**Kind**: global class  
+**Extends:** <code>[Component](#Component)</code>  
+
+* [Tile](#Tile) ⇐ <code>[Component](#Component)</code>
+    * [new Tile([initialComponents])](#new_Tile_new)
+    * [new Tile()](#new_Tile_new)
+    * [.name](#Component+name) : <code>string</code>
+    * [.get(name)](#Tile+get) ⇒ <code>\*</code>
+    * [.hasComponent(name)](#Tile+hasComponent) ⇒ <code>boolean</code>
+    * [.set(name, component)](#Tile+set) ⇒ <code>[Tile](#Tile)</code>
+    * [.delete(name)](#Tile+delete) ⇒ <code>boolean</code>
+    * ["componentAdded"](#Tile+event_componentAdded)
+    * ["componentDeleted"](#Tile+event_componentDeleted)
+
+<a name="new_Tile_new"></a>
+
+### new Tile([initialComponents])
+Creates a new tile with initial components. Note that the given initial
+components object will be copied *by value* into each tile. What this means
+is that inner objects of the component are *not* deep copied.
+
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [initialComponents] | <code>Object</code> | <code>{}</code> | Initial components of the Tile |
+
+**Example**  
+
+```js
+const hotTile = new Tile({
+  temperature: 110,
+  biome: "desert"
+  vegetation: [
+    { type: "tree", edible: false },
+    { type: "berries", edible: true}
+  ]
+});
+```
+<a name="new_Tile_new"></a>
+
+### new Tile()
+Constructs a new tile component
+
+<a name="Component+name"></a>
+
+### tile.name : <code>string</code>
+Name of the component. Expected to be unique among Components.
+
+**Kind**: instance property of <code>[Tile](#Tile)</code>  
+<a name="Tile+get"></a>
+
+### tile.get(name) ⇒ <code>\*</code>
+Returns the specified component
+
+**Kind**: instance method of <code>[Tile](#Tile)</code>  
+**Returns**: <code>\*</code> - component data, or undefined if component not found  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | Name of the component |
+
+**Example**  
+
+```js
+let temperature = hotTile.get("temperature");
+```
+<a name="Tile+hasComponent"></a>
+
+### tile.hasComponent(name) ⇒ <code>boolean</code>
+Returns true if this Tile has the given component, false otherwise
+
+**Kind**: instance method of <code>[Tile](#Tile)</code>  
+**Returns**: <code>boolean</code> - True if the Tile has the given component, false
+otherwise  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | the name of the component to check for |
+
+<a name="Tile+set"></a>
+
+### tile.set(name, component) ⇒ <code>[Tile](#Tile)</code>
+Sets the specified component
+
+**Kind**: instance method of <code>[Tile](#Tile)</code>  
+**Returns**: <code>[Tile](#Tile)</code> - The Tile object  
+**Emits**: <code>[componentAdded](#Tile+event_componentAdded)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | name of the component to set |
+| component | <code>\*</code> | the component data |
+
+**Example**  
+
+```js
+hotTile.set("vegetation", [
+  { type: "tree", edible: false }
+]);
+//Chaining
+hotTile.set("one", 1).set("two", 2).set("three", 3);
+```
+<a name="Tile+delete"></a>
+
+### tile.delete(name) ⇒ <code>boolean</code>
+Deletes the specified component, removing it from the Tile completely
+
+**Kind**: instance method of <code>[Tile](#Tile)</code>  
+**Returns**: <code>boolean</code> - True if an item was actually deleted, false otherwise  
+**Emits**: <code>[componentDeleted](#Tile+event_componentDeleted)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | name of the component to delete |
+
+**Example**  
+
+```js
+let didDeleteSomething = hotTile.delete("temperature");
+```
+<a name="Tile+event_componentAdded"></a>
+
+### "componentAdded"
+Fired when a new component is added to a tile. It is NOT fired when
+a component is solely modified.
+
+**Kind**: event emitted by <code>[Tile](#Tile)</code>  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| tile | <code>[Tile](#Tile)</code> | the tile that was modified |
+| name | <code>string</code> | the name of the component that was added |
+
+<a name="Tile+event_componentDeleted"></a>
+
+### "componentDeleted"
+Fired when a component is deleted from a tile
+
+**Kind**: event emitted by <code>[Tile](#Tile)</code>  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| tile | <code>[Tile](#Tile)</code> | the tile that was modified |
+| name | <code>string</code> | name of the component that was deleted |
 
 <a name="ConnectionGene"></a>
 
@@ -1827,57 +2060,30 @@ Intelligent organism with the capability to evolve
 **Extends:** <code>[Component](#Component)</code>  
 
 * [Creature](#Creature) ⇐ <code>[Component](#Component)</code>
-    * [new Creature(dna, energy)](#new_Creature_new)
-    * [.energy](#Creature+energy) : <code>number</code>
+    * [new Creature(dna)](#new_Creature_new)
     * [.dna](#Creature+dna) : <code>[DNA](#DNA)</code>
-    * [.brain](#Creature+brain) : <code>[Brain](#Brain)</code>
-    * [.alive](#Creature+alive) : <code>boolean</code>
     * [.name](#Component+name) : <code>string</code>
-    * [.eat(plant)](#Creature+eat) ⇒ <code>number</code>
-    * [.expend(expenditure)](#Creature+expend) ⇒ <code>boolean</code>
-    * [.die()](#Creature+die)
 
 <a name="new_Creature_new"></a>
 
-### new Creature(dna, energy)
-Constructs a new creature
+### new Creature(dna)
+Constructs a new creature component with the given DNA
 
 
 | Param | Type | Description |
 | --- | --- | --- |
 | dna | <code>[DNA](#DNA)</code> | the genetic representaiton of a creature |
-| energy | <code>number</code> | initial energy level |
 
 **Example**  
 
 ```js
 const dna = new DNA(3, 4, random);
-const creature = new Creature(dna, 12);
-creature.energy === 12; // true
+const creature = new Creature(dna);
 ```
-<a name="Creature+energy"></a>
-
-### creature.energy : <code>number</code>
-Energy level of this creature. When this reaches zero the creature,
-is dead.
-
-**Kind**: instance property of <code>[Creature](#Creature)</code>  
 <a name="Creature+dna"></a>
 
 ### creature.dna : <code>[DNA](#DNA)</code>
 The genetic representaiton of this creature
-
-**Kind**: instance property of <code>[Creature](#Creature)</code>  
-<a name="Creature+brain"></a>
-
-### creature.brain : <code>[Brain](#Brain)</code>
-The brain of this creature
-
-**Kind**: instance property of <code>[Creature](#Creature)</code>  
-<a name="Creature+alive"></a>
-
-### creature.alive : <code>boolean</code>
-True if this creature is alive, false otherwise
 
 **Kind**: instance property of <code>[Creature](#Creature)</code>  
 <a name="Component+name"></a>
@@ -1886,38 +2092,6 @@ True if this creature is alive, false otherwise
 Name of the component. Expected to be unique among Components.
 
 **Kind**: instance property of <code>[Creature](#Creature)</code>  
-<a name="Creature+eat"></a>
-
-### creature.eat(plant) ⇒ <code>number</code>
-Eats the given plant, raising the creature's energy level by the amount
-stored in the plant. Does NOT affect the plant in any way.
-
-**Kind**: instance method of <code>[Creature](#Creature)</code>  
-**Returns**: <code>number</code> - the creature's new energy level  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| plant | <code>[Plant](#Plant)</code> | plant to eat |
-
-<a name="Creature+expend"></a>
-
-### creature.expend(expenditure) ⇒ <code>boolean</code>
-Expends the given amount of energy. If the creature's energy drops below
-zero, it dies.
-
-**Kind**: instance method of <code>[Creature](#Creature)</code>  
-**Returns**: <code>boolean</code> - True if the creature is still alive, false otherwise  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| expenditure | <code>number</code> | the amount of energy to expend |
-
-<a name="Creature+die"></a>
-
-### creature.die()
-Kills this creature
-
-**Kind**: instance method of <code>[Creature](#Creature)</code>  
 <a name="AgingProcessor"></a>
 
 ## AgingProcessor ⇐ <code>[System](#System)</code>
@@ -2647,33 +2821,20 @@ Hook for reading output data from the brain and attempting actions
 <a name="Plant"></a>
 
 ## Plant ⇐ <code>[Component](#Component)</code>
-An edible plant containing energy
+An edible plant
 
 **Kind**: global class  
 **Extends:** <code>[Component](#Component)</code>  
 
 * [Plant](#Plant) ⇐ <code>[Component](#Component)</code>
-    * [new Plant([energy])](#new_Plant_new)
-    * [.energy](#Plant+energy) : <code>number</code>
+    * [new Plant()](#new_Plant_new)
     * [.name](#Component+name) : <code>string</code>
 
 <a name="new_Plant_new"></a>
 
-### new Plant([energy])
-Creates a new plant with the given energy amount
+### new Plant()
+Creates a new plant
 
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| [energy] | <code>number</code> | <code>0</code> | initial energy stored in this plant |
-
-<a name="Plant+energy"></a>
-
-### plant.energy : <code>number</code>
-Energy stored in this plant
-
-**Kind**: instance property of <code>[Plant](#Plant)</code>  
-**Default**: <code>0</code>  
 <a name="Component+name"></a>
 
 ### plant.name : <code>string</code>
