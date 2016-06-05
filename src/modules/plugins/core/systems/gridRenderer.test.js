@@ -3,7 +3,7 @@ import HexGrid from "../../../grid/HexGrid";
 import { expect } from "chai";
 import { stub, spy } from "sinon";
 
-describe("GridRenderer", () => {
+describe.skip("GridRenderer", () => {
   let sys, grid, paper, app;
 
   beforeEach(() => {

@@ -2,7 +2,7 @@ import BackgroundRenderer from "./BackgroundRenderer";
 import { expect } from "chai";
 import { stub, spy } from "sinon";
 
-describe("BackgroundRenderer", () => {
+describe.skip("BackgroundRenderer", () => {
   let sys, paper, app;
 
   beforeEach(() => {

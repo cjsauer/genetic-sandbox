@@ -6,7 +6,7 @@ import config from "../../../config";
 import { expect } from "chai";
 import { stub, spy } from "sinon";
 
-describe("MovementProcessor", () => {
+describe.skip("MovementProcessor", () => {
   let sys, reserveStub, app, creature1, creature2;
 
   beforeEach(() => {

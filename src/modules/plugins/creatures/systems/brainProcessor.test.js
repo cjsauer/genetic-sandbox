@@ -2,7 +2,7 @@ import BrainProcessor from "./BrainProcessor";
 import { expect } from "chai";
 import { stub, spy } from "sinon";
 
-describe("BrainProcessor", () => {
+describe.skip("BrainProcessor", () => {
   let app;
 
   beforeEach(() => {

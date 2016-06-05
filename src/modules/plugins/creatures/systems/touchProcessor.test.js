@@ -5,7 +5,7 @@ import Coord from "../../core/components/Coord";
 import { expect } from "chai";
 import { stub, spy } from "sinon";
 
-describe("TouchProcessor", () => {
+describe.skip("TouchProcessor", () => {
   let app, creature1, creature2, plant, reserveStub;
 
   beforeEach(() => {

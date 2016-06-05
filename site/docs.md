@@ -48,27 +48,12 @@ network</p>
 <dd><p>A 2D, hexagonal grid implementation with axial coordinate system.
 Implementation details can be found <a href="http://goo.gl/nLO6sN">here</a>.</p>
 </dd>
-<dt><a href="#Tile">Tile</a></dt>
-<dd><p>A Tile is a collection of named <a href="Components">Components</a> (data) representing
-the state at a specific place in a grid</p>
-</dd>
-<dt><a href="#TileComponentIndex">TileComponentIndex</a></dt>
-<dd><p>Builds an index of <a href="Tiles">Tiles</a> for fast lookup by component</p>
-</dd>
 <dt><a href="#Plugin">Plugin</a></dt>
 <dd><p>A toggleable plugin containing an array of <a href="#System">Systems</a> and
 configuration options</p>
 </dd>
-<dt><a href="#Brain">Brain</a> ⇐ <code><a href="#Component">Component</a></code></dt>
-<dd><p>A neural network that receives sense input from the environment and produces
-actions on the behalf of a creature</p>
-</dd>
 <dt><a href="#Coord">Coord</a> ⇐ <code><a href="#Component">Component</a></code></dt>
 <dd><p>A two dimensional coordinate of x and y</p>
-</dd>
-<dt><a href="#DNA">DNA</a> ⇐ <code><a href="#Component">Component</a></code></dt>
-<dd><p>Genetic encoding of a creature heavily inspired by the
-<a href="http://nn.cs.utexas.edu/downloads/papers/stanley.ec02.pdf">NEAT algorithm</a></p>
 </dd>
 <dt><a href="#Energy">Energy</a> ⇐ <code><a href="#Component">Component</a></code></dt>
 <dd><p>Energy is the currency of existence</p>
@@ -85,8 +70,16 @@ actions on the behalf of a creature</p>
 <dt><a href="#GridRenderer">GridRenderer</a> ⇐ <code><a href="#System">System</a></code></dt>
 <dd><p>Renders a hexagonal border around all tiles in the grid</p>
 </dd>
+<dt><a href="#Brain">Brain</a> ⇐ <code><a href="#Component">Component</a></code></dt>
+<dd><p>A neural network that receives sense input from the environment and produces
+actions on the behalf of a creature</p>
+</dd>
 <dt><a href="#Creature">Creature</a> ⇐ <code><a href="#Component">Component</a></code></dt>
 <dd><p>Intelligent organism with the capability to evolve</p>
+</dd>
+<dt><a href="#DNA">DNA</a> ⇐ <code><a href="#Component">Component</a></code></dt>
+<dd><p>Genetic encoding of a creature heavily inspired by the
+<a href="http://nn.cs.utexas.edu/downloads/papers/stanley.ec02.pdf">NEAT algorithm</a></p>
 </dd>
 <dt><a href="#AgingProcessor">AgingProcessor</a> ⇐ <code><a href="#System">System</a></code></dt>
 <dd><p>Saps energy from creatures every tick</p>
@@ -160,6 +153,23 @@ for tweaking them.</p>
 <dt><a href="#Theme">Theme</a></dt>
 <dd><p>The hub of all styling. Used to set the current theme, and retrieve styling
 values like color, stroke thickness, etc.</p>
+</dd>
+</dl>
+
+## Functions
+
+<dl>
+<dt><a href="#buildTile">buildTile(coord)</a> ⇒ <code><a href="#Entity">Entity</a></code></dt>
+<dd><p>Builds a tile entity</p>
+</dd>
+<dt><a href="#buildCreature">buildCreature(dna, coord)</a> ⇒ <code><a href="#Entity">Entity</a></code></dt>
+<dd><p>Builds a creature entity with the given DNA at the given position</p>
+</dd>
+<dt><a href="#buildDefaultCreature">buildDefaultCreature(coord)</a> ⇒ <code><a href="#Entity">Entity</a></code></dt>
+<dd><p>Builds a creature entity with the default initial DNA at the given position</p>
+</dd>
+<dt><a href="#buildPlant">buildPlant(energyLevel, coord)</a></dt>
+<dd><p>Builds a plant entity with the given energy level at the given position</p>
 </dd>
 </dl>
 
@@ -905,6 +915,9 @@ Genetic representation of a neural network
     * [new Strand(inputCount, outputCount, enabled, random)](#new_Strand_new)
     * [.nodeGenes](#Strand+nodeGenes) : <code>[Array.&lt;NodeGene&gt;](#NodeGene)</code>
     * [.connectionGenes](#Strand+connectionGenes) : <code>[Array.&lt;ConnectionGene&gt;](#ConnectionGene)</code>
+    * [.inputNodeGeneCount](#Strand+inputNodeGeneCount) ⇒ <code>number</code>
+    * [.outputNodeGeneCount](#Strand+outputNodeGeneCount) ⇒ <code>number</code>
+    * [.hiddenNodeGeneCount](#Strand+hiddenNodeGeneCount) ⇒ <code>number</code>
     * [.serialize([blacklist])](#Serializable+serialize) ⇒ <code>string</code>
 
 <a name="new_Strand_new"></a>
@@ -944,6 +957,27 @@ The list of node genes describing neurons
 The list of connection genes describing connections between neurons
 
 **Kind**: instance property of <code>[Strand](#Strand)</code>  
+<a name="Strand+inputNodeGeneCount"></a>
+
+### strand.inputNodeGeneCount ⇒ <code>number</code>
+Returns the count of input node genes in this strand
+
+**Kind**: instance property of <code>[Strand](#Strand)</code>  
+**Returns**: <code>number</code> - input node gene count  
+<a name="Strand+outputNodeGeneCount"></a>
+
+### strand.outputNodeGeneCount ⇒ <code>number</code>
+Returns the count of output node genes in this strand
+
+**Kind**: instance property of <code>[Strand](#Strand)</code>  
+**Returns**: <code>number</code> - output node gene count  
+<a name="Strand+hiddenNodeGeneCount"></a>
+
+### strand.hiddenNodeGeneCount ⇒ <code>number</code>
+Returns the count of hidden node genes in this strand
+
+**Kind**: instance property of <code>[Strand](#Strand)</code>  
+**Returns**: <code>number</code> - hidden node gene count  
 <a name="Serializable+serialize"></a>
 
 ### strand.serialize([blacklist]) ⇒ <code>string</code>
@@ -972,104 +1006,54 @@ A 2D, hexagonal grid implementation with axial coordinate system.
 Implementation details can be found [here](http://goo.gl/nLO6sN).
 
 **Kind**: global class  
-**See**
-
-- [Tile](#Tile)
-- [Coord](#Coord)
-
+**See**: [Coord](#Coord)  
 
 * [HexGrid](#HexGrid)
-    * [new HexGrid(radius, [defaultTileComponents])](#new_HexGrid_new)
-    * _instance_
-        * [.getTile(coord)](#HexGrid+getTile) ⇒ <code>[Tile](#Tile)</code>
-        * [.getTiles()](#HexGrid+getTiles) ⇒ <code>Array.Tile</code>
-        * [.getTilesByComponent(names)](#HexGrid+getTilesByComponent) ⇒ <code>Array.Tile</code>
-        * [.neighborsOf(coord)](#HexGrid+neighborsOf) ⇒ <code>Array.Tile</code>
-        * [.distanceBetween(coord1, coord2)](#HexGrid+distanceBetween) ⇒ <code>number</code>
-    * _static_
-        * [.coordToPixel(coord, radius)](#HexGrid.coordToPixel) ⇒ <code>[Point](#Point)</code>
+    * [new HexGrid(radius)](#new_HexGrid_new)
+    * [.radius](#HexGrid+radius) : <code>number</code>
+    * [.buildTiles()](#HexGrid+buildTiles) ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
+    * [.neighborsOf(coord)](#HexGrid+neighborsOf) ⇒ <code>[Array.&lt;Coord&gt;](#Coord)</code>
+    * [.distanceBetween(coord1, coord2)](#HexGrid+distanceBetween) ⇒ <code>number</code>
+    * [.coordToPixel(coord, radius)](#HexGrid+coordToPixel) ⇒ <code>[Point](#Point)</code>
 
 <a name="new_HexGrid_new"></a>
 
-### new HexGrid(radius, [defaultTileComponents])
+### new HexGrid(radius)
 Constructs a new HexGrid of given radius. The pattern of tiles within the
 grid will then form a hexagon itself with (0,0) being the center.
 A grid of radius 0 is just a single hexagon, radius 1 is a single hexagon
 surrounded by 1 layer of hexagons, and so on...
 
 
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| radius | <code>number</code> |  | Number of tiles from center of grid to the edge, not counting the center tile |
-| [defaultTileComponents] | <code>Object</code> | <code>{}</code> | Default components that all Tiles will be initialized with |
-
-**Example**  
-
-```js
-let myGrid = new HexGrid(10, {
-   biome: "desert"
-});
-```
-<a name="HexGrid+getTile"></a>
-
-### hexGrid.getTile(coord) ⇒ <code>[Tile](#Tile)</code>
-Returns the Tile at coordinates (x, y)
-
-**Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
-**Returns**: <code>[Tile](#Tile)</code> - The tile at the provided coordinates  
-
 | Param | Type | Description |
 | --- | --- | --- |
-| coord | <code>[Coord](#Coord)</code> | coordinate of tile to fetch |
+| radius | <code>number</code> | Number of tiles from center of grid to the edge, not counting the center tile |
 
 **Example**  
 
 ```js
-let originTile = myGrid.getTile(new Coord(0, 0));
+let myGrid = new HexGrid(10);
 ```
-<a name="HexGrid+getTiles"></a>
+<a name="HexGrid+radius"></a>
 
-### hexGrid.getTiles() ⇒ <code>Array.Tile</code>
-Returns an array of all tiles in the HexGrid
+### hexGrid.radius : <code>number</code>
+The radius of this hex grid in tiles
+
+**Kind**: instance property of <code>[HexGrid](#HexGrid)</code>  
+<a name="HexGrid+buildTiles"></a>
+
+### hexGrid.buildTiles() ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
+Builds an array of tile entities that represent this hex grid
 
 **Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
-**Returns**: <code>Array.Tile</code> - Array of all tiles in this HexGrid  
-**Example**  
-
-```js
-let tiles = myGrid.getTiles();
-tiles.forEach((tile) => {
-  tile.set("temperature", 75).set("forecast", "sunny");
-});
-```
-<a name="HexGrid+getTilesByComponent"></a>
-
-### hexGrid.getTilesByComponent(names) ⇒ <code>Array.Tile</code>
-Returns all tiles that posess the given component or components
-
-**Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
-**Returns**: <code>Array.Tile</code> - the tiles that include all of the given
-components  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| names | <code>string</code> &#124; <code>Array.string</code> | the names of the components this tile must posess to be included in the result |
-
-**Example**  
-
-```js
-// Returns all tiles that have "biome" and "temperature" components
-let habitatTiles = grid.getTilesByComponent(["biome", "temperature"]);
-```
+**Returns**: <code>[Array.&lt;Entity&gt;](#Entity)</code> - array of tile entities  
 <a name="HexGrid+neighborsOf"></a>
 
-### hexGrid.neighborsOf(coord) ⇒ <code>Array.Tile</code>
-Returns the Tiles that are adjacent to the Tile at the provided (x, y) coordinates.
-Will return `null` for a neighbor that doesn't exist, at the edges of the
-grid for example.
+### hexGrid.neighborsOf(coord) ⇒ <code>[Array.&lt;Coord&gt;](#Coord)</code>
+Returns the Coords that are adjacent to the given Coord
 
 **Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
-**Returns**: <code>Array.Tile</code> - The array of neighboring Tiles  
+**Returns**: <code>[Array.&lt;Coord&gt;](#Coord)</code> - The array of neighboring Coords  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1079,14 +1063,11 @@ grid for example.
 
 ```js
 let neighborsOfOrigin = myGrid.neighborsOf(new Coord(0, 0));
-neighborsOfOrigin.forEach((tile) => {
-  tile.set("bordersOrigin", true);
-});
 ```
 <a name="HexGrid+distanceBetween"></a>
 
 ### hexGrid.distanceBetween(coord1, coord2) ⇒ <code>number</code>
-Calculates the distance between two (x, y) coordinates in tiles
+Calculates the distance between two Coords in tiles
 
 **Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
 **Returns**: <code>number</code> - The distance between the provided coordinates in tiles  
@@ -1102,12 +1083,12 @@ Calculates the distance between two (x, y) coordinates in tiles
 let myGrid = new HexGrid(2);
 let distanceFromCenterToEdge = myGrid.distanceBetween(new Coord(0, 0), new Coord(2, -2)); // 2
 ```
-<a name="HexGrid.coordToPixel"></a>
+<a name="HexGrid+coordToPixel"></a>
 
-### HexGrid.coordToPixel(coord, radius) ⇒ <code>[Point](#Point)</code>
+### hexGrid.coordToPixel(coord, radius) ⇒ <code>[Point](#Point)</code>
 Converts a tile's coordinates to its pixel coordinates
 
-**Kind**: static method of <code>[HexGrid](#HexGrid)</code>  
+**Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
 **Returns**: <code>[Point](#Point)</code> - pixel coordinates of center of tile  
 
 | Param | Type | Description |
@@ -1115,212 +1096,6 @@ Converts a tile's coordinates to its pixel coordinates
 | coord | <code>[Coord](#Coord)</code> | tile coordinates |
 | radius | <code>number</code> | radius of hexagons (for correct spacing) |
 
-<a name="Tile"></a>
-
-## Tile
-A Tile is a collection of named [Components](Components) (data) representing
-the state at a specific place in a grid
-
-**Kind**: global class  
-**See**: [Component](#Component)  
-
-* [Tile](#Tile)
-    * [new Tile([initialComponents])](#new_Tile_new)
-    * [new Tile()](#new_Tile_new)
-    * [.name](#Component+name) : <code>string</code>
-    * [.get(name)](#Tile+get) ⇒ <code>\*</code>
-    * [.hasComponent(name)](#Tile+hasComponent) ⇒ <code>boolean</code>
-    * [.set(name, component)](#Tile+set) ⇒ <code>[Tile](#Tile)</code>
-    * [.delete(name)](#Tile+delete) ⇒ <code>boolean</code>
-    * ["componentAdded"](#Tile+event_componentAdded)
-    * ["componentDeleted"](#Tile+event_componentDeleted)
-
-<a name="new_Tile_new"></a>
-
-### new Tile([initialComponents])
-Creates a new tile with initial components. Note that the given initial
-components object will be copied *by value* into each tile. What this means
-is that inner objects of the component are *not* deep copied.
-
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| [initialComponents] | <code>Object</code> | <code>{}</code> | Initial components of the Tile |
-
-**Example**  
-
-```js
-const hotTile = new Tile({
-  temperature: 110,
-  biome: "desert"
-  vegetation: [
-    { type: "tree", edible: false },
-    { type: "berries", edible: true}
-  ]
-});
-```
-<a name="new_Tile_new"></a>
-
-### new Tile()
-Constructs a new tile component
-
-<a name="Component+name"></a>
-
-### tile.name : <code>string</code>
-Name of the component. Expected to be unique among Components.
-
-**Kind**: instance property of <code>[Tile](#Tile)</code>  
-<a name="Tile+get"></a>
-
-### tile.get(name) ⇒ <code>\*</code>
-Returns the specified component
-
-**Kind**: instance method of <code>[Tile](#Tile)</code>  
-**Returns**: <code>\*</code> - component data, or undefined if component not found  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| name | <code>string</code> | Name of the component |
-
-**Example**  
-
-```js
-let temperature = hotTile.get("temperature");
-```
-<a name="Tile+hasComponent"></a>
-
-### tile.hasComponent(name) ⇒ <code>boolean</code>
-Returns true if this Tile has the given component, false otherwise
-
-**Kind**: instance method of <code>[Tile](#Tile)</code>  
-**Returns**: <code>boolean</code> - True if the Tile has the given component, false
-otherwise  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| name | <code>string</code> | the name of the component to check for |
-
-<a name="Tile+set"></a>
-
-### tile.set(name, component) ⇒ <code>[Tile](#Tile)</code>
-Sets the specified component
-
-**Kind**: instance method of <code>[Tile](#Tile)</code>  
-**Returns**: <code>[Tile](#Tile)</code> - The Tile object  
-**Emits**: <code>[componentAdded](#Tile+event_componentAdded)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| name | <code>string</code> | name of the component to set |
-| component | <code>\*</code> | the component data |
-
-**Example**  
-
-```js
-hotTile.set("vegetation", [
-  { type: "tree", edible: false }
-]);
-//Chaining
-hotTile.set("one", 1).set("two", 2).set("three", 3);
-```
-<a name="Tile+delete"></a>
-
-### tile.delete(name) ⇒ <code>boolean</code>
-Deletes the specified component, removing it from the Tile completely
-
-**Kind**: instance method of <code>[Tile](#Tile)</code>  
-**Returns**: <code>boolean</code> - True if an item was actually deleted, false otherwise  
-**Emits**: <code>[componentDeleted](#Tile+event_componentDeleted)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| name | <code>string</code> | name of the component to delete |
-
-**Example**  
-
-```js
-let didDeleteSomething = hotTile.delete("temperature");
-```
-<a name="Tile+event_componentAdded"></a>
-
-### "componentAdded"
-Fired when a new component is added to a tile. It is NOT fired when
-a component is solely modified.
-
-**Kind**: event emitted by <code>[Tile](#Tile)</code>  
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| tile | <code>[Tile](#Tile)</code> | the tile that was modified |
-| name | <code>string</code> | the name of the component that was added |
-
-<a name="Tile+event_componentDeleted"></a>
-
-### "componentDeleted"
-Fired when a component is deleted from a tile
-
-**Kind**: event emitted by <code>[Tile](#Tile)</code>  
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| tile | <code>[Tile](#Tile)</code> | the tile that was modified |
-| name | <code>string</code> | name of the component that was deleted |
-
-<a name="TileComponentIndex"></a>
-
-## TileComponentIndex
-Builds an index of [Tiles](Tiles) for fast lookup by component
-
-**Kind**: global class  
-
-* [TileComponentIndex](#TileComponentIndex)
-    * [new TileComponentIndex(tiles)](#new_TileComponentIndex_new)
-    * [.getTilesByComponent(names)](#TileComponentIndex+getTilesByComponent) ⇒ <code>Array.Tile</code>
-
-<a name="new_TileComponentIndex_new"></a>
-
-### new TileComponentIndex(tiles)
-Creates a new TileComponentIndex with the given array of tiles.
-Note: the index is built on demand. Constructing a new TileComponentIndex
-does not actually build a complete index (which would be expensive),
-but instead the indices are built as needed.
-
-
-| Param | Type | Description |
-| --- | --- | --- |
-| tiles | <code>Array.Tile</code> | the array of tiles for which to build an index by tile component |
-
-**Example**  
-
-```js
-const tiles = [
-  new Tile(),
-  new Tile(),
-  new Tile()
-];
-const tileIndex = new TileComponentIndex(tileIndex);
-```
-<a name="TileComponentIndex+getTilesByComponent"></a>
-
-### tileComponentIndex.getTilesByComponent(names) ⇒ <code>Array.Tile</code>
-Returns all tiles that posess the given component
-
-**Kind**: instance method of <code>[TileComponentIndex](#TileComponentIndex)</code>  
-**Returns**: <code>Array.Tile</code> - the tiles that include all of the given
-components  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| names | <code>string</code> &#124; <code>Array.string</code> | the names of the components a Tile must posess to be included in the result |
-
-**Example**  
-
-```js
-// Returns all tiles that have "biome" and "temperature" components
-let habitatTiles = tileIndex.getTilesByComponent(["biome", "temperature"]);
-```
 <a name="Plugin"></a>
 
 ## Plugin
@@ -1388,149 +1163,6 @@ True if this plugin is enabled, false otherwise. A disabled plugin
 will be excluded from the processing loop.
 
 **Kind**: instance property of <code>[Plugin](#Plugin)</code>  
-<a name="Brain"></a>
-
-## Brain ⇐ <code>[Component](#Component)</code>
-A neural network that receives sense input from the environment and produces
-actions on the behalf of a creature
-
-**Kind**: global class  
-**Extends:** <code>[Component](#Component)</code>  
-
-* [Brain](#Brain) ⇐ <code>[Component](#Component)</code>
-    * [new Brain(dna, sequencer)](#new_Brain_new)
-    * _instance_
-        * [.name](#Component+name) : <code>string</code>
-        * [.input(id, value)](#Brain+input)
-        * [.output(id)](#Brain+output)
-        * [.activate()](#Brain+activate)
-    * _static_
-        * [.inputNeuronCount](#Brain.inputNeuronCount) ⇒ <code>number</code>
-        * [.outputNeuronCount](#Brain.outputNeuronCount) ⇒ <code>number</code>
-        * [._inputNeuronCount](#Brain._inputNeuronCount) : <code>number</code>
-        * [._outputNeuronCount](#Brain._outputNeuronCount) : <code>number</code>
-        * [.reserveInput()](#Brain.reserveInput) ⇒ <code>number</code>
-        * [.reserveOutput()](#Brain.reserveOutput) ⇒ <code>number</code>
-
-<a name="new_Brain_new"></a>
-
-### new Brain(dna, sequencer)
-Constructs a new brain resulting from reading the given [DNA](#DNA) with
-the supplied [Sequencer](#Sequencer)
-
-
-| Param | Type | Description |
-| --- | --- | --- |
-| dna | <code>[DNA](#DNA)</code> | creature DNA |
-| sequencer | <code>[Sequencer](#Sequencer)</code> | the sequencer to use to read the brain strand from the DNA |
-
-<a name="Component+name"></a>
-
-### brain.name : <code>string</code>
-Name of the component. Expected to be unique among Components.
-
-**Kind**: instance property of <code>[Brain](#Brain)</code>  
-<a name="Brain+input"></a>
-
-### brain.input(id, value)
-Inputs the given sense value to the specified neuron
-
-**Kind**: instance method of <code>[Brain](#Brain)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| id | <code>number</code> | id of neuron |
-| value | <code>number</code> | value to input between 0 and 1 inclusive |
-
-**Example**  
-
-```js
-// Called in the System#reserve() method
-const mySenseID = Brain.reserveInput();
-// ...
-myBrain.input(mySenseID, 0.5);
-```
-<a name="Brain+output"></a>
-
-### brain.output(id)
-Fetches the output value of the given neuron
-
-**Kind**: instance method of <code>[Brain](#Brain)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| id | <code>number</code> | id of neuron |
-
-**Example**  
-
-```js
-// Called in the System#reserve() method
-const myOutputID = Brain.reserveOutput();
-// ...
-const outputValue = myBrain.output(myOutputID);
-```
-<a name="Brain+activate"></a>
-
-### brain.activate()
-Activates the brain on the inputs entered thus far
-
-**Kind**: instance method of <code>[Brain](#Brain)</code>  
-<a name="Brain.inputNeuronCount"></a>
-
-### Brain.inputNeuronCount ⇒ <code>number</code>
-Returns the total number of reserved input neurons
-
-**Kind**: static property of <code>[Brain](#Brain)</code>  
-**Returns**: <code>number</code> - total number of reserved input neurons  
-<a name="Brain.outputNeuronCount"></a>
-
-### Brain.outputNeuronCount ⇒ <code>number</code>
-Returns the total number of reserved output neurons
-
-**Kind**: static property of <code>[Brain](#Brain)</code>  
-**Returns**: <code>number</code> - total number of reserved output neurons  
-<a name="Brain._inputNeuronCount"></a>
-
-### Brain._inputNeuronCount : <code>number</code>
-The number of input neurons that every creature's brain will be initialized
-with
-
-**Kind**: static property of <code>[Brain](#Brain)</code>  
-<a name="Brain._outputNeuronCount"></a>
-
-### Brain._outputNeuronCount : <code>number</code>
-The number of output neurons that every creature's brain will be initialized
-with
-
-**Kind**: static property of <code>[Brain](#Brain)</code>  
-<a name="Brain.reserveInput"></a>
-
-### Brain.reserveInput() ⇒ <code>number</code>
-Reserves a single input neuron. This function is expected to be called only
-once in the reservation step by systems that will be feeding sense data into
-the brain.
-
-**Kind**: static method of <code>[Brain](#Brain)</code>  
-**Returns**: <code>number</code> - the ID of the reserved input neuron  
-**Example**  
-
-```js
-const senseID = Brain.reserveInput();
-```
-<a name="Brain.reserveOutput"></a>
-
-### Brain.reserveOutput() ⇒ <code>number</code>
-Reserves a single output neuron. This function is expected to be called only
-once in the reservation step by systems that will be feeding sense data into
-the brain.
-
-**Kind**: static method of <code>[Brain](#Brain)</code>  
-**Returns**: <code>number</code> - the ID of the reserved output neuron  
-**Example**  
-
-```js
-const actionID = Brain.reserveOutput();
-```
 <a name="Coord"></a>
 
 ## Coord ⇐ <code>[Component](#Component)</code>
@@ -1583,60 +1215,6 @@ y value
 Name of the component. Expected to be unique among Components.
 
 **Kind**: instance property of <code>[Coord](#Coord)</code>  
-<a name="DNA"></a>
-
-## DNA ⇐ <code>[Component](#Component)</code>
-Genetic encoding of a creature heavily inspired by the
-[NEAT algorithm](http://nn.cs.utexas.edu/downloads/papers/stanley.ec02.pdf)
-
-**Kind**: global class  
-**Extends:** <code>[Component](#Component)</code>  
-
-* [DNA](#DNA) ⇐ <code>[Component](#Component)</code>
-    * [new DNA(inputCount, outputCount, random)](#new_DNA_new)
-    * [.brainStrand](#DNA+brainStrand) : <code>[Strand](#Strand)</code>
-    * [.traitStrand](#DNA+traitStrand) : <code>[Strand](#Strand)</code>
-    * [.name](#Component+name) : <code>string</code>
-
-<a name="new_DNA_new"></a>
-
-### new DNA(inputCount, outputCount, random)
-Constructs the DNA for a brand new creature with base traits and the
-simplest possible brain: one with only one enabled connection between
-a random input neuron and a random output neuron.
-
-
-| Param | Type | Description |
-| --- | --- | --- |
-| inputCount | <code>number</code> | the total number of possible inputs (senses) to a creature's brain |
-| outputCount | <code>number</code> | the total number of possible outputs (actions) from a creature's brain |
-| random | <code>Object</code> | an instance of a random-js engine |
-
-**Example**  
-
-```js
-// Creates DNA for a creature with the current count of reserved input and
-// output neurons
-const myDNA = new DNA(Brain.inputNeuronCount, Brain.outputNeuronCount, random);
-```
-<a name="DNA+brainStrand"></a>
-
-### dnA.brainStrand : <code>[Strand](#Strand)</code>
-Strand of genes describing a creature's brain
-
-**Kind**: instance property of <code>[DNA](#DNA)</code>  
-<a name="DNA+traitStrand"></a>
-
-### dnA.traitStrand : <code>[Strand](#Strand)</code>
-Strand of genes describing the trait function (TF)
-
-**Kind**: instance property of <code>[DNA](#DNA)</code>  
-<a name="Component+name"></a>
-
-### dnA.name : <code>string</code>
-Name of the component. Expected to be unique among Components.
-
-**Kind**: instance property of <code>[DNA](#DNA)</code>  
 <a name="Energy"></a>
 
 ## Energy ⇐ <code>[Component](#Component)</code>
@@ -1759,40 +1337,9 @@ Tile is a location in the world that an entity can exist at
 **Extends:** <code>[Component](#Component)</code>  
 
 * [Tile](#Tile) ⇐ <code>[Component](#Component)</code>
-    * [new Tile([initialComponents])](#new_Tile_new)
     * [new Tile()](#new_Tile_new)
     * [.name](#Component+name) : <code>string</code>
-    * [.get(name)](#Tile+get) ⇒ <code>\*</code>
-    * [.hasComponent(name)](#Tile+hasComponent) ⇒ <code>boolean</code>
-    * [.set(name, component)](#Tile+set) ⇒ <code>[Tile](#Tile)</code>
-    * [.delete(name)](#Tile+delete) ⇒ <code>boolean</code>
-    * ["componentAdded"](#Tile+event_componentAdded)
-    * ["componentDeleted"](#Tile+event_componentDeleted)
 
-<a name="new_Tile_new"></a>
-
-### new Tile([initialComponents])
-Creates a new tile with initial components. Note that the given initial
-components object will be copied *by value* into each tile. What this means
-is that inner objects of the component are *not* deep copied.
-
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| [initialComponents] | <code>Object</code> | <code>{}</code> | Initial components of the Tile |
-
-**Example**  
-
-```js
-const hotTile = new Tile({
-  temperature: 110,
-  biome: "desert"
-  vegetation: [
-    { type: "tree", edible: false },
-    { type: "berries", edible: true}
-  ]
-});
-```
 <a name="new_Tile_new"></a>
 
 ### new Tile()
@@ -1804,104 +1351,6 @@ Constructs a new tile component
 Name of the component. Expected to be unique among Components.
 
 **Kind**: instance property of <code>[Tile](#Tile)</code>  
-<a name="Tile+get"></a>
-
-### tile.get(name) ⇒ <code>\*</code>
-Returns the specified component
-
-**Kind**: instance method of <code>[Tile](#Tile)</code>  
-**Returns**: <code>\*</code> - component data, or undefined if component not found  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| name | <code>string</code> | Name of the component |
-
-**Example**  
-
-```js
-let temperature = hotTile.get("temperature");
-```
-<a name="Tile+hasComponent"></a>
-
-### tile.hasComponent(name) ⇒ <code>boolean</code>
-Returns true if this Tile has the given component, false otherwise
-
-**Kind**: instance method of <code>[Tile](#Tile)</code>  
-**Returns**: <code>boolean</code> - True if the Tile has the given component, false
-otherwise  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| name | <code>string</code> | the name of the component to check for |
-
-<a name="Tile+set"></a>
-
-### tile.set(name, component) ⇒ <code>[Tile](#Tile)</code>
-Sets the specified component
-
-**Kind**: instance method of <code>[Tile](#Tile)</code>  
-**Returns**: <code>[Tile](#Tile)</code> - The Tile object  
-**Emits**: <code>[componentAdded](#Tile+event_componentAdded)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| name | <code>string</code> | name of the component to set |
-| component | <code>\*</code> | the component data |
-
-**Example**  
-
-```js
-hotTile.set("vegetation", [
-  { type: "tree", edible: false }
-]);
-//Chaining
-hotTile.set("one", 1).set("two", 2).set("three", 3);
-```
-<a name="Tile+delete"></a>
-
-### tile.delete(name) ⇒ <code>boolean</code>
-Deletes the specified component, removing it from the Tile completely
-
-**Kind**: instance method of <code>[Tile](#Tile)</code>  
-**Returns**: <code>boolean</code> - True if an item was actually deleted, false otherwise  
-**Emits**: <code>[componentDeleted](#Tile+event_componentDeleted)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| name | <code>string</code> | name of the component to delete |
-
-**Example**  
-
-```js
-let didDeleteSomething = hotTile.delete("temperature");
-```
-<a name="Tile+event_componentAdded"></a>
-
-### "componentAdded"
-Fired when a new component is added to a tile. It is NOT fired when
-a component is solely modified.
-
-**Kind**: event emitted by <code>[Tile](#Tile)</code>  
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| tile | <code>[Tile](#Tile)</code> | the tile that was modified |
-| name | <code>string</code> | the name of the component that was added |
-
-<a name="Tile+event_componentDeleted"></a>
-
-### "componentDeleted"
-Fired when a component is deleted from a tile
-
-**Kind**: event emitted by <code>[Tile](#Tile)</code>  
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| tile | <code>[Tile](#Tile)</code> | the tile that was modified |
-| name | <code>string</code> | name of the component that was deleted |
-
 <a name="BackgroundRenderer"></a>
 
 ## BackgroundRenderer ⇐ <code>[System](#System)</code>
@@ -2096,6 +1545,149 @@ Hook for reading output data from the brain and attempting actions
 | --- | --- | --- |
 | app | <code>[App](#App)</code> | the currently running GS app |
 
+<a name="Brain"></a>
+
+## Brain ⇐ <code>[Component](#Component)</code>
+A neural network that receives sense input from the environment and produces
+actions on the behalf of a creature
+
+**Kind**: global class  
+**Extends:** <code>[Component](#Component)</code>  
+
+* [Brain](#Brain) ⇐ <code>[Component](#Component)</code>
+    * [new Brain(dna, sequencer)](#new_Brain_new)
+    * _instance_
+        * [.name](#Component+name) : <code>string</code>
+        * [.input(id, value)](#Brain+input)
+        * [.output(id)](#Brain+output)
+        * [.activate()](#Brain+activate)
+    * _static_
+        * [.inputNeuronCount](#Brain.inputNeuronCount) ⇒ <code>number</code>
+        * [.outputNeuronCount](#Brain.outputNeuronCount) ⇒ <code>number</code>
+        * [._inputNeuronCount](#Brain._inputNeuronCount) : <code>number</code>
+        * [._outputNeuronCount](#Brain._outputNeuronCount) : <code>number</code>
+        * [.reserveInput()](#Brain.reserveInput) ⇒ <code>number</code>
+        * [.reserveOutput()](#Brain.reserveOutput) ⇒ <code>number</code>
+
+<a name="new_Brain_new"></a>
+
+### new Brain(dna, sequencer)
+Constructs a new brain resulting from reading the given [DNA](#DNA) with
+the supplied [Sequencer](#Sequencer)
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| dna | <code>[DNA](#DNA)</code> | creature DNA |
+| sequencer | <code>[Sequencer](#Sequencer)</code> | the sequencer to use to read the brain strand from the DNA |
+
+<a name="Component+name"></a>
+
+### brain.name : <code>string</code>
+Name of the component. Expected to be unique among Components.
+
+**Kind**: instance property of <code>[Brain](#Brain)</code>  
+<a name="Brain+input"></a>
+
+### brain.input(id, value)
+Inputs the given sense value to the specified neuron
+
+**Kind**: instance method of <code>[Brain](#Brain)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>number</code> | id of neuron |
+| value | <code>number</code> | value to input between 0 and 1 inclusive |
+
+**Example**  
+
+```js
+// Called in the System#reserve() method
+const mySenseID = Brain.reserveInput();
+// ...
+myBrain.input(mySenseID, 0.5);
+```
+<a name="Brain+output"></a>
+
+### brain.output(id)
+Fetches the output value of the given neuron
+
+**Kind**: instance method of <code>[Brain](#Brain)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>number</code> | id of neuron |
+
+**Example**  
+
+```js
+// Called in the System#reserve() method
+const myOutputID = Brain.reserveOutput();
+// ...
+const outputValue = myBrain.output(myOutputID);
+```
+<a name="Brain+activate"></a>
+
+### brain.activate()
+Activates the brain on the inputs entered thus far
+
+**Kind**: instance method of <code>[Brain](#Brain)</code>  
+<a name="Brain.inputNeuronCount"></a>
+
+### Brain.inputNeuronCount ⇒ <code>number</code>
+Returns the total number of reserved input neurons
+
+**Kind**: static property of <code>[Brain](#Brain)</code>  
+**Returns**: <code>number</code> - total number of reserved input neurons  
+<a name="Brain.outputNeuronCount"></a>
+
+### Brain.outputNeuronCount ⇒ <code>number</code>
+Returns the total number of reserved output neurons
+
+**Kind**: static property of <code>[Brain](#Brain)</code>  
+**Returns**: <code>number</code> - total number of reserved output neurons  
+<a name="Brain._inputNeuronCount"></a>
+
+### Brain._inputNeuronCount : <code>number</code>
+The number of input neurons that every creature's brain will be initialized
+with
+
+**Kind**: static property of <code>[Brain](#Brain)</code>  
+<a name="Brain._outputNeuronCount"></a>
+
+### Brain._outputNeuronCount : <code>number</code>
+The number of output neurons that every creature's brain will be initialized
+with
+
+**Kind**: static property of <code>[Brain](#Brain)</code>  
+<a name="Brain.reserveInput"></a>
+
+### Brain.reserveInput() ⇒ <code>number</code>
+Reserves a single input neuron. This function is expected to be called only
+once in the reservation step by systems that will be feeding sense data into
+the brain.
+
+**Kind**: static method of <code>[Brain](#Brain)</code>  
+**Returns**: <code>number</code> - the ID of the reserved input neuron  
+**Example**  
+
+```js
+const senseID = Brain.reserveInput();
+```
+<a name="Brain.reserveOutput"></a>
+
+### Brain.reserveOutput() ⇒ <code>number</code>
+Reserves a single output neuron. This function is expected to be called only
+once in the reservation step by systems that will be feeding sense data into
+the brain.
+
+**Kind**: static method of <code>[Brain](#Brain)</code>  
+**Returns**: <code>number</code> - the ID of the reserved output neuron  
+**Example**  
+
+```js
+const actionID = Brain.reserveOutput();
+```
 <a name="Creature"></a>
 
 ## Creature ⇐ <code>[Component](#Component)</code>
@@ -2137,6 +1729,59 @@ The genetic representaiton of this creature
 Name of the component. Expected to be unique among Components.
 
 **Kind**: instance property of <code>[Creature](#Creature)</code>  
+<a name="DNA"></a>
+
+## DNA ⇐ <code>[Component](#Component)</code>
+Genetic encoding of a creature heavily inspired by the
+[NEAT algorithm](http://nn.cs.utexas.edu/downloads/papers/stanley.ec02.pdf)
+
+**Kind**: global class  
+**Extends:** <code>[Component](#Component)</code>  
+
+* [DNA](#DNA) ⇐ <code>[Component](#Component)</code>
+    * [new DNA(inputCount, outputCount, random)](#new_DNA_new)
+    * [.brainStrand](#DNA+brainStrand) : <code>[Strand](#Strand)</code>
+    * [.traitStrand](#DNA+traitStrand) : <code>[Strand](#Strand)</code>
+    * [.name](#Component+name) : <code>string</code>
+
+<a name="new_DNA_new"></a>
+
+### new DNA(inputCount, outputCount, random)
+Constructs the DNA for a brand new creature with base traits and a brain
+possessing the given number of input/output neurons
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| inputCount | <code>number</code> | the total number of possible inputs (senses) to a creature's brain |
+| outputCount | <code>number</code> | the total number of possible outputs (actions) from a creature's brain |
+| random | <code>Object</code> | an instance of a random-js engine |
+
+**Example**  
+
+```js
+// Creates DNA for a creature with the current count of reserved input and
+// output neurons
+const myDNA = new DNA(Brain.inputNeuronCount, Brain.outputNeuronCount, random);
+```
+<a name="DNA+brainStrand"></a>
+
+### dnA.brainStrand : <code>[Strand](#Strand)</code>
+Strand of genes describing a creature's brain
+
+**Kind**: instance property of <code>[DNA](#DNA)</code>  
+<a name="DNA+traitStrand"></a>
+
+### dnA.traitStrand : <code>[Strand](#Strand)</code>
+Strand of genes describing the trait function (TF)
+
+**Kind**: instance property of <code>[DNA](#DNA)</code>  
+<a name="Component+name"></a>
+
+### dnA.name : <code>string</code>
+Name of the component. Expected to be unique among Components.
+
+**Kind**: instance property of <code>[DNA](#DNA)</code>  
 <a name="AgingProcessor"></a>
 
 ## AgingProcessor ⇐ <code>[System](#System)</code>
@@ -3615,4 +3260,53 @@ sprite if the given name is not defined
 | --- | --- | --- |
 | name | <code>string</code> | name of the sprite |
 | paper | <code>PaperScope</code> | an active paper scope |
+
+<a name="buildTile"></a>
+
+## buildTile(coord) ⇒ <code>[Entity](#Entity)</code>
+Builds a tile entity
+
+**Kind**: global function  
+**Returns**: <code>[Entity](#Entity)</code> - the built tile entity  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| coord | <code>[Coord](#Coord)</code> | coordinate to place the tile entity at |
+
+<a name="buildCreature"></a>
+
+## buildCreature(dna, coord) ⇒ <code>[Entity](#Entity)</code>
+Builds a creature entity with the given DNA at the given position
+
+**Kind**: global function  
+**Returns**: <code>[Entity](#Entity)</code> - the built creature entity  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| dna | <code>[DNA](#DNA)</code> | genetic representation of the creature |
+| coord | <code>[Coord](#Coord)</code> | coordinate to place the creature entity at |
+
+<a name="buildDefaultCreature"></a>
+
+## buildDefaultCreature(coord) ⇒ <code>[Entity](#Entity)</code>
+Builds a creature entity with the default initial DNA at the given position
+
+**Kind**: global function  
+**Returns**: <code>[Entity](#Entity)</code> - the built creature entity  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| coord | <code>[Coord](#Coord)</code> | coordinate to place the creature entity at |
+
+<a name="buildPlant"></a>
+
+## buildPlant(energyLevel, coord)
+Builds a plant entity with the given energy level at the given position
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| energyLevel | <code>number</code> | initial energy level of the plant |
+| coord | <code>[Coord](#Coord)</code> | coordinate to place the plant entity at |
 

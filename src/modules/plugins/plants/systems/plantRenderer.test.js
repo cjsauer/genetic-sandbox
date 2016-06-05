@@ -4,7 +4,7 @@ import HexGrid from "../../../grid/HexGrid";
 import { expect } from "chai";
 import { stub, spy } from "sinon";
 
-describe("PlantRenderer", () => {
+describe.skip("PlantRenderer", () => {
   let sys, grid, paper, app;
 
   beforeEach(() => {
