@@ -1,5 +1,5 @@
 import System from "../../../ecs/System";
-import DNA from "../../core/components/genetics/DNA";
+import DNA from "../../core/components/DNA";
 import Brain from "../../core/components/Brain";
 import Creature from "../components/Creature";
 import config from "../../../config";

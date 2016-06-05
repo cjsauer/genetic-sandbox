@@ -1,14 +1,14 @@
-import Component from "../../../../ecs/Component";
+import Serializable from "../util/Serializable";
 import NodeGene from "./NodeGene";
 import ConnectionGene from "./ConnectionGene";
 
 /**
  * Genetic representation of a neural network
- * @extends Component
+ * @extends Serializable
  * @see {NodeGene}
  * @see {ConnectionGene}
  */
-class Strand extends Component {
+class Strand extends Serializable {
   /**
    * Constructs a new Strand representing a fully connected neural network with
    * the given number of input/output neurons, zero hidden neurons, and
@@ -78,6 +78,6 @@ class Strand extends Component {
   }
 }
 
-Component.register(Strand);
+Serializable.register(Strand);
 
 export default Strand;

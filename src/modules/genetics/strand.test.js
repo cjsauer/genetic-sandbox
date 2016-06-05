@@ -1,5 +1,5 @@
 import Strand from "./Strand";
-import Component from "../../../../ecs/Component";
+import Serializable from "../util/Serializable";
 import { expect } from "chai";
 import { stub } from "sinon";
 
@@ -17,13 +17,13 @@ describe("Strand", () => {
     };
   });
 
-  it("should extend Component", () => {
+  it("should extend Serializable", () => {
     const strand = new Strand(4, 6, true, random);
-    expect(strand instanceof Component).to.be.true;
+    expect(strand instanceof Serializable).to.be.true;
   });
 
-  it("should register its constructor with Component", () => {
-    expect(Component._constructors["Strand"]).to.eql(Strand);
+  it("should register its constructor with Serializable", () => {
+    expect(Serializable._constructors["Strand"]).to.eql(Strand);
   });
 
   it("can be instantiated with zero arguments", () => {

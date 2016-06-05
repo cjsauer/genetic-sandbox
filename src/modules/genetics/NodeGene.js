@@ -1,10 +1,10 @@
-import Component from "../../../../ecs/Component";
+import Serializable from "../util/Serializable";
 
 /**
  * Genetic representation of a neuron in a neural network
- * @extends Component
+ * @extends Serializable
  */
-class NodeGene extends Component {
+class NodeGene extends Serializable {
   /**
    * Constructs a new NodeGene
    * @example
@@ -31,6 +31,6 @@ class NodeGene extends Component {
   }
 }
 
-Component.register(NodeGene);
+Serializable.register(NodeGene);
 
 export default NodeGene;

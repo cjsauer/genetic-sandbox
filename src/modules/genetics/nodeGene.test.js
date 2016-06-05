@@ -1,5 +1,5 @@
 import NodeGene from "./NodeGene";
-import Component from "../../../../ecs/Component";
+import Serializable from "../util/Serializable";
 import { expect } from "chai";
 
 describe("NodeGene", () => {
@@ -20,13 +20,13 @@ describe("NodeGene", () => {
     expect(gene.type).to.equal("hidden");
   });
 
-  it("should extend Component", () => {
+  it("should extend Serializable", () => {
     const gene = new NodeGene(1, "input");
-    expect(gene instanceof Component).to.be.true;
+    expect(gene instanceof Serializable).to.be.true;
   });
 
-  it("should register its constructor with Component", () => {
-    expect(Component._constructors["NodeGene"]).to.eql(NodeGene);
+  it("should register its constructor with Serializable", () => {
+    expect(Serializable._constructors["NodeGene"]).to.eql(NodeGene);
   });
 
   it("can be instantiated with zero arguments", () => {

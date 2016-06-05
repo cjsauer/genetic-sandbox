@@ -1,12 +1,12 @@
-import Component from "../../../../ecs/Component";
+import Serializable from "../util/Serializable";
 
 /**
  * Genetic representation of a connection between two neurons in a neural
  * network
- * @extends Component
+ * @extends Serializable
  * @see {NodeGene}
  */
-class ConnectionGene extends Component {
+class ConnectionGene extends Serializable {
   /**
    * Constructs a new ConnectionGene
    * @example
@@ -90,6 +90,6 @@ ConnectionGene._nextInnovationNumber = 1;
  */
 ConnectionGene._innovationMap = {};
 
-Component.register(ConnectionGene);
+Serializable.register(ConnectionGene);
 
 export default ConnectionGene;

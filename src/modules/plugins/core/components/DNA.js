@@ -1,5 +1,5 @@
-import Component from "../../../../ecs/Component";
-import Strand from "./Strand";
+import Component from "../../../ecs/Component";
+import Strand from "../../../genetics/Strand";
 
 /**
  * Genetic encoding of a creature heavily inspired by the

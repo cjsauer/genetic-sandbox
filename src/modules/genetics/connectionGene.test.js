@@ -1,5 +1,5 @@
 import ConnectionGene from "./ConnectionGene";
-import Component from "../../../../ecs/Component";
+import Serializable from "../util/Serializable";
 import { expect } from "chai";
 
 describe("ConnectionGene", () => {
@@ -12,13 +12,13 @@ describe("ConnectionGene", () => {
     expect(gene.enabled).to.equal(false);
   });
 
-  it("should extend Component", () => {
+  it("should extend Serializable", () => {
     const gene = new ConnectionGene(1, 2);
-    expect(gene instanceof Component).to.be.true;
+    expect(gene instanceof Serializable).to.be.true;
   });
 
-  it("should register its constructor with Component", () => {
-    expect(Component._constructors["ConnectionGene"]).to.eql(ConnectionGene);
+  it("should register its constructor with Serializable", () => {
+    expect(Serializable._constructors["ConnectionGene"]).to.eql(ConnectionGene);
   });
 
   it("can be instantiated with zero arguments", () => {

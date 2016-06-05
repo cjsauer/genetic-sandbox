@@ -1,5 +1,5 @@
 import DNA from "./DNA";
-import Component from "../../../../ecs/Component";
+import Component from "../../../ecs/Component";
 import { expect } from "chai";
 import { stub } from "sinon";
 
