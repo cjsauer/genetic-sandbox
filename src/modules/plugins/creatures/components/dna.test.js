@@ -8,8 +8,7 @@ describe("DNA", () => {
 
   beforeEach(() => {
     random = {
-      real: stub().returns(0.5),
-      pick: stub().returns({ enabled: false })
+      real: stub().returns(0.5)
     };
   });
 
@@ -38,12 +37,6 @@ describe("DNA", () => {
       expect(dna.traitStrand).to.be.ok;
       expect(dna.traitStrand.nodeGenes).to.have.length(2);
       expect(dna.traitStrand.connectionGenes).to.have.length(1);
-    });
-
-    it("should enable a single, random connection gene in the brain", () => {
-      expect(random.pick().enabled).to.be.false;
-      const dna = new DNA(5, 6, random); // eslint-disable-line
-      expect(random.pick().enabled).to.be.true;
     });
 
     it("should contain a single, random Hox gene", () => {

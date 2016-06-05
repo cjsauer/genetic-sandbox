@@ -21,7 +21,6 @@ describe("CreatureGenerator", () => {
     };
     random = {
       bool: stub(),
-      pick: stub().returns({ enabled: false }),
       real: stub().returns(0.5)
     };
     app = { grid, random };

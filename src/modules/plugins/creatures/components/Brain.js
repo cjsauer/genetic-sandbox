@@ -37,14 +37,14 @@ class Brain extends Component {
      * @private
      * @type {number[]}
      */
-    this._inputs = new Array(Brain._inputNeuronCount);
+    this._inputs = new Array(dna.brainStrand.inputNodeGeneCount);
 
     /**
      * The outputs produced by activating the brain
      * @private
      * @type {number[]}
      */
-    this._outputs = new Array(Brain._outputNeuronCOunt);
+    this._outputs = new Array(dna.brainStrand.outputNeuronCount);
   }
 
   /**

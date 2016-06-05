@@ -8,17 +8,16 @@ import Strand from "../../../genetics/Strand";
  */
 class DNA extends Component {
   /**
-   * Constructs the DNA for a brand new creature with base traits and the
-   * simplest possible brain: one with only one enabled connection between
-   * a random input neuron and a random output neuron.
+   * Constructs the DNA for a brand new creature with base traits and a brain
+   * possessing the given number of input/output neurons
    * @example
    * // Creates DNA for a creature with the current count of reserved input and
    * // output neurons
    * const myDNA = new DNA(Brain.inputNeuronCount, Brain.outputNeuronCount, random);
    * @param {number} inputCount - the total number of possible inputs (senses)
    * to a creature's brain
-   * @param {number} outputCount - the total number of possible outputs (actions)
-   * from a creature's brain
+   * @param {number} outputCount - the total number of possible outputs
+   * (actions) from a creature's brain
    * @param {Object} random - an instance of a random-js engine
    */
   constructor(inputCount, outputCount, random) {
@@ -31,9 +30,6 @@ class DNA extends Component {
      * @type {Strand}
      */
     this.brainStrand = new Strand(inputCount, outputCount, true, random);
-
-    // Randomly enable a single connection
-    random.pick(this.brainStrand.connectionGenes).enabled = true;
 
     /**
      * Strand of genes describing the trait function (TF)

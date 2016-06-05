@@ -5,9 +5,6 @@ import { stub } from "sinon";
 
 describe("Strand", () => {
   let random;
-  const isInputNodeGene = (gene) => gene.type === "input";
-  const isOutputNodeGene = (gene) => gene.type === "output";
-  const isHiddenNodeGene = (gene) => gene.type === "hidden";
   const isEnabled = (gene) => gene.enabled;
   const isDisabled = (gene) => !gene.enabled;
 
@@ -36,15 +33,15 @@ describe("Strand", () => {
     let nodeGenes = strand.nodeGenes;
     // 2 input neurons, 3 output neurons
     expect(nodeGenes).to.have.length(5);
-    expect(nodeGenes.filter(isInputNodeGene)).to.have.length(2);
-    expect(nodeGenes.filter(isOutputNodeGene)).to.have.length(3);
+    expect(strand.inputNodeGeneCount).to.equal(2);
+    expect(strand.outputNodeGeneCount).to.equal(3);
 
     strand = new Strand(6, 4, true, random);
     nodeGenes = strand.nodeGenes;
     // 6 input neurons, 4 output neurons
     expect(nodeGenes).to.have.length(10);
-    expect(nodeGenes.filter(isInputNodeGene)).to.have.length(6);
-    expect(nodeGenes.filter(isOutputNodeGene)).to.have.length(4);
+    expect(strand.inputNodeGeneCount).to.equal(6);
+    expect(strand.outputNodeGeneCount).to.equal(4);
   });
 
   it("should use sequential node gene IDs", () => {
@@ -59,8 +56,7 @@ describe("Strand", () => {
 
   it("should be instantiated with zero hidden node genes", () => {
     let strand = new Strand(2, 3, true, random);
-    let nodeGenes = strand.nodeGenes;
-    expect(nodeGenes.filter(isHiddenNodeGene)).to.have.length(0);
+    expect(strand.hiddenNodeGeneCount).to.equal(0);
   });
 
   it("describes a fully connected neural network", () => {
@@ -81,5 +77,12 @@ describe("Strand", () => {
     strand = new Strand(2, 3, true, random); // All enabled
     connectionGenes = strand.connectionGenes;
     expect(connectionGenes.filter(isEnabled)).to.have.length(6);
+  });
+
+  it("can count its input/output/hidden node genes", () => {
+    let strand = new Strand(2, 3, true, random);
+    expect(strand.inputNodeGeneCount).to.equal(2);
+    expect(strand.outputNodeGeneCount).to.equal(3);
+    expect(strand.hiddenNodeGeneCount).to.equal(0);
   });
 });

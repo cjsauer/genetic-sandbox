@@ -76,6 +76,33 @@ class Strand extends Serializable {
     this.nodeGenes = inputNodeGenes.concat(outputNodeGenes);
     this.connectionGenes = connectionGenes;
   }
+
+  /**
+   * Returns the count of input node genes in this strand
+   * @returns {number} input node gene count
+   */
+  get inputNodeGeneCount() {
+    const isInputNodeGene = (gene) => gene.type === "input";
+    return this.nodeGenes.filter(isInputNodeGene).length;
+  }
+
+  /**
+   * Returns the count of output node genes in this strand
+   * @returns {number} output node gene count
+   */
+  get outputNodeGeneCount() {
+    const isOutputNodeGene = (gene) => gene.type === "output";
+    return this.nodeGenes.filter(isOutputNodeGene).length;
+  }
+
+  /**
+   * Returns the count of hidden node genes in this strand
+   * @returns {number} hidden node gene count
+   */
+  get hiddenNodeGeneCount() {
+    const isHiddenNodeGene = (gene) => gene.type === "hidden";
+    return this.nodeGenes.filter(isHiddenNodeGene).length;
+  }
 }
 
 Serializable.register(Strand);

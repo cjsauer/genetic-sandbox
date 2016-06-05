@@ -9,8 +9,7 @@ describe("Creature", () => {
 
   beforeEach(() => {
     random = {
-      real: stub().returns(0.5),
-      pick: stub().returns({ enabled: true })
+      real: stub().returns(0.5)
     };
     dna = new DNA(3, 4, random);
     creature = new Creature(dna);
