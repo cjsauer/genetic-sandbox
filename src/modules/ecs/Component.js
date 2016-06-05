@@ -1,9 +1,8 @@
 import Serializable from "../util/Serializable";
 
 /**
- * Components are bags of properties that entities possess. It is possible for
- * Components to contain other nested Components. They may also contain helper
- * methods.
+ * Components are bags of properties that entities possess. They may also
+ * contain helper methods.
  */
 class Component extends Serializable {
   /**
