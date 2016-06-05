@@ -1,6 +1,6 @@
 import Creature from "./Creature";
 import Component from "../../../ecs/Component";
-import DNA from "../../core/components/DNA";
+import DNA from "../../creatures/components/DNA";
 import { expect } from "chai";
 import { stub } from "sinon";
 

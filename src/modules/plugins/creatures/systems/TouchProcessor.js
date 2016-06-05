@@ -1,5 +1,5 @@
 import System from "../../../ecs/System";
-import Brain from "../../core/components/Brain";
+import Brain from "../../creatures/components/Brain";
 
 /**
  * Inputs touch sense data into the brains of creatures

@@ -1,5 +1,5 @@
 import MovementProcessor from "./MovementProcessor";
-import Brain from "../../core/components/Brain";
+import Brain from "../../creatures/components/Brain";
 import HexGrid from "../../../grid/HexGrid";
 import Coord from "../../core/components/Coord";
 import config from "../../../config";

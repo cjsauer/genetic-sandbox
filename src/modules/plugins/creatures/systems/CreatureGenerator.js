@@ -1,6 +1,6 @@
 import System from "../../../ecs/System";
-import DNA from "../../core/components/DNA";
-import Brain from "../../core/components/Brain";
+import DNA from "../../creatures/components/DNA";
+import Brain from "../../creatures/components/Brain";
 import Creature from "../components/Creature";
 import config from "../../../config";
 

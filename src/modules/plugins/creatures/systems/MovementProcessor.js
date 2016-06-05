@@ -1,5 +1,5 @@
 import System from "../../../ecs/System";
-import Brain from "../../core/components/Brain";
+import Brain from "../../creatures/components/Brain";
 import Coord from "../../core/components/Coord";
 import config from "../../../config";
 
