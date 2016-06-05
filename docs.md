@@ -30,9 +30,19 @@ containing logic that operates in some way on <a href="#Tile">Tiles</a> within t
 <dd><p>World is a container of all entities in existence, and provides super fast
 lookup of entities by component</p>
 </dd>
+<dt><a href="#ConnectionGene">ConnectionGene</a> ⇐ <code><a href="#Serializable">Serializable</a></code></dt>
+<dd><p>Genetic representation of a connection between two neurons in a neural
+network</p>
+</dd>
+<dt><a href="#NodeGene">NodeGene</a> ⇐ <code><a href="#Serializable">Serializable</a></code></dt>
+<dd><p>Genetic representation of a neuron in a neural network</p>
+</dd>
 <dt><a href="#Sequencer">Sequencer</a></dt>
 <dd><p>Reads in a <a href="#Strand">Strand</a> and produces a
 <a href="http://synaptic.juancazala.com/#/">Synaptic neural network</a></p>
+</dd>
+<dt><a href="#Strand">Strand</a> ⇐ <code><a href="#Serializable">Serializable</a></code></dt>
+<dd><p>Genetic representation of a neural network</p>
 </dd>
 <dt><a href="#HexGrid">HexGrid</a></dt>
 <dd><p>A 2D, hexagonal grid implementation with axial coordinate system.
@@ -56,6 +66,10 @@ actions on the behalf of a creature</p>
 <dt><a href="#Coord">Coord</a> ⇐ <code><a href="#Component">Component</a></code></dt>
 <dd><p>A two dimensional coordinate of x and y</p>
 </dd>
+<dt><a href="#DNA">DNA</a> ⇐ <code><a href="#Component">Component</a></code></dt>
+<dd><p>Genetic encoding of a creature heavily inspired by the
+<a href="http://nn.cs.utexas.edu/downloads/papers/stanley.ec02.pdf">NEAT algorithm</a></p>
+</dd>
 <dt><a href="#Energy">Energy</a> ⇐ <code><a href="#Component">Component</a></code></dt>
 <dd><p>Energy is the currency of existence</p>
 </dd>
@@ -64,20 +78,6 @@ actions on the behalf of a creature</p>
 </dd>
 <dt><a href="#Tile">Tile</a> ⇐ <code><a href="#Component">Component</a></code></dt>
 <dd><p>Tile is a location in the world that an entity can exist at</p>
-</dd>
-<dt><a href="#ConnectionGene">ConnectionGene</a> ⇐ <code><a href="#Component">Component</a></code></dt>
-<dd><p>Genetic representation of a connection between two neurons in a neural
-network</p>
-</dd>
-<dt><a href="#DNA">DNA</a> ⇐ <code><a href="#Component">Component</a></code></dt>
-<dd><p>Genetic encoding of a creature heavily inspired by the
-<a href="http://nn.cs.utexas.edu/downloads/papers/stanley.ec02.pdf">NEAT algorithm</a></p>
-</dd>
-<dt><a href="#NodeGene">NodeGene</a> ⇐ <code><a href="#Component">Component</a></code></dt>
-<dd><p>Genetic representation of a neuron in a neural network</p>
-</dd>
-<dt><a href="#Strand">Strand</a> ⇐ <code><a href="#Component">Component</a></code></dt>
-<dd><p>Genetic representation of a neural network</p>
 </dd>
 <dt><a href="#BackgroundRenderer">BackgroundRenderer</a> ⇐ <code><a href="#System">System</a></code></dt>
 <dd><p>Renders the background</p>
@@ -701,6 +701,173 @@ Retrieves an array of all entities that contain ALL of the given components
 | --- | --- | --- |
 | ...componentNames | <code>string</code> | The name of a component |
 
+<a name="ConnectionGene"></a>
+
+## ConnectionGene ⇐ <code>[Serializable](#Serializable)</code>
+Genetic representation of a connection between two neurons in a neural
+network
+
+**Kind**: global class  
+**Extends:** <code>[Serializable](#Serializable)</code>  
+**See**: {NodeGene}  
+
+* [ConnectionGene](#ConnectionGene) ⇐ <code>[Serializable](#Serializable)</code>
+    * [new ConnectionGene(inID, outID, weight, enabled)](#new_ConnectionGene_new)
+    * _instance_
+        * [.in](#ConnectionGene+in) : <code>number</code>
+        * [.out](#ConnectionGene+out) : <code>number</code>
+        * [.weight](#ConnectionGene+weight) : <code>number</code>
+        * [.enabled](#ConnectionGene+enabled) : <code>boolean</code>
+        * [.innovationNumber](#ConnectionGene+innovationNumber) : <code>number</code>
+        * [.serialize([blacklist])](#Serializable+serialize) ⇒ <code>string</code>
+    * _static_
+        * [.resetInnovations()](#ConnectionGene.resetInnovations)
+
+<a name="new_ConnectionGene_new"></a>
+
+### new ConnectionGene(inID, outID, weight, enabled)
+Constructs a new ConnectionGene
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| inID | <code>number</code> | id of the source node |
+| outID | <code>number</code> | id of the destination node |
+| weight | <code>number</code> | the weight of the connection as a value between 0 and 1 inclusive |
+| enabled | <code>boolean</code> | whether this gene is expressed or not |
+
+**Example**  
+
+```js
+const node1 = new NodeGene(1, "input");
+const node2 = new NodeGene(2, "output");
+const conn = new ConnectionGene(node1.id, node2.id, 0.2, true);
+```
+<a name="ConnectionGene+in"></a>
+
+### connectionGene.in : <code>number</code>
+ID of the source node for this connection
+
+**Kind**: instance property of <code>[ConnectionGene](#ConnectionGene)</code>  
+<a name="ConnectionGene+out"></a>
+
+### connectionGene.out : <code>number</code>
+ID of the destination node for this connection
+
+**Kind**: instance property of <code>[ConnectionGene](#ConnectionGene)</code>  
+<a name="ConnectionGene+weight"></a>
+
+### connectionGene.weight : <code>number</code>
+The weight of this connection as a value between 0 and 1 inclusive
+
+**Kind**: instance property of <code>[ConnectionGene](#ConnectionGene)</code>  
+<a name="ConnectionGene+enabled"></a>
+
+### connectionGene.enabled : <code>boolean</code>
+True if this gene is expressed, false otherwise. A connection gene
+that is not expressed is given a weight of zero in the resulting
+neural network.
+
+**Kind**: instance property of <code>[ConnectionGene](#ConnectionGene)</code>  
+<a name="ConnectionGene+innovationNumber"></a>
+
+### connectionGene.innovationNumber : <code>number</code>
+ID of the historical origin, or "innovation number" of this connection
+gene
+
+**Kind**: instance property of <code>[ConnectionGene](#ConnectionGene)</code>  
+<a name="Serializable+serialize"></a>
+
+### connectionGene.serialize([blacklist]) ⇒ <code>string</code>
+Serializes this object to JSON with an optional array of blacklisted
+fields that will not be included in the output. This function will be
+called recursively for nested Serializable objects.
+
+**Kind**: instance method of <code>[ConnectionGene](#ConnectionGene)</code>  
+**Returns**: <code>string</code> - JSON string  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [blacklist] | <code>Array.&lt;string&gt;</code> | <code>[]</code> | keys in this list will be excluded from the JSON string |
+
+**Example**  
+
+```js
+let coord = new Coord(1, 2);
+coord.serialize() // '{"ctor":"Coord","data":{"x":1,"y":2}}'
+coord.serialize(["y"]) // '{"ctor":"Coord","data":{"x":1}}'
+```
+<a name="ConnectionGene.resetInnovations"></a>
+
+### ConnectionGene.resetInnovations()
+Resets the innovation history
+
+**Kind**: static method of <code>[ConnectionGene](#ConnectionGene)</code>  
+<a name="NodeGene"></a>
+
+## NodeGene ⇐ <code>[Serializable](#Serializable)</code>
+Genetic representation of a neuron in a neural network
+
+**Kind**: global class  
+**Extends:** <code>[Serializable](#Serializable)</code>  
+
+* [NodeGene](#NodeGene) ⇐ <code>[Serializable](#Serializable)</code>
+    * [new NodeGene([id], [type])](#new_NodeGene_new)
+    * [.id](#NodeGene+id) : <code>number</code>
+    * [.type](#NodeGene+type) : <code>string</code>
+    * [.serialize([blacklist])](#Serializable+serialize) ⇒ <code>string</code>
+
+<a name="new_NodeGene_new"></a>
+
+### new NodeGene([id], [type])
+Constructs a new NodeGene
+
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [id] | <code>number</code> | <code>0</code> | the id of the neuron |
+| [type] | <code>string</code> | <code>&quot;hidden&quot;</code> | one of "input", "hidden", or "output" |
+
+**Example**  
+
+```js
+const node1 = new NodeGene(1, "input");
+const node2 = new NodeGene(2, "output");
+const node3 = new NodeGene(3, "hidden");
+```
+<a name="NodeGene+id"></a>
+
+### nodeGene.id : <code>number</code>
+The id of the neuron
+
+**Kind**: instance property of <code>[NodeGene](#NodeGene)</code>  
+<a name="NodeGene+type"></a>
+
+### nodeGene.type : <code>string</code>
+Type of neuron. One of "input", "hidden", or "output".
+
+**Kind**: instance property of <code>[NodeGene](#NodeGene)</code>  
+<a name="Serializable+serialize"></a>
+
+### nodeGene.serialize([blacklist]) ⇒ <code>string</code>
+Serializes this object to JSON with an optional array of blacklisted
+fields that will not be included in the output. This function will be
+called recursively for nested Serializable objects.
+
+**Kind**: instance method of <code>[NodeGene](#NodeGene)</code>  
+**Returns**: <code>string</code> - JSON string  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [blacklist] | <code>Array.&lt;string&gt;</code> | <code>[]</code> | keys in this list will be excluded from the JSON string |
+
+**Example**  
+
+```js
+let coord = new Coord(1, 2);
+coord.serialize() // '{"ctor":"Coord","data":{"x":1,"y":2}}'
+coord.serialize(["y"]) // '{"ctor":"Coord","data":{"x":1}}'
+```
 <a name="Sequencer"></a>
 
 ## Sequencer
@@ -721,6 +888,83 @@ Reads in a Strand and outputs a Synaptic neural network
 | --- | --- | --- |
 | strand | <code>[Strand](#Strand)</code> | strand of node and connection genes |
 
+<a name="Strand"></a>
+
+## Strand ⇐ <code>[Serializable](#Serializable)</code>
+Genetic representation of a neural network
+
+**Kind**: global class  
+**Extends:** <code>[Serializable](#Serializable)</code>  
+**See**
+
+- {NodeGene}
+- {ConnectionGene}
+
+
+* [Strand](#Strand) ⇐ <code>[Serializable](#Serializable)</code>
+    * [new Strand(inputCount, outputCount, enabled, random)](#new_Strand_new)
+    * [.nodeGenes](#Strand+nodeGenes) : <code>[Array.&lt;NodeGene&gt;](#NodeGene)</code>
+    * [.connectionGenes](#Strand+connectionGenes) : <code>[Array.&lt;ConnectionGene&gt;](#ConnectionGene)</code>
+    * [.serialize([blacklist])](#Serializable+serialize) ⇒ <code>string</code>
+
+<a name="new_Strand_new"></a>
+
+### new Strand(inputCount, outputCount, enabled, random)
+Constructs a new Strand representing a fully connected neural network with
+the given number of input/output neurons, zero hidden neurons, and
+random weight values
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| inputCount | <code>number</code> | number of input neuron genes |
+| outputCount | <code>number</code> | number of output neuron genes |
+| enabled | <code>boolean</code> | whether all connection genes are initially enabled (true), or disabled (false) |
+| random | <code>Object</code> | an instance of a random-js instance |
+
+**Example**  
+
+```js
+// Represents a neural network with 4 input neurons, 5 output neurons,
+// and all connection genes enabled.
+const strand1 = new Strand(4, 5, true, random);
+// Represents a neural network with 2 input neurons, 4 output neurons,
+// and all connection genes disabled.
+const strand2 = new Strand(2, 4, false, random);
+```
+<a name="Strand+nodeGenes"></a>
+
+### strand.nodeGenes : <code>[Array.&lt;NodeGene&gt;](#NodeGene)</code>
+The list of node genes describing neurons
+
+**Kind**: instance property of <code>[Strand](#Strand)</code>  
+<a name="Strand+connectionGenes"></a>
+
+### strand.connectionGenes : <code>[Array.&lt;ConnectionGene&gt;](#ConnectionGene)</code>
+The list of connection genes describing connections between neurons
+
+**Kind**: instance property of <code>[Strand](#Strand)</code>  
+<a name="Serializable+serialize"></a>
+
+### strand.serialize([blacklist]) ⇒ <code>string</code>
+Serializes this object to JSON with an optional array of blacklisted
+fields that will not be included in the output. This function will be
+called recursively for nested Serializable objects.
+
+**Kind**: instance method of <code>[Strand](#Strand)</code>  
+**Returns**: <code>string</code> - JSON string  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [blacklist] | <code>Array.&lt;string&gt;</code> | <code>[]</code> | keys in this list will be excluded from the JSON string |
+
+**Example**  
+
+```js
+let coord = new Coord(1, 2);
+coord.serialize() // '{"ctor":"Coord","data":{"x":1,"y":2}}'
+coord.serialize(["y"]) // '{"ctor":"Coord","data":{"x":1}}'
+```
 <a name="HexGrid"></a>
 
 ## HexGrid
@@ -1339,6 +1583,60 @@ y value
 Name of the component. Expected to be unique among Components.
 
 **Kind**: instance property of <code>[Coord](#Coord)</code>  
+<a name="DNA"></a>
+
+## DNA ⇐ <code>[Component](#Component)</code>
+Genetic encoding of a creature heavily inspired by the
+[NEAT algorithm](http://nn.cs.utexas.edu/downloads/papers/stanley.ec02.pdf)
+
+**Kind**: global class  
+**Extends:** <code>[Component](#Component)</code>  
+
+* [DNA](#DNA) ⇐ <code>[Component](#Component)</code>
+    * [new DNA(inputCount, outputCount, random)](#new_DNA_new)
+    * [.brainStrand](#DNA+brainStrand) : <code>[Strand](#Strand)</code>
+    * [.traitStrand](#DNA+traitStrand) : <code>[Strand](#Strand)</code>
+    * [.name](#Component+name) : <code>string</code>
+
+<a name="new_DNA_new"></a>
+
+### new DNA(inputCount, outputCount, random)
+Constructs the DNA for a brand new creature with base traits and the
+simplest possible brain: one with only one enabled connection between
+a random input neuron and a random output neuron.
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| inputCount | <code>number</code> | the total number of possible inputs (senses) to a creature's brain |
+| outputCount | <code>number</code> | the total number of possible outputs (actions) from a creature's brain |
+| random | <code>Object</code> | an instance of a random-js engine |
+
+**Example**  
+
+```js
+// Creates DNA for a creature with the current count of reserved input and
+// output neurons
+const myDNA = new DNA(Brain.inputNeuronCount, Brain.outputNeuronCount, random);
+```
+<a name="DNA+brainStrand"></a>
+
+### dnA.brainStrand : <code>[Strand](#Strand)</code>
+Strand of genes describing a creature's brain
+
+**Kind**: instance property of <code>[DNA](#DNA)</code>  
+<a name="DNA+traitStrand"></a>
+
+### dnA.traitStrand : <code>[Strand](#Strand)</code>
+Strand of genes describing the trait function (TF)
+
+**Kind**: instance property of <code>[DNA](#DNA)</code>  
+<a name="Component+name"></a>
+
+### dnA.name : <code>string</code>
+Name of the component. Expected to be unique among Components.
+
+**Kind**: instance property of <code>[DNA](#DNA)</code>  
 <a name="Energy"></a>
 
 ## Energy ⇐ <code>[Component](#Component)</code>
@@ -1604,259 +1902,6 @@ Fired when a component is deleted from a tile
 | tile | <code>[Tile](#Tile)</code> | the tile that was modified |
 | name | <code>string</code> | name of the component that was deleted |
 
-<a name="ConnectionGene"></a>
-
-## ConnectionGene ⇐ <code>[Component](#Component)</code>
-Genetic representation of a connection between two neurons in a neural
-network
-
-**Kind**: global class  
-**Extends:** <code>[Component](#Component)</code>  
-**See**: {NodeGene}  
-
-* [ConnectionGene](#ConnectionGene) ⇐ <code>[Component](#Component)</code>
-    * [new ConnectionGene(inID, outID, weight, enabled)](#new_ConnectionGene_new)
-    * _instance_
-        * [.in](#ConnectionGene+in) : <code>number</code>
-        * [.out](#ConnectionGene+out) : <code>number</code>
-        * [.weight](#ConnectionGene+weight) : <code>number</code>
-        * [.enabled](#ConnectionGene+enabled) : <code>boolean</code>
-        * [.innovationNumber](#ConnectionGene+innovationNumber) : <code>number</code>
-        * [.name](#Component+name) : <code>string</code>
-    * _static_
-        * [.resetInnovations()](#ConnectionGene.resetInnovations)
-
-<a name="new_ConnectionGene_new"></a>
-
-### new ConnectionGene(inID, outID, weight, enabled)
-Constructs a new ConnectionGene
-
-
-| Param | Type | Description |
-| --- | --- | --- |
-| inID | <code>number</code> | id of the source node |
-| outID | <code>number</code> | id of the destination node |
-| weight | <code>number</code> | the weight of the connection as a value between 0 and 1 inclusive |
-| enabled | <code>boolean</code> | whether this gene is expressed or not |
-
-**Example**  
-
-```js
-const node1 = new NodeGene(1, "input");
-const node2 = new NodeGene(2, "output");
-const conn = new ConnectionGene(node1.id, node2.id, 0.2, true);
-```
-<a name="ConnectionGene+in"></a>
-
-### connectionGene.in : <code>number</code>
-ID of the source node for this connection
-
-**Kind**: instance property of <code>[ConnectionGene](#ConnectionGene)</code>  
-<a name="ConnectionGene+out"></a>
-
-### connectionGene.out : <code>number</code>
-ID of the destination node for this connection
-
-**Kind**: instance property of <code>[ConnectionGene](#ConnectionGene)</code>  
-<a name="ConnectionGene+weight"></a>
-
-### connectionGene.weight : <code>number</code>
-The weight of this connection as a value between 0 and 1 inclusive
-
-**Kind**: instance property of <code>[ConnectionGene](#ConnectionGene)</code>  
-<a name="ConnectionGene+enabled"></a>
-
-### connectionGene.enabled : <code>boolean</code>
-True if this gene is expressed, false otherwise. A connection gene
-that is not expressed is given a weight of zero in the resulting
-neural network.
-
-**Kind**: instance property of <code>[ConnectionGene](#ConnectionGene)</code>  
-<a name="ConnectionGene+innovationNumber"></a>
-
-### connectionGene.innovationNumber : <code>number</code>
-ID of the historical origin, or "innovation number" of this connection
-gene
-
-**Kind**: instance property of <code>[ConnectionGene](#ConnectionGene)</code>  
-<a name="Component+name"></a>
-
-### connectionGene.name : <code>string</code>
-Name of the component. Expected to be unique among Components.
-
-**Kind**: instance property of <code>[ConnectionGene](#ConnectionGene)</code>  
-<a name="ConnectionGene.resetInnovations"></a>
-
-### ConnectionGene.resetInnovations()
-Resets the innovation history
-
-**Kind**: static method of <code>[ConnectionGene](#ConnectionGene)</code>  
-<a name="DNA"></a>
-
-## DNA ⇐ <code>[Component](#Component)</code>
-Genetic encoding of a creature heavily inspired by the
-[NEAT algorithm](http://nn.cs.utexas.edu/downloads/papers/stanley.ec02.pdf)
-
-**Kind**: global class  
-**Extends:** <code>[Component](#Component)</code>  
-
-* [DNA](#DNA) ⇐ <code>[Component](#Component)</code>
-    * [new DNA(inputCount, outputCount, random)](#new_DNA_new)
-    * [.brainStrand](#DNA+brainStrand) : <code>[Strand](#Strand)</code>
-    * [.traitStrand](#DNA+traitStrand) : <code>[Strand](#Strand)</code>
-    * [.name](#Component+name) : <code>string</code>
-
-<a name="new_DNA_new"></a>
-
-### new DNA(inputCount, outputCount, random)
-Constructs the DNA for a brand new creature with base traits and the
-simplest possible brain: one with only one enabled connection between
-a random input neuron and a random output neuron.
-
-
-| Param | Type | Description |
-| --- | --- | --- |
-| inputCount | <code>number</code> | the total number of possible inputs (senses) to a creature's brain |
-| outputCount | <code>number</code> | the total number of possible outputs (actions) from a creature's brain |
-| random | <code>Object</code> | an instance of a random-js engine |
-
-**Example**  
-
-```js
-// Creates DNA for a creature with the current count of reserved input and
-// output neurons
-const myDNA = new DNA(Brain.inputNeuronCount, Brain.outputNeuronCount, random);
-```
-<a name="DNA+brainStrand"></a>
-
-### dnA.brainStrand : <code>[Strand](#Strand)</code>
-Strand of genes describing a creature's brain
-
-**Kind**: instance property of <code>[DNA](#DNA)</code>  
-<a name="DNA+traitStrand"></a>
-
-### dnA.traitStrand : <code>[Strand](#Strand)</code>
-Strand of genes describing the trait function (TF)
-
-**Kind**: instance property of <code>[DNA](#DNA)</code>  
-<a name="Component+name"></a>
-
-### dnA.name : <code>string</code>
-Name of the component. Expected to be unique among Components.
-
-**Kind**: instance property of <code>[DNA](#DNA)</code>  
-<a name="NodeGene"></a>
-
-## NodeGene ⇐ <code>[Component](#Component)</code>
-Genetic representation of a neuron in a neural network
-
-**Kind**: global class  
-**Extends:** <code>[Component](#Component)</code>  
-
-* [NodeGene](#NodeGene) ⇐ <code>[Component](#Component)</code>
-    * [new NodeGene([id], [type])](#new_NodeGene_new)
-    * [.id](#NodeGene+id) : <code>number</code>
-    * [.type](#NodeGene+type) : <code>string</code>
-    * [.name](#Component+name) : <code>string</code>
-
-<a name="new_NodeGene_new"></a>
-
-### new NodeGene([id], [type])
-Constructs a new NodeGene
-
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| [id] | <code>number</code> | <code>0</code> | the id of the neuron |
-| [type] | <code>string</code> | <code>&quot;hidden&quot;</code> | one of "input", "hidden", or "output" |
-
-**Example**  
-
-```js
-const node1 = new NodeGene(1, "input");
-const node2 = new NodeGene(2, "output");
-const node3 = new NodeGene(3, "hidden");
-```
-<a name="NodeGene+id"></a>
-
-### nodeGene.id : <code>number</code>
-The id of the neuron
-
-**Kind**: instance property of <code>[NodeGene](#NodeGene)</code>  
-<a name="NodeGene+type"></a>
-
-### nodeGene.type : <code>string</code>
-Type of neuron. One of "input", "hidden", or "output".
-
-**Kind**: instance property of <code>[NodeGene](#NodeGene)</code>  
-<a name="Component+name"></a>
-
-### nodeGene.name : <code>string</code>
-Name of the component. Expected to be unique among Components.
-
-**Kind**: instance property of <code>[NodeGene](#NodeGene)</code>  
-<a name="Strand"></a>
-
-## Strand ⇐ <code>[Component](#Component)</code>
-Genetic representation of a neural network
-
-**Kind**: global class  
-**Extends:** <code>[Component](#Component)</code>  
-**See**
-
-- {NodeGene}
-- {ConnectionGene}
-
-
-* [Strand](#Strand) ⇐ <code>[Component](#Component)</code>
-    * [new Strand(inputCount, outputCount, enabled, random)](#new_Strand_new)
-    * [.nodeGenes](#Strand+nodeGenes) : <code>[Array.&lt;NodeGene&gt;](#NodeGene)</code>
-    * [.connectionGenes](#Strand+connectionGenes) : <code>[Array.&lt;ConnectionGene&gt;](#ConnectionGene)</code>
-    * [.name](#Component+name) : <code>string</code>
-
-<a name="new_Strand_new"></a>
-
-### new Strand(inputCount, outputCount, enabled, random)
-Constructs a new Strand representing a fully connected neural network with
-the given number of input/output neurons, zero hidden neurons, and
-random weight values
-
-
-| Param | Type | Description |
-| --- | --- | --- |
-| inputCount | <code>number</code> | number of input neuron genes |
-| outputCount | <code>number</code> | number of output neuron genes |
-| enabled | <code>boolean</code> | whether all connection genes are initially enabled (true), or disabled (false) |
-| random | <code>Object</code> | an instance of a random-js instance |
-
-**Example**  
-
-```js
-// Represents a neural network with 4 input neurons, 5 output neurons,
-// and all connection genes enabled.
-const strand1 = new Strand(4, 5, true, random);
-// Represents a neural network with 2 input neurons, 4 output neurons,
-// and all connection genes disabled.
-const strand2 = new Strand(2, 4, false, random);
-```
-<a name="Strand+nodeGenes"></a>
-
-### strand.nodeGenes : <code>[Array.&lt;NodeGene&gt;](#NodeGene)</code>
-The list of node genes describing neurons
-
-**Kind**: instance property of <code>[Strand](#Strand)</code>  
-<a name="Strand+connectionGenes"></a>
-
-### strand.connectionGenes : <code>[Array.&lt;ConnectionGene&gt;](#ConnectionGene)</code>
-The list of connection genes describing connections between neurons
-
-**Kind**: instance property of <code>[Strand](#Strand)</code>  
-<a name="Component+name"></a>
-
-### strand.name : <code>string</code>
-Name of the component. Expected to be unique among Components.
-
-**Kind**: instance property of <code>[Strand](#Strand)</code>  
 <a name="BackgroundRenderer"></a>
 
 ## BackgroundRenderer ⇐ <code>[System](#System)</code>
