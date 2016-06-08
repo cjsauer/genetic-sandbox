@@ -8,7 +8,7 @@ permalink: /docs/
 
 <dl>
 <dt><a href="#App">App</a></dt>
-<dd><p>The entry point and hub of the entire application</p>
+<dd><p>The context and heartbeat of the Genetic Sandbox simulation</p>
 </dd>
 <dt><a href="#Component">Component</a></dt>
 <dd><p>Components are bags of properties that entities possess. They may also
@@ -122,6 +122,9 @@ actions on the behalf of a creature</p>
 <dd><p>An abstract class representing 2D geometric shapes that have a center, a width,
 and a height</p>
 </dd>
+<dt><a href="#CoordEntityIndex">CoordEntityIndex</a></dt>
+<dd><p>An index providing fast lookup of Entities by their coordinate position</p>
+</dd>
 <dt><a href="#MultiStringHashMap">MultiStringHashMap</a></dt>
 <dd><p>A key/value store where keys can be a single string, or an array of strings</p>
 </dd>
@@ -176,49 +179,50 @@ values like color, stroke thickness, etc.</p>
 <a name="App"></a>
 
 ## App
-The entry point and hub of the entire application
+The context and heartbeat of the Genetic Sandbox simulation
 
 **Kind**: global class  
 **See**
 
+- [World](#World)
 - [HexGrid](#HexGrid)
 - [Plugin](#Plugin)
 
 
 * [App](#App)
-    * [new App(grid, plugins, paperScope, [seed])](#new_App_new)
+    * [new App(world, grid, paperScope)](#new_App_new)
+    * [.world](#App+world) : <code>[World](#World)</code>
     * [.grid](#App+grid) : <code>[HexGrid](#HexGrid)</code>
-    * [.plugins](#App+plugins) : <code>[Array.&lt;Plugin&gt;](#Plugin)</code>
     * [.paper](#App+paper) : <code>PaperScope</code>
+    * [.plugins](#App+plugins) : <code>[Array.&lt;Plugin&gt;](#Plugin)</code>
     * [.random](#App+random)
-    * [.initialize()](#App+initialize)
+    * [.initialize(plugins, [seed])](#App+initialize)
     * [.tick()](#App+tick)
     * [.run()](#App+run)
     * [.stop()](#App+stop)
 
 <a name="new_App_new"></a>
 
-### new App(grid, plugins, paperScope, [seed])
-Prepares a Genetic Sandbox application for bootstrapping.
+### new App(world, grid, paperScope)
+Creates a new App, setting up the context for the rest of the simulation
 
 
 | Param | Type | Description |
 | --- | --- | --- |
-| grid | <code>[HexGrid](#HexGrid)</code> | hex grid to use as the stage |
-| plugins | <code>[Array.&lt;Plugin&gt;](#Plugin)</code> | the plugins to be included in the main processing loop |
+| world | <code>[World](#World)</code> | world instance |
+| grid | <code>[HexGrid](#HexGrid)</code> | grid implementation to use for grid-related computation |
 | paperScope | <code>PaperScope</code> | Paper.js graphics context |
-| [seed] | <code>number</code> | the seed for the random number generator |
 
+<a name="App+world"></a>
+
+### app.world : <code>[World](#World)</code>
+The World, or manager of all entities
+
+**Kind**: instance property of <code>[App](#App)</code>  
 <a name="App+grid"></a>
 
 ### app.grid : <code>[HexGrid](#HexGrid)</code>
-A grid of tiles serving as the main stage of the simulation
-
-**Kind**: instance property of <code>[App](#App)</code>  
-<a name="App+plugins"></a>
-
-### app.plugins : <code>[Array.&lt;Plugin&gt;](#Plugin)</code>
-Array of plugins included in the main processing loop
+Grid implementation to use for grid-related computation
 
 **Kind**: instance property of <code>[App](#App)</code>  
 <a name="App+paper"></a>
@@ -226,6 +230,12 @@ Array of plugins included in the main processing loop
 ### app.paper : <code>PaperScope</code>
 Paper.js graphics context used for rendering vector graphics to a
 canvas element
+
+**Kind**: instance property of <code>[App](#App)</code>  
+<a name="App+plugins"></a>
+
+### app.plugins : <code>[Array.&lt;Plugin&gt;](#Plugin)</code>
+Array of plugins included in the main processing loop
 
 **Kind**: instance property of <code>[App](#App)</code>  
 <a name="App+random"></a>
@@ -237,11 +247,18 @@ generating random numbers
 **Kind**: instance property of <code>[App](#App)</code>  
 <a name="App+initialize"></a>
 
-### app.initialize()
-Initializes all enabled plugins by calling *reserve()* and *initialize()*
-on their constituent systems
+### app.initialize(plugins, [seed])
+Initializes all enabled plugins passed by calling *reserve()* and
+*initialize()* on their constituent systems. Can optionally be passed a
+seed to prime the random number generator with for this simulation.
 
 **Kind**: instance method of <code>[App](#App)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| plugins | <code>[Array.&lt;Plugin&gt;](#Plugin)</code> | the plugins to be included in the main processing loop |
+| [seed] | <code>number</code> | the seed for the random number generator |
+
 <a name="App+tick"></a>
 
 ### app.tick()
@@ -672,6 +689,7 @@ lookup of entities by component
 * [World](#World)
     * [new World()](#new_World_new)
     * [.addEntity(entity)](#World+addEntity)
+    * [.addEntities(entities)](#World+addEntities)
     * [.getEntities()](#World+getEntities) ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
     * [.getEntitiesWith(...componentNames)](#World+getEntitiesWith) ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
 
@@ -691,6 +709,18 @@ is already in the world
 | Param | Type | Description |
 | --- | --- | --- |
 | entity | <code>[Entity](#Entity)</code> | the entity to add |
+
+<a name="World+addEntities"></a>
+
+### world.addEntities(entities)
+Adds the given array of entities to this world, skipping entities that
+have already been added.
+
+**Kind**: instance method of <code>[World](#World)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| entities | <code>[Array.&lt;Entity&gt;](#Entity)</code> | array of entities to add to this world |
 
 <a name="World+getEntities"></a>
 
@@ -2914,6 +2944,56 @@ The height of the bounding box containing this shape
 
 **Kind**: instance abstract property of <code>[Shape](#Shape)</code>  
 **Returns**: <code>number</code> - The height of the bounding box containing this shape  
+<a name="CoordEntityIndex"></a>
+
+## CoordEntityIndex
+An index providing fast lookup of Entities by their coordinate position
+
+**Kind**: global class  
+
+* [CoordEntityIndex](#CoordEntityIndex)
+    * [new CoordEntityIndex()](#new_CoordEntityIndex_new)
+    * [.length](#CoordEntityIndex+length) ⇒ <code>number</code>
+    * [.rebuild(entities)](#CoordEntityIndex+rebuild)
+    * [.findEntitiesAt(coord)](#CoordEntityIndex+findEntitiesAt) ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
+
+<a name="new_CoordEntityIndex_new"></a>
+
+### new CoordEntityIndex()
+Constructs an empty CoordEntityIndex
+
+<a name="CoordEntityIndex+length"></a>
+
+### coordEntityIndex.length ⇒ <code>number</code>
+Returns the current number of entities stored in the index
+
+**Kind**: instance property of <code>[CoordEntityIndex](#CoordEntityIndex)</code>  
+**Returns**: <code>number</code> - current number of entities stored in the index  
+<a name="CoordEntityIndex+rebuild"></a>
+
+### coordEntityIndex.rebuild(entities)
+Rebuilds the index of the given entities for fast lookup by their coordinate
+positions (Coord component). If an entity does not contain a Coord
+component, it is not included in the index.
+
+**Kind**: instance method of <code>[CoordEntityIndex](#CoordEntityIndex)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| entities | <code>[Array.&lt;Entity&gt;](#Entity)</code> | array of entities to build the index for |
+
+<a name="CoordEntityIndex+findEntitiesAt"></a>
+
+### coordEntityIndex.findEntitiesAt(coord) ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
+Returns an array of entities that are located at the given coordinate
+
+**Kind**: instance method of <code>[CoordEntityIndex](#CoordEntityIndex)</code>  
+**Returns**: <code>[Array.&lt;Entity&gt;](#Entity)</code> - array of entities with given coordinates  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| coord | <code>[Coord](#Coord)</code> | coordinate |
+
 <a name="MultiStringHashMap"></a>
 
 ## MultiStringHashMap
