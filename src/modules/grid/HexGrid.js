@@ -1,13 +1,18 @@
+import CoordEntityIndex from "../util/CoordEntityIndex";
 import { buildTile } from "../plugins/core/assembly";
 import Coord from "../plugins/core/components/Coord";
 import Point from "../shapes/Point";
 
 /**
- * A 2D, hexagonal grid implementation with axial coordinate system.
+ * A 2D, hexagonal grid implementation with axial coordinate system. Provides
+ * methods for building an array of tile entities, fast lookup of entities by
+ * coordinate, as well as other useful grid-related tasks.
  * Implementation details can be found [here]{@link http://goo.gl/nLO6sN}.
+ * @extends CoordEntityIndex
+ * @see {@link Entity}
  * @see {@link Coord}
  */
-class HexGrid {
+class HexGrid extends CoordEntityIndex {
   /**
    * Constructs a new HexGrid of given radius. The pattern of tiles within the
    * grid will then form a hexagon itself with (0,0) being the center.
@@ -19,6 +24,8 @@ class HexGrid {
    * not counting the center tile
    */
   constructor(radius) {
+    super();
+
     /**
      * The radius of this hex grid in tiles
      * @type {number}
