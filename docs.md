@@ -44,8 +44,10 @@ network</p>
 <dt><a href="#Strand">Strand</a> ⇐ <code><a href="#Serializable">Serializable</a></code></dt>
 <dd><p>Genetic representation of a neural network</p>
 </dd>
-<dt><a href="#HexGrid">HexGrid</a></dt>
-<dd><p>A 2D, hexagonal grid implementation with axial coordinate system.
+<dt><a href="#HexGrid">HexGrid</a> ⇐ <code><a href="#CoordEntityIndex">CoordEntityIndex</a></code></dt>
+<dd><p>A 2D, hexagonal grid implementation with axial coordinate system. Provides
+methods for building an array of tile entities, fast lookup of entities by
+coordinate, as well as other useful grid-related tasks.
 Implementation details can be found <a href="http://goo.gl/nLO6sN">here</a>.</p>
 </dd>
 <dt><a href="#Plugin">Plugin</a></dt>
@@ -1031,20 +1033,30 @@ coord.serialize(["y"]) // '{"ctor":"Coord","data":{"x":1}}'
 ```
 <a name="HexGrid"></a>
 
-## HexGrid
-A 2D, hexagonal grid implementation with axial coordinate system.
+## HexGrid ⇐ <code>[CoordEntityIndex](#CoordEntityIndex)</code>
+A 2D, hexagonal grid implementation with axial coordinate system. Provides
+methods for building an array of tile entities, fast lookup of entities by
+coordinate, as well as other useful grid-related tasks.
 Implementation details can be found [here](http://goo.gl/nLO6sN).
 
 **Kind**: global class  
-**See**: [Coord](#Coord)  
+**Extends:** <code>[CoordEntityIndex](#CoordEntityIndex)</code>  
+**See**
 
-* [HexGrid](#HexGrid)
+- [Entity](#Entity)
+- [Coord](#Coord)
+
+
+* [HexGrid](#HexGrid) ⇐ <code>[CoordEntityIndex](#CoordEntityIndex)</code>
     * [new HexGrid(radius)](#new_HexGrid_new)
     * [.radius](#HexGrid+radius) : <code>number</code>
+    * [.length](#CoordEntityIndex+length) ⇒ <code>number</code>
     * [.buildTiles()](#HexGrid+buildTiles) ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
     * [.neighborsOf(coord)](#HexGrid+neighborsOf) ⇒ <code>[Array.&lt;Coord&gt;](#Coord)</code>
     * [.distanceBetween(coord1, coord2)](#HexGrid+distanceBetween) ⇒ <code>number</code>
     * [.coordToPixel(coord, radius)](#HexGrid+coordToPixel) ⇒ <code>[Point](#Point)</code>
+    * [.rebuild(entities)](#CoordEntityIndex+rebuild)
+    * [.findEntitiesAt(coord)](#CoordEntityIndex+findEntitiesAt) ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
 
 <a name="new_HexGrid_new"></a>
 
@@ -1070,6 +1082,13 @@ let myGrid = new HexGrid(10);
 The radius of this hex grid in tiles
 
 **Kind**: instance property of <code>[HexGrid](#HexGrid)</code>  
+<a name="CoordEntityIndex+length"></a>
+
+### hexGrid.length ⇒ <code>number</code>
+Returns the current number of entities stored in the index
+
+**Kind**: instance property of <code>[HexGrid](#HexGrid)</code>  
+**Returns**: <code>number</code> - current number of entities stored in the index  
 <a name="HexGrid+buildTiles"></a>
 
 ### hexGrid.buildTiles() ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
@@ -1125,6 +1144,31 @@ Converts a tile's coordinates to its pixel coordinates
 | --- | --- | --- |
 | coord | <code>[Coord](#Coord)</code> | tile coordinates |
 | radius | <code>number</code> | radius of hexagons (for correct spacing) |
+
+<a name="CoordEntityIndex+rebuild"></a>
+
+### hexGrid.rebuild(entities)
+Rebuilds the index of the given entities for fast lookup by their coordinate
+positions (Coord component). If an entity does not contain a Coord
+component, it is not included in the index.
+
+**Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| entities | <code>[Array.&lt;Entity&gt;](#Entity)</code> | array of entities to build the index for |
+
+<a name="CoordEntityIndex+findEntitiesAt"></a>
+
+### hexGrid.findEntitiesAt(coord) ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
+Returns an array of entities that are located at the given coordinate
+
+**Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
+**Returns**: <code>[Array.&lt;Entity&gt;](#Entity)</code> - array of entities with given coordinates  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| coord | <code>[Coord](#Coord)</code> | coordinate |
 
 <a name="Plugin"></a>
 
