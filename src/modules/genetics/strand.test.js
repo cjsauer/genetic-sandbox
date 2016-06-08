@@ -32,14 +32,14 @@ describe("Strand", () => {
     let strand = new Strand(2, 3, true, random);
     let nodeGenes = strand.nodeGenes;
     // 2 input neurons, 3 output neurons
-    expect(nodeGenes).to.have.length(5);
+    expect(nodeGenes).to.have.lengthOf(5);
     expect(strand.inputNodeGeneCount).to.equal(2);
     expect(strand.outputNodeGeneCount).to.equal(3);
 
     strand = new Strand(6, 4, true, random);
     nodeGenes = strand.nodeGenes;
     // 6 input neurons, 4 output neurons
-    expect(nodeGenes).to.have.length(10);
+    expect(nodeGenes).to.have.lengthOf(10);
     expect(strand.inputNodeGeneCount).to.equal(6);
     expect(strand.outputNodeGeneCount).to.equal(4);
   });
@@ -62,21 +62,21 @@ describe("Strand", () => {
   it("describes a fully connected neural network", () => {
     let strand = new Strand(2, 3, true, random);
     let connectionGenes = strand.connectionGenes;
-    expect(connectionGenes).to.have.length(6);
+    expect(connectionGenes).to.have.lengthOf(6);
 
     strand = new Strand(9, 7, true, random);
     connectionGenes = strand.connectionGenes;
-    expect(connectionGenes).to.have.length(63);
+    expect(connectionGenes).to.have.lengthOf(63);
   });
 
   it("is created with either all connection genes enabled, or all connection genes disabled", () => {
     let strand = new Strand(2, 3, false, random); // All disabled
     let connectionGenes = strand.connectionGenes;
-    expect(connectionGenes.filter(isDisabled)).to.have.length(6);
+    expect(connectionGenes.filter(isDisabled)).to.have.lengthOf(6);
 
     strand = new Strand(2, 3, true, random); // All enabled
     connectionGenes = strand.connectionGenes;
-    expect(connectionGenes.filter(isEnabled)).to.have.length(6);
+    expect(connectionGenes.filter(isEnabled)).to.have.lengthOf(6);
   });
 
   it("can count its input/output/hidden node genes", () => {

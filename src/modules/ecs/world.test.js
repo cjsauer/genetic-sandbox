@@ -44,17 +44,17 @@ describe("World", () => {
   });
 
   it("can return an array of all its entities", () => {
-    expect(world.getEntities()).to.have.length(30);
+    expect(world.getEntities()).to.have.lengthOf(30);
   });
 
   it("can be queried for all entities with the given components", () => {
-    expect(world.getEntitiesWith("a")).to.have.length(30);
-    expect(world.getEntitiesWith("b")).to.have.length(20);
-    expect(world.getEntitiesWith("c")).to.have.length(20);
-    expect(world.getEntitiesWith("a", "b", "c")).to.have.length(10);
-    expect(world.getEntitiesWith("a", "b")).to.have.length(20);
-    expect(world.getEntitiesWith("a", "c")).to.have.length(20);
-    expect(world.getEntitiesWith("a", "b", "c", "d")).to.have.length(0);
+    expect(world.getEntitiesWith("a")).to.have.lengthOf(30);
+    expect(world.getEntitiesWith("b")).to.have.lengthOf(20);
+    expect(world.getEntitiesWith("c")).to.have.lengthOf(20);
+    expect(world.getEntitiesWith("a", "b", "c")).to.have.lengthOf(10);
+    expect(world.getEntitiesWith("a", "b")).to.have.lengthOf(20);
+    expect(world.getEntitiesWith("a", "c")).to.have.lengthOf(20);
+    expect(world.getEntitiesWith("a", "b", "c", "d")).to.have.lengthOf(0);
   });
 
   it("should update all families when adding a component to an entity", () => {
@@ -62,22 +62,22 @@ describe("World", () => {
     let entity3 = createEntity3();
     world.addEntity(entity2);
     world.addEntity(entity3);
-    expect(world.getEntitiesWith("a", "b", "c")).to.have.length(10);
+    expect(world.getEntitiesWith("a", "b", "c")).to.have.lengthOf(10);
 
     entity2.addComponent(new CompC());
     entity3.addComponent(new CompB());
 
-    expect(world.getEntitiesWith("a", "b", "c")).to.have.length(12);
+    expect(world.getEntitiesWith("a", "b", "c")).to.have.lengthOf(12);
   });
 
   it("should update all families when removing components from an entity", () => {
     let entities = world.getEntitiesWith("a", "b", "c");
-    expect(entities).to.have.length(10);
+    expect(entities).to.have.lengthOf(10);
 
     entities[0].removeComponent("a");
     entities[1].removeComponent("b");
     entities[2].removeComponent("c");
 
-    expect(world.getEntitiesWith("a", "b", "c")).to.have.length(7);
+    expect(world.getEntitiesWith("a", "b", "c")).to.have.lengthOf(7);
   });
 });

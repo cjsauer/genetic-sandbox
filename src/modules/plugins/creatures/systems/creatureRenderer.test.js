@@ -65,7 +65,7 @@ describe.skip("CreatureRenderer", () => {
       sys.draw(app);
       expect(Symbol().place.callCount).to.equal(3);
       expect(() => { sys.draw(app); }).to.not.increase(Symbol().place, "callCount");
-      expect(grid.getTilesByComponent("!creature")).to.have.length(3);
+      expect(grid.getTilesByComponent("!creature")).to.have.lengthOf(3);
     });
 
     it("should remove creature symbols for tiles that no longer have vegetation", () => {

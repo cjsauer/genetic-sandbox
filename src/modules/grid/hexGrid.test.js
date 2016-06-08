@@ -17,22 +17,22 @@ describe("HexGrid", () => {
     /* Create a HexGrid of 0 tile radius */
     const hexGrid0 = new HexGrid(0);
     /* There should be 1 hexagonal tile inside of a HexGrid of radius 0 */
-    expect(hexGrid0.buildTiles()).to.have.length(1);
+    expect(hexGrid0.buildTiles()).to.have.lengthOf(1);
 
     /* Create a HexGrid of 1 tile radius */
     const hexGrid1 = new HexGrid(1);
     /* There should be 7 hexagonal tiles inside of a HexGrid of radius 1 */
-    expect(hexGrid1.buildTiles()).to.have.length(7);
+    expect(hexGrid1.buildTiles()).to.have.lengthOf(7);
 
     /* Create a HexGrid of 2 tile radius */
     const hexGrid2 = new HexGrid(2);
     /* There should be 19 hexagonal tiles inside of a HexGrid of radius 2 */
-    expect(hexGrid2.buildTiles()).to.have.length(19);
+    expect(hexGrid2.buildTiles()).to.have.lengthOf(19);
 
     /* Create a HexGrid of 3 tile radius */
     const hexGrid3 = new HexGrid(3);
     /* There should be 37 hexagonal tiles inside of a HexGrid of radius 3 */
-    expect(hexGrid3.buildTiles()).to.have.length(37);
+    expect(hexGrid3.buildTiles()).to.have.lengthOf(37);
   });
 
   it("can calculate the distance between tiles", () => {

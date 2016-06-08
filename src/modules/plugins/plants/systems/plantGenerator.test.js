@@ -46,7 +46,7 @@
 //       });
 //
 //       expect(app.random.bool.calledWith(config.plants.vegetationRate)).to.be.true;
-//       expect(tilesWithVegetation).to.have.length(3);
+//       expect(tilesWithVegetation).to.have.lengthOf(3);
 //       tilesWithVegetation.forEach((tile) => {
 //         expect(tile.get("plant") instanceof Plant).to.be.true;
 //       });

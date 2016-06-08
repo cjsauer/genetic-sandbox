@@ -31,17 +31,17 @@ describe("DNA", () => {
       const dna = new DNA(3, 4, random);
 
       expect(dna.brainStrand).to.be.ok;
-      expect(dna.brainStrand.nodeGenes).to.have.length(7);
-      expect(dna.brainStrand.connectionGenes).to.have.length(12);
+      expect(dna.brainStrand.nodeGenes).to.have.lengthOf(7);
+      expect(dna.brainStrand.connectionGenes).to.have.lengthOf(12);
 
       expect(dna.traitStrand).to.be.ok;
-      expect(dna.traitStrand.nodeGenes).to.have.length(2);
-      expect(dna.traitStrand.connectionGenes).to.have.length(1);
+      expect(dna.traitStrand.nodeGenes).to.have.lengthOf(2);
+      expect(dna.traitStrand.connectionGenes).to.have.lengthOf(1);
     });
 
     it("should contain a single, random Hox gene", () => {
       const dna = new DNA(2, 2, random);
-      expect(dna._hoxGenes).to.have.length(1);
+      expect(dna._hoxGenes).to.have.lengthOf(1);
       expect(dna._hoxGenes[0]).to.equal(0.5);
     });
   });

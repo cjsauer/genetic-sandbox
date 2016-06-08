@@ -47,7 +47,7 @@
 //       });
 //
 //       expect(app.random.bool.calledWith(config.creatures.creatureRate)).to.be.true;
-//       expect(tilesWithCreature).to.have.length(3);
+//       expect(tilesWithCreature).to.have.lengthOf(3);
 //       tilesWithCreature.forEach((tile) => {
 //         expect(tile.get("creature") instanceof Creature).to.be.true;
 //       });

@@ -71,7 +71,7 @@ describe.skip("PlantRenderer", () => {
       sys.draw(app);
       expect(Symbol().place.callCount).to.equal(3);
       expect(() => { sys.draw(app); }).to.not.increase(Symbol().place, "callCount");
-      expect(grid.getTilesByComponent("!plant")).to.have.length(3);
+      expect(grid.getTilesByComponent("!plant")).to.have.lengthOf(3);
     });
 
     it("should remove plant symbols for tiles that no longer have vegetation", () => {
