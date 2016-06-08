@@ -47,6 +47,20 @@ describe("World", () => {
     expect(world.getEntities()).to.have.lengthOf(30);
   });
 
+  it("can add one entity at a time", () => {
+    world.addEntity(new Entity());
+    world.addEntity(new Entity());
+    world.addEntity(new Entity());
+
+    expect(world.getEntities()).to.have.lengthOf(33);
+  });
+
+  it("can add an array of entities", () => {
+    world.addEntities([ new Entity(), new Entity(), new Entity() ]);
+
+    expect(world.getEntities()).to.have.lengthOf(33);
+  });
+
   it("can be queried for all entities with the given components", () => {
     expect(world.getEntitiesWith("a")).to.have.lengthOf(30);
     expect(world.getEntitiesWith("b")).to.have.lengthOf(20);

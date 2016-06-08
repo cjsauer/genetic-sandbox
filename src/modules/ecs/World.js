@@ -51,6 +51,17 @@ class World {
   }
 
   /**
+   * Adds the given array of entities to this world, skipping entities that
+   * have already been added.
+   * @param {Entity[]} entities - array of entities to add to this world
+   */
+  addEntities(entities) {
+    entities.forEach((entity) => {
+      this.addEntity(entity);
+    });
+  }
+
+  /**
    * Retrieves all entities currently in the world
    * @returns {Entity[]} array of all entities in the world
    */

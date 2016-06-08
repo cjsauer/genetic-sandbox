@@ -5,7 +5,7 @@ import { expect } from "chai";
 import { spy, stub } from "sinon";
 
 describe("App", () => {
-  let app, grid, plugins, systems, paper;
+  let app, world, grid, plugins, systems, paper;
 
   class FakeSystem extends System {
     reserve() {}
@@ -18,12 +18,19 @@ describe("App", () => {
   }
 
   beforeEach(() => {
+    world = {};
     grid = {};
 
     systems = [
-      new FakeSystem(),
-      new FakeSystem(),
-      new FakeSystem()
+      new FakeSystem("fake1"),
+      new FakeSystem("fake2"),
+      new FakeSystem("fake3"),
+      new FakeSystem("fake4"),
+      new FakeSystem("fake5"),
+      new FakeSystem("fake6"),
+      new FakeSystem("fake7"),
+      new FakeSystem("fake8"),
+      new FakeSystem("fake9")
     ];
 
     systems.forEach((system) => {
@@ -36,7 +43,11 @@ describe("App", () => {
       spy(system, "attempt");
     });
 
-    plugins = [ new Plugin("fake", systems, {}) ];
+    plugins = [
+      new Plugin("fake", systems.slice(0, 3), {}),
+      new Plugin("faker", systems.slice(3, 6), {}),
+      new Plugin("fakest", systems.slice(6, 9), {})
+    ];
 
     paper = {
       Path: {
@@ -54,49 +65,58 @@ describe("App", () => {
       }
     };
 
-    app = new App(grid, plugins, paper);
+    app = new App(world, grid, paper);
   });
 
   it("can be instantiated", () => {
     expect(app).to.be.ok;
-  });
-
-  it("can be instantiated with a seed for the random number generator", () => {
-    const app1 = new App({}, [], {}, 1111);
-    const app2 = new App({}, [], {}, 1111);
-    // If the seed is working, both app's random values should produce the same
-    // result.
-    expect(app1.random.integer(0, 100)).to.equal(app2.random.integer(0, 100));
-    expect(app1.random.string(10)).to.equal(app2.random.string(10));
-    expect(app1.random.bool()).to.equal(app2.random.bool());
-    expect(app1.random.die(20)).to.equal(app2.random.die(20));
-    expect(app1.random.real(0, 100)).to.equal(app2.random.real(0, 100));
-  });
-
-  it("should contain an array of Plugins", () => {
-    expect(app.plugins).to.be.ok;
-    expect(app.plugins.constructor === Array).to.be.true;
+    expect(app.world).to.be.ok;
+    expect(app.grid).to.be.ok;
+    expect(app.paper).to.be.ok;
   });
 
   it("should skip disabled plugins in its processing loop", () => {
     plugins[0].enabled = false;
+    app.initialize(plugins);
     const systemSpy = spy();
     app._forEachSystem((system) => systemSpy(system));
-    systems.forEach((system) => {
+
+    systems.slice(0, 3).forEach((system) => {
       expect(systemSpy.calledWith(system)).to.be.false;
     });
   });
 
   describe("initialize", () => {
+    it("is passed the array of plugins", () => {
+      app.initialize(plugins);
+      expect(app.plugins).to.be.ok;
+      expect(app.plugins.constructor === Array).to.be.true;
+    });
+
+    it("can be passed a seed to prepare the random number generator", () => {
+      const app1 = new App();
+      const app2 = new App();
+      app1.initialize([], 1111);
+      app2.initialize([], 1111);
+
+      // If the seed is working, both app's random values should produce the same
+      // result.
+      expect(app1.random.integer(0, 100)).to.equal(app2.random.integer(0, 100));
+      expect(app1.random.string(10)).to.equal(app2.random.string(10));
+      expect(app1.random.bool()).to.equal(app2.random.bool());
+      expect(app1.random.die(20)).to.equal(app2.random.die(20));
+      expect(app1.random.real(0, 100)).to.equal(app2.random.real(0, 100));
+    });
+
     it("should call reserve() on every system in every enabled plugin", () => {
-      app.initialize();
+      app.initialize(plugins);
       systems.forEach((system) => {
         expect(system.reserve.calledOnce).to.be.true;
       });
     });
 
     it("should call initialize() on every system in every enabled plugin", () => {
-      app.initialize();
+      app.initialize(plugins);
       systems.forEach((system) => {
         expect(system.initialize.calledOnce).to.be.true;
       });
@@ -104,6 +124,10 @@ describe("App", () => {
   });
 
   describe("tick", () => {
+    beforeEach(() => {
+      app.initialize(plugins);
+    });
+
     it("should call update() on every system in every enabld plugin", () => {
       app.tick();
       systems.forEach((system) => {
@@ -144,6 +168,7 @@ describe("App", () => {
     let stubSetInterval, stubClearInterval;
 
     beforeEach(() => {
+      app.initialize(plugins);
       stubSetInterval = stub(global, "setInterval").returns({});
       stubClearInterval = stub(global, "clearInterval");
     });
