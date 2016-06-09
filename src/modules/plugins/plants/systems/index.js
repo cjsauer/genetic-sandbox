@@ -1,9 +1,8 @@
-import PlantGenerator from "./PlantGenerator";
-import PlantRenderer from "./PlantRenderer";
+// import PlantGenerator from "./PlantGenerator";
 
 const systems = [
-  new PlantGenerator(),
-  new PlantRenderer()
+  // TODO: Turn these back on!
+  // new PlantGenerator()
 ];
 
 export default systems;

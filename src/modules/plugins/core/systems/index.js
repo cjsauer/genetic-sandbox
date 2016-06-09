@@ -1,9 +1,9 @@
 import BackgroundRenderer from "./BackgroundRenderer";
-import GridRenderer from "./GridRenderer";
+import SpriteRenderer from "./SpriteRenderer";
 
 const systems = [
   new BackgroundRenderer(),
-  new GridRenderer()
+  new SpriteRenderer()
 ];
 
 export default systems;
