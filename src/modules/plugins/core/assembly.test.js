@@ -7,7 +7,7 @@ describe("Core assembly", () => {
     let coord = new Coord(0, 0);
     let tile = buildTile(coord);
     expect(tile.hasComponent("tile")).to.be.true;
-    expect(tile.hasComponent("coord")).to.be.true;
     expect(tile.getComponent("coord")).to.eql(coord);
+    expect(tile.hasComponent("sprite")).to.be.true;
   });
 });
