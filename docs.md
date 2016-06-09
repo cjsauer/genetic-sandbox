@@ -69,8 +69,8 @@ configuration options</p>
 <dt><a href="#BackgroundRenderer">BackgroundRenderer</a> ⇐ <code><a href="#System">System</a></code></dt>
 <dd><p>Renders the background</p>
 </dd>
-<dt><a href="#GridRenderer">GridRenderer</a> ⇐ <code><a href="#System">System</a></code></dt>
-<dd><p>Renders a hexagonal border around all tiles in the grid</p>
+<dt><a href="#SpriteRenderer">SpriteRenderer</a> ⇐ <code><a href="#System">System</a></code></dt>
+<dd><p>Renders all entities with Coord and Sprite components to the screen</p>
 </dd>
 <dt><a href="#Brain">Brain</a> ⇐ <code><a href="#Component">Component</a></code></dt>
 <dd><p>A neural network that receives sense input from the environment and produces
@@ -92,9 +92,6 @@ actions on the behalf of a creature</p>
 <dt><a href="#CreatureGenerator">CreatureGenerator</a> ⇐ <code><a href="#System">System</a></code></dt>
 <dd><p>Generates initial creatures with random DNA</p>
 </dd>
-<dt><a href="#CreatureRenderer">CreatureRenderer</a> ⇐ <code><a href="#System">System</a></code></dt>
-<dd><p>Renders creatures for all tiles that contain a Creature component</p>
-</dd>
 <dt><a href="#EatingProcessor">EatingProcessor</a> ⇐ <code><a href="#System">System</a></code></dt>
 <dd><p>Processes the eating of plants by creatures</p>
 </dd>
@@ -109,9 +106,6 @@ actions on the behalf of a creature</p>
 </dd>
 <dt><a href="#PlantGenerator">PlantGenerator</a> ⇐ <code><a href="#System">System</a></code></dt>
 <dd><p>Generates initial plant life, placing Plant components into Tiles</p>
-</dd>
-<dt><a href="#PlantRenderer">PlantRenderer</a> ⇐ <code><a href="#System">System</a></code></dt>
-<dd><p>Renders plants for all tiles that contain a Plant component</p>
 </dd>
 <dt><a href="#Hexagon">Hexagon</a> ⇐ <code><a href="#Shape">Shape</a></code></dt>
 <dd><p>A flat-topped, regular hexagon. Implementation details can be found
@@ -1522,43 +1516,43 @@ Hook for reading output data from the brain and attempting actions
 | --- | --- | --- |
 | app | <code>[App](#App)</code> | the currently running GS app |
 
-<a name="GridRenderer"></a>
+<a name="SpriteRenderer"></a>
 
-## GridRenderer ⇐ <code>[System](#System)</code>
-Renders a hexagonal border around all tiles in the grid
+## SpriteRenderer ⇐ <code>[System](#System)</code>
+Renders all entities with Coord and Sprite components to the screen
 
 **Kind**: global class  
 **Extends:** <code>[System](#System)</code>  
 
-* [GridRenderer](#GridRenderer) ⇐ <code>[System](#System)</code>
-    * [new GridRenderer()](#new_GridRenderer_new)
+* [SpriteRenderer](#SpriteRenderer) ⇐ <code>[System](#System)</code>
+    * [new SpriteRenderer()](#new_SpriteRenderer_new)
     * [.tag](#System+tag) : <code>string</code>
-    * [.initialize(app)](#GridRenderer+initialize)
+    * [.draw(app)](#SpriteRenderer+draw)
     * [.reserve(app)](#System+reserve)
+    * [.initialize(app)](#System+initialize)
     * [.update(app)](#System+update)
-    * [.draw(app)](#System+draw)
     * [.sense(app)](#System+sense)
     * [.attempt(app)](#System+attempt)
 
-<a name="new_GridRenderer_new"></a>
+<a name="new_SpriteRenderer_new"></a>
 
-### new GridRenderer()
-Constructs a new GridRenderer
+### new SpriteRenderer()
+Constructs a new SpriteRenderer
 
 <a name="System+tag"></a>
 
-### gridRenderer.tag : <code>string</code>
+### spriteRenderer.tag : <code>string</code>
 Defines the overall role of this system. One of "renderer", "generator",
 or "processor".
 
-**Kind**: instance property of <code>[GridRenderer](#GridRenderer)</code>  
-<a name="GridRenderer+initialize"></a>
+**Kind**: instance property of <code>[SpriteRenderer](#SpriteRenderer)</code>  
+<a name="SpriteRenderer+draw"></a>
 
-### gridRenderer.initialize(app)
-Renders the grid
+### spriteRenderer.draw(app)
+Called once per frame to perform drawing logic
 
-**Kind**: instance method of <code>[GridRenderer](#GridRenderer)</code>  
-**Overrides:** <code>[initialize](#System+initialize)</code>  
+**Kind**: instance method of <code>[SpriteRenderer](#SpriteRenderer)</code>  
+**Overrides:** <code>[draw](#System+draw)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1566,10 +1560,21 @@ Renders the grid
 
 <a name="System+reserve"></a>
 
-### gridRenderer.reserve(app)
+### spriteRenderer.reserve(app)
 Hook for reserving input and ouput neurons in the Brain
 
-**Kind**: instance method of <code>[GridRenderer](#GridRenderer)</code>  
+**Kind**: instance method of <code>[SpriteRenderer](#SpriteRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+initialize"></a>
+
+### spriteRenderer.initialize(app)
+Initializes this system allowing it to perform one-time preparation logic
+
+**Kind**: instance method of <code>[SpriteRenderer](#SpriteRenderer)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1577,21 +1582,10 @@ Hook for reserving input and ouput neurons in the Brain
 
 <a name="System+update"></a>
 
-### gridRenderer.update(app)
+### spriteRenderer.update(app)
 Hook for updating the state of the world
 
-**Kind**: instance method of <code>[GridRenderer](#GridRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="System+draw"></a>
-
-### gridRenderer.draw(app)
-Called once per frame to perform drawing logic
-
-**Kind**: instance method of <code>[GridRenderer](#GridRenderer)</code>  
+**Kind**: instance method of <code>[SpriteRenderer](#SpriteRenderer)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1599,10 +1593,10 @@ Called once per frame to perform drawing logic
 
 <a name="System+sense"></a>
 
-### gridRenderer.sense(app)
+### spriteRenderer.sense(app)
 Hook for inputting sense data into the brain
 
-**Kind**: instance method of <code>[GridRenderer](#GridRenderer)</code>  
+**Kind**: instance method of <code>[SpriteRenderer](#SpriteRenderer)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1610,10 +1604,10 @@ Hook for inputting sense data into the brain
 
 <a name="System+attempt"></a>
 
-### gridRenderer.attempt(app)
+### spriteRenderer.attempt(app)
 Hook for reading output data from the brain and attempting actions
 
-**Kind**: instance method of <code>[GridRenderer](#GridRenderer)</code>  
+**Kind**: instance method of <code>[SpriteRenderer](#SpriteRenderer)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -2160,104 +2154,6 @@ Hook for reading output data from the brain and attempting actions
 | --- | --- | --- |
 | app | <code>[App](#App)</code> | the currently running GS app |
 
-<a name="CreatureRenderer"></a>
-
-## CreatureRenderer ⇐ <code>[System](#System)</code>
-Renders creatures for all tiles that contain a Creature component
-
-**Kind**: global class  
-**Extends:** <code>[System](#System)</code>  
-
-* [CreatureRenderer](#CreatureRenderer) ⇐ <code>[System](#System)</code>
-    * [new CreatureRenderer()](#new_CreatureRenderer_new)
-    * [.tag](#System+tag) : <code>string</code>
-    * [.initialize(app)](#CreatureRenderer+initialize)
-    * [.draw(app)](#CreatureRenderer+draw)
-    * [.reserve(app)](#System+reserve)
-    * [.update(app)](#System+update)
-    * [.sense(app)](#System+sense)
-    * [.attempt(app)](#System+attempt)
-
-<a name="new_CreatureRenderer_new"></a>
-
-### new CreatureRenderer()
-Constructs a new CreatureRenderer
-
-<a name="System+tag"></a>
-
-### creatureRenderer.tag : <code>string</code>
-Defines the overall role of this system. One of "renderer", "generator",
-or "processor".
-
-**Kind**: instance property of <code>[CreatureRenderer](#CreatureRenderer)</code>  
-<a name="CreatureRenderer+initialize"></a>
-
-### creatureRenderer.initialize(app)
-Prepares the system for rendering creature graphics
-
-**Kind**: instance method of <code>[CreatureRenderer](#CreatureRenderer)</code>  
-**Overrides:** <code>[initialize](#System+initialize)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="CreatureRenderer+draw"></a>
-
-### creatureRenderer.draw(app)
-Renders a creature graphic for every tile that contains a Creature component
-
-**Kind**: instance method of <code>[CreatureRenderer](#CreatureRenderer)</code>  
-**Overrides:** <code>[draw](#System+draw)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="System+reserve"></a>
-
-### creatureRenderer.reserve(app)
-Hook for reserving input and ouput neurons in the Brain
-
-**Kind**: instance method of <code>[CreatureRenderer](#CreatureRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="System+update"></a>
-
-### creatureRenderer.update(app)
-Hook for updating the state of the world
-
-**Kind**: instance method of <code>[CreatureRenderer](#CreatureRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="System+sense"></a>
-
-### creatureRenderer.sense(app)
-Hook for inputting sense data into the brain
-
-**Kind**: instance method of <code>[CreatureRenderer](#CreatureRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="System+attempt"></a>
-
-### creatureRenderer.attempt(app)
-Hook for reading output data from the brain and attempting actions
-
-**Kind**: instance method of <code>[CreatureRenderer](#CreatureRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
 <a name="EatingProcessor"></a>
 
 ## EatingProcessor ⇐ <code>[System](#System)</code>
@@ -2698,105 +2594,6 @@ Hook for inputting sense data into the brain
 Hook for reading output data from the brain and attempting actions
 
 **Kind**: instance method of <code>[PlantGenerator](#PlantGenerator)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="PlantRenderer"></a>
-
-## PlantRenderer ⇐ <code>[System](#System)</code>
-Renders plants for all tiles that contain a Plant component
-
-**Kind**: global class  
-**Extends:** <code>[System](#System)</code>  
-
-* [PlantRenderer](#PlantRenderer) ⇐ <code>[System](#System)</code>
-    * [new PlantRenderer()](#new_PlantRenderer_new)
-    * [.tag](#System+tag) : <code>string</code>
-    * [.initialize(app)](#PlantRenderer+initialize)
-    * [.draw(app)](#PlantRenderer+draw)
-    * [.reserve(app)](#System+reserve)
-    * [.update(app)](#System+update)
-    * [.sense(app)](#System+sense)
-    * [.attempt(app)](#System+attempt)
-
-<a name="new_PlantRenderer_new"></a>
-
-### new PlantRenderer()
-Constructs a new PlantRenderer
-
-<a name="System+tag"></a>
-
-### plantRenderer.tag : <code>string</code>
-Defines the overall role of this system. One of "renderer", "generator",
-or "processor".
-
-**Kind**: instance property of <code>[PlantRenderer](#PlantRenderer)</code>  
-<a name="PlantRenderer+initialize"></a>
-
-### plantRenderer.initialize(app)
-Prepares the system for rendering plant graphics
-
-**Kind**: instance method of <code>[PlantRenderer](#PlantRenderer)</code>  
-**Overrides:** <code>[initialize](#System+initialize)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="PlantRenderer+draw"></a>
-
-### plantRenderer.draw(app)
-Renders a plant graphic for every tile that contains a Plant component,
-and removes plant graphics for tiles that no longer have vegetation
-
-**Kind**: instance method of <code>[PlantRenderer](#PlantRenderer)</code>  
-**Overrides:** <code>[draw](#System+draw)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="System+reserve"></a>
-
-### plantRenderer.reserve(app)
-Hook for reserving input and ouput neurons in the Brain
-
-**Kind**: instance method of <code>[PlantRenderer](#PlantRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="System+update"></a>
-
-### plantRenderer.update(app)
-Hook for updating the state of the world
-
-**Kind**: instance method of <code>[PlantRenderer](#PlantRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="System+sense"></a>
-
-### plantRenderer.sense(app)
-Hook for inputting sense data into the brain
-
-**Kind**: instance method of <code>[PlantRenderer](#PlantRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="System+attempt"></a>
-
-### plantRenderer.attempt(app)
-Hook for reading output data from the brain and attempting actions
-
-**Kind**: instance method of <code>[PlantRenderer](#PlantRenderer)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
