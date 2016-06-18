@@ -65,6 +65,20 @@ class HexGrid extends CoordEntityIndex {
   }
 
   /**
+   * Determines whether the given coordinate is valid within the grid
+   * @param {Coord} coord - the coordinate to check
+   * @returns {boolean} True if the given coordinate is valid, false otherwise
+   */
+  isValidCoord(coord) {
+    let cubicCoords = HexGrid._axialToCubic(coord.x, coord.y);
+    let zeroSum = (cubicCoords.x + cubicCoords.y + cubicCoords.z) === 0;
+    let withinRadius = Math.abs(cubicCoords.x) <= this.radius &&
+                       Math.abs(cubicCoords.y) <= this.radius &&
+                       Math.abs(cubicCoords.z) <= this.radius;
+    return zeroSum && withinRadius;
+  }
+
+  /**
    * Returns the Coords that are adjacent to the given Coord
    * @example
    * let neighborsOfOrigin = myGrid.neighborsOf(new Coord(0, 0));

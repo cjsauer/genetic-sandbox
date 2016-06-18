@@ -45,6 +45,23 @@ describe("HexGrid", () => {
     expect(hexGrid.distanceBetween(new Coord(-5, 5), new Coord(5, -4))).to.equal(10);
   });
 
+  it("can determine if the given coordinates are a valid location on the grid", () => {
+    const hexGrid = new HexGrid(1);
+    const coord1 = new Coord(0, 0);
+    const coord2 = new Coord(1, 0);
+    const coord3 = new Coord(0, -1);
+    const coord4 = new Coord(0, -2);
+    const coord5 = new Coord(1, 1);
+    const coord6 = new Coord(-1, -1);
+
+    expect(hexGrid.isValidCoord(coord1)).to.be.true;
+    expect(hexGrid.isValidCoord(coord2)).to.be.true;
+    expect(hexGrid.isValidCoord(coord3)).to.be.true;
+    expect(hexGrid.isValidCoord(coord4)).to.be.false;
+    expect(hexGrid.isValidCoord(coord5)).to.be.false;
+    expect(hexGrid.isValidCoord(coord6)).to.be.false;
+  });
+
   describe("neighbors", () => {
     it("can be calculated for a given coordinate", () => {
       const hexGrid = new HexGrid(1);
