@@ -61,6 +61,18 @@ describe("World", () => {
     expect(world.getEntities()).to.have.lengthOf(33);
   });
 
+  it("can remove an entity", () => {
+    const entity = new Entity();
+
+    world.addEntity(entity);
+    expect(world._entities[entity.id]).to.be.ok;
+    expect(world.getEntities()).to.have.lengthOf(31);
+
+    world.removeEntity(entity);
+    expect(world._entities[entity.id]).to.be.undefined;
+    expect(world.getEntities()).to.have.lengthOf(30);
+  });
+
   it("can be queried for all entities with the given components", () => {
     expect(world.getEntitiesWith("a")).to.have.lengthOf(30);
     expect(world.getEntitiesWith("b")).to.have.lengthOf(20);

@@ -62,6 +62,19 @@ class World {
   }
 
   /**
+   * Removes the given entity from this world
+   * @param {Entity} entity - the entity to remove
+   */
+  removeEntity(entity) {
+    for (let key in this._families) {
+      let family = this._families[key];
+      family.removeEntity(entity);
+    }
+
+    delete this._entities[entity.id];
+  }
+
+  /**
    * Retrieves all entities currently in the world
    * @returns {Entity[]} array of all entities in the world
    */
