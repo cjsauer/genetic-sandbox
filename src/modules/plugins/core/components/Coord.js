@@ -31,6 +31,16 @@ class Coord extends Component {
      */
     this.y = y;
   }
+
+  /**
+   * Determines if the give coordinate is equal to this one
+   * @param {Coord} coord - the coordinate to compare to
+   * @returns {boolean} True if this coordinate is equal to the given one, false
+   * otherwise
+   */
+  equalTo(coord) {
+    return (this.x === coord.x) && (this.y === coord.y);
+  }
 }
 
 Component.register(Coord);
