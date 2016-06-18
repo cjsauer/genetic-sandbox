@@ -164,7 +164,7 @@ values like color, stroke thickness, etc.</p>
 <dt><a href="#buildCreature">buildCreature(dna, coord)</a> ⇒ <code><a href="#Entity">Entity</a></code></dt>
 <dd><p>Builds a creature entity with the given DNA at the given position</p>
 </dd>
-<dt><a href="#buildDefaultCreature">buildDefaultCreature(coord)</a> ⇒ <code><a href="#Entity">Entity</a></code></dt>
+<dt><a href="#buildDefaultCreature">buildDefaultCreature(coord, random)</a> ⇒ <code><a href="#Entity">Entity</a></code></dt>
 <dd><p>Builds a creature entity with the default initial DNA at the given position</p>
 </dd>
 <dt><a href="#buildPlant">buildPlant(energyLevel, coord)</a></dt>
@@ -1765,32 +1765,14 @@ Intelligent organism with the capability to evolve
 **Extends:** <code>[Component](#Component)</code>  
 
 * [Creature](#Creature) ⇐ <code>[Component](#Component)</code>
-    * [new Creature(dna)](#new_Creature_new)
-    * [.dna](#Creature+dna) : <code>[DNA](#DNA)</code>
+    * [new Creature()](#new_Creature_new)
     * [.name](#Component+name) : <code>string</code>
 
 <a name="new_Creature_new"></a>
 
-### new Creature(dna)
-Constructs a new creature component with the given DNA
+### new Creature()
+Constructs a new creature component
 
-
-| Param | Type | Description |
-| --- | --- | --- |
-| dna | <code>[DNA](#DNA)</code> | the genetic representaiton of a creature |
-
-**Example**  
-
-```js
-const dna = new DNA(3, 4, random);
-const creature = new Creature(dna);
-```
-<a name="Creature+dna"></a>
-
-### creature.dna : <code>[DNA](#DNA)</code>
-The genetic representaiton of this creature
-
-**Kind**: instance property of <code>[Creature](#Creature)</code>  
 <a name="Component+name"></a>
 
 ### creature.name : <code>string</code>
@@ -3209,7 +3191,7 @@ Builds a creature entity with the given DNA at the given position
 
 <a name="buildDefaultCreature"></a>
 
-## buildDefaultCreature(coord) ⇒ <code>[Entity](#Entity)</code>
+## buildDefaultCreature(coord, random) ⇒ <code>[Entity](#Entity)</code>
 Builds a creature entity with the default initial DNA at the given position
 
 **Kind**: global function  
@@ -3218,6 +3200,7 @@ Builds a creature entity with the default initial DNA at the given position
 | Param | Type | Description |
 | --- | --- | --- |
 | coord | <code>[Coord](#Coord)</code> | coordinate to place the creature entity at |
+| random | <code>Object</code> | an instance of a random-js engine |
 
 <a name="buildPlant"></a>
 

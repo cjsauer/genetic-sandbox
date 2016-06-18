@@ -6,22 +6,10 @@ import Component from "../../../ecs/Component";
  */
 class Creature extends Component {
   /**
-   * Constructs a new creature component with the given DNA
-   * @example
-   * const dna = new DNA(3, 4, random);
-   * const creature = new Creature(dna);
-   * @param {DNA} dna - the genetic representaiton of a creature
+   * Constructs a new creature component
    */
   constructor(dna) {
     super("creature");
-
-    if (arguments.length === 0) return;
-
-    /**
-     * The genetic representaiton of this creature
-     * @type {DNA}
-     */
-    this.dna = dna;
   }
 }
 

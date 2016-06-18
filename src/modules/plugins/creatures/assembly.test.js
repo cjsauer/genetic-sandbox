@@ -19,6 +19,7 @@ describe("Creature assembly", () => {
     let coord = new Coord(0, 0);
     let creature = buildCreature(dna, coord);
     expect(creature.hasComponent("creature")).to.be.true;
+    expect(creature.hasComponent("brain")).to.be.true;
     expect(creature.hasComponent("dna")).to.be.true;
     expect(creature.getComponent("dna")).to.eql(dna);
     expect(creature.hasComponent("coord")).to.be.true;
@@ -37,6 +38,7 @@ describe("Creature assembly", () => {
     let dna = creature.getComponent("dna");
 
     expect(creature.hasComponent("creature")).to.be.true;
+    expect(creature.hasComponent("brain")).to.be.true;
     expect(creature.hasComponent("coord")).to.be.true;
     expect(creature.getComponent("coord")).to.eql(coord);
     expect(dna.brainStrand.inputNodeGeneCount).to.equal(3);
