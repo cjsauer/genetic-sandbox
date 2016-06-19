@@ -1,6 +1,5 @@
 import System from "../../../ecs/System";
 import Brain from "../../creatures/components/Brain";
-import Coord from "../../core/components/Coord";
 import Velocity from "../../core/components/Velocity";
 import config from "../../../config";
 
@@ -43,8 +42,7 @@ class MovementProcessor extends System {
       let velocity = creature.getComponent("velocity");
       let brain = creature.getComponent("brain");
       let dir = this._calculatePreferredVelocity(brain);
-      velocity.x = dir.x;
-      velocity.y = dir.y;
+      velocity.set(dir.x, dir.y);
     });
   }
 
@@ -59,7 +57,7 @@ class MovementProcessor extends System {
     creatures.forEach((creature) => {
       let coord = creature.getComponent("coord");
       let velocity = creature.getComponent("velocity");
-      let destination = new Coord(coord.x + velocity.x, coord.y + velocity.y);
+      let destination = coord.add(velocity);
 
       if (!coord.equalTo(destination) && grid.isValidCoord(destination)) {
         // Check if there are any other creatures already there
@@ -70,8 +68,7 @@ class MovementProcessor extends System {
         if (!alreadyOccupied) {
           let energy = creature.getComponent("energy");
           energy.expend(config.creatures.moveCost);
-          coord.x = destination.x;
-          coord.y = destination.y;
+          coord.set(destination.x, destination.y);
         }
       }
     });

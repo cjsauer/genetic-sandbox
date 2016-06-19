@@ -25,14 +25,4 @@ describe("Coord", () => {
     expect(coord.x).to.equal(10);
     expect(coord.y).to.equal(12);
   });
-
-  it("can determine if two coordinates are equal", () => {
-    const coord1 = new Coord(0, 0);
-    const coord2 = new Coord(0, 0);
-    const coord3 = new Coord(10, 12);
-
-    expect(coord1.equalTo(coord2)).to.be.true;
-    expect(coord1.equalTo(coord3)).to.be.false;
-    expect(coord2.equalTo(coord3)).to.be.false;
-  });
 });

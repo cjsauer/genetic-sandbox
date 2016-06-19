@@ -25,14 +25,4 @@ describe("Velocity", () => {
     expect(velocity.x).to.equal(10);
     expect(velocity.y).to.equal(12);
   });
-
-  it("can determine if two velocityinates are equal", () => {
-    const velocity1 = new Velocity(0, 0);
-    const velocity2 = new Velocity(0, 0);
-    const velocity3 = new Velocity(10, 12);
-
-    expect(velocity1.equalTo(velocity2)).to.be.true;
-    expect(velocity1.equalTo(velocity3)).to.be.false;
-    expect(velocity2.equalTo(velocity3)).to.be.false;
-  });
 });
