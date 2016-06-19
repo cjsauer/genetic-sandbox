@@ -1,13 +1,10 @@
-import System from "../../System";
-import DNA from "../../core/components/genetics/DNA";
-import Brain from "../../core/components/Brain";
-import Creature from "../components/Creature";
+import System from "../../../ecs/System";
 import config from "../../../config";
+import { buildDefaultCreature } from "../assembly";
 
 /**
- * Generates initial creatures with random DNA
+ * Generates initial creatures
  * @extends System
- * @see {@link Creature}
  */
 class CreatureGenerator extends System {
   /**
@@ -22,12 +19,14 @@ class CreatureGenerator extends System {
     * @param {App} app - the currently running GS app
     */
   initialize(app) {
-    const random = app.random;
-    const tiles = app.grid.getTiles();
+    const { world, random } = app;
+    const tiles = world.getEntitiesWith("tile");
+
     tiles.forEach((tile) => {
       if (random.bool(config.creatures.creatureRate)) {
-        let dna = new DNA(Brain.inputNeuronCount, Brain.outputNeuronCount, random);
-        tile.set("creature", new Creature(dna, config.creatures.initialEnergy));
+        const coord = tile.getComponent("coord");
+        const creature = buildDefaultCreature(coord, random);
+        world.addEntity(creature);
       }
     });
   }

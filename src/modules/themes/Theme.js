@@ -30,6 +30,20 @@ const Theme = {
    */
   setTheme(name) {
     this.current = this._themes[name];
+  },
+
+  /**
+   * Retrieves a [Paper.js item]{@link http://paperjs.org/reference/item/}
+   * for the given sprite name as defined by the current theme, or the default
+   * sprite if the given name is not defined
+   * @param {string} name - name of the sprite
+   * @param {PaperScope} paper - an active paper scope
+   * @returns {Item} a Paper.js Item instance
+   */
+  getSprite(name, paper) {
+    const sprites = this.current.sprites;
+    const spriteFunc = sprites[name] ? sprites[name] : sprites["default"];
+    return spriteFunc(paper);
   }
 };
 

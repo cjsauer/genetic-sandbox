@@ -8,65 +8,83 @@ permalink: /docs/
 
 <dl>
 <dt><a href="#App">App</a></dt>
-<dd><p>The entry point and hub of the entire application</p>
-</dd>
-<dt><a href="#Sequencer">Sequencer</a></dt>
-<dd><p>Reads in a <a href="#Strand">Strand</a> and produces a
-<a href="http://synaptic.juancazala.com/#/">Synaptic neural network</a></p>
-</dd>
-<dt><a href="#HexGrid">HexGrid</a></dt>
-<dd><p>A 2D, hexagonal grid implementation with axial coordinate system.
-Implementation details can be found <a href="http://goo.gl/nLO6sN">here</a>.</p>
-</dd>
-<dt><a href="#Tile">Tile</a></dt>
-<dd><p>A Tile is a collection of named <a href="Components">Components</a> (data) representing
-the state at a specific place in a grid</p>
-</dd>
-<dt><a href="#TileComponentIndex">TileComponentIndex</a></dt>
-<dd><p>Builds an index of <a href="Tiles">Tiles</a> for fast lookup by component</p>
+<dd><p>The context and heartbeat of the Genetic Sandbox simulation</p>
 </dd>
 <dt><a href="#Component">Component</a></dt>
-<dd><p>Components are objects stored inside of <a href="#Tile">Tiles</a> that contain
-arbitrary data, be it plant data, creature data, tile coordinates, etc.</p>
+<dd><p>Components are bags of properties that entities possess. They may also
+contain helper methods.</p>
 </dd>
-<dt><a href="#Plugin">Plugin</a></dt>
-<dd><p>A toggleable plugin containing an array of <a href="#System">Systems</a> and
-configuration options</p>
+<dt><a href="#Entity">Entity</a></dt>
+<dd><p>An entity is a container of Components, and represents all &quot;things&quot; in the
+world</p>
+</dd>
+<dt><a href="#Family">Family</a></dt>
+<dd><p>A collection of entities containing all of the specified components</p>
 </dd>
 <dt><a href="#System">System</a></dt>
 <dd><p>Interface for defining new systems. A system in Genetic Sandbox is a class
 containing logic that operates in some way on <a href="#Tile">Tiles</a> within the
 <a href="#HexGrid">HexGrid</a>.</p>
 </dd>
-<dt><a href="#Brain">Brain</a> ⇐ <code><a href="#Component">Component</a></code></dt>
-<dd><p>A neural network that receives sense input from the environment and produces
-actions on the behalf of a creature</p>
+<dt><a href="#World">World</a></dt>
+<dd><p>World is a container of all entities in existence, and provides super fast
+lookup of entities by component</p>
+</dd>
+<dt><a href="#ConnectionGene">ConnectionGene</a> ⇐ <code><a href="#Serializable">Serializable</a></code></dt>
+<dd><p>Genetic representation of a connection between two neurons in a neural
+network</p>
+</dd>
+<dt><a href="#NodeGene">NodeGene</a> ⇐ <code><a href="#Serializable">Serializable</a></code></dt>
+<dd><p>Genetic representation of a neuron in a neural network</p>
+</dd>
+<dt><a href="#Sequencer">Sequencer</a></dt>
+<dd><p>Reads in a <a href="#Strand">Strand</a> and produces a
+<a href="http://synaptic.juancazala.com/#/">Synaptic neural network</a></p>
+</dd>
+<dt><a href="#Strand">Strand</a> ⇐ <code><a href="#Serializable">Serializable</a></code></dt>
+<dd><p>Genetic representation of a neural network</p>
+</dd>
+<dt><a href="#HexGrid">HexGrid</a> ⇐ <code><a href="#CoordEntityIndex">CoordEntityIndex</a></code></dt>
+<dd><p>A 2D, hexagonal grid implementation with axial coordinate system. Provides
+methods for building an array of tile entities, fast lookup of entities by
+coordinate, as well as other useful grid-related tasks.
+Implementation details can be found <a href="http://goo.gl/nLO6sN">here</a>.</p>
+</dd>
+<dt><a href="#Plugin">Plugin</a></dt>
+<dd><p>A toggleable plugin containing an array of <a href="#System">Systems</a> and
+configuration options</p>
 </dd>
 <dt><a href="#Coord">Coord</a> ⇐ <code><a href="#Component">Component</a></code></dt>
 <dd><p>A two dimensional coordinate of x and y</p>
 </dd>
-<dt><a href="#ConnectionGene">ConnectionGene</a> ⇐ <code><a href="#Component">Component</a></code></dt>
-<dd><p>Genetic representation of a connection between two neurons in a neural
-network</p>
+<dt><a href="#Energy">Energy</a> ⇐ <code><a href="#Component">Component</a></code></dt>
+<dd><p>Energy is the currency of existence</p>
 </dd>
-<dt><a href="#DNA">DNA</a> ⇐ <code><a href="#Component">Component</a></code></dt>
-<dd><p>Genetic encoding of a creature heavily inspired by the
-<a href="http://nn.cs.utexas.edu/downloads/papers/stanley.ec02.pdf">NEAT algorithm</a></p>
+<dt><a href="#Sprite">Sprite</a> ⇐ <code><a href="#Component">Component</a></code></dt>
+<dd><p>Graphical representation of an entity</p>
 </dd>
-<dt><a href="#NodeGene">NodeGene</a> ⇐ <code><a href="#Component">Component</a></code></dt>
-<dd><p>Genetic representation of a neuron in a neural network</p>
+<dt><a href="#Tile">Tile</a> ⇐ <code><a href="#Component">Component</a></code></dt>
+<dd><p>Tile is a location in the world that an entity can exist at</p>
 </dd>
-<dt><a href="#Strand">Strand</a> ⇐ <code><a href="#Component">Component</a></code></dt>
-<dd><p>Genetic representation of a neural network</p>
+<dt><a href="#Velocity">Velocity</a> ⇐ <code><a href="#Component">Component</a></code></dt>
+<dd><p>A two dimensional velocity</p>
 </dd>
 <dt><a href="#BackgroundRenderer">BackgroundRenderer</a> ⇐ <code><a href="#System">System</a></code></dt>
 <dd><p>Renders the background</p>
 </dd>
-<dt><a href="#GridRenderer">GridRenderer</a> ⇐ <code><a href="#System">System</a></code></dt>
-<dd><p>Renders a hexagonal border around all tiles in the grid</p>
+<dt><a href="#SpriteRenderer">SpriteRenderer</a> ⇐ <code><a href="#System">System</a></code></dt>
+<dd><p>Renders all entities with Coord and Sprite components to the screen</p>
+</dd>
+<dt><a href="#Brain">Brain</a> ⇐ <code><a href="#Component">Component</a></code></dt>
+<dd><p>A neural network that receives sense input from the environment and produces
+actions on the behalf of a creature</p>
 </dd>
 <dt><a href="#Creature">Creature</a> ⇐ <code><a href="#Component">Component</a></code></dt>
 <dd><p>Intelligent organism with the capability to evolve</p>
+</dd>
+<dt><a href="#DNA">DNA</a> ⇐ <code><a href="#Component">Component</a></code></dt>
+<dd><p>Genetic encoding of a creature heavily inspired by the
+<a href="http://nn.cs.utexas.edu/downloads/papers/stanley.ec02.pdf">NEAT algorithm</a></p>
 </dd>
 <dt><a href="#AgingProcessor">AgingProcessor</a> ⇐ <code><a href="#System">System</a></code></dt>
 <dd><p>Saps energy from creatures every tick</p>
@@ -75,10 +93,7 @@ network</p>
 <dd><p>Activates the brains of all creatures</p>
 </dd>
 <dt><a href="#CreatureGenerator">CreatureGenerator</a> ⇐ <code><a href="#System">System</a></code></dt>
-<dd><p>Generates initial creatures with random DNA</p>
-</dd>
-<dt><a href="#CreatureRenderer">CreatureRenderer</a> ⇐ <code><a href="#System">System</a></code></dt>
-<dd><p>Renders creatures for all tiles that contain a Creature component</p>
+<dd><p>Generates initial creatures</p>
 </dd>
 <dt><a href="#EatingProcessor">EatingProcessor</a> ⇐ <code><a href="#System">System</a></code></dt>
 <dd><p>Processes the eating of plants by creatures</p>
@@ -90,13 +105,10 @@ network</p>
 <dd><p>Inputs touch sense data into the brains of creatures</p>
 </dd>
 <dt><a href="#Plant">Plant</a> ⇐ <code><a href="#Component">Component</a></code></dt>
-<dd><p>An edible plant containing energy</p>
+<dd><p>An edible plant</p>
 </dd>
 <dt><a href="#PlantGenerator">PlantGenerator</a> ⇐ <code><a href="#System">System</a></code></dt>
-<dd><p>Generates initial plant life, placing Plant components into Tiles</p>
-</dd>
-<dt><a href="#PlantRenderer">PlantRenderer</a> ⇐ <code><a href="#System">System</a></code></dt>
-<dd><p>Renders plants for all tiles that contain a Plant component</p>
+<dd><p>Generates initial plant life</p>
 </dd>
 <dt><a href="#Hexagon">Hexagon</a> ⇐ <code><a href="#Shape">Shape</a></code></dt>
 <dd><p>A flat-topped, regular hexagon. Implementation details can be found
@@ -109,12 +121,23 @@ network</p>
 <dd><p>An abstract class representing 2D geometric shapes that have a center, a width,
 and a height</p>
 </dd>
+<dt><a href="#CoordEntityIndex">CoordEntityIndex</a></dt>
+<dd><p>An index providing fast lookup of Entities by their coordinate position</p>
+</dd>
 <dt><a href="#MultiStringHashMap">MultiStringHashMap</a></dt>
 <dd><p>A key/value store where keys can be a single string, or an array of strings</p>
 </dd>
 <dt><a href="#Serializable">Serializable</a></dt>
 <dd><p>An interface for recursively serializing and deserializing objects to and from
 JSON.</p>
+</dd>
+</dl>
+
+## Mixins
+
+<dl>
+<dt><a href="#VectorMixin">VectorMixin</a></dt>
+<dd><p>Two dimensional vector</p>
 </dd>
 </dl>
 
@@ -143,52 +166,70 @@ values like color, stroke thickness, etc.</p>
 </dd>
 </dl>
 
+## Functions
+
+<dl>
+<dt><a href="#buildTile">buildTile(coord)</a> ⇒ <code><a href="#Entity">Entity</a></code></dt>
+<dd><p>Builds a tile entity</p>
+</dd>
+<dt><a href="#buildCreature">buildCreature(dna, coord)</a> ⇒ <code><a href="#Entity">Entity</a></code></dt>
+<dd><p>Builds a creature entity with the given DNA at the given position</p>
+</dd>
+<dt><a href="#buildDefaultCreature">buildDefaultCreature(coord, random)</a> ⇒ <code><a href="#Entity">Entity</a></code></dt>
+<dd><p>Builds a creature entity with the default initial DNA at the given position</p>
+</dd>
+<dt><a href="#buildPlant">buildPlant(energyLevel, coord)</a></dt>
+<dd><p>Builds a plant entity with the given energy level at the given position</p>
+</dd>
+</dl>
+
 <a name="App"></a>
 
 ## App
-The entry point and hub of the entire application
+The context and heartbeat of the Genetic Sandbox simulation
 
 **Kind**: global class  
 **See**
 
+- [World](#World)
 - [HexGrid](#HexGrid)
 - [Plugin](#Plugin)
 
 
 * [App](#App)
-    * [new App(grid, plugins, paperScope, [seed])](#new_App_new)
+    * [new App(world, grid, paperScope)](#new_App_new)
+    * [.world](#App+world) : <code>[World](#World)</code>
     * [.grid](#App+grid) : <code>[HexGrid](#HexGrid)</code>
-    * [.plugins](#App+plugins) : <code>[Array.&lt;Plugin&gt;](#Plugin)</code>
     * [.paper](#App+paper) : <code>PaperScope</code>
+    * [.plugins](#App+plugins) : <code>[Array.&lt;Plugin&gt;](#Plugin)</code>
     * [.random](#App+random)
-    * [.initialize()](#App+initialize)
+    * [.initialize(plugins, [seed])](#App+initialize)
     * [.tick()](#App+tick)
     * [.run()](#App+run)
     * [.stop()](#App+stop)
 
 <a name="new_App_new"></a>
 
-### new App(grid, plugins, paperScope, [seed])
-Prepares a Genetic Sandbox application for bootstrapping.
+### new App(world, grid, paperScope)
+Creates a new App, setting up the context for the rest of the simulation
 
 
 | Param | Type | Description |
 | --- | --- | --- |
-| grid | <code>[HexGrid](#HexGrid)</code> | hex grid to use as the stage |
-| plugins | <code>[Array.&lt;Plugin&gt;](#Plugin)</code> | the plugins to be included in the main processing loop |
+| world | <code>[World](#World)</code> | world instance |
+| grid | <code>[HexGrid](#HexGrid)</code> | grid implementation to use for grid-related computation |
 | paperScope | <code>PaperScope</code> | Paper.js graphics context |
-| [seed] | <code>number</code> | the seed for the random number generator |
 
+<a name="App+world"></a>
+
+### app.world : <code>[World](#World)</code>
+The World, or manager of all entities
+
+**Kind**: instance property of <code>[App](#App)</code>  
 <a name="App+grid"></a>
 
 ### app.grid : <code>[HexGrid](#HexGrid)</code>
-A grid of tiles serving as the main stage of the simulation
-
-**Kind**: instance property of <code>[App](#App)</code>  
-<a name="App+plugins"></a>
-
-### app.plugins : <code>[Array.&lt;Plugin&gt;](#Plugin)</code>
-Array of plugins included in the main processing loop
+Grid implementation to use for grid-related computation
 
 **Kind**: instance property of <code>[App](#App)</code>  
 <a name="App+paper"></a>
@@ -198,20 +239,33 @@ Paper.js graphics context used for rendering vector graphics to a
 canvas element
 
 **Kind**: instance property of <code>[App](#App)</code>  
+<a name="App+plugins"></a>
+
+### app.plugins : <code>[Array.&lt;Plugin&gt;](#Plugin)</code>
+Array of plugins included in the main processing loop
+
+**Kind**: instance property of <code>[App](#App)</code>  
 <a name="App+random"></a>
 
 ### app.random
-An seeded instance of the random-js Mersenne Twister engine for
+A seeded instance of the random-js Mersenne Twister engine for
 generating random numbers
 
 **Kind**: instance property of <code>[App](#App)</code>  
 <a name="App+initialize"></a>
 
-### app.initialize()
-Initializes all enabled plugins by calling *reserve()* and *initialize()*
-on their constituent systems
+### app.initialize(plugins, [seed])
+Initializes all enabled plugins passed by calling *reserve()* and
+*initialize()* on their constituent systems. Can optionally be passed a
+seed to prime the random number generator with for this simulation.
 
 **Kind**: instance method of <code>[App](#App)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| plugins | <code>[Array.&lt;Plugin&gt;](#Plugin)</code> | the plugins to be included in the main processing loop |
+| [seed] | <code>number</code> | the seed for the random number generator |
+
 <a name="App+tick"></a>
 
 ### app.tick()
@@ -230,225 +284,77 @@ Kicks off the processing loop to continously update all systems
 Stops the processing loop, essentially pausing the entire simulation
 
 **Kind**: instance method of <code>[App](#App)</code>  
-<a name="Sequencer"></a>
+<a name="Component"></a>
 
-## Sequencer
-Reads in a [Strand](#Strand) and produces a
-[Synaptic neural network](http://synaptic.juancazala.com/#/)
-
-**Kind**: global class  
-**See**: [Strand](#Strand)  
-<a name="Sequencer+read"></a>
-
-### sequencer.read(strand) ⇒ <code>Network</code>
-Reads in a Strand and outputs a Synaptic neural network
-
-**Kind**: instance method of <code>[Sequencer](#Sequencer)</code>  
-**Returns**: <code>Network</code> - a Synaptic Network instance  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| strand | <code>[Strand](#Strand)</code> | strand of node and connection genes |
-
-<a name="HexGrid"></a>
-
-## HexGrid
-A 2D, hexagonal grid implementation with axial coordinate system.
-Implementation details can be found [here](http://goo.gl/nLO6sN).
+## Component
+Components are bags of properties that entities possess. They may also
+contain helper methods.
 
 **Kind**: global class  
-**See**
 
-- [Tile](#Tile)
-- [Coord](#Coord)
+* [Component](#Component)
+    * [new Component(name)](#new_Component_new)
+    * [.name](#Component+name) : <code>string</code>
 
+<a name="new_Component_new"></a>
 
-* [HexGrid](#HexGrid)
-    * [new HexGrid(radius, [defaultTileComponents])](#new_HexGrid_new)
-    * _instance_
-        * [.getTile(coord)](#HexGrid+getTile) ⇒ <code>[Tile](#Tile)</code>
-        * [.getTiles()](#HexGrid+getTiles) ⇒ <code>Array.Tile</code>
-        * [.getTilesByComponent(names)](#HexGrid+getTilesByComponent) ⇒ <code>Array.Tile</code>
-        * [.neighborsOf(coord)](#HexGrid+neighborsOf) ⇒ <code>Array.Tile</code>
-        * [.distanceBetween(coord1, coord2)](#HexGrid+distanceBetween) ⇒ <code>number</code>
-    * _static_
-        * [.coordToPixel(coord, radius)](#HexGrid.coordToPixel) ⇒ <code>[Point](#Point)</code>
+### new Component(name)
+Component isn't instantiable directly, but should be extended by a
+concrete subclass.
 
-<a name="new_HexGrid_new"></a>
-
-### new HexGrid(radius, [defaultTileComponents])
-Constructs a new HexGrid of given radius. The pattern of tiles within the
-grid will then form a hexagon itself with (0,0) being the center.
-A grid of radius 0 is just a single hexagon, radius 1 is a single hexagon
-surrounded by 1 layer of hexagons, and so on...
-
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| radius | <code>number</code> |  | Number of tiles from center of grid to the edge, not counting the center tile |
-| [defaultTileComponents] | <code>Object</code> | <code>{}</code> | Default components that all Tiles will be initialized with |
-
-**Example**  
-
-```js
-let myGrid = new HexGrid(10, {
-   biome: "desert"
-});
-```
-<a name="HexGrid+getTile"></a>
-
-### hexGrid.getTile(coord) ⇒ <code>[Tile](#Tile)</code>
-Returns the Tile at coordinates (x, y)
-
-**Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
-**Returns**: <code>[Tile](#Tile)</code> - The tile at the provided coordinates  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| coord | <code>[Coord](#Coord)</code> | coordinate of tile to fetch |
+| name | <code>string</code> | the name of the component |
 
-**Example**  
+<a name="Component+name"></a>
 
-```js
-let originTile = myGrid.getTile(new Coord(0, 0));
-```
-<a name="HexGrid+getTiles"></a>
+### component.name : <code>string</code>
+Name of the component. Expected to be unique among Components.
 
-### hexGrid.getTiles() ⇒ <code>Array.Tile</code>
-Returns an array of all tiles in the HexGrid
+**Kind**: instance property of <code>[Component](#Component)</code>  
+<a name="Entity"></a>
 
-**Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
-**Returns**: <code>Array.Tile</code> - Array of all tiles in this HexGrid  
-**Example**  
-
-```js
-let tiles = myGrid.getTiles();
-tiles.forEach((tile) => {
-  tile.set("temperature", 75).set("forecast", "sunny");
-});
-```
-<a name="HexGrid+getTilesByComponent"></a>
-
-### hexGrid.getTilesByComponent(names) ⇒ <code>Array.Tile</code>
-Returns all tiles that posess the given component or components
-
-**Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
-**Returns**: <code>Array.Tile</code> - the tiles that include all of the given
-components  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| names | <code>string</code> &#124; <code>Array.string</code> | the names of the components this tile must posess to be included in the result |
-
-**Example**  
-
-```js
-// Returns all tiles that have "biome" and "temperature" components
-let habitatTiles = grid.getTilesByComponent(["biome", "temperature"]);
-```
-<a name="HexGrid+neighborsOf"></a>
-
-### hexGrid.neighborsOf(coord) ⇒ <code>Array.Tile</code>
-Returns the Tiles that are adjacent to the Tile at the provided (x, y) coordinates.
-Will return `null` for a neighbor that doesn't exist, at the edges of the
-grid for example.
-
-**Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
-**Returns**: <code>Array.Tile</code> - The array of neighboring Tiles  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| coord | <code>[Coord](#Coord)</code> | coordinates of tile for which to calculate neighbors |
-
-**Example**  
-
-```js
-let neighborsOfOrigin = myGrid.neighborsOf(new Coord(0, 0));
-neighborsOfOrigin.forEach((tile) => {
-  tile.set("bordersOrigin", true);
-});
-```
-<a name="HexGrid+distanceBetween"></a>
-
-### hexGrid.distanceBetween(coord1, coord2) ⇒ <code>number</code>
-Calculates the distance between two (x, y) coordinates in tiles
-
-**Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
-**Returns**: <code>number</code> - The distance between the provided coordinates in tiles  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| coord1 | <code>[Coord](#Coord)</code> | coordinates of first tile |
-| coord2 | <code>[Coord](#Coord)</code> | coordinates of second tile |
-
-**Example**  
-
-```js
-let myGrid = new HexGrid(2);
-let distanceFromCenterToEdge = myGrid.distanceBetween(new Coord(0, 0), new Coord(2, -2)); // 2
-```
-<a name="HexGrid.coordToPixel"></a>
-
-### HexGrid.coordToPixel(coord, radius) ⇒ <code>[Point](#Point)</code>
-Converts a tile's coordinates to its pixel coordinates
-
-**Kind**: static method of <code>[HexGrid](#HexGrid)</code>  
-**Returns**: <code>[Point](#Point)</code> - pixel coordinates of center of tile  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| coord | <code>[Coord](#Coord)</code> | tile coordinates |
-| radius | <code>number</code> | radius of hexagons (for correct spacing) |
-
-<a name="Tile"></a>
-
-## Tile
-A Tile is a collection of named [Components](Components) (data) representing
-the state at a specific place in a grid
+## Entity
+An entity is a container of Components, and represents all "things" in the
+world
 
 **Kind**: global class  
 **See**: [Component](#Component)  
 
-* [Tile](#Tile)
-    * [new Tile([initialComponents])](#new_Tile_new)
-    * [.get(name)](#Tile+get) ⇒ <code>\*</code>
-    * [.hasComponent(name)](#Tile+hasComponent) ⇒ <code>boolean</code>
-    * [.set(name, component)](#Tile+set) ⇒ <code>[Tile](#Tile)</code>
-    * [.delete(name)](#Tile+delete) ⇒ <code>boolean</code>
-    * ["componentAdded"](#Tile+event_componentAdded)
-    * ["componentDeleted"](#Tile+event_componentDeleted)
+* [Entity](#Entity)
+    * [new Entity()](#new_Entity_new)
+    * [.id](#Entity+id) : <code>number</code>
+    * [.getComponent(name)](#Entity+getComponent) ⇒ <code>[Component](#Component)</code>
+    * [.hasComponent(name)](#Entity+hasComponent) ⇒ <code>boolean</code>
+    * [.addComponent(component)](#Entity+addComponent)
+    * [.removeComponent(name)](#Entity+removeComponent)
+    * ["componentAdded"](#Entity+event_componentAdded)
+    * ["componentDeleted"](#Entity+event_componentDeleted)
 
-<a name="new_Tile_new"></a>
+<a name="new_Entity_new"></a>
 
-### new Tile([initialComponents])
-Creates a new tile with initial components. Note that the given initial
-components object will be copied *by value* into each tile. What this means
-is that inner objects of the component are *not* deep copied.
-
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| [initialComponents] | <code>Object</code> | <code>{}</code> | Initial components of the Tile |
+### new Entity()
+Creates a new, empty Entity
 
 **Example**  
 
 ```js
-const hotTile = new Tile({
-  temperature: 110,
-  biome: "desert"
-  vegetation: [
-    { type: "tree", edible: false },
-    { type: "berries", edible: true}
-  ]
-});
+const myEntity = new Entity();
 ```
-<a name="Tile+get"></a>
+<a name="Entity+id"></a>
 
-### tile.get(name) ⇒ <code>\*</code>
-Returns the specified component
+### entity.id : <code>number</code>
+Unique ID of this entity
 
-**Kind**: instance method of <code>[Tile](#Tile)</code>  
-**Returns**: <code>\*</code> - component data, or undefined if component not found  
+**Kind**: instance property of <code>[Entity](#Entity)</code>  
+<a name="Entity+getComponent"></a>
+
+### entity.getComponent(name) ⇒ <code>[Component](#Component)</code>
+Returns the component with the given name, or null if it does not exist
+
+**Kind**: instance method of <code>[Entity](#Entity)</code>  
+**Returns**: <code>[Component](#Component)</code> - the component, or null if it does not exist  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -457,52 +363,45 @@ Returns the specified component
 **Example**  
 
 ```js
-let temperature = hotTile.get("temperature");
+let plant = myEntity.getComponent("plant");
 ```
-<a name="Tile+hasComponent"></a>
+<a name="Entity+hasComponent"></a>
 
-### tile.hasComponent(name) ⇒ <code>boolean</code>
-Returns true if this Tile has the given component, false otherwise
+### entity.hasComponent(name) ⇒ <code>boolean</code>
+Returns true if this entity has the given component, false otherwise
 
-**Kind**: instance method of <code>[Tile](#Tile)</code>  
-**Returns**: <code>boolean</code> - True if the Tile has the given component, false
+**Kind**: instance method of <code>[Entity](#Entity)</code>  
+**Returns**: <code>boolean</code> - True if the entity has the given component, false
 otherwise  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | name | <code>string</code> | the name of the component to check for |
 
-<a name="Tile+set"></a>
+<a name="Entity+addComponent"></a>
 
-### tile.set(name, component) ⇒ <code>[Tile](#Tile)</code>
-Sets the specified component
+### entity.addComponent(component)
+Adds the given component to this entity
 
-**Kind**: instance method of <code>[Tile](#Tile)</code>  
-**Returns**: <code>[Tile](#Tile)</code> - The Tile object  
-**Emits**: <code>[componentAdded](#Tile+event_componentAdded)</code>  
+**Kind**: instance method of <code>[Entity](#Entity)</code>  
+**Emits**: <code>[componentAdded](#Entity+event_componentAdded)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| name | <code>string</code> | name of the component to set |
-| component | <code>\*</code> | the component data |
+| component | <code>[Component](#Component)</code> | the component instance to add |
 
 **Example**  
 
 ```js
-hotTile.set("vegetation", [
-  { type: "tree", edible: false }
-]);
-//Chaining
-hotTile.set("one", 1).set("two", 2).set("three", 3);
+myEntity.addComponent(new Plant(10));
 ```
-<a name="Tile+delete"></a>
+<a name="Entity+removeComponent"></a>
 
-### tile.delete(name) ⇒ <code>boolean</code>
-Deletes the specified component, removing it from the Tile completely
+### entity.removeComponent(name)
+Removes the specified component from this entity
 
-**Kind**: instance method of <code>[Tile](#Tile)</code>  
-**Returns**: <code>boolean</code> - True if an item was actually deleted, false otherwise  
-**Emits**: <code>[componentDeleted](#Tile+event_componentDeleted)</code>  
+**Kind**: instance method of <code>[Entity](#Entity)</code>  
+**Emits**: <code>[componentDeleted](#Entity+event_componentDeleted)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -511,169 +410,173 @@ Deletes the specified component, removing it from the Tile completely
 **Example**  
 
 ```js
-let didDeleteSomething = hotTile.delete("temperature");
+myEntity.addComponent(new Plant(10));
+myEntity.removeComponent("plant");
 ```
-<a name="Tile+event_componentAdded"></a>
+<a name="Entity+event_componentAdded"></a>
 
 ### "componentAdded"
-Fired when a new component is added to a tile. It is NOT fired when
-a component is solely modified.
+Fired when a new component is added to an entity
 
-**Kind**: event emitted by <code>[Tile](#Tile)</code>  
+**Kind**: event emitted by <code>[Entity](#Entity)</code>  
 **Properties**
 
 | Name | Type | Description |
 | --- | --- | --- |
-| tile | <code>[Tile](#Tile)</code> | the tile that was modified |
+| entity | <code>[Entity](#Entity)</code> | the entity that was modified |
 | name | <code>string</code> | the name of the component that was added |
 
-<a name="Tile+event_componentDeleted"></a>
+<a name="Entity+event_componentDeleted"></a>
 
 ### "componentDeleted"
-Fired when a component is deleted from a tile
+Fired when a component is deleted from a entity
 
-**Kind**: event emitted by <code>[Tile](#Tile)</code>  
+**Kind**: event emitted by <code>[Entity](#Entity)</code>  
 **Properties**
 
 | Name | Type | Description |
 | --- | --- | --- |
-| tile | <code>[Tile](#Tile)</code> | the tile that was modified |
+| entity | <code>[Entity](#Entity)</code> | the entity that was modified |
 | name | <code>string</code> | name of the component that was deleted |
 
-<a name="TileComponentIndex"></a>
+<a name="Family"></a>
 
-## TileComponentIndex
-Builds an index of [Tiles](Tiles) for fast lookup by component
+## Family
+A collection of entities containing all of the specified components
 
 **Kind**: global class  
+**See**
 
-* [TileComponentIndex](#TileComponentIndex)
-    * [new TileComponentIndex(tiles)](#new_TileComponentIndex_new)
-    * [.getTilesByComponent(names)](#TileComponentIndex+getTilesByComponent) ⇒ <code>Array.Tile</code>
+- {Entity}
+- {Component}
 
-<a name="new_TileComponentIndex_new"></a>
 
-### new TileComponentIndex(tiles)
-Creates a new TileComponentIndex with the given array of tiles.
-Note: the index is built on demand. Constructing a new TileComponentIndex
-does not actually build a complete index (which would be expensive),
-but instead the indices are built as needed.
+* [Family](#Family)
+    * [new Family(componentNames)](#new_Family_new)
+    * _instance_
+        * [.hash](#Family+hash) : <code>string</code>
+        * [.addEntityIfMatch(entity)](#Family+addEntityIfMatch)
+        * [.removeEntity(entity)](#Family+removeEntity)
+        * [.getEntities()](#Family+getEntities) ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
+        * [.onComponentRemoved(event)](#Family+onComponentRemoved)
+    * _static_
+        * [.hashComponentNames(componentNames)](#Family.hashComponentNames) ⇒ <code>string</code>
+
+<a name="new_Family_new"></a>
+
+### new Family(componentNames)
+Creates a new family matching entities containing all of the given
+components
 
 
 | Param | Type | Description |
 | --- | --- | --- |
-| tiles | <code>Array.Tile</code> | the array of tiles for which to build an index by tile component |
+| componentNames | <code>Array.&lt;string&gt;</code> | the names of the components that an entity must contain all of to be included in this family |
 
 **Example**  
 
 ```js
-const tiles = [
-  new Tile(),
-  new Tile(),
-  new Tile()
-];
-const tileIndex = new TileComponentIndex(tileIndex);
+const family = new Family(["creature", "plant"]);
 ```
-<a name="TileComponentIndex+getTilesByComponent"></a>
+<a name="Family+hash"></a>
 
-### tileComponentIndex.getTilesByComponent(names) ⇒ <code>Array.Tile</code>
-Returns all tiles that posess the given component
+### family.hash : <code>string</code>
+Hash key representation of this family. Two families that require
+the same components of their entities will hash to the same value.
 
-**Kind**: instance method of <code>[TileComponentIndex](#TileComponentIndex)</code>  
-**Returns**: <code>Array.Tile</code> - the tiles that include all of the given
-components  
+**Kind**: instance property of <code>[Family](#Family)</code>  
+<a name="Family+addEntityIfMatch"></a>
+
+### family.addEntityIfMatch(entity)
+Adds the given entity to this family if it contains all of its specified
+components
+
+**Kind**: instance method of <code>[Family](#Family)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| names | <code>string</code> &#124; <code>Array.string</code> | the names of the components a Tile must posess to be included in the result |
+| entity | <code>[Entity](#Entity)</code> | the entity to add |
 
 **Example**  
 
 ```js
-// Returns all tiles that have "biome" and "temperature" components
-let habitatTiles = tileIndex.getTilesByComponent(["biome", "temperature"]);
+const myEntity = new Entity();
+myEntity.addComponent(new Plant(10));
+const family = new Family(["plant"]);
+family.addEntityIfMatch(myEntity);
 ```
-<a name="Component"></a>
+<a name="Family+removeEntity"></a>
 
-## Component
-Components are objects stored inside of [Tiles](#Tile) that contain
-arbitrary data, be it plant data, creature data, tile coordinates, etc.
+### family.removeEntity(entity)
+Removes the given entity from this family
 
-**Kind**: global class  
-**See**: [Tile](#Tile)  
-<a name="new_Component_new"></a>
+**Kind**: instance method of <code>[Family](#Family)</code>  
 
-### new Component()
-Component isn't instantiable directly, but should be extended by a
-concrete subclass.
-
-<a name="Plugin"></a>
-
-## Plugin
-A toggleable plugin containing an array of [Systems](#System) and
-configuration options
-
-**Kind**: global class  
-
-* [Plugin](#Plugin)
-    * [new Plugin(name, systems, config, [enabled])](#new_Plugin_new)
-    * [.name](#Plugin+name) : <code>string</code>
-    * [.systems](#Plugin+systems) : <code>[Array.&lt;System&gt;](#System)</code>
-    * [.config](#Plugin+config) : <code>Object</code>
-    * [.enabled](#Plugin+enabled) : <code>boolean</code>
-
-<a name="new_Plugin_new"></a>
-
-### new Plugin(name, systems, config, [enabled])
-Constructs a new plugin
-
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| name | <code>string</code> |  | name of the plugin |
-| systems | <code>[Array.&lt;System&gt;](#System)</code> |  | the systems that this plugin includes |
-| config | <code>Object</code> |  | configuration options that this plugin exposes |
-| [enabled] | <code>boolean</code> | <code>true</code> | whether this plugin is enabled or not |
+| Param | Type | Description |
+| --- | --- | --- |
+| entity | <code>[Entity](#Entity)</code> | the entity to remove |
 
 **Example**  
 
 ```js
-import MySystem from "./systems/MySystem";
-import MyOtherSystem from "./systems/MyOtherSystem";
-const systems = [ new MySystem(), new MyOtherSystem() ];
-const config = { someSetting: 10 };
-const myPlugin = new Plugin("mine", systems, config);
-
-// Assuming myPlugin is registered in `config.js`, in some other file
-// we can do:
-import config from "../config";
-config.mine.someSetting = 12; // someSetting has been exposed via config global
+const myEntity = new Entity();
+myEntity.addComponent(new Plant(10));
+const family = new Family(["plant"]);
+family.addEntityIfMatch(myEntity);
+family.removeEntity(myEntity);
 ```
-<a name="Plugin+name"></a>
+<a name="Family+getEntities"></a>
 
-### plugin.name : <code>string</code>
-Name of the plugin
+### family.getEntities() ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
+Returns an array of all entities currently in this family
 
-**Kind**: instance property of <code>[Plugin](#Plugin)</code>  
-<a name="Plugin+systems"></a>
+**Kind**: instance method of <code>[Family](#Family)</code>  
+**Returns**: <code>[Array.&lt;Entity&gt;](#Entity)</code> - array of all entities in this family  
+**Example**  
 
-### plugin.systems : <code>[Array.&lt;System&gt;](#System)</code>
-The array of systems that this plugin includes
+```js
+family.getEntities().forEach((entity) => {
+  // Do something with each entity
+});
+```
+<a name="Family+onComponentRemoved"></a>
 
-**Kind**: instance property of <code>[Plugin](#Plugin)</code>  
-<a name="Plugin+config"></a>
+### family.onComponentRemoved(event)
+Event handler to be called when a component is removed from an entity.
+If the component removed was required to qualify for this family,
+the entity is removed from the family.
 
-### plugin.config : <code>Object</code>
-The configuration options that this plugin exposes
+**Kind**: instance method of <code>[Family](#Family)</code>  
 
-**Kind**: instance property of <code>[Plugin](#Plugin)</code>  
-<a name="Plugin+enabled"></a>
+| Param | Type | Description |
+| --- | --- | --- |
+| event | <code>Object</code> | event object |
+| event.entity | <code>[Entity](#Entity)</code> | the entity from which the component was removed |
+| event.component | <code>[Component](#Component)</code> | the component that was removed |
 
-### plugin.enabled : <code>boolean</code>
-True if this plugin is enabled, false otherwise. A disabled plugin
-will be excluded from the processing loop.
+**Example**  
 
-**Kind**: instance property of <code>[Plugin](#Plugin)</code>  
+```js
+myEntity.addListener("componentRemoved", family.onComponentRemoved.bind(family));
+```
+<a name="Family.hashComponentNames"></a>
+
+### Family.hashComponentNames(componentNames) ⇒ <code>string</code>
+Hash key representation of an array of component names
+
+**Kind**: static method of <code>[Family](#Family)</code>  
+**Returns**: <code>string</code> - hash key representation of the passed array of component
+names  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| componentNames | <code>Array.&lt;string&gt;</code> | array of component names |
+
+**Example**  
+
+```js
+Family.hashComponentNames(["a", "b", "c"]); // "$a,b,c"
+```
 <a name="System"></a>
 
 ## *System*
@@ -777,6 +680,1053 @@ Hook for reading output data from the brain and attempting actions
 | --- | --- | --- |
 | app | <code>[App](#App)</code> | the currently running GS app |
 
+<a name="World"></a>
+
+## World
+World is a container of all entities in existence, and provides super fast
+lookup of entities by component
+
+**Kind**: global class  
+**See**
+
+- {Entity}
+- {System}
+
+
+* [World](#World)
+    * [new World()](#new_World_new)
+    * [.update()](#World+update)
+    * [.addEntity(entity)](#World+addEntity)
+    * [.addEntities(entities)](#World+addEntities)
+    * [.removeEntity(entity)](#World+removeEntity)
+    * [.getEntities()](#World+getEntities) ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
+    * [.getEntitiesWith(...componentNames)](#World+getEntitiesWith) ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
+    * [.getEntitiesAt(coord)](#World+getEntitiesAt) ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
+
+<a name="new_World_new"></a>
+
+### new World()
+And on the seventh day...
+
+<a name="World+update"></a>
+
+### world.update()
+Updates the world
+
+**Kind**: instance method of <code>[World](#World)</code>  
+<a name="World+addEntity"></a>
+
+### world.addEntity(entity)
+Adds the given entity to this world, or does nothing if that entity
+is already in the world
+
+**Kind**: instance method of <code>[World](#World)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| entity | <code>[Entity](#Entity)</code> | the entity to add |
+
+<a name="World+addEntities"></a>
+
+### world.addEntities(entities)
+Adds the given array of entities to this world, skipping entities that
+have already been added.
+
+**Kind**: instance method of <code>[World](#World)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| entities | <code>[Array.&lt;Entity&gt;](#Entity)</code> | array of entities to add to this world |
+
+<a name="World+removeEntity"></a>
+
+### world.removeEntity(entity)
+Removes the given entity from this world
+
+**Kind**: instance method of <code>[World](#World)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| entity | <code>[Entity](#Entity)</code> | the entity to remove |
+
+<a name="World+getEntities"></a>
+
+### world.getEntities() ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
+Retrieves all entities currently in the world
+
+**Kind**: instance method of <code>[World](#World)</code>  
+**Returns**: <code>[Array.&lt;Entity&gt;](#Entity)</code> - array of all entities in the world  
+<a name="World+getEntitiesWith"></a>
+
+### world.getEntitiesWith(...componentNames) ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
+Retrieves an array of all entities that contain ALL of the given components
+
+**Kind**: instance method of <code>[World](#World)</code>  
+**Returns**: <code>[Array.&lt;Entity&gt;](#Entity)</code> - the array of entities  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| ...componentNames | <code>string</code> | The name of a component |
+
+<a name="World+getEntitiesAt"></a>
+
+### world.getEntitiesAt(coord) ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
+Retrieves an array of all entities located at the given coordinates
+
+**Kind**: instance method of <code>[World](#World)</code>  
+**Returns**: <code>[Array.&lt;Entity&gt;](#Entity)</code> - the array of entities  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| coord | <code>[Coord](#Coord)</code> | coordinates to lookup |
+
+<a name="ConnectionGene"></a>
+
+## ConnectionGene ⇐ <code>[Serializable](#Serializable)</code>
+Genetic representation of a connection between two neurons in a neural
+network
+
+**Kind**: global class  
+**Extends:** <code>[Serializable](#Serializable)</code>  
+**See**: {NodeGene}  
+
+* [ConnectionGene](#ConnectionGene) ⇐ <code>[Serializable](#Serializable)</code>
+    * [new ConnectionGene(inID, outID, weight, enabled)](#new_ConnectionGene_new)
+    * _instance_
+        * [.in](#ConnectionGene+in) : <code>number</code>
+        * [.out](#ConnectionGene+out) : <code>number</code>
+        * [.weight](#ConnectionGene+weight) : <code>number</code>
+        * [.enabled](#ConnectionGene+enabled) : <code>boolean</code>
+        * [.innovationNumber](#ConnectionGene+innovationNumber) : <code>number</code>
+        * [.serialize([blacklist])](#Serializable+serialize) ⇒ <code>string</code>
+    * _static_
+        * [.resetInnovations()](#ConnectionGene.resetInnovations)
+
+<a name="new_ConnectionGene_new"></a>
+
+### new ConnectionGene(inID, outID, weight, enabled)
+Constructs a new ConnectionGene
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| inID | <code>number</code> | id of the source node |
+| outID | <code>number</code> | id of the destination node |
+| weight | <code>number</code> | the weight of the connection as a value between 0 and 1 inclusive |
+| enabled | <code>boolean</code> | whether this gene is expressed or not |
+
+**Example**  
+
+```js
+const node1 = new NodeGene(1, "input");
+const node2 = new NodeGene(2, "output");
+const conn = new ConnectionGene(node1.id, node2.id, 0.2, true);
+```
+<a name="ConnectionGene+in"></a>
+
+### connectionGene.in : <code>number</code>
+ID of the source node for this connection
+
+**Kind**: instance property of <code>[ConnectionGene](#ConnectionGene)</code>  
+<a name="ConnectionGene+out"></a>
+
+### connectionGene.out : <code>number</code>
+ID of the destination node for this connection
+
+**Kind**: instance property of <code>[ConnectionGene](#ConnectionGene)</code>  
+<a name="ConnectionGene+weight"></a>
+
+### connectionGene.weight : <code>number</code>
+The weight of this connection as a value between 0 and 1 inclusive
+
+**Kind**: instance property of <code>[ConnectionGene](#ConnectionGene)</code>  
+<a name="ConnectionGene+enabled"></a>
+
+### connectionGene.enabled : <code>boolean</code>
+True if this gene is expressed, false otherwise. A connection gene
+that is not expressed is given a weight of zero in the resulting
+neural network.
+
+**Kind**: instance property of <code>[ConnectionGene](#ConnectionGene)</code>  
+<a name="ConnectionGene+innovationNumber"></a>
+
+### connectionGene.innovationNumber : <code>number</code>
+ID of the historical origin, or "innovation number" of this connection
+gene
+
+**Kind**: instance property of <code>[ConnectionGene](#ConnectionGene)</code>  
+<a name="Serializable+serialize"></a>
+
+### connectionGene.serialize([blacklist]) ⇒ <code>string</code>
+Serializes this object to JSON with an optional array of blacklisted
+fields that will not be included in the output. This function will be
+called recursively for nested Serializable objects.
+
+**Kind**: instance method of <code>[ConnectionGene](#ConnectionGene)</code>  
+**Returns**: <code>string</code> - JSON string  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [blacklist] | <code>Array.&lt;string&gt;</code> | <code>[]</code> | keys in this list will be excluded from the JSON string |
+
+**Example**  
+
+```js
+let coord = new Coord(1, 2);
+coord.serialize() // '{"ctor":"Coord","data":{"x":1,"y":2}}'
+coord.serialize(["y"]) // '{"ctor":"Coord","data":{"x":1}}'
+```
+<a name="ConnectionGene.resetInnovations"></a>
+
+### ConnectionGene.resetInnovations()
+Resets the innovation history
+
+**Kind**: static method of <code>[ConnectionGene](#ConnectionGene)</code>  
+<a name="NodeGene"></a>
+
+## NodeGene ⇐ <code>[Serializable](#Serializable)</code>
+Genetic representation of a neuron in a neural network
+
+**Kind**: global class  
+**Extends:** <code>[Serializable](#Serializable)</code>  
+
+* [NodeGene](#NodeGene) ⇐ <code>[Serializable](#Serializable)</code>
+    * [new NodeGene([id], [type])](#new_NodeGene_new)
+    * [.id](#NodeGene+id) : <code>number</code>
+    * [.type](#NodeGene+type) : <code>string</code>
+    * [.serialize([blacklist])](#Serializable+serialize) ⇒ <code>string</code>
+
+<a name="new_NodeGene_new"></a>
+
+### new NodeGene([id], [type])
+Constructs a new NodeGene
+
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [id] | <code>number</code> | <code>0</code> | the id of the neuron |
+| [type] | <code>string</code> | <code>&quot;hidden&quot;</code> | one of "input", "hidden", or "output" |
+
+**Example**  
+
+```js
+const node1 = new NodeGene(1, "input");
+const node2 = new NodeGene(2, "output");
+const node3 = new NodeGene(3, "hidden");
+```
+<a name="NodeGene+id"></a>
+
+### nodeGene.id : <code>number</code>
+The id of the neuron
+
+**Kind**: instance property of <code>[NodeGene](#NodeGene)</code>  
+<a name="NodeGene+type"></a>
+
+### nodeGene.type : <code>string</code>
+Type of neuron. One of "input", "hidden", or "output".
+
+**Kind**: instance property of <code>[NodeGene](#NodeGene)</code>  
+<a name="Serializable+serialize"></a>
+
+### nodeGene.serialize([blacklist]) ⇒ <code>string</code>
+Serializes this object to JSON with an optional array of blacklisted
+fields that will not be included in the output. This function will be
+called recursively for nested Serializable objects.
+
+**Kind**: instance method of <code>[NodeGene](#NodeGene)</code>  
+**Returns**: <code>string</code> - JSON string  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [blacklist] | <code>Array.&lt;string&gt;</code> | <code>[]</code> | keys in this list will be excluded from the JSON string |
+
+**Example**  
+
+```js
+let coord = new Coord(1, 2);
+coord.serialize() // '{"ctor":"Coord","data":{"x":1,"y":2}}'
+coord.serialize(["y"]) // '{"ctor":"Coord","data":{"x":1}}'
+```
+<a name="Sequencer"></a>
+
+## Sequencer
+Reads in a [Strand](#Strand) and produces a
+[Synaptic neural network](http://synaptic.juancazala.com/#/)
+
+**Kind**: global class  
+**See**: [Strand](#Strand)  
+<a name="Sequencer+read"></a>
+
+### sequencer.read(strand) ⇒ <code>Network</code>
+Reads in a Strand and outputs a Synaptic neural network
+
+**Kind**: instance method of <code>[Sequencer](#Sequencer)</code>  
+**Returns**: <code>Network</code> - a Synaptic Network instance  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| strand | <code>[Strand](#Strand)</code> | strand of node and connection genes |
+
+<a name="Strand"></a>
+
+## Strand ⇐ <code>[Serializable](#Serializable)</code>
+Genetic representation of a neural network
+
+**Kind**: global class  
+**Extends:** <code>[Serializable](#Serializable)</code>  
+**See**
+
+- {NodeGene}
+- {ConnectionGene}
+
+
+* [Strand](#Strand) ⇐ <code>[Serializable](#Serializable)</code>
+    * [new Strand(inputCount, outputCount, enabled, random)](#new_Strand_new)
+    * [.nodeGenes](#Strand+nodeGenes) : <code>[Array.&lt;NodeGene&gt;](#NodeGene)</code>
+    * [.connectionGenes](#Strand+connectionGenes) : <code>[Array.&lt;ConnectionGene&gt;](#ConnectionGene)</code>
+    * [.inputNodeGeneCount](#Strand+inputNodeGeneCount) ⇒ <code>number</code>
+    * [.outputNodeGeneCount](#Strand+outputNodeGeneCount) ⇒ <code>number</code>
+    * [.hiddenNodeGeneCount](#Strand+hiddenNodeGeneCount) ⇒ <code>number</code>
+    * [.serialize([blacklist])](#Serializable+serialize) ⇒ <code>string</code>
+
+<a name="new_Strand_new"></a>
+
+### new Strand(inputCount, outputCount, enabled, random)
+Constructs a new Strand representing a fully connected neural network with
+the given number of input/output neurons, zero hidden neurons, and
+random weight values
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| inputCount | <code>number</code> | number of input neuron genes |
+| outputCount | <code>number</code> | number of output neuron genes |
+| enabled | <code>boolean</code> | whether all connection genes are initially enabled (true), or disabled (false) |
+| random | <code>Object</code> | an instance of a random-js instance |
+
+**Example**  
+
+```js
+// Represents a neural network with 4 input neurons, 5 output neurons,
+// and all connection genes enabled.
+const strand1 = new Strand(4, 5, true, random);
+// Represents a neural network with 2 input neurons, 4 output neurons,
+// and all connection genes disabled.
+const strand2 = new Strand(2, 4, false, random);
+```
+<a name="Strand+nodeGenes"></a>
+
+### strand.nodeGenes : <code>[Array.&lt;NodeGene&gt;](#NodeGene)</code>
+The list of node genes describing neurons
+
+**Kind**: instance property of <code>[Strand](#Strand)</code>  
+<a name="Strand+connectionGenes"></a>
+
+### strand.connectionGenes : <code>[Array.&lt;ConnectionGene&gt;](#ConnectionGene)</code>
+The list of connection genes describing connections between neurons
+
+**Kind**: instance property of <code>[Strand](#Strand)</code>  
+<a name="Strand+inputNodeGeneCount"></a>
+
+### strand.inputNodeGeneCount ⇒ <code>number</code>
+Returns the count of input node genes in this strand
+
+**Kind**: instance property of <code>[Strand](#Strand)</code>  
+**Returns**: <code>number</code> - input node gene count  
+<a name="Strand+outputNodeGeneCount"></a>
+
+### strand.outputNodeGeneCount ⇒ <code>number</code>
+Returns the count of output node genes in this strand
+
+**Kind**: instance property of <code>[Strand](#Strand)</code>  
+**Returns**: <code>number</code> - output node gene count  
+<a name="Strand+hiddenNodeGeneCount"></a>
+
+### strand.hiddenNodeGeneCount ⇒ <code>number</code>
+Returns the count of hidden node genes in this strand
+
+**Kind**: instance property of <code>[Strand](#Strand)</code>  
+**Returns**: <code>number</code> - hidden node gene count  
+<a name="Serializable+serialize"></a>
+
+### strand.serialize([blacklist]) ⇒ <code>string</code>
+Serializes this object to JSON with an optional array of blacklisted
+fields that will not be included in the output. This function will be
+called recursively for nested Serializable objects.
+
+**Kind**: instance method of <code>[Strand](#Strand)</code>  
+**Returns**: <code>string</code> - JSON string  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [blacklist] | <code>Array.&lt;string&gt;</code> | <code>[]</code> | keys in this list will be excluded from the JSON string |
+
+**Example**  
+
+```js
+let coord = new Coord(1, 2);
+coord.serialize() // '{"ctor":"Coord","data":{"x":1,"y":2}}'
+coord.serialize(["y"]) // '{"ctor":"Coord","data":{"x":1}}'
+```
+<a name="HexGrid"></a>
+
+## HexGrid ⇐ <code>[CoordEntityIndex](#CoordEntityIndex)</code>
+A 2D, hexagonal grid implementation with axial coordinate system. Provides
+methods for building an array of tile entities, fast lookup of entities by
+coordinate, as well as other useful grid-related tasks.
+Implementation details can be found [here](http://goo.gl/nLO6sN).
+
+**Kind**: global class  
+**Extends:** <code>[CoordEntityIndex](#CoordEntityIndex)</code>  
+**See**
+
+- [Entity](#Entity)
+- [Coord](#Coord)
+
+
+* [HexGrid](#HexGrid) ⇐ <code>[CoordEntityIndex](#CoordEntityIndex)</code>
+    * [new HexGrid(radius)](#new_HexGrid_new)
+    * [.radius](#HexGrid+radius) : <code>number</code>
+    * [.length](#CoordEntityIndex+length) ⇒ <code>number</code>
+    * [.buildTiles()](#HexGrid+buildTiles) ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
+    * [.isValidCoord(coord)](#HexGrid+isValidCoord) ⇒ <code>boolean</code>
+    * [.neighborsOf(coord)](#HexGrid+neighborsOf) ⇒ <code>[Array.&lt;Coord&gt;](#Coord)</code>
+    * [.distanceBetween(coord1, coord2)](#HexGrid+distanceBetween) ⇒ <code>number</code>
+    * [.coordToPixel(coord, radius)](#HexGrid+coordToPixel) ⇒ <code>[Point](#Point)</code>
+    * [.rebuild(entities)](#CoordEntityIndex+rebuild)
+    * [.findEntitiesAt(coord)](#CoordEntityIndex+findEntitiesAt) ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
+
+<a name="new_HexGrid_new"></a>
+
+### new HexGrid(radius)
+Constructs a new HexGrid of given radius. The pattern of tiles within the
+grid will then form a hexagon itself with (0,0) being the center.
+A grid of radius 0 is just a single hexagon, radius 1 is a single hexagon
+surrounded by 1 layer of hexagons, and so on...
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| radius | <code>number</code> | Number of tiles from center of grid to the edge, not counting the center tile |
+
+**Example**  
+
+```js
+let myGrid = new HexGrid(10);
+```
+<a name="HexGrid+radius"></a>
+
+### hexGrid.radius : <code>number</code>
+The radius of this hex grid in tiles
+
+**Kind**: instance property of <code>[HexGrid](#HexGrid)</code>  
+<a name="CoordEntityIndex+length"></a>
+
+### hexGrid.length ⇒ <code>number</code>
+Returns the current number of entities stored in the index
+
+**Kind**: instance property of <code>[HexGrid](#HexGrid)</code>  
+**Returns**: <code>number</code> - current number of entities stored in the index  
+<a name="HexGrid+buildTiles"></a>
+
+### hexGrid.buildTiles() ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
+Builds an array of tile entities that represent this hex grid
+
+**Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
+**Returns**: <code>[Array.&lt;Entity&gt;](#Entity)</code> - array of tile entities  
+<a name="HexGrid+isValidCoord"></a>
+
+### hexGrid.isValidCoord(coord) ⇒ <code>boolean</code>
+Determines whether the given coordinate is valid within the grid
+
+**Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
+**Returns**: <code>boolean</code> - True if the given coordinate is valid, false otherwise  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| coord | <code>[Coord](#Coord)</code> | the coordinate to check |
+
+<a name="HexGrid+neighborsOf"></a>
+
+### hexGrid.neighborsOf(coord) ⇒ <code>[Array.&lt;Coord&gt;](#Coord)</code>
+Returns the Coords that are adjacent to the given Coord
+
+**Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
+**Returns**: <code>[Array.&lt;Coord&gt;](#Coord)</code> - The array of neighboring Coords  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| coord | <code>[Coord](#Coord)</code> | coordinates of tile for which to calculate neighbors |
+
+**Example**  
+
+```js
+let neighborsOfOrigin = myGrid.neighborsOf(new Coord(0, 0));
+```
+<a name="HexGrid+distanceBetween"></a>
+
+### hexGrid.distanceBetween(coord1, coord2) ⇒ <code>number</code>
+Calculates the distance between two Coords in tiles
+
+**Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
+**Returns**: <code>number</code> - The distance between the provided coordinates in tiles  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| coord1 | <code>[Coord](#Coord)</code> | coordinates of first tile |
+| coord2 | <code>[Coord](#Coord)</code> | coordinates of second tile |
+
+**Example**  
+
+```js
+let myGrid = new HexGrid(2);
+let distanceFromCenterToEdge = myGrid.distanceBetween(new Coord(0, 0), new Coord(2, -2)); // 2
+```
+<a name="HexGrid+coordToPixel"></a>
+
+### hexGrid.coordToPixel(coord, radius) ⇒ <code>[Point](#Point)</code>
+Converts a tile's coordinates to its pixel coordinates
+
+**Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
+**Returns**: <code>[Point](#Point)</code> - pixel coordinates of center of tile  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| coord | <code>[Coord](#Coord)</code> | tile coordinates |
+| radius | <code>number</code> | radius of hexagons (for correct spacing) |
+
+<a name="CoordEntityIndex+rebuild"></a>
+
+### hexGrid.rebuild(entities)
+Rebuilds the index of the given entities for fast lookup by their coordinate
+positions (Coord component). If an entity does not contain a Coord
+component, it is not included in the index.
+
+**Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| entities | <code>[Array.&lt;Entity&gt;](#Entity)</code> | array of entities to build the index for |
+
+<a name="CoordEntityIndex+findEntitiesAt"></a>
+
+### hexGrid.findEntitiesAt(coord) ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
+Returns an array of entities that are located at the given coordinate
+
+**Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
+**Returns**: <code>[Array.&lt;Entity&gt;](#Entity)</code> - array of entities with given coordinates  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| coord | <code>[Coord](#Coord)</code> | coordinate |
+
+<a name="Plugin"></a>
+
+## Plugin
+A toggleable plugin containing an array of [Systems](#System) and
+configuration options
+
+**Kind**: global class  
+
+* [Plugin](#Plugin)
+    * [new Plugin(name, systems, config, [enabled])](#new_Plugin_new)
+    * [.name](#Plugin+name) : <code>string</code>
+    * [.systems](#Plugin+systems) : <code>[Array.&lt;System&gt;](#System)</code>
+    * [.config](#Plugin+config) : <code>Object</code>
+    * [.enabled](#Plugin+enabled) : <code>boolean</code>
+
+<a name="new_Plugin_new"></a>
+
+### new Plugin(name, systems, config, [enabled])
+Constructs a new plugin
+
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| name | <code>string</code> |  | name of the plugin |
+| systems | <code>[Array.&lt;System&gt;](#System)</code> |  | the systems that this plugin includes |
+| config | <code>Object</code> |  | configuration options that this plugin exposes |
+| [enabled] | <code>boolean</code> | <code>true</code> | whether this plugin is enabled or not |
+
+**Example**  
+
+```js
+import MySystem from "./systems/MySystem";
+import MyOtherSystem from "./systems/MyOtherSystem";
+const systems = [ new MySystem(), new MyOtherSystem() ];
+const config = { someSetting: 10 };
+const myPlugin = new Plugin("mine", systems, config);
+
+// Assuming myPlugin is registered in `config.js`, in some other file
+// we can do:
+import config from "../config";
+config.mine.someSetting = 12; // someSetting has been exposed via config global
+```
+<a name="Plugin+name"></a>
+
+### plugin.name : <code>string</code>
+Name of the plugin
+
+**Kind**: instance property of <code>[Plugin](#Plugin)</code>  
+<a name="Plugin+systems"></a>
+
+### plugin.systems : <code>[Array.&lt;System&gt;](#System)</code>
+The array of systems that this plugin includes
+
+**Kind**: instance property of <code>[Plugin](#Plugin)</code>  
+<a name="Plugin+config"></a>
+
+### plugin.config : <code>Object</code>
+The configuration options that this plugin exposes
+
+**Kind**: instance property of <code>[Plugin](#Plugin)</code>  
+<a name="Plugin+enabled"></a>
+
+### plugin.enabled : <code>boolean</code>
+True if this plugin is enabled, false otherwise. A disabled plugin
+will be excluded from the processing loop.
+
+**Kind**: instance property of <code>[Plugin](#Plugin)</code>  
+<a name="Coord"></a>
+
+## Coord ⇐ <code>[Component](#Component)</code>
+A two dimensional coordinate of x and y
+
+**Kind**: global class  
+**Extends:** <code>[Component](#Component)</code>  
+**Mixes**: <code>[VectorMixin](#VectorMixin)</code>  
+
+* [Coord](#Coord) ⇐ <code>[Component](#Component)</code>
+    * [new Coord([x], [y])](#new_Coord_new)
+    * [.x](#Coord+x) : <code>number</code>
+    * [.y](#Coord+y) : <code>number</code>
+    * [.name](#Component+name) : <code>string</code>
+
+<a name="new_Coord_new"></a>
+
+### new Coord([x], [y])
+Constructs a new Coord with coordinates (x,y)
+
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [x] | <code>number</code> | <code>0</code> | x value |
+| [y] | <code>number</code> | <code>0</code> | y value |
+
+**Example**  
+
+```js
+let myCoord = new Coord(-5, 10);
+```
+<a name="Coord+x"></a>
+
+### coord.x : <code>number</code>
+x value
+
+**Kind**: instance property of <code>[Coord](#Coord)</code>  
+**Default**: <code>0</code>  
+<a name="Coord+y"></a>
+
+### coord.y : <code>number</code>
+y value
+
+**Kind**: instance property of <code>[Coord](#Coord)</code>  
+**Default**: <code>0</code>  
+<a name="Component+name"></a>
+
+### coord.name : <code>string</code>
+Name of the component. Expected to be unique among Components.
+
+**Kind**: instance property of <code>[Coord](#Coord)</code>  
+<a name="Energy"></a>
+
+## Energy ⇐ <code>[Component](#Component)</code>
+Energy is the currency of existence
+
+**Kind**: global class  
+**Extends:** <code>[Component](#Component)</code>  
+
+* [Energy](#Energy) ⇐ <code>[Component](#Component)</code>
+    * [new Energy(energyLevel)](#new_Energy_new)
+    * [.level](#Energy+level) ⇒ <code>number</code>
+    * [.name](#Component+name) : <code>string</code>
+    * [.gain(amount, the)](#Energy+gain)
+    * [.expend(amount)](#Energy+expend) ⇒ <code>number</code>
+
+<a name="new_Energy_new"></a>
+
+### new Energy(energyLevel)
+Constructs a new energy component with the given energy level
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| energyLevel | <code>number</code> | level of energy to initiate this component with |
+
+<a name="Energy+level"></a>
+
+### energy.level ⇒ <code>number</code>
+The current energy level
+
+**Kind**: instance property of <code>[Energy](#Energy)</code>  
+**Returns**: <code>number</code> - current energy level  
+<a name="Component+name"></a>
+
+### energy.name : <code>string</code>
+Name of the component. Expected to be unique among Components.
+
+**Kind**: instance property of <code>[Energy](#Energy)</code>  
+<a name="Energy+gain"></a>
+
+### energy.gain(amount, the)
+Increases the current energy level by the given amount
+
+**Kind**: instance method of <code>[Energy](#Energy)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| amount | <code>number</code> | amount of energy to gain |
+| the | <code>number</code> | updated energy level |
+
+<a name="Energy+expend"></a>
+
+### energy.expend(amount) ⇒ <code>number</code>
+Expends the given amount of energy, capped at zero
+
+**Kind**: instance method of <code>[Energy](#Energy)</code>  
+**Returns**: <code>number</code> - the updated energy level  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| amount | <code>number</code> | amount of energy to expend |
+
+<a name="Sprite"></a>
+
+## Sprite ⇐ <code>[Component](#Component)</code>
+Graphical representation of an entity
+
+**Kind**: global class  
+**Extends:** <code>[Component](#Component)</code>  
+
+* [Sprite](#Sprite) ⇐ <code>[Component](#Component)</code>
+    * [new Sprite(spriteName)](#new_Sprite_new)
+    * [.spriteName](#Sprite+spriteName) : <code>string</code>
+    * [.name](#Component+name) : <code>string</code>
+    * [.getItem(paper)](#Sprite+getItem) ⇒ <code>Item</code>
+    * [.release()](#Sprite+release)
+
+<a name="new_Sprite_new"></a>
+
+### new Sprite(spriteName)
+Constructs a new sprite component with the given graphic defined by the
+current theme, or falls back to the "default" graphic if not defined
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| spriteName | <code>string</code> | the name of the graphic as defined by the current theme |
+
+<a name="Sprite+spriteName"></a>
+
+### sprite.spriteName : <code>string</code>
+Name of the graphic that this sprite represents as defined by the
+current theme
+
+**Kind**: instance property of <code>[Sprite](#Sprite)</code>  
+<a name="Component+name"></a>
+
+### sprite.name : <code>string</code>
+Name of the component. Expected to be unique among Components.
+
+**Kind**: instance property of <code>[Sprite](#Sprite)</code>  
+<a name="Sprite+getItem"></a>
+
+### sprite.getItem(paper) ⇒ <code>Item</code>
+Returns a [Paper.js Item](http://paperjs.org/reference/item)
+instance representing the vector graphic of this sprite
+
+**Kind**: instance method of <code>[Sprite](#Sprite)</code>  
+**Returns**: <code>Item</code> - Paper.js Item instance  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| paper | <code>PaperScope</code> | an active paper scope |
+
+<a name="Sprite+release"></a>
+
+### sprite.release()
+Releases the underlying Paper.js representation of this sprite, effectively
+removing it from the screen
+
+**Kind**: instance method of <code>[Sprite](#Sprite)</code>  
+<a name="Tile"></a>
+
+## Tile ⇐ <code>[Component](#Component)</code>
+Tile is a location in the world that an entity can exist at
+
+**Kind**: global class  
+**Extends:** <code>[Component](#Component)</code>  
+
+* [Tile](#Tile) ⇐ <code>[Component](#Component)</code>
+    * [new Tile()](#new_Tile_new)
+    * [.name](#Component+name) : <code>string</code>
+
+<a name="new_Tile_new"></a>
+
+### new Tile()
+Constructs a new tile component
+
+<a name="Component+name"></a>
+
+### tile.name : <code>string</code>
+Name of the component. Expected to be unique among Components.
+
+**Kind**: instance property of <code>[Tile](#Tile)</code>  
+<a name="Velocity"></a>
+
+## Velocity ⇐ <code>[Component](#Component)</code>
+A two dimensional velocity
+
+**Kind**: global class  
+**Extends:** <code>[Component](#Component)</code>  
+**Mixes**: <code>[VectorMixin](#VectorMixin)</code>  
+
+* [Velocity](#Velocity) ⇐ <code>[Component](#Component)</code>
+    * [new Velocity([x], [y])](#new_Velocity_new)
+    * [.x](#Velocity+x) : <code>number</code>
+    * [.y](#Velocity+y) : <code>number</code>
+    * [.name](#Component+name) : <code>string</code>
+
+<a name="new_Velocity_new"></a>
+
+### new Velocity([x], [y])
+Constructs a new Velocity component
+
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [x] | <code>number</code> | <code>0</code> | x value |
+| [y] | <code>number</code> | <code>0</code> | y value |
+
+**Example**  
+
+```js
+let myVelocity = new Velocity(-5, 10);
+```
+<a name="Velocity+x"></a>
+
+### velocity.x : <code>number</code>
+x value
+
+**Kind**: instance property of <code>[Velocity](#Velocity)</code>  
+**Default**: <code>0</code>  
+<a name="Velocity+y"></a>
+
+### velocity.y : <code>number</code>
+y value
+
+**Kind**: instance property of <code>[Velocity](#Velocity)</code>  
+**Default**: <code>0</code>  
+<a name="Component+name"></a>
+
+### velocity.name : <code>string</code>
+Name of the component. Expected to be unique among Components.
+
+**Kind**: instance property of <code>[Velocity](#Velocity)</code>  
+<a name="BackgroundRenderer"></a>
+
+## BackgroundRenderer ⇐ <code>[System](#System)</code>
+Renders the background
+
+**Kind**: global class  
+**Extends:** <code>[System](#System)</code>  
+
+* [BackgroundRenderer](#BackgroundRenderer) ⇐ <code>[System](#System)</code>
+    * [new BackgroundRenderer()](#new_BackgroundRenderer_new)
+    * [.tag](#System+tag) : <code>string</code>
+    * [.initialize(app)](#BackgroundRenderer+initialize)
+    * [.reserve(app)](#System+reserve)
+    * [.update(app)](#System+update)
+    * [.draw(app)](#System+draw)
+    * [.sense(app)](#System+sense)
+    * [.attempt(app)](#System+attempt)
+
+<a name="new_BackgroundRenderer_new"></a>
+
+### new BackgroundRenderer()
+Constructs a new BackgroundRenderer
+
+<a name="System+tag"></a>
+
+### backgroundRenderer.tag : <code>string</code>
+Defines the overall role of this system. One of "renderer", "generator",
+or "processor".
+
+**Kind**: instance property of <code>[BackgroundRenderer](#BackgroundRenderer)</code>  
+<a name="BackgroundRenderer+initialize"></a>
+
+### backgroundRenderer.initialize(app)
+Renders the background
+
+**Kind**: instance method of <code>[BackgroundRenderer](#BackgroundRenderer)</code>  
+**Overrides:** <code>[initialize](#System+initialize)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+reserve"></a>
+
+### backgroundRenderer.reserve(app)
+Hook for reserving input and ouput neurons in the Brain
+
+**Kind**: instance method of <code>[BackgroundRenderer](#BackgroundRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+update"></a>
+
+### backgroundRenderer.update(app)
+Hook for updating the state of the world
+
+**Kind**: instance method of <code>[BackgroundRenderer](#BackgroundRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+draw"></a>
+
+### backgroundRenderer.draw(app)
+Called once per frame to perform drawing logic
+
+**Kind**: instance method of <code>[BackgroundRenderer](#BackgroundRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+sense"></a>
+
+### backgroundRenderer.sense(app)
+Hook for inputting sense data into the brain
+
+**Kind**: instance method of <code>[BackgroundRenderer](#BackgroundRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+attempt"></a>
+
+### backgroundRenderer.attempt(app)
+Hook for reading output data from the brain and attempting actions
+
+**Kind**: instance method of <code>[BackgroundRenderer](#BackgroundRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="SpriteRenderer"></a>
+
+## SpriteRenderer ⇐ <code>[System](#System)</code>
+Renders all entities with Coord and Sprite components to the screen
+
+**Kind**: global class  
+**Extends:** <code>[System](#System)</code>  
+
+* [SpriteRenderer](#SpriteRenderer) ⇐ <code>[System](#System)</code>
+    * [new SpriteRenderer()](#new_SpriteRenderer_new)
+    * [.tag](#System+tag) : <code>string</code>
+    * [.draw(app)](#SpriteRenderer+draw)
+    * [.reserve(app)](#System+reserve)
+    * [.initialize(app)](#System+initialize)
+    * [.update(app)](#System+update)
+    * [.sense(app)](#System+sense)
+    * [.attempt(app)](#System+attempt)
+
+<a name="new_SpriteRenderer_new"></a>
+
+### new SpriteRenderer()
+Constructs a new SpriteRenderer
+
+<a name="System+tag"></a>
+
+### spriteRenderer.tag : <code>string</code>
+Defines the overall role of this system. One of "renderer", "generator",
+or "processor".
+
+**Kind**: instance property of <code>[SpriteRenderer](#SpriteRenderer)</code>  
+<a name="SpriteRenderer+draw"></a>
+
+### spriteRenderer.draw(app)
+Called once per frame to perform drawing logic
+
+**Kind**: instance method of <code>[SpriteRenderer](#SpriteRenderer)</code>  
+**Overrides:** <code>[draw](#System+draw)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+reserve"></a>
+
+### spriteRenderer.reserve(app)
+Hook for reserving input and ouput neurons in the Brain
+
+**Kind**: instance method of <code>[SpriteRenderer](#SpriteRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+initialize"></a>
+
+### spriteRenderer.initialize(app)
+Initializes this system allowing it to perform one-time preparation logic
+
+**Kind**: instance method of <code>[SpriteRenderer](#SpriteRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+update"></a>
+
+### spriteRenderer.update(app)
+Hook for updating the state of the world
+
+**Kind**: instance method of <code>[SpriteRenderer](#SpriteRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+sense"></a>
+
+### spriteRenderer.sense(app)
+Hook for inputting sense data into the brain
+
+**Kind**: instance method of <code>[SpriteRenderer](#SpriteRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
+<a name="System+attempt"></a>
+
+### spriteRenderer.attempt(app)
+Hook for reading output data from the brain and attempting actions
+
+**Kind**: instance method of <code>[SpriteRenderer](#SpriteRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| app | <code>[App](#App)</code> | the currently running GS app |
+
 <a name="Brain"></a>
 
 ## Brain ⇐ <code>[Component](#Component)</code>
@@ -789,6 +1739,7 @@ actions on the behalf of a creature
 * [Brain](#Brain) ⇐ <code>[Component](#Component)</code>
     * [new Brain(dna, sequencer)](#new_Brain_new)
     * _instance_
+        * [.name](#Component+name) : <code>string</code>
         * [.input(id, value)](#Brain+input)
         * [.output(id)](#Brain+output)
         * [.activate()](#Brain+activate)
@@ -812,6 +1763,12 @@ the supplied [Sequencer](#Sequencer)
 | dna | <code>[DNA](#DNA)</code> | creature DNA |
 | sequencer | <code>[Sequencer](#Sequencer)</code> | the sequencer to use to read the brain strand from the DNA |
 
+<a name="Component+name"></a>
+
+### brain.name : <code>string</code>
+Name of the component. Expected to be unique among Components.
+
+**Kind**: instance property of <code>[Brain](#Brain)</code>  
 <a name="Brain+input"></a>
 
 ### brain.input(id, value)
@@ -913,131 +1870,29 @@ the brain.
 ```js
 const actionID = Brain.reserveOutput();
 ```
-<a name="Coord"></a>
+<a name="Creature"></a>
 
-## Coord ⇐ <code>[Component](#Component)</code>
-A two dimensional coordinate of x and y
-
-**Kind**: global class  
-**Extends:** <code>[Component](#Component)</code>  
-
-* [Coord](#Coord) ⇐ <code>[Component](#Component)</code>
-    * [new Coord([x], [y])](#new_Coord_new)
-    * [.x](#Coord+x) : <code>number</code>
-    * [.y](#Coord+y) : <code>number</code>
-
-<a name="new_Coord_new"></a>
-
-### new Coord([x], [y])
-Constructs a new Coord with coordinates (x,y)
-
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| [x] | <code>number</code> | <code>0</code> | x value |
-| [y] | <code>number</code> | <code>0</code> | y value |
-
-**Example**  
-
-```js
-let myCoord = new Coord(-5, 10);
-myCoord.x = 0;
-myCoord.y = 0;
-```
-<a name="Coord+x"></a>
-
-### coord.x : <code>number</code>
-x value
-
-**Kind**: instance property of <code>[Coord](#Coord)</code>  
-**Default**: <code>0</code>  
-<a name="Coord+y"></a>
-
-### coord.y : <code>number</code>
-y value
-
-**Kind**: instance property of <code>[Coord](#Coord)</code>  
-**Default**: <code>0</code>  
-<a name="ConnectionGene"></a>
-
-## ConnectionGene ⇐ <code>[Component](#Component)</code>
-Genetic representation of a connection between two neurons in a neural
-network
+## Creature ⇐ <code>[Component](#Component)</code>
+Intelligent organism with the capability to evolve
 
 **Kind**: global class  
 **Extends:** <code>[Component](#Component)</code>  
-**See**: {NodeGene}  
 
-* [ConnectionGene](#ConnectionGene) ⇐ <code>[Component](#Component)</code>
-    * [new ConnectionGene(inID, outID, weight, enabled)](#new_ConnectionGene_new)
-    * _instance_
-        * [.in](#ConnectionGene+in) : <code>number</code>
-        * [.out](#ConnectionGene+out) : <code>number</code>
-        * [.weight](#ConnectionGene+weight) : <code>number</code>
-        * [.enabled](#ConnectionGene+enabled) : <code>boolean</code>
-        * [.innovationNumber](#ConnectionGene+innovationNumber) : <code>number</code>
-    * _static_
-        * [.resetInnovations()](#ConnectionGene.resetInnovations)
+* [Creature](#Creature) ⇐ <code>[Component](#Component)</code>
+    * [new Creature()](#new_Creature_new)
+    * [.name](#Component+name) : <code>string</code>
 
-<a name="new_ConnectionGene_new"></a>
+<a name="new_Creature_new"></a>
 
-### new ConnectionGene(inID, outID, weight, enabled)
-Constructs a new ConnectionGene
+### new Creature()
+Constructs a new creature component
 
+<a name="Component+name"></a>
 
-| Param | Type | Description |
-| --- | --- | --- |
-| inID | <code>number</code> | id of the source node |
-| outID | <code>number</code> | id of the destination node |
-| weight | <code>number</code> | the weight of the connection as a value between 0 and 1 inclusive |
-| enabled | <code>boolean</code> | whether this gene is expressed or not |
+### creature.name : <code>string</code>
+Name of the component. Expected to be unique among Components.
 
-**Example**  
-
-```js
-const node1 = new NodeGene(1, "input");
-const node2 = new NodeGene(2, "output");
-const conn = new ConnectionGene(node1.id, node2.id, 0.2, true);
-```
-<a name="ConnectionGene+in"></a>
-
-### connectionGene.in : <code>number</code>
-ID of the source node for this connection
-
-**Kind**: instance property of <code>[ConnectionGene](#ConnectionGene)</code>  
-<a name="ConnectionGene+out"></a>
-
-### connectionGene.out : <code>number</code>
-ID of the destination node for this connection
-
-**Kind**: instance property of <code>[ConnectionGene](#ConnectionGene)</code>  
-<a name="ConnectionGene+weight"></a>
-
-### connectionGene.weight : <code>number</code>
-The weight of this connection as a value between 0 and 1 inclusive
-
-**Kind**: instance property of <code>[ConnectionGene](#ConnectionGene)</code>  
-<a name="ConnectionGene+enabled"></a>
-
-### connectionGene.enabled : <code>boolean</code>
-True if this gene is expressed, false otherwise. A connection gene
-that is not expressed is given a weight of zero in the resulting
-neural network.
-
-**Kind**: instance property of <code>[ConnectionGene](#ConnectionGene)</code>  
-<a name="ConnectionGene+innovationNumber"></a>
-
-### connectionGene.innovationNumber : <code>number</code>
-ID of the historical origin, or "innovation number" of this connection
-gene
-
-**Kind**: instance property of <code>[ConnectionGene](#ConnectionGene)</code>  
-<a name="ConnectionGene.resetInnovations"></a>
-
-### ConnectionGene.resetInnovations()
-Resets the innovation history
-
-**Kind**: static method of <code>[ConnectionGene](#ConnectionGene)</code>  
+**Kind**: instance property of <code>[Creature](#Creature)</code>  
 <a name="DNA"></a>
 
 ## DNA ⇐ <code>[Component](#Component)</code>
@@ -1051,13 +1906,13 @@ Genetic encoding of a creature heavily inspired by the
     * [new DNA(inputCount, outputCount, random)](#new_DNA_new)
     * [.brainStrand](#DNA+brainStrand) : <code>[Strand](#Strand)</code>
     * [.traitStrand](#DNA+traitStrand) : <code>[Strand](#Strand)</code>
+    * [.name](#Component+name) : <code>string</code>
 
 <a name="new_DNA_new"></a>
 
 ### new DNA(inputCount, outputCount, random)
-Constructs the DNA for a brand new creature with base traits and the
-simplest possible brain: one with only one enabled connection between
-a random input neuron and a random output neuron.
+Constructs the DNA for a brand new creature with base traits and a brain
+possessing the given number of input/output neurons
 
 
 | Param | Type | Description |
@@ -1085,391 +1940,12 @@ Strand of genes describing a creature's brain
 Strand of genes describing the trait function (TF)
 
 **Kind**: instance property of <code>[DNA](#DNA)</code>  
-<a name="NodeGene"></a>
+<a name="Component+name"></a>
 
-## NodeGene ⇐ <code>[Component](#Component)</code>
-Genetic representation of a neuron in a neural network
+### dnA.name : <code>string</code>
+Name of the component. Expected to be unique among Components.
 
-**Kind**: global class  
-**Extends:** <code>[Component](#Component)</code>  
-
-* [NodeGene](#NodeGene) ⇐ <code>[Component](#Component)</code>
-    * [new NodeGene([id], [type])](#new_NodeGene_new)
-    * [.id](#NodeGene+id) : <code>number</code>
-    * [.type](#NodeGene+type) : <code>string</code>
-
-<a name="new_NodeGene_new"></a>
-
-### new NodeGene([id], [type])
-Constructs a new NodeGene
-
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| [id] | <code>number</code> | <code>0</code> | the id of the neuron |
-| [type] | <code>string</code> | <code>&quot;hidden&quot;</code> | one of "input", "hidden", or "output" |
-
-**Example**  
-
-```js
-const node1 = new NodeGene(1, "input");
-const node2 = new NodeGene(2, "output");
-const node3 = new NodeGene(3, "hidden");
-```
-<a name="NodeGene+id"></a>
-
-### nodeGene.id : <code>number</code>
-The id of the neuron
-
-**Kind**: instance property of <code>[NodeGene](#NodeGene)</code>  
-<a name="NodeGene+type"></a>
-
-### nodeGene.type : <code>string</code>
-Type of neuron. One of "input", "hidden", or "output".
-
-**Kind**: instance property of <code>[NodeGene](#NodeGene)</code>  
-<a name="Strand"></a>
-
-## Strand ⇐ <code>[Component](#Component)</code>
-Genetic representation of a neural network
-
-**Kind**: global class  
-**Extends:** <code>[Component](#Component)</code>  
-**See**
-
-- {NodeGene}
-- {ConnectionGene}
-
-
-* [Strand](#Strand) ⇐ <code>[Component](#Component)</code>
-    * [new Strand(inputCount, outputCount, enabled, random)](#new_Strand_new)
-    * [.nodeGenes](#Strand+nodeGenes) : <code>[Array.&lt;NodeGene&gt;](#NodeGene)</code>
-    * [.connectionGenes](#Strand+connectionGenes) : <code>[Array.&lt;ConnectionGene&gt;](#ConnectionGene)</code>
-
-<a name="new_Strand_new"></a>
-
-### new Strand(inputCount, outputCount, enabled, random)
-Constructs a new Strand representing a fully connected neural network with
-the given number of input/output neurons, zero hidden neurons, and
-random weight values
-
-
-| Param | Type | Description |
-| --- | --- | --- |
-| inputCount | <code>number</code> | number of input neuron genes |
-| outputCount | <code>number</code> | number of output neuron genes |
-| enabled | <code>boolean</code> | whether all connection genes are initially enabled (true), or disabled (false) |
-| random | <code>Object</code> | an instance of a random-js instance |
-
-**Example**  
-
-```js
-// Represents a neural network with 4 input neurons, 5 output neurons,
-// and all connection genes enabled.
-const strand1 = new Strand(4, 5, true, random);
-// Represents a neural network with 2 input neurons, 4 output neurons,
-// and all connection genes disabled.
-const strand2 = new Strand(2, 4, false, random);
-```
-<a name="Strand+nodeGenes"></a>
-
-### strand.nodeGenes : <code>[Array.&lt;NodeGene&gt;](#NodeGene)</code>
-The list of node genes describing neurons
-
-**Kind**: instance property of <code>[Strand](#Strand)</code>  
-<a name="Strand+connectionGenes"></a>
-
-### strand.connectionGenes : <code>[Array.&lt;ConnectionGene&gt;](#ConnectionGene)</code>
-The list of connection genes describing connections between neurons
-
-**Kind**: instance property of <code>[Strand](#Strand)</code>  
-<a name="BackgroundRenderer"></a>
-
-## BackgroundRenderer ⇐ <code>[System](#System)</code>
-Renders the background
-
-**Kind**: global class  
-**Extends:** <code>[System](#System)</code>  
-
-* [BackgroundRenderer](#BackgroundRenderer) ⇐ <code>[System](#System)</code>
-    * [new BackgroundRenderer()](#new_BackgroundRenderer_new)
-    * [.tag](#System+tag) : <code>string</code>
-    * [.initialize(app)](#BackgroundRenderer+initialize)
-    * [.reserve(app)](#System+reserve)
-    * [.update(app)](#System+update)
-    * [.draw(app)](#System+draw)
-    * [.sense(app)](#System+sense)
-    * [.attempt(app)](#System+attempt)
-
-<a name="new_BackgroundRenderer_new"></a>
-
-### new BackgroundRenderer()
-Constructs a new BackgroundRenderer
-
-<a name="System+tag"></a>
-
-### backgroundRenderer.tag : <code>string</code>
-Defines the overall role of this system. One of "renderer", "generator",
-or "processor".
-
-**Kind**: instance property of <code>[BackgroundRenderer](#BackgroundRenderer)</code>  
-<a name="BackgroundRenderer+initialize"></a>
-
-### backgroundRenderer.initialize(app)
-Renders the background
-
-**Kind**: instance method of <code>[BackgroundRenderer](#BackgroundRenderer)</code>  
-**Overrides:** <code>[initialize](#System+initialize)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="System+reserve"></a>
-
-### backgroundRenderer.reserve(app)
-Hook for reserving input and ouput neurons in the Brain
-
-**Kind**: instance method of <code>[BackgroundRenderer](#BackgroundRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="System+update"></a>
-
-### backgroundRenderer.update(app)
-Hook for updating the state of the world
-
-**Kind**: instance method of <code>[BackgroundRenderer](#BackgroundRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="System+draw"></a>
-
-### backgroundRenderer.draw(app)
-Called once per frame to perform drawing logic
-
-**Kind**: instance method of <code>[BackgroundRenderer](#BackgroundRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="System+sense"></a>
-
-### backgroundRenderer.sense(app)
-Hook for inputting sense data into the brain
-
-**Kind**: instance method of <code>[BackgroundRenderer](#BackgroundRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="System+attempt"></a>
-
-### backgroundRenderer.attempt(app)
-Hook for reading output data from the brain and attempting actions
-
-**Kind**: instance method of <code>[BackgroundRenderer](#BackgroundRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="GridRenderer"></a>
-
-## GridRenderer ⇐ <code>[System](#System)</code>
-Renders a hexagonal border around all tiles in the grid
-
-**Kind**: global class  
-**Extends:** <code>[System](#System)</code>  
-
-* [GridRenderer](#GridRenderer) ⇐ <code>[System](#System)</code>
-    * [new GridRenderer()](#new_GridRenderer_new)
-    * [.tag](#System+tag) : <code>string</code>
-    * [.initialize(app)](#GridRenderer+initialize)
-    * [.reserve(app)](#System+reserve)
-    * [.update(app)](#System+update)
-    * [.draw(app)](#System+draw)
-    * [.sense(app)](#System+sense)
-    * [.attempt(app)](#System+attempt)
-
-<a name="new_GridRenderer_new"></a>
-
-### new GridRenderer()
-Constructs a new GridRenderer
-
-<a name="System+tag"></a>
-
-### gridRenderer.tag : <code>string</code>
-Defines the overall role of this system. One of "renderer", "generator",
-or "processor".
-
-**Kind**: instance property of <code>[GridRenderer](#GridRenderer)</code>  
-<a name="GridRenderer+initialize"></a>
-
-### gridRenderer.initialize(app)
-Renders the grid
-
-**Kind**: instance method of <code>[GridRenderer](#GridRenderer)</code>  
-**Overrides:** <code>[initialize](#System+initialize)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="System+reserve"></a>
-
-### gridRenderer.reserve(app)
-Hook for reserving input and ouput neurons in the Brain
-
-**Kind**: instance method of <code>[GridRenderer](#GridRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="System+update"></a>
-
-### gridRenderer.update(app)
-Hook for updating the state of the world
-
-**Kind**: instance method of <code>[GridRenderer](#GridRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="System+draw"></a>
-
-### gridRenderer.draw(app)
-Called once per frame to perform drawing logic
-
-**Kind**: instance method of <code>[GridRenderer](#GridRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="System+sense"></a>
-
-### gridRenderer.sense(app)
-Hook for inputting sense data into the brain
-
-**Kind**: instance method of <code>[GridRenderer](#GridRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="System+attempt"></a>
-
-### gridRenderer.attempt(app)
-Hook for reading output data from the brain and attempting actions
-
-**Kind**: instance method of <code>[GridRenderer](#GridRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="Creature"></a>
-
-## Creature ⇐ <code>[Component](#Component)</code>
-Intelligent organism with the capability to evolve
-
-**Kind**: global class  
-**Extends:** <code>[Component](#Component)</code>  
-
-* [Creature](#Creature) ⇐ <code>[Component](#Component)</code>
-    * [new Creature(dna, energy)](#new_Creature_new)
-    * [.energy](#Creature+energy) : <code>number</code>
-    * [.dna](#Creature+dna) : <code>[DNA](#DNA)</code>
-    * [.brain](#Creature+brain) : <code>[Brain](#Brain)</code>
-    * [.alive](#Creature+alive) : <code>boolean</code>
-    * [.eat(plant)](#Creature+eat) ⇒ <code>number</code>
-    * [.expend(expenditure)](#Creature+expend) ⇒ <code>boolean</code>
-    * [.die()](#Creature+die)
-
-<a name="new_Creature_new"></a>
-
-### new Creature(dna, energy)
-Constructs a new creature
-
-
-| Param | Type | Description |
-| --- | --- | --- |
-| dna | <code>[DNA](#DNA)</code> | the genetic representaiton of a creature |
-| energy | <code>number</code> | initial energy level |
-
-**Example**  
-
-```js
-const dna = new DNA(3, 4, random);
-const creature = new Creature(dna, 12);
-creature.energy === 12; // true
-```
-<a name="Creature+energy"></a>
-
-### creature.energy : <code>number</code>
-Energy level of this creature. When this reaches zero the creature,
-is dead.
-
-**Kind**: instance property of <code>[Creature](#Creature)</code>  
-<a name="Creature+dna"></a>
-
-### creature.dna : <code>[DNA](#DNA)</code>
-The genetic representaiton of this creature
-
-**Kind**: instance property of <code>[Creature](#Creature)</code>  
-<a name="Creature+brain"></a>
-
-### creature.brain : <code>[Brain](#Brain)</code>
-The brain of this creature
-
-**Kind**: instance property of <code>[Creature](#Creature)</code>  
-<a name="Creature+alive"></a>
-
-### creature.alive : <code>boolean</code>
-True if this creature is alive, false otherwise
-
-**Kind**: instance property of <code>[Creature](#Creature)</code>  
-<a name="Creature+eat"></a>
-
-### creature.eat(plant) ⇒ <code>number</code>
-Eats the given plant, raising the creature's energy level by the amount
-stored in the plant. Does NOT affect the plant in any way.
-
-**Kind**: instance method of <code>[Creature](#Creature)</code>  
-**Returns**: <code>number</code> - the creature's new energy level  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| plant | <code>[Plant](#Plant)</code> | plant to eat |
-
-<a name="Creature+expend"></a>
-
-### creature.expend(expenditure) ⇒ <code>boolean</code>
-Expends the given amount of energy. If the creature's energy drops below
-zero, it dies.
-
-**Kind**: instance method of <code>[Creature](#Creature)</code>  
-**Returns**: <code>boolean</code> - True if the creature is still alive, false otherwise  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| expenditure | <code>number</code> | the amount of energy to expend |
-
-<a name="Creature+die"></a>
-
-### creature.die()
-Kills this creature
-
-**Kind**: instance method of <code>[Creature](#Creature)</code>  
+**Kind**: instance property of <code>[DNA](#DNA)</code>  
 <a name="AgingProcessor"></a>
 
 ## AgingProcessor ⇐ <code>[System](#System)</code>
@@ -1679,11 +2155,10 @@ Hook for reading output data from the brain and attempting actions
 <a name="CreatureGenerator"></a>
 
 ## CreatureGenerator ⇐ <code>[System](#System)</code>
-Generates initial creatures with random DNA
+Generates initial creatures
 
 **Kind**: global class  
 **Extends:** <code>[System](#System)</code>  
-**See**: [Creature](#Creature)  
 
 * [CreatureGenerator](#CreatureGenerator) ⇐ <code>[System](#System)</code>
     * [new CreatureGenerator()](#new_CreatureGenerator_new)
@@ -1769,104 +2244,6 @@ Hook for inputting sense data into the brain
 Hook for reading output data from the brain and attempting actions
 
 **Kind**: instance method of <code>[CreatureGenerator](#CreatureGenerator)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="CreatureRenderer"></a>
-
-## CreatureRenderer ⇐ <code>[System](#System)</code>
-Renders creatures for all tiles that contain a Creature component
-
-**Kind**: global class  
-**Extends:** <code>[System](#System)</code>  
-
-* [CreatureRenderer](#CreatureRenderer) ⇐ <code>[System](#System)</code>
-    * [new CreatureRenderer()](#new_CreatureRenderer_new)
-    * [.tag](#System+tag) : <code>string</code>
-    * [.initialize(app)](#CreatureRenderer+initialize)
-    * [.draw(app)](#CreatureRenderer+draw)
-    * [.reserve(app)](#System+reserve)
-    * [.update(app)](#System+update)
-    * [.sense(app)](#System+sense)
-    * [.attempt(app)](#System+attempt)
-
-<a name="new_CreatureRenderer_new"></a>
-
-### new CreatureRenderer()
-Constructs a new CreatureRenderer
-
-<a name="System+tag"></a>
-
-### creatureRenderer.tag : <code>string</code>
-Defines the overall role of this system. One of "renderer", "generator",
-or "processor".
-
-**Kind**: instance property of <code>[CreatureRenderer](#CreatureRenderer)</code>  
-<a name="CreatureRenderer+initialize"></a>
-
-### creatureRenderer.initialize(app)
-Prepares the system for rendering creature graphics
-
-**Kind**: instance method of <code>[CreatureRenderer](#CreatureRenderer)</code>  
-**Overrides:** <code>[initialize](#System+initialize)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="CreatureRenderer+draw"></a>
-
-### creatureRenderer.draw(app)
-Renders a creature graphic for every tile that contains a Creature component
-
-**Kind**: instance method of <code>[CreatureRenderer](#CreatureRenderer)</code>  
-**Overrides:** <code>[draw](#System+draw)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="System+reserve"></a>
-
-### creatureRenderer.reserve(app)
-Hook for reserving input and ouput neurons in the Brain
-
-**Kind**: instance method of <code>[CreatureRenderer](#CreatureRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="System+update"></a>
-
-### creatureRenderer.update(app)
-Hook for updating the state of the world
-
-**Kind**: instance method of <code>[CreatureRenderer](#CreatureRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="System+sense"></a>
-
-### creatureRenderer.sense(app)
-Hook for inputting sense data into the brain
-
-**Kind**: instance method of <code>[CreatureRenderer](#CreatureRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="System+attempt"></a>
-
-### creatureRenderer.attempt(app)
-Hook for reading output data from the brain and attempting actions
-
-**Kind**: instance method of <code>[CreatureRenderer](#CreatureRenderer)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1982,11 +2359,9 @@ Processes locomotion for creatures
     * [new MovementProcessor()](#new_MovementProcessor_new)
     * [.tag](#System+tag) : <code>string</code>
     * [.reserve(app)](#MovementProcessor+reserve)
-    * [.initialize(app)](#MovementProcessor+initialize)
     * [.attempt(app)](#MovementProcessor+attempt)
     * [.update(app)](#MovementProcessor+update)
-    * [._hashCoord(coord)](#MovementProcessor+_hashCoord) ⇒ <code>string</code>
-    * [._unhashCoord(hash)](#MovementProcessor+_unhashCoord) ⇒ <code>[Coord](#Coord)</code>
+    * [.initialize(app)](#System+initialize)
     * [.draw(app)](#System+draw)
     * [.sense(app)](#System+sense)
 
@@ -2014,23 +2389,11 @@ Reserves 7 output neurons, one for each direction plus no direction
 | --- | --- | --- |
 | app | <code>[App](#App)</code> | the currently running GS app |
 
-<a name="MovementProcessor+initialize"></a>
-
-### movementProcessor.initialize(app)
-Prepares the system for use
-
-**Kind**: instance method of <code>[MovementProcessor](#MovementProcessor)</code>  
-**Overrides:** <code>[initialize](#System+initialize)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
 <a name="MovementProcessor+attempt"></a>
 
 ### movementProcessor.attempt(app)
-Makes plans to move a creature in the most prevailing direction signaled
-by the brain
+Sets creature's velocity to the most prevailing direction signaled by the
+brain
 
 **Kind**: instance method of <code>[MovementProcessor](#MovementProcessor)</code>  
 **Overrides:** <code>[attempt](#System+attempt)</code>  
@@ -2051,29 +2414,16 @@ Moves creature to their planned positions
 | --- | --- | --- |
 | app | <code>[App](#App)</code> | the currently running GS app |
 
-<a name="MovementProcessor+_hashCoord"></a>
+<a name="System+initialize"></a>
 
-### movementProcessor._hashCoord(coord) ⇒ <code>string</code>
-Hashes a Coord instance for use as an object key
+### movementProcessor.initialize(app)
+Initializes this system allowing it to perform one-time preparation logic
 
 **Kind**: instance method of <code>[MovementProcessor](#MovementProcessor)</code>  
-**Returns**: <code>string</code> - hashed version of the given coord  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| coord | <code>[Coord](#Coord)</code> | the coord to hash |
-
-<a name="MovementProcessor+_unhashCoord"></a>
-
-### movementProcessor._unhashCoord(hash) ⇒ <code>[Coord](#Coord)</code>
-Reverses the effect of hashing a Coord instance using _hashCoord
-
-**Kind**: instance method of <code>[MovementProcessor](#MovementProcessor)</code>  
-**Returns**: <code>[Coord](#Coord)</code> - the restored Coord instance  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| hash | <code>string</code> | the hashed Coord instance |
+| app | <code>[App](#App)</code> | the currently running GS app |
 
 <a name="System+draw"></a>
 
@@ -2199,40 +2549,33 @@ Hook for reading output data from the brain and attempting actions
 <a name="Plant"></a>
 
 ## Plant ⇐ <code>[Component](#Component)</code>
-An edible plant containing energy
+An edible plant
 
 **Kind**: global class  
 **Extends:** <code>[Component](#Component)</code>  
 
 * [Plant](#Plant) ⇐ <code>[Component](#Component)</code>
-    * [new Plant([energy])](#new_Plant_new)
-    * [.energy](#Plant+energy) : <code>number</code>
+    * [new Plant()](#new_Plant_new)
+    * [.name](#Component+name) : <code>string</code>
 
 <a name="new_Plant_new"></a>
 
-### new Plant([energy])
-Creates a new plant with the given energy amount
+### new Plant()
+Creates a new plant
 
+<a name="Component+name"></a>
 
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| [energy] | <code>number</code> | <code>0</code> | initial energy stored in this plant |
-
-<a name="Plant+energy"></a>
-
-### plant.energy : <code>number</code>
-Energy stored in this plant
+### plant.name : <code>string</code>
+Name of the component. Expected to be unique among Components.
 
 **Kind**: instance property of <code>[Plant](#Plant)</code>  
-**Default**: <code>0</code>  
 <a name="PlantGenerator"></a>
 
 ## PlantGenerator ⇐ <code>[System](#System)</code>
-Generates initial plant life, placing Plant components into Tiles
+Generates initial plant life
 
 **Kind**: global class  
 **Extends:** <code>[System](#System)</code>  
-**See**: [Plant](#Plant)  
 
 * [PlantGenerator](#PlantGenerator) ⇐ <code>[System](#System)</code>
     * [new PlantGenerator()](#new_PlantGenerator_new)
@@ -2318,105 +2661,6 @@ Hook for inputting sense data into the brain
 Hook for reading output data from the brain and attempting actions
 
 **Kind**: instance method of <code>[PlantGenerator](#PlantGenerator)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="PlantRenderer"></a>
-
-## PlantRenderer ⇐ <code>[System](#System)</code>
-Renders plants for all tiles that contain a Plant component
-
-**Kind**: global class  
-**Extends:** <code>[System](#System)</code>  
-
-* [PlantRenderer](#PlantRenderer) ⇐ <code>[System](#System)</code>
-    * [new PlantRenderer()](#new_PlantRenderer_new)
-    * [.tag](#System+tag) : <code>string</code>
-    * [.initialize(app)](#PlantRenderer+initialize)
-    * [.draw(app)](#PlantRenderer+draw)
-    * [.reserve(app)](#System+reserve)
-    * [.update(app)](#System+update)
-    * [.sense(app)](#System+sense)
-    * [.attempt(app)](#System+attempt)
-
-<a name="new_PlantRenderer_new"></a>
-
-### new PlantRenderer()
-Constructs a new PlantRenderer
-
-<a name="System+tag"></a>
-
-### plantRenderer.tag : <code>string</code>
-Defines the overall role of this system. One of "renderer", "generator",
-or "processor".
-
-**Kind**: instance property of <code>[PlantRenderer](#PlantRenderer)</code>  
-<a name="PlantRenderer+initialize"></a>
-
-### plantRenderer.initialize(app)
-Prepares the system for rendering plant graphics
-
-**Kind**: instance method of <code>[PlantRenderer](#PlantRenderer)</code>  
-**Overrides:** <code>[initialize](#System+initialize)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="PlantRenderer+draw"></a>
-
-### plantRenderer.draw(app)
-Renders a plant graphic for every tile that contains a Plant component,
-and removes plant graphics for tiles that no longer have vegetation
-
-**Kind**: instance method of <code>[PlantRenderer](#PlantRenderer)</code>  
-**Overrides:** <code>[draw](#System+draw)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="System+reserve"></a>
-
-### plantRenderer.reserve(app)
-Hook for reserving input and ouput neurons in the Brain
-
-**Kind**: instance method of <code>[PlantRenderer](#PlantRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="System+update"></a>
-
-### plantRenderer.update(app)
-Hook for updating the state of the world
-
-**Kind**: instance method of <code>[PlantRenderer](#PlantRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="System+sense"></a>
-
-### plantRenderer.sense(app)
-Hook for inputting sense data into the brain
-
-**Kind**: instance method of <code>[PlantRenderer](#PlantRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
-<a name="System+attempt"></a>
-
-### plantRenderer.attempt(app)
-Hook for reading output data from the brain and attempting actions
-
-**Kind**: instance method of <code>[PlantRenderer](#PlantRenderer)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -2608,6 +2852,56 @@ The height of the bounding box containing this shape
 
 **Kind**: instance abstract property of <code>[Shape](#Shape)</code>  
 **Returns**: <code>number</code> - The height of the bounding box containing this shape  
+<a name="CoordEntityIndex"></a>
+
+## CoordEntityIndex
+An index providing fast lookup of Entities by their coordinate position
+
+**Kind**: global class  
+
+* [CoordEntityIndex](#CoordEntityIndex)
+    * [new CoordEntityIndex()](#new_CoordEntityIndex_new)
+    * [.length](#CoordEntityIndex+length) ⇒ <code>number</code>
+    * [.rebuild(entities)](#CoordEntityIndex+rebuild)
+    * [.findEntitiesAt(coord)](#CoordEntityIndex+findEntitiesAt) ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
+
+<a name="new_CoordEntityIndex_new"></a>
+
+### new CoordEntityIndex()
+Constructs an empty CoordEntityIndex
+
+<a name="CoordEntityIndex+length"></a>
+
+### coordEntityIndex.length ⇒ <code>number</code>
+Returns the current number of entities stored in the index
+
+**Kind**: instance property of <code>[CoordEntityIndex](#CoordEntityIndex)</code>  
+**Returns**: <code>number</code> - current number of entities stored in the index  
+<a name="CoordEntityIndex+rebuild"></a>
+
+### coordEntityIndex.rebuild(entities)
+Rebuilds the index of the given entities for fast lookup by their coordinate
+positions (Coord component). If an entity does not contain a Coord
+component, it is not included in the index.
+
+**Kind**: instance method of <code>[CoordEntityIndex](#CoordEntityIndex)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| entities | <code>[Array.&lt;Entity&gt;](#Entity)</code> | array of entities to build the index for |
+
+<a name="CoordEntityIndex+findEntitiesAt"></a>
+
+### coordEntityIndex.findEntitiesAt(coord) ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
+Returns an array of entities that are located at the given coordinate
+
+**Kind**: instance method of <code>[CoordEntityIndex](#CoordEntityIndex)</code>  
+**Returns**: <code>[Array.&lt;Entity&gt;](#Entity)</code> - array of entities with given coordinates  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| coord | <code>[Coord](#Coord)</code> | coordinate |
+
 <a name="MultiStringHashMap"></a>
 
 ## MultiStringHashMap
@@ -2794,6 +3088,66 @@ const restored = Serializable.restore(coord.serialize());
 coord.x === restored.x; // true
 coord.y === restored.y; // true
 ```
+<a name="VectorMixin"></a>
+
+## VectorMixin
+Two dimensional vector
+
+**Kind**: global mixin  
+
+* [VectorMixin](#VectorMixin)
+    * [.equalTo(vec)](#VectorMixin+equalTo) ⇒ <code>boolean</code>
+    * [.set(x, y)](#VectorMixin+set) ⇒ <code>Base</code>
+    * [.add(vec)](#VectorMixin+add) ⇒ <code>Base</code>
+
+<a name="VectorMixin+equalTo"></a>
+
+### vectorMixin.equalTo(vec) ⇒ <code>boolean</code>
+Determines if the given vector is equal to this one
+
+**Kind**: instance method of <code>[VectorMixin](#VectorMixin)</code>  
+**Returns**: <code>boolean</code> - True if this vector is equal to the given one, false
+otherwise  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| vec | <code>[VectorMixin](#VectorMixin)</code> | the vector to compare to |
+
+<a name="VectorMixin+set"></a>
+
+### vectorMixin.set(x, y) ⇒ <code>Base</code>
+Sets the (x, y) coordinates of this vector
+
+**Kind**: instance method of <code>[VectorMixin](#VectorMixin)</code>  
+**Returns**: <code>Base</code> - this vector  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| x | <code>number</code> | x coordinate |
+| y | <code>number</code> | y coordinate |
+
+<a name="VectorMixin+add"></a>
+
+### vectorMixin.add(vec) ⇒ <code>Base</code>
+Adds the given vector to this one, producing a new vector sum. It returns
+an instance with the same type as the `this` argument. So for example,
+if adding a Coord to a Velocity as below, it would return a Coord instance.
+
+**Kind**: instance method of <code>[VectorMixin](#VectorMixin)</code>  
+**Returns**: <code>Base</code> - the vector sum  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| vec | <code>[VectorMixin](#VectorMixin)</code> | the other vector to add |
+
+**Example**  
+
+```js
+const coord = new Coord(1, 2);
+const velocity = new Velocity(3, 4);
+let sum = coord.add(velocity); // Coord instance
+sum = velocity.add(coord); // Velocity instance
+```
 <a name="config"></a>
 
 ## config : <code>Object</code>
@@ -2910,6 +3264,7 @@ values like color, stroke thickness, etc.
 * [Theme](#Theme)
     * [.current](#Theme.current) : <code>object</code>
     * [.setTheme(name)](#Theme.setTheme)
+    * [.getSprite(name, paper)](#Theme.getSprite) ⇒ <code>Item</code>
 
 <a name="Theme.current"></a>
 
@@ -2939,3 +3294,68 @@ Sets the current theme
 ```js
 Theme.setTheme("elemental");
 ```
+<a name="Theme.getSprite"></a>
+
+### Theme.getSprite(name, paper) ⇒ <code>Item</code>
+Retrieves a [Paper.js item](http://paperjs.org/reference/item/)
+for the given sprite name as defined by the current theme, or the default
+sprite if the given name is not defined
+
+**Kind**: static method of <code>[Theme](#Theme)</code>  
+**Returns**: <code>Item</code> - a Paper.js Item instance  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | name of the sprite |
+| paper | <code>PaperScope</code> | an active paper scope |
+
+<a name="buildTile"></a>
+
+## buildTile(coord) ⇒ <code>[Entity](#Entity)</code>
+Builds a tile entity
+
+**Kind**: global function  
+**Returns**: <code>[Entity](#Entity)</code> - the built tile entity  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| coord | <code>[Coord](#Coord)</code> | coordinate to place the tile entity at |
+
+<a name="buildCreature"></a>
+
+## buildCreature(dna, coord) ⇒ <code>[Entity](#Entity)</code>
+Builds a creature entity with the given DNA at the given position
+
+**Kind**: global function  
+**Returns**: <code>[Entity](#Entity)</code> - the built creature entity  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| dna | <code>[DNA](#DNA)</code> | genetic representation of the creature |
+| coord | <code>[Coord](#Coord)</code> | coordinate to place the creature entity at |
+
+<a name="buildDefaultCreature"></a>
+
+## buildDefaultCreature(coord, random) ⇒ <code>[Entity](#Entity)</code>
+Builds a creature entity with the default initial DNA at the given position
+
+**Kind**: global function  
+**Returns**: <code>[Entity](#Entity)</code> - the built creature entity  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| coord | <code>[Coord](#Coord)</code> | coordinate to place the creature entity at |
+| random | <code>Object</code> | an instance of a random-js engine |
+
+<a name="buildPlant"></a>
+
+## buildPlant(energyLevel, coord)
+Builds a plant entity with the given energy level at the given position
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| energyLevel | <code>number</code> | initial energy level of the plant |
+| coord | <code>[Coord](#Coord)</code> | coordinate to place the plant entity at |
+
