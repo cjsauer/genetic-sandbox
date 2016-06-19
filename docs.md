@@ -66,6 +66,9 @@ configuration options</p>
 <dt><a href="#Tile">Tile</a> ⇐ <code><a href="#Component">Component</a></code></dt>
 <dd><p>Tile is a location in the world that an entity can exist at</p>
 </dd>
+<dt><a href="#Velocity">Velocity</a> ⇐ <code><a href="#Component">Component</a></code></dt>
+<dd><p>A two dimensional velocity</p>
+</dd>
 <dt><a href="#BackgroundRenderer">BackgroundRenderer</a> ⇐ <code><a href="#System">System</a></code></dt>
 <dd><p>Renders the background</p>
 </dd>
@@ -90,7 +93,7 @@ actions on the behalf of a creature</p>
 <dd><p>Activates the brains of all creatures</p>
 </dd>
 <dt><a href="#CreatureGenerator">CreatureGenerator</a> ⇐ <code><a href="#System">System</a></code></dt>
-<dd><p>Generates initial creatures with random DNA</p>
+<dd><p>Generates initial creatures</p>
 </dd>
 <dt><a href="#EatingProcessor">EatingProcessor</a> ⇐ <code><a href="#System">System</a></code></dt>
 <dd><p>Processes the eating of plants by creatures</p>
@@ -105,7 +108,7 @@ actions on the behalf of a creature</p>
 <dd><p>An edible plant</p>
 </dd>
 <dt><a href="#PlantGenerator">PlantGenerator</a> ⇐ <code><a href="#System">System</a></code></dt>
-<dd><p>Generates initial plant life, placing Plant components into Tiles</p>
+<dd><p>Generates initial plant life</p>
 </dd>
 <dt><a href="#Hexagon">Hexagon</a> ⇐ <code><a href="#Shape">Shape</a></code></dt>
 <dd><p>A flat-topped, regular hexagon. Implementation details can be found
@@ -686,6 +689,7 @@ lookup of entities by component
     * [new World()](#new_World_new)
     * [.addEntity(entity)](#World+addEntity)
     * [.addEntities(entities)](#World+addEntities)
+    * [.removeEntity(entity)](#World+removeEntity)
     * [.getEntities()](#World+getEntities) ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
     * [.getEntitiesWith(...componentNames)](#World+getEntitiesWith) ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
 
@@ -717,6 +721,17 @@ have already been added.
 | Param | Type | Description |
 | --- | --- | --- |
 | entities | <code>[Array.&lt;Entity&gt;](#Entity)</code> | array of entities to add to this world |
+
+<a name="World+removeEntity"></a>
+
+### world.removeEntity(entity)
+Removes the given entity from this world
+
+**Kind**: instance method of <code>[World](#World)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| entity | <code>[Entity](#Entity)</code> | the entity to remove |
 
 <a name="World+getEntities"></a>
 
@@ -1046,6 +1061,7 @@ Implementation details can be found [here](http://goo.gl/nLO6sN).
     * [.radius](#HexGrid+radius) : <code>number</code>
     * [.length](#CoordEntityIndex+length) ⇒ <code>number</code>
     * [.buildTiles()](#HexGrid+buildTiles) ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
+    * [.isValidCoord(coord)](#HexGrid+isValidCoord) ⇒ <code>boolean</code>
     * [.neighborsOf(coord)](#HexGrid+neighborsOf) ⇒ <code>[Array.&lt;Coord&gt;](#Coord)</code>
     * [.distanceBetween(coord1, coord2)](#HexGrid+distanceBetween) ⇒ <code>number</code>
     * [.coordToPixel(coord, radius)](#HexGrid+coordToPixel) ⇒ <code>[Point](#Point)</code>
@@ -1090,6 +1106,18 @@ Builds an array of tile entities that represent this hex grid
 
 **Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
 **Returns**: <code>[Array.&lt;Entity&gt;](#Entity)</code> - array of tile entities  
+<a name="HexGrid+isValidCoord"></a>
+
+### hexGrid.isValidCoord(coord) ⇒ <code>boolean</code>
+Determines whether the given coordinate is valid within the grid
+
+**Kind**: instance method of <code>[HexGrid](#HexGrid)</code>  
+**Returns**: <code>boolean</code> - True if the given coordinate is valid, false otherwise  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| coord | <code>[Coord](#Coord)</code> | the coordinate to check |
+
 <a name="HexGrid+neighborsOf"></a>
 
 ### hexGrid.neighborsOf(coord) ⇒ <code>[Array.&lt;Coord&gt;](#Coord)</code>
@@ -1244,6 +1272,7 @@ A two dimensional coordinate of x and y
     * [.x](#Coord+x) : <code>number</code>
     * [.y](#Coord+y) : <code>number</code>
     * [.name](#Component+name) : <code>string</code>
+    * [.equalTo(coord)](#Coord+equalTo) ⇒ <code>boolean</code>
 
 <a name="new_Coord_new"></a>
 
@@ -1283,6 +1312,19 @@ y value
 Name of the component. Expected to be unique among Components.
 
 **Kind**: instance property of <code>[Coord](#Coord)</code>  
+<a name="Coord+equalTo"></a>
+
+### coord.equalTo(coord) ⇒ <code>boolean</code>
+Determines if the give coordinate is equal to this one
+
+**Kind**: instance method of <code>[Coord](#Coord)</code>  
+**Returns**: <code>boolean</code> - True if this coordinate is equal to the given one, false
+otherwise  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| coord | <code>[Coord](#Coord)</code> | the coordinate to compare to |
+
 <a name="Energy"></a>
 
 ## Energy ⇐ <code>[Component](#Component)</code>
@@ -1419,6 +1461,72 @@ Constructs a new tile component
 Name of the component. Expected to be unique among Components.
 
 **Kind**: instance property of <code>[Tile](#Tile)</code>  
+<a name="Velocity"></a>
+
+## Velocity ⇐ <code>[Component](#Component)</code>
+A two dimensional velocity
+
+**Kind**: global class  
+**Extends:** <code>[Component](#Component)</code>  
+
+* [Velocity](#Velocity) ⇐ <code>[Component](#Component)</code>
+    * [new Velocity([x], [y])](#new_Velocity_new)
+    * [.x](#Velocity+x) : <code>number</code>
+    * [.y](#Velocity+y) : <code>number</code>
+    * [.name](#Component+name) : <code>string</code>
+    * [.equalTo(velocity)](#Velocity+equalTo) ⇒ <code>boolean</code>
+
+<a name="new_Velocity_new"></a>
+
+### new Velocity([x], [y])
+Constructs a new Velocity component
+
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [x] | <code>number</code> | <code>0</code> | x value |
+| [y] | <code>number</code> | <code>0</code> | y value |
+
+**Example**  
+
+```js
+let myVelocity = new Velocity(-5, 10);
+myVelocity.x = 0;
+myVelocity.y = 0;
+```
+<a name="Velocity+x"></a>
+
+### velocity.x : <code>number</code>
+x value
+
+**Kind**: instance property of <code>[Velocity](#Velocity)</code>  
+**Default**: <code>0</code>  
+<a name="Velocity+y"></a>
+
+### velocity.y : <code>number</code>
+y value
+
+**Kind**: instance property of <code>[Velocity](#Velocity)</code>  
+**Default**: <code>0</code>  
+<a name="Component+name"></a>
+
+### velocity.name : <code>string</code>
+Name of the component. Expected to be unique among Components.
+
+**Kind**: instance property of <code>[Velocity](#Velocity)</code>  
+<a name="Velocity+equalTo"></a>
+
+### velocity.equalTo(velocity) ⇒ <code>boolean</code>
+Determines if the give velocity is equal to this one
+
+**Kind**: instance method of <code>[Velocity](#Velocity)</code>  
+**Returns**: <code>boolean</code> - True if this velocity is equal to the given one, false
+otherwise  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| velocity | <code>[Velocity](#Velocity)</code> | the velocity to compare to |
+
 <a name="BackgroundRenderer"></a>
 
 ## BackgroundRenderer ⇐ <code>[System](#System)</code>
@@ -2041,11 +2149,10 @@ Hook for reading output data from the brain and attempting actions
 <a name="CreatureGenerator"></a>
 
 ## CreatureGenerator ⇐ <code>[System](#System)</code>
-Generates initial creatures with random DNA
+Generates initial creatures
 
 **Kind**: global class  
 **Extends:** <code>[System](#System)</code>  
-**See**: [Creature](#Creature)  
 
 * [CreatureGenerator](#CreatureGenerator) ⇐ <code>[System](#System)</code>
     * [new CreatureGenerator()](#new_CreatureGenerator_new)
@@ -2246,11 +2353,9 @@ Processes locomotion for creatures
     * [new MovementProcessor()](#new_MovementProcessor_new)
     * [.tag](#System+tag) : <code>string</code>
     * [.reserve(app)](#MovementProcessor+reserve)
-    * [.initialize(app)](#MovementProcessor+initialize)
     * [.attempt(app)](#MovementProcessor+attempt)
     * [.update(app)](#MovementProcessor+update)
-    * [._hashCoord(coord)](#MovementProcessor+_hashCoord) ⇒ <code>string</code>
-    * [._unhashCoord(hash)](#MovementProcessor+_unhashCoord) ⇒ <code>[Coord](#Coord)</code>
+    * [.initialize(app)](#System+initialize)
     * [.draw(app)](#System+draw)
     * [.sense(app)](#System+sense)
 
@@ -2278,23 +2383,11 @@ Reserves 7 output neurons, one for each direction plus no direction
 | --- | --- | --- |
 | app | <code>[App](#App)</code> | the currently running GS app |
 
-<a name="MovementProcessor+initialize"></a>
-
-### movementProcessor.initialize(app)
-Prepares the system for use
-
-**Kind**: instance method of <code>[MovementProcessor](#MovementProcessor)</code>  
-**Overrides:** <code>[initialize](#System+initialize)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| app | <code>[App](#App)</code> | the currently running GS app |
-
 <a name="MovementProcessor+attempt"></a>
 
 ### movementProcessor.attempt(app)
-Makes plans to move a creature in the most prevailing direction signaled
-by the brain
+Sets creature's velocity to the most prevailing direction signaled by the
+brain
 
 **Kind**: instance method of <code>[MovementProcessor](#MovementProcessor)</code>  
 **Overrides:** <code>[attempt](#System+attempt)</code>  
@@ -2315,29 +2408,16 @@ Moves creature to their planned positions
 | --- | --- | --- |
 | app | <code>[App](#App)</code> | the currently running GS app |
 
-<a name="MovementProcessor+_hashCoord"></a>
+<a name="System+initialize"></a>
 
-### movementProcessor._hashCoord(coord) ⇒ <code>string</code>
-Hashes a Coord instance for use as an object key
+### movementProcessor.initialize(app)
+Initializes this system allowing it to perform one-time preparation logic
 
 **Kind**: instance method of <code>[MovementProcessor](#MovementProcessor)</code>  
-**Returns**: <code>string</code> - hashed version of the given coord  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| coord | <code>[Coord](#Coord)</code> | the coord to hash |
-
-<a name="MovementProcessor+_unhashCoord"></a>
-
-### movementProcessor._unhashCoord(hash) ⇒ <code>[Coord](#Coord)</code>
-Reverses the effect of hashing a Coord instance using _hashCoord
-
-**Kind**: instance method of <code>[MovementProcessor](#MovementProcessor)</code>  
-**Returns**: <code>[Coord](#Coord)</code> - the restored Coord instance  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| hash | <code>string</code> | the hashed Coord instance |
+| app | <code>[App](#App)</code> | the currently running GS app |
 
 <a name="System+draw"></a>
 
@@ -2486,11 +2566,10 @@ Name of the component. Expected to be unique among Components.
 <a name="PlantGenerator"></a>
 
 ## PlantGenerator ⇐ <code>[System](#System)</code>
-Generates initial plant life, placing Plant components into Tiles
+Generates initial plant life
 
 **Kind**: global class  
 **Extends:** <code>[System](#System)</code>  
-**See**: [Plant](#Plant)  
 
 * [PlantGenerator](#PlantGenerator) ⇐ <code>[System](#System)</code>
     * [new PlantGenerator()](#new_PlantGenerator_new)
