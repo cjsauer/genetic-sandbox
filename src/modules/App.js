@@ -1,31 +1,31 @@
 import Random from "random-js";
 
 /**
- * The entry point and hub of the entire application
+ * The context and heartbeat of the Genetic Sandbox simulation
+ * @see {@link World}
  * @see {@link HexGrid}
  * @see {@link Plugin}
  */
 class App {
   /**
-   * Prepares a Genetic Sandbox application for bootstrapping.
-   * @param {HexGrid} grid - hex grid to use as the stage
-   * @param {Plugin[]} plugins - the plugins to be included in the main
-   * processing loop
+   * Creates a new App, setting up the context for the rest of the simulation
+   * @param {World} world - world instance
+   * @param {HexGrid} grid - grid implementation to use for grid-related
+   * computation
    * @param {PaperScope} paperScope - Paper.js graphics context
-   * @param {number} [seed] - the seed for the random number generator
    */
-  constructor(grid, plugins, paperScope, seed) {
+  constructor(world, grid, paperScope) {
     /**
-     * A grid of tiles serving as the main stage of the simulation
+     * The World, or manager of all entities
+     * @type {World}
+     */
+    this.world = world;
+
+    /**
+     * Grid implementation to use for grid-related computation
      * @type {HexGrid}
      */
     this.grid = grid;
-
-    /**
-     * Array of plugins included in the main processing loop
-     * @type {Plugin[]}
-     */
-    this.plugins = plugins;
 
     /**
      * Paper.js graphics context used for rendering vector graphics to a
@@ -33,16 +33,6 @@ class App {
      * @type {PaperScope}
      */
     this.paper = paperScope;
-
-    if (seed === undefined) {
-      /**
-      * An seeded instance of the random-js Mersenne Twister engine for
-      * generating random numbers
-      */
-      this.random = new Random(Random.engines.mt19937().autoSeed());
-    } else {
-      this.random = new Random(Random.engines.mt19937().seed(seed));
-    }
   }
 
   /**
@@ -62,10 +52,30 @@ class App {
   }
 
   /**
-   * Initializes all enabled plugins by calling *reserve()* and *initialize()*
-   * on their constituent systems
+   * Initializes all enabled plugins passed by calling *reserve()* and
+   * *initialize()* on their constituent systems. Can optionally be passed a
+   * seed to prime the random number generator with for this simulation.
+   * @param {Plugin[]} plugins - the plugins to be included in the main
+   * processing loop
+   * @param {number} [seed] - the seed for the random number generator
    */
-  initialize() {
+  initialize(plugins, seed) {
+    /**
+    * Array of plugins included in the main processing loop
+    * @type {Plugin[]}
+    */
+    this.plugins = plugins;
+
+    if (seed === undefined) {
+      /**
+      * A seeded instance of the random-js Mersenne Twister engine for
+      * generating random numbers
+      */
+      this.random = new Random(Random.engines.mt19937().autoSeed());
+    } else {
+      this.random = new Random(Random.engines.mt19937().seed(seed));
+    }
+
     this._forEachSystem((system) => system.reserve(this));
     this._forEachSystem((system) => system.initialize(this));
   }
@@ -74,6 +84,7 @@ class App {
    * Ticks the simulation forward by one full iteration
    */
   tick() {
+    this.world.update();
     this._forEachSystem((system) => system.update(this));
     this._forEachSystem((system) => system.draw(this));
     this.paper.view.draw();

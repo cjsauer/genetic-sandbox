@@ -1,4 +1,4 @@
-import System from "../../System";
+import System from "../../../ecs/System";
 
 /**
  * Activates the brains of all creatures
@@ -17,9 +17,9 @@ class BrainProcessor extends System {
    * @param {App} app - the currently running GS app
    */
   think(app) {
-    app.grid.getTilesByComponent("creature").forEach((tile) => {
-      let creature = tile.get("creature");
-      creature.brain.activate();
+    app.world.getEntitiesWith("brain").forEach((entity) => {
+      let brain = entity.getComponent("brain");
+      brain.activate();
     });
   }
 }

@@ -1,5 +1,5 @@
-// Load main.html into the build folder using the webpack file-loader so that
-// it becomes the "homepage"
+// Load main.html as index.html into the build folder using the webpack
+// file-loader so that it becomes the "homepage"
 import "file?name=index.html!./main.html";
 
 // Stylesheets
@@ -8,6 +8,7 @@ import "./styles/style.css";
 
 import paper from "paper";
 import App from "./modules/App";
+import World from "./modules/ecs/World";
 import HexGrid from "./modules/grid/HexGrid";
 import config, { plugins } from "./modules/config";
 
@@ -28,12 +29,14 @@ window.GeneticSandbox = function (canvas, seed) {
   window.onresize = fitToContainer();
   fitToContainer();
 
-  // Create the universe!
+  // Build the World and fill it with tiles
+  const world = new World();
   const grid = new HexGrid(config.core.gridRadius);
+  world.addEntities(grid.buildTiles());
 
   // Finally, create an instance of App and initialize it
-  const app = new App(grid, plugins, paperScope, seed);
-  app.initialize();
+  const app = new App(world, grid, paperScope);
+  app.initialize(plugins, seed);
 
   return app;
 };

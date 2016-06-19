@@ -1,4 +1,4 @@
-import System from "../../System";
+import System from "../../../ecs/System";
 import config from "../../../config";
 
 /**
@@ -18,11 +18,11 @@ class AgingProcessor extends System {
    * @param {App} app - the currently running GS app
    */
   update(app) {
-    const grid = app.grid;
-    grid.getTilesByComponent("creature").forEach((tile) => {
-      const creature = tile.get("creature");
-      if (!creature.expend(config.creatures.tickCost)) {
-        tile.delete("creature");
+    const world = app.world;
+    world.getEntitiesWith("creature").forEach((creature) => {
+      const energy = creature.getComponent("energy");
+      if (energy.expend(config.creatures.tickCost) <= 0) {
+        world.removeEntity(creature);
       }
     });
   }
