@@ -133,6 +133,14 @@ JSON.</p>
 </dd>
 </dl>
 
+## Mixins
+
+<dl>
+<dt><a href="#VectorMixin">VectorMixin</a></dt>
+<dd><p>Two dimensional vector</p>
+</dd>
+</dl>
+
 ## Constants
 
 <dl>
@@ -1286,13 +1294,13 @@ A two dimensional coordinate of x and y
 
 **Kind**: global class  
 **Extends:** <code>[Component](#Component)</code>  
+**Mixes**: <code>[VectorMixin](#VectorMixin)</code>  
 
 * [Coord](#Coord) ⇐ <code>[Component](#Component)</code>
     * [new Coord([x], [y])](#new_Coord_new)
     * [.x](#Coord+x) : <code>number</code>
     * [.y](#Coord+y) : <code>number</code>
     * [.name](#Component+name) : <code>string</code>
-    * [.equalTo(coord)](#Coord+equalTo) ⇒ <code>boolean</code>
 
 <a name="new_Coord_new"></a>
 
@@ -1309,8 +1317,6 @@ Constructs a new Coord with coordinates (x,y)
 
 ```js
 let myCoord = new Coord(-5, 10);
-myCoord.x = 0;
-myCoord.y = 0;
 ```
 <a name="Coord+x"></a>
 
@@ -1332,19 +1338,6 @@ y value
 Name of the component. Expected to be unique among Components.
 
 **Kind**: instance property of <code>[Coord](#Coord)</code>  
-<a name="Coord+equalTo"></a>
-
-### coord.equalTo(coord) ⇒ <code>boolean</code>
-Determines if the give coordinate is equal to this one
-
-**Kind**: instance method of <code>[Coord](#Coord)</code>  
-**Returns**: <code>boolean</code> - True if this coordinate is equal to the given one, false
-otherwise  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| coord | <code>[Coord](#Coord)</code> | the coordinate to compare to |
-
 <a name="Energy"></a>
 
 ## Energy ⇐ <code>[Component](#Component)</code>
@@ -1496,13 +1489,13 @@ A two dimensional velocity
 
 **Kind**: global class  
 **Extends:** <code>[Component](#Component)</code>  
+**Mixes**: <code>[VectorMixin](#VectorMixin)</code>  
 
 * [Velocity](#Velocity) ⇐ <code>[Component](#Component)</code>
     * [new Velocity([x], [y])](#new_Velocity_new)
     * [.x](#Velocity+x) : <code>number</code>
     * [.y](#Velocity+y) : <code>number</code>
     * [.name](#Component+name) : <code>string</code>
-    * [.equalTo(velocity)](#Velocity+equalTo) ⇒ <code>boolean</code>
 
 <a name="new_Velocity_new"></a>
 
@@ -1519,8 +1512,6 @@ Constructs a new Velocity component
 
 ```js
 let myVelocity = new Velocity(-5, 10);
-myVelocity.x = 0;
-myVelocity.y = 0;
 ```
 <a name="Velocity+x"></a>
 
@@ -1542,19 +1533,6 @@ y value
 Name of the component. Expected to be unique among Components.
 
 **Kind**: instance property of <code>[Velocity](#Velocity)</code>  
-<a name="Velocity+equalTo"></a>
-
-### velocity.equalTo(velocity) ⇒ <code>boolean</code>
-Determines if the give velocity is equal to this one
-
-**Kind**: instance method of <code>[Velocity](#Velocity)</code>  
-**Returns**: <code>boolean</code> - True if this velocity is equal to the given one, false
-otherwise  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| velocity | <code>[Velocity](#Velocity)</code> | the velocity to compare to |
-
 <a name="BackgroundRenderer"></a>
 
 ## BackgroundRenderer ⇐ <code>[System](#System)</code>
@@ -3109,6 +3087,66 @@ const coord = new Coord(5, 6);
 const restored = Serializable.restore(coord.serialize());
 coord.x === restored.x; // true
 coord.y === restored.y; // true
+```
+<a name="VectorMixin"></a>
+
+## VectorMixin
+Two dimensional vector
+
+**Kind**: global mixin  
+
+* [VectorMixin](#VectorMixin)
+    * [.equalTo(vec)](#VectorMixin+equalTo) ⇒ <code>boolean</code>
+    * [.set(x, y)](#VectorMixin+set) ⇒ <code>Base</code>
+    * [.add(vec)](#VectorMixin+add) ⇒ <code>Base</code>
+
+<a name="VectorMixin+equalTo"></a>
+
+### vectorMixin.equalTo(vec) ⇒ <code>boolean</code>
+Determines if the given vector is equal to this one
+
+**Kind**: instance method of <code>[VectorMixin](#VectorMixin)</code>  
+**Returns**: <code>boolean</code> - True if this vector is equal to the given one, false
+otherwise  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| vec | <code>[VectorMixin](#VectorMixin)</code> | the vector to compare to |
+
+<a name="VectorMixin+set"></a>
+
+### vectorMixin.set(x, y) ⇒ <code>Base</code>
+Sets the (x, y) coordinates of this vector
+
+**Kind**: instance method of <code>[VectorMixin](#VectorMixin)</code>  
+**Returns**: <code>Base</code> - this vector  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| x | <code>number</code> | x coordinate |
+| y | <code>number</code> | y coordinate |
+
+<a name="VectorMixin+add"></a>
+
+### vectorMixin.add(vec) ⇒ <code>Base</code>
+Adds the given vector to this one, producing a new vector sum. It returns
+an instance with the same type as the `this` argument. So for example,
+if adding a Coord to a Velocity as below, it would return a Coord instance.
+
+**Kind**: instance method of <code>[VectorMixin](#VectorMixin)</code>  
+**Returns**: <code>Base</code> - the vector sum  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| vec | <code>[VectorMixin](#VectorMixin)</code> | the other vector to add |
+
+**Example**  
+
+```js
+const coord = new Coord(1, 2);
+const velocity = new Velocity(3, 4);
+let sum = coord.add(velocity); // Coord instance
+sum = velocity.add(coord); // Velocity instance
 ```
 <a name="config"></a>
 
