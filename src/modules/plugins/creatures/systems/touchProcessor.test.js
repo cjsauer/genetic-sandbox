@@ -1,27 +1,32 @@
 import TouchProcessor from "./TouchProcessor";
 import Brain from "../../creatures/components/Brain";
+import World from "../../../ecs/World";
 import HexGrid from "../../../grid/HexGrid";
 import Coord from "../../core/components/Coord";
+import { buildDefaultCreature } from "../assembly";
+import { buildPlant } from "../../plants/assembly";
 import { expect } from "chai";
 import { stub, spy } from "sinon";
 
-describe.skip("TouchProcessor", () => {
+describe("TouchProcessor", () => {
   let app, creature1, creature2, plant, reserveStub;
 
   beforeEach(() => {
+    const world = new World();
     const grid = new HexGrid(1);
+    const random = {
+      real: stub().returns(0)
+    };
 
-    // Creature at (0, 0)
-    creature1 = { brain: { input: stub() } };
-    grid.getTile(new Coord(0, 0)).set("creature", creature1);
-    // Creature at (1, 0)
-    creature2 = { brain: { input: stub() } };
-    grid.getTile(new Coord(1, 0)).set("creature", creature2);
-    // Plant at (-1, 0)
-    plant = {};
-    grid.getTile(new Coord(-1, 0)).set("plant", plant);
+    creature1 = buildDefaultCreature(new Coord(0, 0), random);
+    creature2 = buildDefaultCreature(new Coord(1, 0), random);
+    plant = buildPlant(10, new Coord(-1, 0));
 
-    app = { grid };
+    world.addEntity(creature1);
+    world.addEntity(creature2);
+    world.addEntity(plant);
+
+    app = { world, grid, random };
 
     reserveStub = stub(Brain, "reserveInput").returns(0);
   });
@@ -43,24 +48,26 @@ describe.skip("TouchProcessor", () => {
 
   it("inputs 6 values to the brain", () => {
     const sys = new TouchProcessor();
-    const getSpy = spy(app.grid, "getTilesByComponent");
+    const brain1 = creature1.getComponent("brain");
+    const brain2 = creature2.getComponent("brain");
+    spy(brain1, "input");
+    spy(brain2, "input");
+
     sys.reserve(app);
     sys.sense(app);
-    getSpy.restore();
 
-    expect(getSpy.calledWith("creature")).to.be.true;
-    expect(creature1.brain.input.getCall(0).args[1]).to.equal(0.5);
-    expect(creature1.brain.input.getCall(1).args[1]).to.equal(0);
-    expect(creature1.brain.input.getCall(2).args[1]).to.equal(0);
-    expect(creature1.brain.input.getCall(3).args[1]).to.equal(1);
-    expect(creature1.brain.input.getCall(4).args[1]).to.equal(0);
-    expect(creature1.brain.input.getCall(5).args[1]).to.equal(0);
+    expect(brain1.input.getCall(0).args[1]).to.equal(0.5);
+    expect(brain1.input.getCall(1).args[1]).to.equal(0);
+    expect(brain1.input.getCall(2).args[1]).to.equal(0);
+    expect(brain1.input.getCall(3).args[1]).to.equal(1);
+    expect(brain1.input.getCall(4).args[1]).to.equal(0);
+    expect(brain1.input.getCall(5).args[1]).to.equal(0);
 
-    expect(creature2.brain.input.getCall(0).args[1]).to.equal(0);
-    expect(creature2.brain.input.getCall(1).args[1]).to.equal(0);
-    expect(creature2.brain.input.getCall(2).args[1]).to.equal(0);
-    expect(creature2.brain.input.getCall(3).args[1]).to.equal(0.5);
-    expect(creature2.brain.input.getCall(4).args[1]).to.equal(0);
-    expect(creature2.brain.input.getCall(5).args[1]).to.equal(0);
+    expect(brain2.input.getCall(0).args[1]).to.equal(0);
+    expect(brain2.input.getCall(1).args[1]).to.equal(0);
+    expect(brain2.input.getCall(2).args[1]).to.equal(0);
+    expect(brain2.input.getCall(3).args[1]).to.equal(0.5);
+    expect(brain2.input.getCall(4).args[1]).to.equal(0);
+    expect(brain2.input.getCall(5).args[1]).to.equal(0);
   });
 });

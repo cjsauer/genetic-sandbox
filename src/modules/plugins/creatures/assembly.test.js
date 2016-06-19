@@ -22,6 +22,7 @@ describe("Creature assembly", () => {
     expect(creature.hasComponent("brain")).to.be.true;
     expect(creature.hasComponent("dna")).to.be.true;
     expect(creature.getComponent("dna")).to.eql(dna);
+    expect(creature.hasComponent("sprite")).to.be.true;
     expect(creature.hasComponent("coord")).to.be.true;
     expect(creature.getComponent("coord")).to.eql(coord);
   });
@@ -39,6 +40,7 @@ describe("Creature assembly", () => {
 
     expect(creature.hasComponent("creature")).to.be.true;
     expect(creature.hasComponent("brain")).to.be.true;
+    expect(creature.hasComponent("sprite")).to.be.true;
     expect(creature.hasComponent("coord")).to.be.true;
     expect(creature.getComponent("coord")).to.eql(coord);
     expect(dna.brainStrand.inputNodeGeneCount).to.equal(3);

@@ -1,27 +1,28 @@
 import EatingProcessor from "./EatingProcessor";
-import HexGrid from "../../../grid/HexGrid";
+import World from "../../../ecs/World";
 import Coord from "../../core/components/Coord";
-import Plant from "../../plants/components/Plant";
+import { buildDefaultCreature } from "../assembly";
+import { buildPlant } from "../../plants/assembly";
 import { expect } from "chai";
-import { spy } from "sinon";
+import { stub } from "sinon";
 
-describe.skip("EatingProcessor", () => {
-  let sys, app, creature, plant;
+describe("EatingProcessor", () => {
+  let sys, app;
 
   beforeEach(() => {
-    const grid = new HexGrid(1);
+    const world = new World();
+    const random = {
+      real: stub().returns(0)
+    };
 
-    // Creature at (0, 0)
-    creature = { eat: spy() };
-    grid.getTile(new Coord(0, 0)).set("creature", creature);
-    // Plant at (0, 0)
-    plant = new Plant(5);
-    grid.getTile(new Coord(0, 0)).set("plant", plant);
-    // Plant at (1, 0)
-    plant = new Plant(5);
-    grid.getTile(new Coord(1, 0)).set("plant", plant);
+    // Create a world with one creature and one plant sharing a location,
+    // and one plant in a separate location.
+    let creature = buildDefaultCreature(new Coord(0, 0), random);
+    let plant = buildPlant(10, new Coord(0, 0));
+    let otherPlant = buildPlant(10, new Coord(1, 0));
+    world.addEntities([ creature, plant, otherPlant ]);
 
-    app = { grid };
+    app = { world };
 
     sys = new EatingProcessor();
   });
@@ -31,23 +32,14 @@ describe.skip("EatingProcessor", () => {
   });
 
   it("should resolve a creature and plant sharing a tile to the creature eating that plant", () => {
-    const tile = app.grid.getTile(new Coord(0, 0));
-    expect(tile.hasComponent("plant")).to.be.true;
-    expect(tile.hasComponent("creature")).to.be.true;
+    let creature = app.world.getEntitiesWith("creature")[0];
+    let energy = creature.getComponent("energy");
+    let originalEnergyLevel = energy.level;
+    expect(app.world.getEntitiesWith("plant")).to.have.lengthOf(2);
 
     sys.update(app);
 
-    expect(tile.hasComponent("plant")).to.be.false;
-    expect(tile.hasComponent("creature")).to.be.true;
-    expect(creature.eat.calledWith(plant)).to.be.true;
-  });
-
-  it("should not affect tiles that do not contain both a plant and a creature", () => {
-    const tile = app.grid.getTile(new Coord(1, 0));
-    expect(tile.hasComponent("plant")).to.be.true;
-
-    sys.update(app);
-
-    expect(tile.hasComponent("plant")).to.be.true;
+    expect(energy.level).to.equal(originalEnergyLevel + 10);
+    expect(app.world.getEntitiesWith("plant")).to.have.lengthOf(1);
   });
 });

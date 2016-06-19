@@ -8,12 +8,6 @@ const ElementalTheme = {
   backgroundStyle: {
     fillColor: new Color("#18303D")
   },
-  // TODO: Remove all of these useless theme objects
-  defaultHexStyle: {
-    strokeColor: new Color(1.0, 0.1)
-  },
-  defaultPlantColor: new Color("#347C47"),
-  defaultCreatureColor: new Color("#D4964B"),
 
   sprites: {
     // The default sprite drawn when a request is made for a sprite that does

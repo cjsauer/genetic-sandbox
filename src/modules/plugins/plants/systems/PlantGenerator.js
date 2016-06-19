@@ -1,11 +1,10 @@
 import System from "../../../ecs/System";
-import Plant from "../components/Plant";
 import config from "../../../config";
+import { buildPlant } from "../assembly";
 
 /**
- * Generates initial plant life, placing Plant components into Tiles
+ * Generates initial plant life
  * @extends System
- * @see {@link Plant}
  */
 class PlantGenerator extends System {
   /**
@@ -20,11 +19,14 @@ class PlantGenerator extends System {
     * @param {App} app - the currently running GS app
     */
   initialize(app) {
-    const random = app.random;
-    const tiles = app.grid.getTiles();
+    const { world, random } = app;
+    const tiles = world.getEntitiesWith("tile");
+
     tiles.forEach((tile) => {
       if (random.bool(config.plants.vegetationRate)) {
-        tile.set("plant", new Plant(config.plants.plantEnergy));
+        const coord = tile.getComponent("coord");
+        const plant = buildPlant(config.plants.plantEnergy, coord);
+        world.addEntity(plant);
       }
     });
   }

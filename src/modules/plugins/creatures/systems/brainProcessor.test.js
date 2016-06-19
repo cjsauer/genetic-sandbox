@@ -1,23 +1,33 @@
 import BrainProcessor from "./BrainProcessor";
+import Brain from "../components/Brain";
+import DNA from "../components/DNA";
+import World from "../../../ecs/World";
+import Entity from "../../../ecs/Entity";
+import Sequencer from "../../../genetics/Sequencer";
 import { expect } from "chai";
 import { stub, spy } from "sinon";
 
-describe.skip("BrainProcessor", () => {
+describe("BrainProcessor", () => {
   let app;
 
   beforeEach(() => {
-    const grid = {
-      getTilesByComponent: stub().returns([
-        { get: stub().returns({
-          brain: { activate: spy() }
-        })},
-        { get: stub().returns({
-          brain: { activate: spy() }
-        })}
-      ])
+    const world = new World();
+
+    const random = {
+      real: stub().returns(0)
     };
 
-    app = { grid };
+    // Add some brains to the world
+    for (let i = 0; i < 3; i++) {
+      let entity = new Entity();
+      let dna = new DNA(1, 1, random);
+      let brain = new Brain(dna, new Sequencer());
+      spy(brain, "activate");
+      entity.addComponent(brain);
+      world.addEntity(entity);
+    }
+
+    app = { world };
   });
 
   it("should be tagged as 'processor'", () => {
@@ -29,8 +39,8 @@ describe.skip("BrainProcessor", () => {
     it("should activate the brains of all creatures", () => {
       const sys = new BrainProcessor();
       sys.think(app);
-      app.grid.getTilesByComponent().forEach((tile) => {
-        expect(tile.get().brain.activate.calledOnce).to.be.true;
+      app.world.getEntitiesWith("brain").forEach((entity) => {
+        expect(entity.getComponent("brain").activate.calledOnce).to.be.true;
       });
     });
   });

@@ -1,4 +1,3 @@
-import _ from "lodash";
 import System from "../../../ecs/System";
 
 /**
@@ -19,16 +18,23 @@ class EatingProcessor extends System {
    * @param {App} app - the currently running GS app
    */
   update(app) {
-    const grid = app.grid;
-    const creatureTiles = grid.getTilesByComponent("creature");
-    const plantTiles = grid.getTilesByComponent("plant");
-    const tilesOfInterest = _.intersection(creatureTiles, plantTiles);
+    const world = app.world;
+    const creatures = world.getEntitiesWith("creature");
+    const plants = world.getEntitiesWith("plant");
 
-    tilesOfInterest.forEach((tile) => {
-      const creature = tile.get("creature");
-      const plant = tile.get("plant");
-      creature.eat(plant);
-      tile.delete("plant");
+    creatures.forEach((creature) => {
+      plants.forEach((plant) => {
+        let creatureCoord = creature.getComponent("coord");
+        let plantCoord = plant.getComponent("coord");
+
+        if (creatureCoord.equalTo(plantCoord)) {
+          let creatureEnergy = creature.getComponent("energy");
+          let plantEnergy = plant.getComponent("energy");
+
+          creatureEnergy.gain(plantEnergy.level);
+          world.removeEntity(plant);
+        }
+      });
     });
   }
 }

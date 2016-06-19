@@ -2,7 +2,11 @@ import Entity from "../../ecs/Entity";
 import Creature from "./components/Creature";
 import Brain from "./components/Brain";
 import DNA from "./components/DNA";
+import Energy from "../core/components/Energy";
+import Sprite from "../core/components/Sprite";
+import Velocity from "../core/components/Velocity";
 import Sequencer from "../../genetics/Sequencer";
+import config from "../../config";
 
 /**
  * Builds a creature entity with the given DNA at the given position
@@ -15,6 +19,9 @@ export function buildCreature(dna, coord) {
   entity.addComponent(new Creature());
   entity.addComponent(dna);
   entity.addComponent(new Brain(dna, new Sequencer()));
+  entity.addComponent(new Energy(config.creatures.initialEnergy));
+  entity.addComponent(new Sprite("creature"));
+  entity.addComponent(new Velocity());
   entity.addComponent(coord);
   return entity;
 };
@@ -31,6 +38,9 @@ export function buildDefaultCreature(coord, random) {
   entity.addComponent(new Creature());
   entity.addComponent(dna);
   entity.addComponent(new Brain(dna, new Sequencer()));
+  entity.addComponent(new Energy(config.creatures.initialEnergy));
+  entity.addComponent(new Sprite("creature"));
+  entity.addComponent(new Velocity());
   entity.addComponent(coord);
   return entity;
 }

@@ -1,22 +1,23 @@
 import AgingProcessor from "./AgingProcessor";
-import HexGrid from "../../../grid/HexGrid";
+import World from "../../../ecs/World";
 import Coord from "../../core/components/Coord";
-import config from "../../../config";
+import { buildDefaultCreature } from "../assembly";
 import { expect } from "chai";
-import { spy } from "sinon";
+import { stub } from "sinon";
 
-describe.skip("EatingProcessor", () => {
-  let sys, app, creature;
+describe("AgingProcessor", () => {
+  let sys, app, world, random, creature;
 
   beforeEach(() => {
-    const grid = new HexGrid(1);
+    random = {
+      real: stub().returns(0)
+    };
 
-    // Creature at (0, 0)
-    creature = { expend: spy() };
-    grid.getTile(new Coord(0, 0)).set("creature", creature);
+    world = new World();
+    creature = buildDefaultCreature(new Coord(0, 0), random);
+    world.addEntity(creature);
 
-    app = { grid };
-
+    app = { world, random };
     sys = new AgingProcessor();
   });
 
@@ -26,15 +27,19 @@ describe.skip("EatingProcessor", () => {
 
   describe("update", () => {
     it("should age creatures by the configured energy amount", () => {
-      creature.alive = true;
+      const energy = creature.getComponent("energy");
+      let originalEnergyLevel = energy.level;
+
       sys.update(app);
-      expect(creature.expend.calledWith(config.creatures.tickCost)).to.be.true;
+      expect(energy.level).to.be.below(originalEnergyLevel);
     });
 
     it("should destroy dead creatures", () => {
-      creature.alive = false;
+      const energy = creature.getComponent("energy");
+      energy._level = 0; // Essentially kill the creature
+
       sys.update(app);
-      expect(app.grid.getTile(new Coord(0, 0)).hasComponent("creature")).to.be.false;
+      expect(world.getEntitiesWith("creature")).to.have.lengthOf(0);
     });
   });
 });

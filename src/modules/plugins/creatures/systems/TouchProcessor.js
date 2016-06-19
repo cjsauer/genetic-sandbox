@@ -34,19 +34,33 @@ class TouchProcessor extends System {
    * @param {App} app - the currently running GS app
    */
   sense(app) {
-    const grid = app.grid;
-    grid.getTilesByComponent("creature").forEach((tile) => {
-      let creature = tile.get("creature");
-      let coord = tile.get("coord");
+    const { world, grid } = app;
+    const creatures = world.getEntitiesWith("creature");
+    const plants = world.getEntitiesWith("plant");
+
+    creatures.forEach((creature) => {
+      let coord = creature.getComponent("coord");
+      let brain = creature.getComponent("brain");
       let neighbors = grid.neighborsOf(coord);
 
       neighbors.forEach((neighbor, index) => {
         let value = 0;
-        if (neighbor !== null) {
-          if (neighbor.hasComponent("plant")) value = 1;
-          else if (neighbor.hasComponent("creature")) value = 0.5;
+        let creaturePresent = creatures.some((creature) => {
+          return creature.getComponent("coord").equalTo(neighbor);
+        });
+
+        if (creaturePresent) {
+          value = 0.5;
+        } else {
+          let plantPresent = plants.some((plant) => {
+            return plant.getComponent("coord").equalTo(neighbor);
+          });
+
+          if (plantPresent) {
+            value = 1;
+          }
         }
-        creature.brain.input(this._inputs[index], value);
+        brain.input(this._inputs[index], value);
       });
     });
   }
