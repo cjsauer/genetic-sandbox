@@ -36,7 +36,6 @@ class TouchProcessor extends System {
   sense(app) {
     const { world, grid } = app;
     const creatures = world.getEntitiesWith("creature");
-    const plants = world.getEntitiesWith("plant");
 
     creatures.forEach((creature) => {
       let coord = creature.getComponent("coord");
@@ -44,23 +43,23 @@ class TouchProcessor extends System {
       let neighbors = grid.neighborsOf(coord);
 
       neighbors.forEach((neighbor, index) => {
-        let value = 0;
-        let creaturePresent = creatures.some((creature) => {
-          return creature.getComponent("coord").equalTo(neighbor);
+        let senseValue = 0;
+        let neighboringEntities = world.getEntitiesAt(neighbor);
+
+        let creaturePresent = neighboringEntities.some((entity) => {
+          return entity.hasComponent("creature");
+        });
+
+        let plantPresent = neighboringEntities.some((entity) => {
+          return entity.hasComponent("plant");
         });
 
         if (creaturePresent) {
-          value = 0.5;
-        } else {
-          let plantPresent = plants.some((plant) => {
-            return plant.getComponent("coord").equalTo(neighbor);
-          });
-
-          if (plantPresent) {
-            value = 1;
-          }
+          senseValue = 0.5;
+        } else if (plantPresent) {
+          senseValue = 1;
         }
-        brain.input(this._inputs[index], value);
+        brain.input(this._inputs[index], senseValue);
       });
     });
   }

@@ -18,7 +18,9 @@ describe("App", () => {
   }
 
   beforeEach(() => {
-    world = {};
+    world = {
+      update: spy()
+    };
     grid = {};
 
     systems = [
@@ -126,6 +128,11 @@ describe("App", () => {
   describe("tick", () => {
     beforeEach(() => {
       app.initialize(plugins);
+    });
+
+    it("should udpate the world", () => {
+      app.tick();
+      expect(world.update.calledOnce).to.be.true;
     });
 
     it("should call update() on every system in every enabld plugin", () => {

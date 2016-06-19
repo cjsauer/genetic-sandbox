@@ -63,8 +63,8 @@ class MovementProcessor extends System {
 
       if (!coord.equalTo(destination) && grid.isValidCoord(destination)) {
         // Check if there are any other creatures already there
-        let alreadyOccupied = creatures.some((creature) => {
-          return creature.getComponent("coord").equalTo(destination);
+        let alreadyOccupied = world.getEntitiesAt(destination).some((entity) => {
+          return entity.hasComponent("creature");
         });
 
         if (!alreadyOccupied) {

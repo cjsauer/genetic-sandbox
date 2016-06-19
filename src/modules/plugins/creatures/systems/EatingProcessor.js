@@ -20,19 +20,18 @@ class EatingProcessor extends System {
   update(app) {
     const world = app.world;
     const creatures = world.getEntitiesWith("creature");
-    const plants = world.getEntitiesWith("plant");
 
     creatures.forEach((creature) => {
-      plants.forEach((plant) => {
-        let creatureCoord = creature.getComponent("coord");
-        let plantCoord = plant.getComponent("coord");
+      let creatureCoord = creature.getComponent("coord");
+      let collisions = world.getEntitiesAt(creatureCoord);
 
-        if (creatureCoord.equalTo(plantCoord)) {
+      collisions.forEach((entity) => {
+        // Don't collide with self
+        if (entity.id !== creature.id && entity.hasComponent("plant")) {
           let creatureEnergy = creature.getComponent("energy");
-          let plantEnergy = plant.getComponent("energy");
-
+          let plantEnergy = entity.getComponent("energy");
           creatureEnergy.gain(plantEnergy.level);
-          world.removeEntity(plant);
+          world.removeEntity(entity);
         }
       });
     });

@@ -84,6 +84,7 @@ class App {
    * Ticks the simulation forward by one full iteration
    */
   tick() {
+    this.world.update();
     this._forEachSystem((system) => system.update(this));
     this._forEachSystem((system) => system.draw(this));
     this.paper.view.draw();

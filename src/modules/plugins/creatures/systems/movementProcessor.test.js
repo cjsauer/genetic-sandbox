@@ -22,6 +22,7 @@ describe("MovementProcessor", () => {
     creature2 = buildDefaultCreature(new Coord(1, 0), random);
     world.addEntity(creature1);
     world.addEntity(creature2);
+    world.update();
 
     app = { world, grid, random };
 

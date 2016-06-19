@@ -1,6 +1,7 @@
 import World from "./World";
 import Entity from "./Entity";
 import Component from "./Component";
+import Coord from "../plugins/core/components/Coord";
 import Sprite from "../plugins/core/components/Sprite";
 import { expect } from "chai";
 import { stub, spy } from "sinon";
@@ -17,6 +18,7 @@ describe("World", () => {
     entity.addComponent(new CompA());
     entity.addComponent(new CompB());
     entity.addComponent(new CompC());
+    entity.addComponent(new Coord(0, 0));
     return entity;
   }
 
@@ -24,6 +26,7 @@ describe("World", () => {
     let entity = new Entity();
     entity.addComponent(new CompA());
     entity.addComponent(new CompB());
+    entity.addComponent(new Coord(1, 0));
     return entity;
   }
 
@@ -31,6 +34,7 @@ describe("World", () => {
     let entity = new Entity();
     entity.addComponent(new CompA());
     entity.addComponent(new CompC());
+    entity.addComponent(new Coord(0, 1));
     return entity;
   }
 
@@ -134,5 +138,28 @@ describe("World", () => {
     entities[2].removeComponent("c");
 
     expect(world.getEntitiesWith("a", "b", "c")).to.have.lengthOf(7);
+  });
+
+  describe("update", () => {
+    it("rebuilds the coord to entity index", () => {
+      let rebuildSpy = spy(world._coordEntityIndex, "rebuild");
+      world.update();
+      world._coordEntityIndex.rebuild.restore();
+
+      expect(rebuildSpy.calledWith(world.getEntities())).to.be.true;
+    });
+  });
+
+  it("can be queried for all entities at a given coordinate position", () => {
+    world.update(); // Rebuild the index
+    let entities00 = world.getEntitiesAt(new Coord(0, 0));
+    let entities10 = world.getEntitiesAt(new Coord(1, 0));
+    let entities01 = world.getEntitiesAt(new Coord(0, 1));
+    let empty = world.getEntitiesAt(new Coord(2, 2));
+
+    expect(entities00).to.have.lengthOf(10);
+    expect(entities10).to.have.lengthOf(10);
+    expect(entities01).to.have.lengthOf(10);
+    expect(empty).to.have.lengthOf(0);
   });
 });

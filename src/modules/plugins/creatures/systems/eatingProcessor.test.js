@@ -22,6 +22,7 @@ describe("EatingProcessor", () => {
     let otherPlant = buildPlant(10, new Coord(1, 0));
     world.addEntities([ creature, plant, otherPlant ]);
 
+    world.update();
     app = { world };
 
     sys = new EatingProcessor();

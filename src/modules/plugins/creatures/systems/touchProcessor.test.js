@@ -25,6 +25,7 @@ describe("TouchProcessor", () => {
     world.addEntity(creature1);
     world.addEntity(creature2);
     world.addEntity(plant);
+    world.update();
 
     app = { world, grid, random };
 

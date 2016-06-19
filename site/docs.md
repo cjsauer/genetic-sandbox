@@ -687,17 +687,25 @@ lookup of entities by component
 
 * [World](#World)
     * [new World()](#new_World_new)
+    * [.update()](#World+update)
     * [.addEntity(entity)](#World+addEntity)
     * [.addEntities(entities)](#World+addEntities)
     * [.removeEntity(entity)](#World+removeEntity)
     * [.getEntities()](#World+getEntities) ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
     * [.getEntitiesWith(...componentNames)](#World+getEntitiesWith) ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
+    * [.getEntitiesAt(coord)](#World+getEntitiesAt) ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
 
 <a name="new_World_new"></a>
 
 ### new World()
 And on the seventh day...
 
+<a name="World+update"></a>
+
+### world.update()
+Updates the world
+
+**Kind**: instance method of <code>[World](#World)</code>  
 <a name="World+addEntity"></a>
 
 ### world.addEntity(entity)
@@ -751,6 +759,18 @@ Retrieves an array of all entities that contain ALL of the given components
 | Param | Type | Description |
 | --- | --- | --- |
 | ...componentNames | <code>string</code> | The name of a component |
+
+<a name="World+getEntitiesAt"></a>
+
+### world.getEntitiesAt(coord) ⇒ <code>[Array.&lt;Entity&gt;](#Entity)</code>
+Retrieves an array of all entities located at the given coordinates
+
+**Kind**: instance method of <code>[World](#World)</code>  
+**Returns**: <code>[Array.&lt;Entity&gt;](#Entity)</code> - the array of entities  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| coord | <code>[Coord](#Coord)</code> | coordinates to lookup |
 
 <a name="ConnectionGene"></a>
 
@@ -1400,6 +1420,7 @@ Graphical representation of an entity
     * [.spriteName](#Sprite+spriteName) : <code>string</code>
     * [.name](#Component+name) : <code>string</code>
     * [.getItem(paper)](#Sprite+getItem) ⇒ <code>Item</code>
+    * [.release()](#Sprite+release)
 
 <a name="new_Sprite_new"></a>
 
@@ -1438,6 +1459,13 @@ instance representing the vector graphic of this sprite
 | --- | --- | --- |
 | paper | <code>PaperScope</code> | an active paper scope |
 
+<a name="Sprite+release"></a>
+
+### sprite.release()
+Releases the underlying Paper.js representation of this sprite, effectively
+removing it from the screen
+
+**Kind**: instance method of <code>[Sprite](#Sprite)</code>  
 <a name="Tile"></a>
 
 ## Tile ⇐ <code>[Component](#Component)</code>

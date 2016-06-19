@@ -1,4 +1,5 @@
 import Family from "./Family";
+import CoordEntityIndex from "../util/CoordEntityIndex";
 
 /**
  * World is a container of all entities in existence, and provides super fast
@@ -24,6 +25,20 @@ class World {
      * @type {Object}
      */
     this._entities = {};
+
+    /**
+     * An index mapping coordinates to entities for fast lookup by position
+     * @private
+     * @type {CoordEntityIndex}
+     */
+    this._coordEntityIndex = new CoordEntityIndex();
+  }
+
+  /**
+   * Updates the world
+   */
+  update() {
+    this._coordEntityIndex.rebuild(this.getEntities());
   }
 
   /**
@@ -107,6 +122,15 @@ class World {
     }
 
     return this._families[familyHash].getEntities();
+  }
+
+  /**
+   * Retrieves an array of all entities located at the given coordinates
+   * @param {Coord} coord - coordinates to lookup
+   * @returns {Entity[]} the array of entities
+   */
+  getEntitiesAt(coord) {
+    return this._coordEntityIndex.findEntitiesAt(coord);
   }
 
   /**
