@@ -2,15 +2,19 @@ import Sprite from "./Sprite";
 import Component from "../../../ecs/Component";
 import Theme from "../../../themes/Theme";
 import { expect } from "chai";
-import { stub } from "sinon";
+import { stub, spy } from "sinon";
 
 describe("Sprite", () => {
-  let paper, fakeTheme;
+  let paper, fakeTheme, item;
 
   beforeEach(() => {
+    item = {
+      remove: spy()
+    };
+
     paper = {
       Symbol: stub().returns({
-        place: stub().returns("fakeItem")
+        place: stub().returns(item)
       })
     };
 
@@ -47,7 +51,7 @@ describe("Sprite", () => {
     const sprite = new Sprite("default");
     const item = sprite.getItem(paper);
     expect(item).to.be.ok;
-    expect(item).to.equal("fakeItem");
+    expect(item).to.eql(item);
   });
 
   it("caches a reference to its item", () => {
@@ -60,5 +64,16 @@ describe("Sprite", () => {
     let item2 = sprite.getItem(paper);
     expect(item).to.eql(item2);
     expect(paper.Symbol().place.callCount).to.equal(1);
+  });
+
+  it("can release its Paper.js Item", () => {
+    const sprite = new Sprite("default");
+    const neverAccessedSprite = new Sprite("default");
+    sprite.getItem(paper); // Access it
+
+    sprite.release();
+    neverAccessedSprite.release(); // This should basically do nothing
+
+    expect(item.remove.calledOnce).to.be.true;
   });
 });

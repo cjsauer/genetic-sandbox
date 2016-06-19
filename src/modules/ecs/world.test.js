@@ -1,10 +1,12 @@
 import World from "./World";
 import Entity from "./Entity";
 import Component from "./Component";
+import Sprite from "../plugins/core/components/Sprite";
 import { expect } from "chai";
+import { stub, spy } from "sinon";
 
 describe("World", () => {
-  let world;
+  let world, paper;
 
   class CompA extends Component { constructor() { super("a"); } }
   class CompB extends Component { constructor() { super("b"); } }
@@ -32,8 +34,25 @@ describe("World", () => {
     return entity;
   }
 
+  function createEntityWithSprite() {
+    let entity = new Entity();
+    entity.addComponent(new Sprite("default"));
+    return entity;
+  }
+
   beforeEach(() => {
     world = new World();
+
+    paper = {
+      Path: {
+        Circle: stub().returns({})
+      },
+      Symbol: stub().returns({
+        place: stub().returns({
+          remove: spy()
+        })
+      })
+    };
 
     // Fill up the world with entities
     for (let i = 0; i < 10; i++) {
@@ -71,6 +90,16 @@ describe("World", () => {
     world.removeEntity(entity);
     expect(world._entities[entity.id]).to.be.undefined;
     expect(world.getEntities()).to.have.lengthOf(30);
+  });
+
+  it("cleans up an entity's sprite upon removal", () => {
+    const entity = createEntityWithSprite();
+    const sprite = entity.getComponent("sprite");
+    const item = sprite.getItem(paper);
+    world.addEntity(entity);
+
+    world.removeEntity(entity);
+    expect(item.remove.calledOnce).to.be.true;
   });
 
   it("can be queried for all entities with the given components", () => {

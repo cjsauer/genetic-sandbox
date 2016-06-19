@@ -38,6 +38,16 @@ class Sprite extends Component {
 
     return this._item;
   }
+
+  /**
+   * Releases the underlying Paper.js representation of this sprite, effectively
+   * removing it from the screen
+   */
+  release() {
+    if (this._item !== undefined) {
+      this._item.remove();
+    }
+  }
 }
 
 Component.register(Sprite);

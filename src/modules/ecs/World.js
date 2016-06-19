@@ -66,6 +66,11 @@ class World {
    * @param {Entity} entity - the entity to remove
    */
   removeEntity(entity) {
+    // Clean up the entity's sprite if it has one
+    if (entity.hasComponent("sprite")) {
+      entity.getComponent("sprite").release();
+    }
+
     for (let key in this._families) {
       let family = this._families[key];
       family.removeEntity(entity);
