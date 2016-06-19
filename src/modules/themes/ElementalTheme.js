@@ -23,7 +23,10 @@ const ElementalTheme = {
         ElementalTheme._defaultSymbol = new Symbol(path);
       }
 
-      return ElementalTheme._defaultSymbol.place();
+      let placedSymbol = ElementalTheme._defaultSymbol.place();
+      let rasterized = placedSymbol.rasterize();
+      placedSymbol.remove();
+      return rasterized;
     },
 
     // Tile sprite
@@ -38,7 +41,10 @@ const ElementalTheme = {
         ElementalTheme._tileSymbol = new Symbol(path);
       }
 
-      return ElementalTheme._tileSymbol.place();
+      let placedSymbol = ElementalTheme._tileSymbol.place();
+      let rasterized = placedSymbol.rasterize();
+      placedSymbol.remove();
+      return rasterized;
     },
 
     // Plant sprite
@@ -63,7 +69,10 @@ const ElementalTheme = {
         ElementalTheme._plantSymbol = new Symbol(petals);
       }
 
-      return ElementalTheme._plantSymbol.place();
+      let placedSymbol = ElementalTheme._plantSymbol.place();
+      let rasterized = placedSymbol.rasterize();
+      placedSymbol.remove();
+      return rasterized;
     },
 
     // Creature sprite
@@ -79,7 +88,10 @@ const ElementalTheme = {
         ElementalTheme._creatureSymbol = new Symbol(path);
       }
 
-      return ElementalTheme._creatureSymbol.place();
+      let placedSymbol = ElementalTheme._creatureSymbol.place();
+      let rasterized = placedSymbol.rasterize();
+      placedSymbol.remove();
+      return rasterized;
     }
   }
 };

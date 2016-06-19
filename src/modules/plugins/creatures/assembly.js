@@ -2,6 +2,7 @@ import Entity from "../../ecs/Entity";
 import Creature from "./components/Creature";
 import Brain from "./components/Brain";
 import DNA from "./components/DNA";
+import Coord from "../core/components/Coord";
 import Energy from "../core/components/Energy";
 import Sprite from "../core/components/Sprite";
 import Velocity from "../core/components/Velocity";
@@ -22,7 +23,7 @@ export function buildCreature(dna, coord) {
   entity.addComponent(new Energy(config.creatures.initialEnergy));
   entity.addComponent(new Sprite("creature"));
   entity.addComponent(new Velocity());
-  entity.addComponent(coord);
+  entity.addComponent(new Coord(coord.x, coord.y));
   return entity;
 };
 
@@ -41,6 +42,6 @@ export function buildDefaultCreature(coord, random) {
   entity.addComponent(new Energy(config.creatures.initialEnergy));
   entity.addComponent(new Sprite("creature"));
   entity.addComponent(new Velocity());
-  entity.addComponent(coord);
+  entity.addComponent(new Coord(coord.x, coord.y));
   return entity;
 }

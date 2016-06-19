@@ -1,5 +1,6 @@
 import Entity from "../../ecs/Entity";
 import Plant from "./components/Plant";
+import Coord from "../core/components/Coord";
 import Energy from "../core/components/Energy";
 import Sprite from "../core/components/Sprite";
 
@@ -13,6 +14,6 @@ export function buildPlant(energyLevel, coord) {
   entity.addComponent(new Plant());
   entity.addComponent(new Energy(energyLevel));
   entity.addComponent(new Sprite("plant"));
-  entity.addComponent(coord);
+  entity.addComponent(new Coord(coord.x, coord.y));
   return entity;
 };

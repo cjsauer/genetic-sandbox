@@ -53,7 +53,10 @@ describe("World", () => {
       },
       Symbol: stub().returns({
         place: stub().returns({
-          remove: spy()
+          remove: spy(),
+          rasterize: stub().returns({
+            remove: spy()
+          })
         })
       })
     };
