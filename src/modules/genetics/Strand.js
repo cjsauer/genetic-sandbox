@@ -110,10 +110,10 @@ class Strand extends Serializable {
    * replacing the weight with a new value completely. Chances are NOT
    * codependent.
    * @param {number} perturbChance - chance that each weight has of being mutated
-   * @param {number} perturnAmplitude - maximum change in weight possible
+   * @param {number} perturbAmplitude - maximum change in weight possible
    * @param {number} newValueChance - chance that a weight will be completely
    * replaced by a new value
-   * @param {Object} random-js generator instance
+   * @param {Object} random - random-js generator instance
    */
   mutateWeights(perturbChance, perturbAmplitude, newValueChance, random) {
     this.connectionGenes.forEach((gene) => {
@@ -134,6 +134,7 @@ class Strand extends Serializable {
    * strand. The new connection leading into the new node receives a weight of
    * 1, and the new connection leading out of the new node receives the same
    * weight as the original connection.
+   * @private
    * @param {ConnectionGene} connectionGene - connection gene to split
    */
   _splitConnectionWithNode(connectionGene) {
@@ -249,9 +250,9 @@ class Strand extends Serializable {
   _disjoint(otherStrand) {
     const result = [];
     // Only consider non-matching genes
-    let matchingCount = this._matching(otherStrand).length;
-    let candidates = _.drop(this.connectionGenes, matchingCount);
-    let others = _.drop(otherStrand.connectionGenes, matchingCount);
+    let matching = this._matching(otherStrand);
+    let candidates = _.without(this.connectionGenes, ...matching);
+    let others = _.without(otherStrand.connectionGenes, ...matching);
 
     // Test whether the given candidate has an innovation number that's less
     // than any gene's innovation number in the other strand
@@ -274,9 +275,9 @@ class Strand extends Serializable {
   _excess(otherStrand) {
     const result = [];
     // Only consider non-matching genes
-    let matchingCount = this._matching(otherStrand).length;
-    let candidates = _.drop(this.connectionGenes, matchingCount);
-    let others = _.drop(otherStrand.connectionGenes, matchingCount);
+    let matching = this._matching(otherStrand);
+    let candidates = _.without(this.connectionGenes, ...matching);
+    let others = _.without(otherStrand.connectionGenes, ...matching);
 
     // Test whether the given candidate has an innovation number that's greater
     // than every gene's innovation number in the other strand
@@ -289,14 +290,14 @@ class Strand extends Serializable {
   }
 
   /**
-   * Computes the compatibility difference between two strands
+   * Computes the compatibility distance between two strands
    * @param {Strand} otherStrand - the strand to compare this one against
    * @param {number} excessCoefficient - the importance placed on the number
    * of excess genes in determining compatibility
    * @param {number} disjointCoefficient - the importance placed on the number
    * of disjoint genes in determining compatibility
    * @param {number} weightCoefficient - the importance placed on differences
-   * in weights between matching connections in determining compatibility
+   * in weights between matching connection genes in determining compatibility
    * @returns {number} the computed compatibility distance measure
    */
   compatibilityDistance(otherStrand, excessCoefficient, disjointCoefficient, weightCoefficient) {
@@ -329,7 +330,7 @@ class Strand extends Serializable {
   }
 
   /**
-   * Makes a complete copy of this strand
+   * Makes a complete, deep copy of this strand
    * @returns {Strand} the cloned strand
    */
   clone() {
