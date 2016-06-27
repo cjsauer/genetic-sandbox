@@ -66,7 +66,9 @@ class MovementProcessor extends System {
         });
 
         if (!alreadyOccupied) {
+          let creatureComp = creature.getComponent("creature");
           let energy = creature.getComponent("energy");
+          creatureComp.movesMade += 1;
           energy.expend(config.creatures.moveCost);
           coord.set(destination.x, destination.y);
         }

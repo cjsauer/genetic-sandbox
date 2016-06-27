@@ -28,8 +28,10 @@ class EatingProcessor extends System {
       collisions.forEach((entity) => {
         // Don't collide with self
         if (entity.id !== creature.id && entity.hasComponent("plant")) {
+          let creatureComp = creature.getComponent("creature");
           let creatureEnergy = creature.getComponent("energy");
           let plantEnergy = entity.getComponent("energy");
+          creatureComp.plantsEaten += 1;
           creatureEnergy.gain(plantEnergy.level);
           world.removeEntity(entity);
         }

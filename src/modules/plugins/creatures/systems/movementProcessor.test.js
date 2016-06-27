@@ -189,6 +189,26 @@ describe("MovementProcessor", () => {
       expect(energy2.level).to.equal(originalEnergyLevel2);
     });
 
+    it("keeps track of the number of moves a creature has made", () => {
+      let velocity1 = creature1.getComponent("velocity");
+      velocity1.x = -1;
+      velocity1.y = 1;
+
+      let velocity2 = creature2.getComponent("velocity");
+      velocity2.x = 0;
+      velocity2.y = 0;
+
+      let creatureComp1 = creature1.getComponent("creature");
+      let creatureComp2 = creature2.getComponent("creature");
+      let originalMoveCount1 = creatureComp1.movesMade;
+      let originalMoveCount2 = creatureComp2.movesMade;
+
+      sys.update(app);
+
+      expect(creatureComp1.movesMade).to.equal(originalMoveCount1 + 1);
+      expect(creatureComp2.movesMade).to.equal(originalMoveCount2);
+    });
+
     it("does not allow a creature to move out of bounds", () => {
       // Signals a move from (1, 0) to (2, 0) which is out of bounds
       let velocity2 = creature2.getComponent("velocity");
