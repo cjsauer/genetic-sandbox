@@ -80,6 +80,18 @@ class DNA extends Component {
     let traitDistance = this.traitStrand.compatibilityDistance(otherDNA.traitStrand, 1.0, 1.0, 1.0);
     return brainDistance + traitDistance;
   }
+
+  /**
+   * Clones this DNA, performing a deep copy of its constituent strands and
+   * hox genes
+   */
+  clone() {
+    const dna = new DNA();
+    dna.brainStrand = this.brainStrand.clone();
+    dna.traitStrand = this.traitStrand.clone();
+    dna._hoxGenes = this._hoxGenes.slice(0);
+    return dna;
+  }
 }
 
 Component.register(DNA);

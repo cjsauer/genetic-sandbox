@@ -88,4 +88,14 @@ describe("DNA", () => {
     let mutatedDistance = dna1.compatibilityDistance(dna2, 1.0, 1.0, 1.0);
     expect(mutatedDistance).to.be.above(evolvedDistance);
   });
+
+  it("can be cloned", () => {
+    const dna = new DNA(2, 1, random);
+    const clone = dna.clone();
+    expect(dna.brainStrand.nodeGenes).to.eql(clone.brainStrand.nodeGenes);
+    expect(dna.brainStrand.connectionGenes).to.eql(clone.brainStrand.connectionGenes);
+    expect(dna.traitStrand.nodeGenes).to.eql(clone.traitStrand.nodeGenes);
+    expect(dna.traitStrand.connectionGenes).to.eql(clone.traitStrand.connectionGenes);
+    expect(dna.hoxGenes).to.eql(clone.hoxGenes);
+  });
 });
