@@ -290,6 +290,63 @@ class Strand extends Serializable {
   }
 
   /**
+   * Crosses this strand over with the given one. Matching genes are inherited
+   * randomly from both parents, whereas disjoint and excess genes are inherited
+   * only from the more fit parent. The more fit parent is assumed to be `this`
+   * strand unless the equalFitness flag is set to true. In that case ALL
+   * disjoint and excess genes are inherited. Genes that are disabled in either
+   * parent have the given chance of also being disabled in the offspring.
+   * @param {Strand} otherStrand - the strand to crossover with this one
+   * @param {number} disabledChance - the chance that a gene has of being
+   * disabled if it is disabled in either parent
+   * @param {boolean} equalFitness - if set to true, all excess and disjoint
+   * genes are inherited from both parents, otherwise only the excess and
+   * disjoint genes from `this` parent will be inherited
+   * @param {Object} random - a random-js generator instance
+   */
+  crossover(otherStrand, disabledChance, equalFitness, random) {
+    let offspring = new Strand(); // Create an empty strand to fill up
+
+    // Randomly inherit matching genes
+    let myMatchingGenes = this._matching(otherStrand).sort((a, b) => a.innovationNumber - b.innovationNumber);
+    let otherMatchingGenes = otherStrand._matching(this).sort((a, b) => a.innovationNumber - b.innovationNumber);
+    for (let i = 0; i < myMatchingGenes.length; i++) {
+      let geneToInherit = random.bool(0.5) ? myMatchingGenes[i] : otherMatchingGenes[i];
+      let gene = geneToInherit.clone();
+      gene.enabled = true;
+      if ((!myMatchingGenes[i].enabled || !otherMatchingGenes[i].enabled) && random.bool(disabledChance)) {
+        gene.enabled = false;
+      }
+      offspring.connectionGenes.push(gene);
+    }
+
+    // Inherit either `this` parent's excess and disjoint genes, or both parents'
+    // excess and disjoint genes if the equalFitness flag is set
+    let inheritedExcessAndDisjointGenes = [];
+    let myExcess = this._excess(otherStrand);
+    let myDisjoint = this._disjoint(otherStrand);
+    inheritedExcessAndDisjointGenes = myExcess.concat(myDisjoint);
+    if (equalFitness) {
+      let otherExcess = otherStrand._excess(this);
+      let otherDisjoint = otherStrand._disjoint(this);
+      inheritedExcessAndDisjointGenes = inheritedExcessAndDisjointGenes.concat(otherExcess.concat(otherDisjoint));
+    }
+    offspring.connectionGenes = offspring.connectionGenes.concat(inheritedExcessAndDisjointGenes);
+
+    // Inherit all the necessary node genes
+    let possibleNodeGenes = _.uniqBy(this.nodeGenes.concat(otherStrand.nodeGenes), (gene) => gene.id);
+    offspring.nodeGenes = possibleNodeGenes.filter((nodeGene) => {
+      // Remove all node genes that aren't part of a connection
+      return offspring.connectionGenes.some((connGene) => {
+        return connGene.in === nodeGene.id || connGene.out === nodeGene.id;
+      });
+    }).map((gene) => gene.clone());
+    offspring._nextNodeGeneID = offspring.nodeGenes.length + 1;
+
+    return offspring;
+  }
+
+  /**
    * Computes the compatibility distance between two strands
    * @param {Strand} otherStrand - the strand to compare this one against
    * @param {number} excessCoefficient - the importance placed on the number

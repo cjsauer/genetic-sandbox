@@ -29,6 +29,17 @@ class NodeGene extends Serializable {
      */
     this.type = type;
   }
+
+  /**
+   * Clones this node gene, copying its current fields verbatim
+   * @returns {NodeGene} the cloned node gene
+   */
+  clone() {
+    const gene = new NodeGene();
+    gene.id = this.id;
+    gene.type = this.type;
+    return gene;
+  }
 }
 
 Serializable.register(NodeGene);

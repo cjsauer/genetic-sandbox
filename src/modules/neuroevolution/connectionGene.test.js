@@ -26,6 +26,20 @@ describe("ConnectionGene", () => {
     expect(emptyConnGene).to.be.ok;
   });
 
+  it("can be cloned", () => {
+    const gene = new ConnectionGene(1, 2, 0.5, true);
+    let clone = gene.clone();
+    expect(clone !== gene).to.be.true;
+    expect(clone.in).to.equal(1);
+    expect(clone.out).to.equal(2);
+    expect(clone.weight).to.equal(0.5);
+    expect(clone.enabled).to.be.true;
+
+    gene.enabled = false;
+    clone = gene.clone();
+    expect(clone.enabled).to.be.false;
+  });
+
   describe("innovation tracking", () => {
     beforeEach(() => {
       ConnectionGene.resetInnovations();

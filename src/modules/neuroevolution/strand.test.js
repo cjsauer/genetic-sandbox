@@ -234,7 +234,7 @@ describe("Strand", () => {
     });
   });
 
-  describe("speciation", () => {
+  describe("compatibility and crossover", () => {
     let strand1, strand2;
 
     beforeEach(() => {
@@ -250,33 +250,89 @@ describe("Strand", () => {
       strand2._connect(strand2.nodeGenes[0], strand2.nodeGenes[5], random);
     });
 
+    it("can crossover with another strand", () => {
+      random.bool = stub();
+      random.bool.withArgs(0.5).onCall(0).returns(true); // parent 1's matching gene
+      random.bool.withArgs(0.5).onCall(1).returns(false); // parent 2's matching gene
+      random.bool.withArgs(0.5).onCall(2).returns(true);
+      random.bool.withArgs(0.5).onCall(3).returns(false);
+      random.bool.withArgs(0.5).onCall(4).returns(true);
+      random.bool.withArgs(0.25).onCall(0).returns(false); // Don't disable gene
+      random.bool.withArgs(0.25).onCall(1).returns(true); // Do disable gene
+      // strand1 assumed to be more fit
+      let offspring = strand1.crossover(strand2, 0.25, false, random);
+      let innovations = offspring.connectionGenes.map((gene) => gene.innovationNumber);
+      let nodeIDs = offspring.nodeGenes.map((gene) => gene.id);
+      expect(innovations).to.include.members([1, 2, 3, 4, 5, 8]);
+      expect(nodeIDs).to.include.members([1, 2, 3, 4, 5]);
+      expect(innovations).to.have.lengthOf(6);
+      expect(nodeIDs).to.have.lengthOf(5);
+      expect(offspring._nextNodeGeneID).to.equal(6);
+      expect(offspring.connectionGenes[1].enabled).to.be.true;
+      expect(offspring.connectionGenes[4].enabled).to.be.false;
+
+      random.bool = stub();
+      random.bool.withArgs(0.5).onCall(0).returns(true); // parent 1's matching gene
+      random.bool.withArgs(0.5).onCall(1).returns(false); // parent 2's matching gene
+      random.bool.withArgs(0.5).onCall(2).returns(true);
+      random.bool.withArgs(0.5).onCall(3).returns(false);
+      random.bool.withArgs(0.5).onCall(4).returns(true);
+      random.bool.withArgs(0.25).onCall(0).returns(true); // Do disable gene
+      random.bool.withArgs(0.25).onCall(1).returns(false); // Don't disable gene
+      // strand2 assumed to be more fit
+      offspring = strand2.crossover(strand1, 0.25, false, random);
+      innovations = offspring.connectionGenes.map((gene) => gene.innovationNumber);
+      nodeIDs = offspring.nodeGenes.map((gene) => gene.id);
+      expect(innovations).to.include.members([1, 2, 3, 4, 5, 6, 7, 9, 10]);
+      expect(nodeIDs).to.include.members([1, 2, 3, 4, 5, 6]);
+      expect(innovations).to.have.lengthOf(9);
+      expect(nodeIDs).to.have.lengthOf(6);
+      expect(offspring._nextNodeGeneID).to.equal(7);
+      expect(offspring.connectionGenes[1].enabled).to.be.false;
+      expect(offspring.connectionGenes[4].enabled).to.be.true;
+
+      random.bool = stub();
+      random.bool.returns(true); // Don't really care about this for this case
+      // Inherit all disjoint and excess genes from both parents
+      offspring = strand1.crossover(strand2, 0.25, true, random);
+      innovations = offspring.connectionGenes.map((gene) => gene.innovationNumber);
+      nodeIDs = offspring.nodeGenes.map((gene) => gene.id);
+      expect(innovations).to.include.members([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+      expect(nodeIDs).to.include.members([1, 2, 3, 4, 5, 6]);
+      expect(innovations).to.have.lengthOf(10);
+      expect(nodeIDs).to.have.lengthOf(6);
+      expect(offspring._nextNodeGeneID).to.equal(7);
+      expect(offspring.connectionGenes[1].enabled).to.be.false;
+      expect(offspring.connectionGenes[4].enabled).to.be.false;
+    });
+
     it("can determine matching genes between strands", () => {
       let matchingGenes = strand1._matching(strand2);
       expect(matchingGenes).to.have.lengthOf(5);
-      expect(matchingGenes[0].innovationNumber).to.equal(1);
-      expect(matchingGenes[1].innovationNumber).to.equal(2);
-      expect(matchingGenes[2].innovationNumber).to.equal(3);
-      expect(matchingGenes[3].innovationNumber).to.equal(4);
-      expect(matchingGenes[4].innovationNumber).to.equal(5);
+      expect(matchingGenes[0]).to.eql(strand1.connectionGenes[0]);
+      expect(matchingGenes[1]).to.eql(strand1.connectionGenes[1]);
+      expect(matchingGenes[2]).to.eql(strand1.connectionGenes[2]);
+      expect(matchingGenes[3]).to.eql(strand1.connectionGenes[3]);
+      expect(matchingGenes[4]).to.eql(strand1.connectionGenes[4]);
 
       matchingGenes = strand2._matching(strand1);
       expect(matchingGenes).to.have.lengthOf(5);
-      expect(matchingGenes[0].innovationNumber).to.equal(1);
-      expect(matchingGenes[1].innovationNumber).to.equal(2);
-      expect(matchingGenes[2].innovationNumber).to.equal(3);
-      expect(matchingGenes[3].innovationNumber).to.equal(4);
-      expect(matchingGenes[4].innovationNumber).to.equal(5);
+      expect(matchingGenes[0]).to.eql(strand2.connectionGenes[0]);
+      expect(matchingGenes[1]).to.eql(strand2.connectionGenes[1]);
+      expect(matchingGenes[2]).to.eql(strand2.connectionGenes[2]);
+      expect(matchingGenes[3]).to.eql(strand2.connectionGenes[3]);
+      expect(matchingGenes[4]).to.eql(strand2.connectionGenes[4]);
     });
 
     it("can determine disjoint genes between strands", () => {
       let disjointGenes = strand1._disjoint(strand2);
       expect(disjointGenes).to.have.lengthOf(1);
-      expect(disjointGenes[0].innovationNumber).to.equal(8);
+      expect(disjointGenes[0]).to.eql(strand1.connectionGenes[5]);
 
       disjointGenes = strand2._disjoint(strand1);
       expect(disjointGenes).to.have.lengthOf(2);
-      expect(disjointGenes[0].innovationNumber).to.equal(6);
-      expect(disjointGenes[1].innovationNumber).to.equal(7);
+      expect(disjointGenes[0]).to.eql(strand2.connectionGenes[5]);
+      expect(disjointGenes[1]).to.eql(strand2.connectionGenes[6]);
     });
 
     it("can determine excess genes between strands", () => {
@@ -285,8 +341,8 @@ describe("Strand", () => {
 
       excessGenes = strand2._excess(strand1);
       expect(excessGenes).to.have.lengthOf(2);
-      expect(excessGenes[0].innovationNumber).to.equal(9);
-      expect(excessGenes[1].innovationNumber).to.equal(10);
+      expect(excessGenes[0]).to.eql(strand2.connectionGenes[7]);
+      expect(excessGenes[1]).to.eql(strand2.connectionGenes[8]);
     });
 
     it("can compute the compatibility difference between two strands", () => {
