@@ -81,6 +81,14 @@ describe("World", () => {
     expect(world.getEntities()).to.have.lengthOf(33);
   });
 
+  it("can't add the same entity twice", () => {
+    const entity = new Entity();
+    world.addEntity(entity);
+    world.addEntity(entity);
+
+    expect(world.getEntities()).to.have.lengthOf(31);
+  });
+
   it("can add an array of entities", () => {
     world.addEntities([ new Entity(), new Entity(), new Entity() ]);
 

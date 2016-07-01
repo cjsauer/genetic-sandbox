@@ -56,8 +56,17 @@ describe("DNA", () => {
     stub(dna.traitStrand, "addRandomNodeGene");
     stub(dna.traitStrand, "addRandomConnectionGene");
 
+    random.bool = stub().returns(false);
     dna.mutate(0.8, 0.03, 0.05, random);
+    expect(dna.brainStrand.mutateWeights.calledOnce).to.be.false;
+    expect(dna.brainStrand.addRandomNodeGene.calledOnce).to.be.false;
+    expect(dna.brainStrand.addRandomConnectionGene.calledOnce).to.be.false;
+    expect(dna.traitStrand.mutateWeights.calledOnce).to.be.false;
+    expect(dna.traitStrand.addRandomNodeGene.calledOnce).to.be.false;
+    expect(dna.traitStrand.addRandomConnectionGene.calledOnce).to.be.false;
 
+    random.bool = stub().returns(true);
+    dna.mutate(0.8, 0.03, 0.05, random);
     // These functions are tested separately, so we'll just make sure that they
     // were called
     expect(dna.brainStrand.mutateWeights.calledOnce).to.be.true;

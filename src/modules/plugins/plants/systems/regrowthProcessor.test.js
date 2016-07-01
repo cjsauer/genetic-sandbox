@@ -31,6 +31,12 @@ describe("RegrowthProcessor", () => {
   it("should continuously spread new plants from existing ones", () => {
     let originalPlantCount = app.world.getEntitiesWith("plant").length;
 
+    // Don't place a new plant
+    app.random.bool.onCall(0).returns(false);
+    app.world.update();
+    sys.update(app);
+    expect(app.world.getEntitiesWith("plant").length).to.equal(originalPlantCount);
+
     // Always try and place a plant
     app.random.bool.returns(true);
 
