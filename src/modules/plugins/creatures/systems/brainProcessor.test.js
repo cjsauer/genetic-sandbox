@@ -3,7 +3,7 @@ import Brain from "../components/Brain";
 import DNA from "../components/DNA";
 import World from "../../../ecs/World";
 import Entity from "../../../ecs/Entity";
-import Sequencer from "../../../genetics/Sequencer";
+import Sequencer from "../../../neuroevolution/Sequencer";
 import { expect } from "chai";
 import { stub, spy } from "sinon";
 

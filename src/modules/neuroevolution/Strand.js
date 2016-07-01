@@ -118,12 +118,12 @@ class Strand extends Serializable {
   mutateWeights(perturbChance, perturbAmplitude, newValueChance, random) {
     this.connectionGenes.forEach((gene) => {
       if (random.bool(perturbChance)) {
-        let delta = perturbAmplitude * random.real() * (random.bool(0.5) ? 1 : -1);
+        let delta = perturbAmplitude * random.real(0, 1) * (random.bool(0.5) ? 1 : -1);
         gene.weight += delta;
       }
 
       if (random.bool(newValueChance)) {
-        gene.weight = random.real();
+        gene.weight = random.real(0, 1);
       }
     });
   }
@@ -196,7 +196,7 @@ class Strand extends Serializable {
   _connect(sourceNode, destNode, random) {
     let connectionGene = null;
     if (this._canConnect(sourceNode, destNode)) {
-      connectionGene = new ConnectionGene(sourceNode.id, destNode.id, random.real(), true);
+      connectionGene = new ConnectionGene(sourceNode.id, destNode.id, random.real(0, 1), true);
       this.connectionGenes.push(connectionGene);
     }
     return connectionGene;

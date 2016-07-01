@@ -6,7 +6,7 @@ import Coord from "../core/components/Coord";
 import Energy from "../core/components/Energy";
 import Sprite from "../core/components/Sprite";
 import Velocity from "../core/components/Velocity";
-import Sequencer from "../../genetics/Sequencer";
+import Sequencer from "../../neuroevolution/Sequencer";
 import config from "../../config";
 
 /**
