@@ -1,5 +1,6 @@
 import DNA from "./DNA";
 import Component from "../../../ecs/Component";
+import ConnectionGene from "../../../neuroevolution/ConnectionGene";
 import { expect } from "chai";
 import { stub } from "sinon";
 
@@ -11,6 +12,11 @@ describe("DNA", () => {
       real: stub().returns(0.5),
       bool: stub().returns(true)
     };
+    ConnectionGene.resetInnovations();
+  });
+
+  afterEach(() => {
+    ConnectionGene.resetInnovations();
   });
 
   it("should extend Component", () => {
@@ -32,12 +38,12 @@ describe("DNA", () => {
       const dna = new DNA(3, 4, random);
 
       expect(dna.brainStrand).to.be.ok;
-      expect(dna.brainStrand.nodeGenes).to.have.lengthOf(7);
-      expect(dna.brainStrand.connectionGenes).to.have.lengthOf(12);
+      expect(dna.brainStrand.nodes).to.have.lengthOf(7);
+      expect(dna.brainStrand.connections).to.have.lengthOf(12);
 
       expect(dna.traitStrand).to.be.ok;
-      expect(dna.traitStrand.nodeGenes).to.have.lengthOf(2);
-      expect(dna.traitStrand.connectionGenes).to.have.lengthOf(1);
+      expect(dna.traitStrand.nodes).to.have.lengthOf(2);
+      expect(dna.traitStrand.connections).to.have.lengthOf(1);
     });
 
     it("should contain a single, random Hox gene", () => {
@@ -86,14 +92,14 @@ describe("DNA", () => {
     expect(originalDistance).to.equal(0);
 
     // Evolving strands differently should increase the distance
-    dna1.brainStrand._splitConnectionWithNode(dna1.brainStrand.connectionGenes[0]);
-    dna2.brainStrand._splitConnectionWithNode(dna2.brainStrand.connectionGenes[1]);
+    dna1.brainStrand._splitConnectionWithNode(dna1.brainStrand.connections.getGene(1));
+    dna2.brainStrand._splitConnectionWithNode(dna2.brainStrand.connections.getGene(2));
     let evolvedDistance = dna1.compatibilityDistance(dna2, 1.0, 1.0, 1.0);
     expect(evolvedDistance).to.be.above(originalDistance);
 
     // Mutating weights should increase the distance further
-    dna1.traitStrand.connectionGenes[0].weight = 0.1;
-    dna2.traitStrand.connectionGenes[0].weight = 0.9;
+    dna1.traitStrand.connections.genes[0].weight = 0.1;
+    dna2.traitStrand.connections.genes[0].weight = 0.9;
     let mutatedDistance = dna1.compatibilityDistance(dna2, 1.0, 1.0, 1.0);
     expect(mutatedDistance).to.be.above(evolvedDistance);
   });
@@ -101,10 +107,10 @@ describe("DNA", () => {
   it("can be cloned", () => {
     const dna = new DNA(2, 1, random);
     const clone = dna.clone();
-    expect(dna.brainStrand.nodeGenes).to.eql(clone.brainStrand.nodeGenes);
-    expect(dna.brainStrand.connectionGenes).to.eql(clone.brainStrand.connectionGenes);
-    expect(dna.traitStrand.nodeGenes).to.eql(clone.traitStrand.nodeGenes);
-    expect(dna.traitStrand.connectionGenes).to.eql(clone.traitStrand.connectionGenes);
+    expect(dna.brainStrand.nodes).to.eql(clone.brainStrand.nodes);
+    expect(dna.brainStrand.connections).to.eql(clone.brainStrand.connections);
+    expect(dna.traitStrand.nodes).to.eql(clone.traitStrand.nodes);
+    expect(dna.traitStrand.connections).to.eql(clone.traitStrand.connections);
     expect(dna.hoxGenes).to.eql(clone.hoxGenes);
   });
 });

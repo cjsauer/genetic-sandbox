@@ -16,8 +16,8 @@ describe("Sequencer", () => {
   it("should read in a Strand and produce a Synaptic neural network", () => {
     const sequencer = new Sequencer();
     const strand = new Strand(2, 2, true, random);
-    strand._splitConnectionWithNode(strand.connectionGenes[0]); // Add a hidden neuron
-    strand._connect(strand.nodeGenes[4], strand.nodeGenes[4], random); // Make a recurrent connection
+    strand._splitConnectionWithNode(strand.connections.getGene(1)); // Add a hidden neuron
+    strand._connect(5, 5, random); // Make a recurrent connection
 
     const network = sequencer.read(strand);
 
