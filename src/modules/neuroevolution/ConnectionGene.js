@@ -86,6 +86,7 @@ class ConnectionGene extends Serializable {
   */
   static resetInnovations () {
     ConnectionGene._innovationMap = {};
+    ConnectionGene._nextInnovationNumber = 1;
   }
 }
 

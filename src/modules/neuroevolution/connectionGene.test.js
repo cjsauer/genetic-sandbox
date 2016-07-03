@@ -68,14 +68,14 @@ describe("ConnectionGene", () => {
 
       ConnectionGene.resetInnovations();
       expect(ConnectionGene._innovationMap).to.eql({});
-      expect(ConnectionGene._nextInnovationNumber).to.equal(3);
+      expect(ConnectionGene._nextInnovationNumber).to.equal(1);
 
       // These innovations are "new" again, because the history was reset
       const connectionGene3 = new ConnectionGene(1, 2, 0.5, true); // New innovation
       const connectionGene4 = new ConnectionGene(2, 3, 0.5, true); // New innovation
-      expect(connectionGene3.innovationNumber).to.equal(3);
-      expect(connectionGene4.innovationNumber).to.equal(4);
-      expect(ConnectionGene._nextInnovationNumber).to.equal(5);
+      expect(connectionGene3.innovationNumber).to.equal(1);
+      expect(connectionGene4.innovationNumber).to.equal(2);
+      expect(ConnectionGene._nextInnovationNumber).to.equal(3);
     });
   });
 });
