@@ -153,7 +153,7 @@ describe("Strand", () => {
 
       let connectionGenes = strand.connections.genes;
       let weights = connectionGenes.map((gene) => gene.weight);
-      expect(weights[0]).to.equal(0.495);
+      expect(weights[0]).to.equal(0.505);
       expect(weights[1]).to.equal(0.1);
     });
 
@@ -237,6 +237,35 @@ describe("Strand", () => {
       connection = strand.addRandomConnectionGene(3, random);
       expect(strand.connections).to.have.lengthOf(originalConnectionGeneCount);
       expect(connection).to.be.null;
+    });
+
+    it("can randomly mutate itself", () => {
+      let strand = new Strand(2, 1, true, random);
+      let mutateWeightsChance = 0.8;
+      let perturbChance = 0.9;
+      let perturbAmplitude = 0.1;
+      let newValueChance = 0.1;
+      let addNodeChance = 0.03;
+      let addConnectionChance = 0.05;
+
+      random.bool = stub().returns(true);
+      random.pick = (a) => a[0];
+      spy(strand, "mutateWeights");
+      spy(strand, "addRandomNodeGene");
+      spy(strand, "addRandomConnectionGene");
+      strand.mutate(mutateWeightsChance, perturbChance, perturbAmplitude, newValueChance, addNodeChance, addConnectionChance, random);
+      expect(strand.mutateWeights.calledWith(perturbChance, perturbAmplitude, newValueChance, random)).to.be.true;
+      expect(strand.addRandomNodeGene.calledOnce).to.be.true;
+      expect(strand.addRandomConnectionGene.calledOnce).to.be.true;
+
+      random.bool = stub().returns(false);
+      strand.mutateWeights.reset();
+      strand.addRandomNodeGene.reset();
+      strand.addRandomConnectionGene.reset();
+      strand.mutate(mutateWeightsChance, perturbChance, perturbAmplitude, newValueChance, addNodeChance, addConnectionChance, random);
+      expect(strand.mutateWeights.calledOnce).to.be.false;
+      expect(strand.addRandomNodeGene.calledOnce).to.be.false;
+      expect(strand.addRandomConnectionGene.calledOnce).to.be.false;
     });
   });
 

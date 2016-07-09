@@ -100,7 +100,7 @@ class Strand extends Serializable {
   mutateWeights(perturbChance, perturbAmplitude, newValueChance, random) {
     this.connections.genes.forEach((gene) => {
       if (random.bool(perturbChance)) {
-        let delta = perturbAmplitude * random.real(0, 1) * (random.bool(0.5) ? 1 : -1);
+        let delta = perturbAmplitude * random.real(-1, 1, true);
         gene.weight += delta;
       }
 
@@ -299,6 +299,36 @@ class Strand extends Serializable {
   }
 
   /**
+   * Randomly mutates this strand in a variety of ways depending on the passed
+   * chances
+   * @param {number} mutateWeightsChance - chance of mutating ANY weights in
+   * this strand
+   * @param {number} perturbChance - chance that each individual weight has of
+   * being mutated
+   * @param {number} perturbAmplitude - maximum change in weight possible
+   * @param {number} newValueChance - chance that a weight will be completely
+   * replaced by a new value
+   * @param {number} addNodeChance - chance that a new node will be added to
+   * this strand
+   * @param {number} addConnectionChance - chance that a new connection will
+   * be added to this strand
+   * @param {Object} random - random-js generator instance
+   */
+  mutate(mutateWeightsChance, perturbChance, perturbAmplitude, newValueChance, addNodeChance, addConnectionChance, random) {
+    if (random.bool(mutateWeightsChance)) {
+      this.mutateWeights(perturbChance, perturbAmplitude, newValueChance, random);
+    }
+
+    if (random.bool(addNodeChance)) {
+      this.addRandomNodeGene(random);
+    }
+
+    if (random.bool(addConnectionChance)) {
+      this.addRandomConnectionGene(10, random);
+    }
+  }
+
+  /**
    * Crosses this strand over with the given one. Matching genes are inherited
    * randomly from both parents, whereas disjoint and excess genes are inherited
    * only from the more fit parent. The more fit parent is assumed to be `this`
@@ -392,10 +422,10 @@ class Strand extends Serializable {
   clone() {
     let strand = new Strand();
     this.nodes.genes.forEach((gene) => {
-      strand.nodes.addGene(new NodeGene(gene.id, gene.type));
+      strand.nodes.addGene(gene.clone());
     });
     this.connections.genes.forEach((gene) => {
-      strand.connections.addGene(new ConnectionGene(gene.in, gene.out, gene.weight, gene.enabled));
+      strand.connections.addGene(gene.clone());
     });
     return strand;
   }
