@@ -35,12 +35,14 @@ describe("EatingProcessor", () => {
   it("should resolve a creature and plant sharing a tile to the creature eating that plant", () => {
     let creature = app.world.getEntitiesWith("creature")[0];
     let energy = creature.getComponent("energy");
+    let creatureComp = creature.getComponent("creature");
     let originalEnergyLevel = energy.level;
     expect(app.world.getEntitiesWith("plant")).to.have.lengthOf(2);
 
     sys.update(app);
 
     expect(energy.level).to.equal(originalEnergyLevel + 10);
+    expect(creatureComp.plantsEaten).to.equal(1);
     expect(app.world.getEntitiesWith("plant")).to.have.lengthOf(1);
   });
 });

@@ -1,5 +1,5 @@
 import Component from "../../../ecs/Component";
-import Strand from "../../../genetics/Strand";
+import Strand from "../../../neuroevolution/Strand";
 
 /**
  * Genetic encoding of a creature heavily inspired by the
@@ -44,6 +44,53 @@ class DNA extends Component {
      * @type {number[]}
      */
     this._hoxGenes = [ random.real(0, 1, true) ];
+  }
+
+  /**
+   * Mutates this DNA's constituent strands
+   * @param {number} mutateWeightChance - chance a strand has of mutating its weights
+   * @param {number} addNodeChance - chance a strand has of adding a new node
+   * gene
+   * @param {number} addConnectionChance - chance a strand has of adding a new
+   * connection between two unconnected nodes
+   * @param {Object} random - random-js generator instance
+   */
+  mutate(mutateWeightChance, addNodeChance, addConnectionChance, random) {
+    // TODO: replace these hardcoded values with configuration settings
+    // Attempt to mutate the brain strand
+    if (random.bool(mutateWeightChance)) this.brainStrand.mutateWeights(0.9, 0.1, 0.1, random);
+    if (random.bool(addNodeChance)) this.brainStrand.addRandomNodeGene(random);
+    if (random.bool(addConnectionChance)) this.brainStrand.addRandomConnectionGene(10, random);
+
+    // Attempt to mutate the trait strand
+    if (random.bool(mutateWeightChance)) this.traitStrand.mutateWeights(0.9, 0.1, 0.1, random);
+    if (random.bool(addNodeChance)) this.traitStrand.addRandomNodeGene(random);
+    if (random.bool(addConnectionChance)) this.traitStrand.addRandomConnectionGene(10, random);
+  }
+
+  /**
+   * Computes the compatibility distance between this and the given DNA by
+   * adding the compatibility distances of its constituent strands
+   * @param {DNA} otherDNA - the DNA to compare this one against
+   * @returns {number} the computed compatibility distance measure
+   */
+  compatibilityDistance(otherDNA) {
+    // TODO: replace these hardcoded values with configuration settings
+    let brainDistance = this.brainStrand.compatibilityDistance(otherDNA.brainStrand, 1.0, 1.0, 1.0);
+    let traitDistance = this.traitStrand.compatibilityDistance(otherDNA.traitStrand, 1.0, 1.0, 1.0);
+    return brainDistance + traitDistance;
+  }
+
+  /**
+   * Clones this DNA, performing a deep copy of its constituent strands and
+   * hox genes
+   */
+  clone() {
+    const dna = new DNA();
+    dna.brainStrand = this.brainStrand.clone();
+    dna.traitStrand = this.traitStrand.clone();
+    dna._hoxGenes = this._hoxGenes.slice(0);
+    return dna;
   }
 }
 

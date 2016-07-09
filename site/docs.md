@@ -987,6 +987,11 @@ Genetic representation of a neural network
     * [.inputNodeGeneCount](#Strand+inputNodeGeneCount) ⇒ <code>number</code>
     * [.outputNodeGeneCount](#Strand+outputNodeGeneCount) ⇒ <code>number</code>
     * [.hiddenNodeGeneCount](#Strand+hiddenNodeGeneCount) ⇒ <code>number</code>
+    * [.mutateWeights(perturbChance, perturbAmplitude, newValueChance, random)](#Strand+mutateWeights)
+    * [.addRandomNodeGene(random)](#Strand+addRandomNodeGene)
+    * [.addRandomConnectionGene(iterations, random)](#Strand+addRandomConnectionGene) ⇒ <code>[ConnectionGene](#ConnectionGene)</code>
+    * [.compatibilityDistance(otherStrand, excessCoefficient, disjointCoefficient, weightCoefficient)](#Strand+compatibilityDistance) ⇒ <code>number</code>
+    * [.clone()](#Strand+clone) ⇒ <code>[Strand](#Strand)</code>
     * [.serialize([blacklist])](#Serializable+serialize) ⇒ <code>string</code>
 
 <a name="new_Strand_new"></a>
@@ -1047,6 +1052,70 @@ Returns the count of hidden node genes in this strand
 
 **Kind**: instance property of <code>[Strand](#Strand)</code>  
 **Returns**: <code>number</code> - hidden node gene count  
+<a name="Strand+mutateWeights"></a>
+
+### strand.mutateWeights(perturbChance, perturbAmplitude, newValueChance, random)
+Randomly perturbs this strand's connection gene weights, possibly
+replacing the weight with a new value completely. Chances are NOT
+codependent.
+
+**Kind**: instance method of <code>[Strand](#Strand)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| perturbChance | <code>number</code> | chance that each weight has of being mutated |
+| perturbAmplitude | <code>number</code> | maximum change in weight possible |
+| newValueChance | <code>number</code> | chance that a weight will be completely replaced by a new value |
+| random | <code>Object</code> | random-js generator instance |
+
+<a name="Strand+addRandomNodeGene"></a>
+
+### strand.addRandomNodeGene(random)
+Chooses a connection gene at random and splits it with a new node gene
+
+**Kind**: instance method of <code>[Strand](#Strand)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| random | <code>Object</code> | random-js generator instance |
+
+<a name="Strand+addRandomConnectionGene"></a>
+
+### strand.addRandomConnectionGene(iterations, random) ⇒ <code>[ConnectionGene](#ConnectionGene)</code>
+Attempts to add a random connection gene to the genome, failing after
+the given number of iterations
+
+**Kind**: instance method of <code>[Strand](#Strand)</code>  
+**Returns**: <code>[ConnectionGene](#ConnectionGene)</code> - the added connection gene, or null if no gene could
+be added  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| iterations | <code>number</code> | number of times to randomly try selecting two node genes to connect |
+| random | <code>Object</code> | random-js generator instance |
+
+<a name="Strand+compatibilityDistance"></a>
+
+### strand.compatibilityDistance(otherStrand, excessCoefficient, disjointCoefficient, weightCoefficient) ⇒ <code>number</code>
+Computes the compatibility distance between two strands
+
+**Kind**: instance method of <code>[Strand](#Strand)</code>  
+**Returns**: <code>number</code> - the computed compatibility distance measure  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| otherStrand | <code>[Strand](#Strand)</code> | the strand to compare this one against |
+| excessCoefficient | <code>number</code> | the importance placed on the number of excess genes in determining compatibility |
+| disjointCoefficient | <code>number</code> | the importance placed on the number of disjoint genes in determining compatibility |
+| weightCoefficient | <code>number</code> | the importance placed on differences in weights between matching connection genes in determining compatibility |
+
+<a name="Strand+clone"></a>
+
+### strand.clone() ⇒ <code>[Strand](#Strand)</code>
+Makes a complete, deep copy of this strand
+
+**Kind**: instance method of <code>[Strand](#Strand)</code>  
+**Returns**: <code>[Strand](#Strand)</code> - the cloned strand  
 <a name="Serializable+serialize"></a>
 
 ### strand.serialize([blacklist]) ⇒ <code>string</code>
@@ -1907,6 +1976,8 @@ Genetic encoding of a creature heavily inspired by the
     * [.brainStrand](#DNA+brainStrand) : <code>[Strand](#Strand)</code>
     * [.traitStrand](#DNA+traitStrand) : <code>[Strand](#Strand)</code>
     * [.name](#Component+name) : <code>string</code>
+    * [.mutate(mutateWeightChance, addNodeChance, addConnectionChance, random)](#DNA+mutate)
+    * [.compatibilityDistance(otherDNA)](#DNA+compatibilityDistance) ⇒ <code>number</code>
 
 <a name="new_DNA_new"></a>
 
@@ -1946,6 +2017,33 @@ Strand of genes describing the trait function (TF)
 Name of the component. Expected to be unique among Components.
 
 **Kind**: instance property of <code>[DNA](#DNA)</code>  
+<a name="DNA+mutate"></a>
+
+### dnA.mutate(mutateWeightChance, addNodeChance, addConnectionChance, random)
+Mutates this DNA's constituent strands
+
+**Kind**: instance method of <code>[DNA](#DNA)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| mutateWeightChance | <code>number</code> | chance a strand has of mutating its weights |
+| addNodeChance | <code>number</code> | chance a strand has of adding a new node gene |
+| addConnectionChance | <code>number</code> | chance a strand has of adding a new connection between two unconnected nodes |
+| random | <code>Object</code> | random-js generator instance |
+
+<a name="DNA+compatibilityDistance"></a>
+
+### dnA.compatibilityDistance(otherDNA) ⇒ <code>number</code>
+Computes the compatibility distance between this and the given DNA by
+adding the compatibility distances of its constituent strands
+
+**Kind**: instance method of <code>[DNA](#DNA)</code>  
+**Returns**: <code>number</code> - the computed compatibility distance measure  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| otherDNA | <code>[DNA](#DNA)</code> | the DNA to compare this one against |
+
 <a name="AgingProcessor"></a>
 
 ## AgingProcessor ⇐ <code>[System](#System)</code>

@@ -43,7 +43,7 @@ describe("Creature assembly", () => {
     expect(creature.hasComponent("sprite")).to.be.true;
     expect(creature.hasComponent("coord")).to.be.true;
     expect(creature.getComponent("coord")).to.eql(coord);
-    expect(dna.brainStrand.inputNodeGeneCount).to.equal(3);
-    expect(dna.brainStrand.outputNodeGeneCount).to.equal(2);
+    expect(dna.brainStrand.nodes.inputNodeGeneCount).to.equal(3);
+    expect(dna.brainStrand.nodes.outputNodeGeneCount).to.equal(2);
   });
 });

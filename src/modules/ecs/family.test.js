@@ -32,6 +32,7 @@ describe("Family", () => {
   it("adds an entity to itself if it contains all of the required components", () => {
     const family = new Family(["a", "b", "c"]);
     family.addEntityIfMatch(entity1);
+    family.addEntityIfMatch(entity1); // Adding multiple times shouldn't do anything
     family.addEntityIfMatch(entity2);
     family.addEntityIfMatch(entity3);
 

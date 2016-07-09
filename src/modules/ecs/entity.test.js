@@ -38,11 +38,13 @@ describe("Entity", () => {
 
     entity.removeComponent("a");
     entity.removeComponent("b");
+    entity.removeComponent("whoops!"); // this one doesn't exist
 
     expect(entity.hasComponent("a")).to.be.false;
     expect(entity.hasComponent("b")).to.be.false;
     expect(entity.hasComponent("c")).to.be.true;
     expect(entity.hasComponent("d")).to.be.false;
+    expect(entity.hasComponent("whoops!")).to.be.false;
   });
 
   it("can return a given component", () => {

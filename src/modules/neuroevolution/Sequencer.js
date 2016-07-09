@@ -13,8 +13,8 @@ class Sequencer {
    */
   read(strand) {
     const { Neuron, Layer, Network } = synaptic;
-    const nodeGenes = strand.nodeGenes;
-    const connGenes = strand.connectionGenes;
+    const nodeGenes = strand.nodes.genes;
+    const connGenes = strand.connections.genes;
     const neurons = [];
     const inputLayer = new Layer();
     const outputLayer = new Layer();

@@ -35,4 +35,16 @@ describe("NodeGene", () => {
     expect(emptyNodeGene.id).to.equal(0);
     expect(emptyNodeGene.type).to.equal("hidden");
   });
+
+  it("can be cloned", () => {
+    const gene = new NodeGene(1, "input");
+    const gene2 = new NodeGene(2, "output");
+    const clone = gene.clone();
+    const clone2 = gene2.clone();
+
+    expect(clone.id).to.equal(1);
+    expect(clone.type).to.equal("input");
+    expect(clone2.id).to.equal(2);
+    expect(clone2.type).to.equal("output");
+  });
 });

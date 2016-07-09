@@ -68,10 +68,25 @@ class ConnectionGene extends Serializable {
   }
 
   /**
+   * Clones this connection gene, copying all of its current fields verbatim
+   * @returns {ConnectionGene} the cloned connection gene
+   */
+  clone() {
+    const gene = new ConnectionGene();
+    gene.in = this.in;
+    gene.out = this.out;
+    gene.weight = this.weight;
+    gene.enabled = this.enabled;
+    gene.innovationNumber = this.innovationNumber;
+    return gene;
+  }
+
+  /**
   * Resets the innovation history
   */
   static resetInnovations () {
     ConnectionGene._innovationMap = {};
+    ConnectionGene._nextInnovationNumber = 1;
   }
 }
 

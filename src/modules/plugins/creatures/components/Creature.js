@@ -10,6 +10,18 @@ class Creature extends Component {
    */
   constructor(dna) {
     super("creature");
+
+    /**
+     * Total number of plants this creature has eaten
+     * @type {number}
+     */
+    this.plantsEaten = 0;
+
+    /**
+     * Total number of moves this creature has made
+     * @type {number}
+     */
+    this.movesMade = 0;
   }
 }
 
